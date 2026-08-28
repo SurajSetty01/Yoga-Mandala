@@ -1,0 +1,17 @@
+As discussed, I’ve been putting some thought into how I’d like to structure the Yoga Mandala portal , and I’ve put together a framework document to give you a clear picture of the overall vision.
+
+I’m attaching it here. This isn’t meant to be a rigid technical specification, but rather a product and community framework , what Yoga Mandala is trying to become, how I see the different sections working, what the first version of the portal should contain, and some thoughts around the user journey, moderation and future possibilities.
+
+Since you’re coming at this from the digital marketing + AI side, I’d really value your perspective on how we can translate this into a clean, useful and scalable website without overcomplicating the first version.
+
+Have a look when you get some time. Once you’ve gone through it, maybe we can sit together and discuss
+
+what should actually be part of V1
+what can be kept for later
+the best technologyAI approach to build it
+the overall design and user experience
+and how we can make the portal genuinely useful for the Yoga teacher community rather than just another website.
+
+I’m quite excited about where Yoga Mandala can go, and I think this could become something really meaningful for the community. 🙏
+
+Attaching the framework here for you.
