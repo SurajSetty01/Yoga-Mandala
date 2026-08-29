@@ -24,7 +24,10 @@ export function Header() {
   const [mobile, setMobile] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const overHero = pathname === "/" || pathname === "/join" || pathname === "/events";
+  // Only the home page has a full-height dark hero behind the header. Every
+  // other route opens on a light paper masthead, so the header must be in its
+  // solid (dark-text) state from the top or the nav is invisible on paper.
+  const overHero = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > (overHero ? window.innerHeight * 0.7 : 24));
@@ -34,6 +37,9 @@ export function Header() {
   }, [overHero]);
 
   useEffect(() => {
+    // Reset any open menu when the route changes. This is a deliberate
+    // sync of UI state to navigation, not derived state.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobile(false);
     setOpen(null);
   }, [pathname]);

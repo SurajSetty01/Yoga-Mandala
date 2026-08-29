@@ -416,3 +416,126 @@ body {
 .tabnum {
   font-variant-numeric: tabular-nums;
 }
+
+/* ========================= INTERIOR PAGES ========================= */
+
+/* Date-led index rows (P05 §3): the image strip widens and the row eases
+   on hover; a brass rule underlines the title. No boxes anywhere. */
+.index-row {
+  transition: background-color var(--dur-fast) var(--ease-standard);
+}
+.index-row:hover,
+.index-row:focus-visible {
+  background: color-mix(in srgb, var(--color-brass) 8%, transparent);
+}
+.index-strip {
+  width: 80px;
+}
+.index-row:hover .index-strip,
+.index-row:focus-visible .index-strip {
+  width: 200px;
+}
+
+/* A desaturated rail for "past" items — present but quiet (P05 §4). */
+.rail-quiet figure {
+  filter: grayscale(0.85) contrast(0.96);
+  opacity: 0.72;
+  transition:
+    filter var(--dur-base) var(--ease-standard),
+    opacity var(--dur-base) var(--ease-standard);
+}
+.rail-quiet a:hover figure,
+.rail-quiet a:focus-visible figure {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* Form primitives for the UI-only submission and contact screens.
+   No backend in Phase A — these render the real fields, disabled-looking
+   but keyboard-focusable, so the layout is honest about what will exist. */
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+.field > label {
+  font-size: 0.75rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  font-weight: 500;
+  opacity: 0.7;
+}
+.field > input,
+.field > textarea,
+.field > select {
+  width: 100%;
+  background: color-mix(in srgb, var(--color-paper) 60%, transparent);
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 28%, transparent);
+  padding: 0.65rem 0.25rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--color-ink);
+  border-radius: 0;
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.field > input:focus,
+.field > textarea:focus,
+.field > select:focus {
+  outline: none;
+  border-bottom-color: var(--color-clay);
+}
+.field > textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+.g-indigo .field > input,
+.g-indigo-deep .field > input,
+.g-indigo .field > textarea,
+.g-indigo-deep .field > textarea,
+.g-indigo .field > select,
+.g-indigo-deep .field > select {
+  background: color-mix(in srgb, var(--color-paper) 8%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--color-paper) 32%, transparent);
+  color: var(--color-paper);
+}
+
+/* Prose column for policy/long-form pages. */
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  margin: 3rem 0 1rem;
+}
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 2rem 0 0.75rem;
+}
+.prose p,
+.prose li {
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 68ch;
+}
+.prose p {
+  margin: 0 0 1.15rem;
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 1.4rem;
+  padding-left: 1.1rem;
+}
+.prose li {
+  margin-bottom: 0.5rem;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--color-brass) 70%, transparent);
+}
+.prose hr {
+  border: 0;
+  border-top: var(--rule);
+  margin: 3rem 0;
+}

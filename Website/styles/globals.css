@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Yoga Mandala — global styles ("Living Manuscript")
+   Tokens live in tailwind.config.ts; this file wires base
+   typography, the paper grain, focus rings and motion policy.
+   ============================================================ */
+
+:root {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Inter Tight", system-ui, sans-serif;
+  --font-deva: "Tiro Devanagari Sanskrit", serif;
+
+  --color-sand: #f3eee3;
+  --color-sand-deep: #e7dfce;
+  --color-bark: #211e19;
+  --color-bark-soft: #5c574c;
+  --color-forest: #26402c;
+  --color-forest-deep: #182a1d;
+  --color-terracotta: #b4562e;
+  --color-gold: #a6853f;
+  --color-moss: #7c8a63;
+
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-sand);
+    color: var(--color-bark);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* very subtle paper grain, applied globally, unifies image sources */
+    background-image: url("/assets/texture/grain.svg");
+    background-repeat: repeat;
+    background-size: 180px 180px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  /* Sanskrit / Devanagari terms set correctly, never as decoration */
+  .deva {
+    font-family: var(--font-deva);
+    font-feature-settings: "liga" 1;
+  }
+
+  ::selection {
+    background-color: var(--color-forest);
+    color: var(--color-sand);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-terracotta);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Tabular numerals for metadata (dates, counts) */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* A hairline rule in gold — the connective tissue of the whole site */
+  .rule-gold {
+    border-color: rgba(166, 133, 63, 0.55);
+  }
+
+  /* Section label: — LEARNING style marker */
+  .section-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-bark-soft);
+  }
+
+  /* Editorial text column, never wider than ~68ch */
+  .measure {
+    max-width: 42rem;
+  }
+  .measure-wide {
+    max-width: 52rem;
+  }
+
+  /* Warm image grade + subtle grain overlay wrapper */
+  .img-graded {
+    position: relative;
+    overflow: hidden;
+  }
+  .img-graded::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("/assets/texture/grain.svg");
+    background-size: 180px 180px;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* Arch mask (manuscript-niche reference) — used at most twice sitewide (T7). */
+  .arch-mask {
+    -webkit-mask-image: url("/assets/texture/arch.svg");
+    mask-image: url("/assets/texture/arch.svg");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /* Duotone treatment (forest/sand) used for placeholder portraits + texture grounds */
+  .duotone {
+    filter: grayscale(1) contrast(1.05) sepia(0.35) hue-rotate(60deg) saturate(0.7)
+      brightness(0.95);
+  }
+}
+
+/* ---- Motion policy: honor prefers-reduced-motion fully ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Fixed header offset: pages without a dark hero start their content below the bar.
+   Hero pages opt out by setting data-over-hero on <body>. */
+main {
+  padding-top: 76px;
+}
+body[data-over-hero="true"] main {
+  padding-top: 0;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-forest);
+  color: var(--color-sand);
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}

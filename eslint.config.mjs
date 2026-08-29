@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The abandoned first build. Kept in place per instruction, but it is a
+    // separate project with its own tooling and must not be part of the root
+    // site's type-check, lint or build graph.
+    "Website/**",
   ]),
 ]);
 
