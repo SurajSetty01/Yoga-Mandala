@@ -643,11 +643,24 @@
    (below ~0.72 the ink of a quote mark escapes the top of its own box and
    lands on whatever is above it); the negative margin then closes the dead
    space the box carries underneath. */
-/* Both marks now sit IN the line. The generous side bearing on a quote glyph is pulled back
-   so each reads as touching its word rather than floating a space away from it. */
-.ab-quote__mk--o {
+/* HANGING PUNCTUATION — and this is what "centred" actually requires.
+   With the marks in the flow, each row is centred INCLUDING its punctuation, which pushes
+   the words themselves off-centre: measured at 1440 the first line's letters centred on 735
+   and the second on 706, neither at 720 and 29px apart from each other. Geometrically
+   correct, visibly wrong — the eye centres on the mass of the letters, not on the box.
+   So the marks hang outside the measure: absolutely positioned against the row, contributing
+   nothing to its width, exactly as a hanging quote is set in print. Now the rows are sized by
+   their words alone and both centre on the same axis. */
+.ab-quote__mk {
+  position: absolute;
+  top: 0;
   letter-spacing: -0.04em;
-  margin-inline-start: -0.06em;
+  /* a mark this size would otherwise stretch its row's line box */
+  line-height: inherit;
+}
+.ab-quote__mk--o {
+  right: 100%;
+  margin-inline-end: 0.04em;
 }
 /* THE CLOSING MARK — hung off the end of the last clause, out of the flow, so
    a mark three times the size of the sentence cannot open a gap under it. */
@@ -655,7 +668,8 @@
    the full stop. The old rule hung it at left:100% of the last row and anchored it from the
    top, which was necessary only while it was a 248px block out of flow. */
 .ab-quote__mk--c {
-  letter-spacing: -0.04em;
+  left: 100%;
+  margin-inline-start: 0.04em;
 }
 
 /* VARIANT A — only the first word is a window; the rest of the sentence is ink.
