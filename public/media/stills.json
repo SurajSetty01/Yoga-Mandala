@@ -1,0 +1,689 @@
+[
+ {
+  "id": "p13-img_0513",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "none",
+  "w": 3520,
+  "h": 1980,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.6
+  ],
+  "alt": "A line of students holding downward dog on mats across a wide studio floor",
+  "subject": "A line of about ten students holds downward-facing dog on mats laid in rows across the studio, with wooden blocks beside several mats and one person standing at the back of the room.",
+  "activity": "asana-practice",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0516",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "none",
+  "w": 3520,
+  "h": 1980,
+  "ratio": 1.778,
+  "focal": [
+   0.35,
+   0.55
+  ],
+  "alt": "Students standing with arms stretched overhead in a row across a wide studio floor",
+  "subject": "Students stand on their mats with arms stretched overhead and palms together in a row across the studio, a man in a peach t-shirt doing the same in the near foreground with his back to the camera.",
+  "activity": "asana-practice",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0544",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "none",
+  "w": 3520,
+  "h": 1980,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.55
+  ],
+  "alt": "A full class holding downward-facing dog on mats while a teacher watches from the side of the hall.",
+  "subject": "The whole class holds downward-facing dog on mats across the room while a teacher stands observing at the right.",
+  "activity": "asana-practice",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0614",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "none",
+  "w": 4032,
+  "h": 3024,
+  "ratio": 1.333,
+  "focal": [
+   0.45,
+   0.66
+  ],
+  "alt": "Group seated on mats facing the front of a studio with ropes and ceiling slings",
+  "subject": "A wide view of the studio with roughly a dozen people seated on mats facing the front, rope wall and red ceiling slings above.",
+  "activity": "lecture-discussion",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0615",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "none",
+  "w": 4032,
+  "h": 3024,
+  "ratio": 1.333,
+  "focal": [
+   0.45,
+   0.68
+  ],
+  "alt": "Wide view of a seated group on mats in a studio with rope wall and windows",
+  "subject": "The same seated group from a slightly wider angle, mats spread across the reddish-brown floor with windows along the right wall.",
+  "activity": "lecture-discussion",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0617",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "none",
+  "w": 4032,
+  "h": 3024,
+  "ratio": 1.333,
+  "focal": [
+   0.5,
+   0.6
+  ],
+  "alt": "Wide studio interior with participants seated on mats beneath ceiling slings and fans",
+  "subject": "A landscape view of the full studio: seated participants on coloured mats, rope wall at the left, ceiling slings and fans overhead, a screen at the right.",
+  "activity": "lecture-discussion",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0620",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 4032,
+  "h": 3024,
+  "ratio": 1.333,
+  "focal": [
+   0.46,
+   0.72
+  ],
+  "alt": "Participant kneeling on a purple mat in the foreground of a studio class",
+  "subject": "A participant in orange sits back on her heels on a purple mat in the foreground while the rest of the group sits facing the front of the room.",
+  "activity": "asana-practice",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "p13-img_0621",
+  "role": "hero",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 4032,
+  "h": 3024,
+  "ratio": 1.333,
+  "focal": [
+   0.45,
+   0.72
+  ],
+  "alt": "Participant moving on a mat in the foreground while a class sits facing the front",
+  "subject": "The same foreground participant a moment later, one hand lowered to the mat, with the seated group and rope wall behind her.",
+  "activity": "asana-practice",
+  "setting": "indoor-shala",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0267",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.34
+  ],
+  "alt": "Cropped view of a dancer's crimson drape and bare feet in a wide braced stance.",
+  "subject": "A headless crop of a dancer's torso, crimson drape and bare feet in a wide braced stance on a pale painted floor.",
+  "activity": "dance-performance",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0318",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.58,
+   0.5
+  ],
+  "alt": "Three dancers stand with palms joined at the chest in front of a painted mural wall.",
+  "subject": "Three dancers stand apart on the painted floor with palms joined at the chest, the mural wall, a banner and venue equipment spread across the wide frame.",
+  "activity": "dance-performance",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0208",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "top",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.52,
+   0.55
+  ],
+  "alt": "Four speakers seated in wooden chairs along a white wall hung with printed charts.",
+  "subject": "Four panellists sit in wooden chairs in a row along a white wall hung with printed charts, a small round table with a bottle and a plant between them.",
+  "activity": "panel",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0056",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.5
+  ],
+  "alt": "Covered hall with red roof trusses and skylights above a line of people practising on mats",
+  "subject": "A wide view of a covered hall with red roof trusses and skylights above a line of practitioners bending on mats.",
+  "activity": "venue-detail",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0092",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.6
+  ],
+  "alt": "Wide view of a group practising with arms raised under a high steel roof",
+  "subject": "Wide view of a large hall with a high steel roof where a spread-out group stands on mats with arms raised, watched by people seated on chairs at the left.",
+  "activity": "asana-practice",
+  "setting": "other",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0096",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "top",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.58
+  ],
+  "alt": "Class folding forward in two rows down a plant-lined hall, daylight through the skylight roof.",
+  "subject": "Two rows of practitioners fold forward over mats down the length of a plant-lined hall, with daylight entering through the skylight roof behind them.",
+  "activity": "asana-practice",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-ven0139",
+  "role": "fullBleed",
+  "quality": 4,
+  "headroom": "top",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.45,
+   0.62
+  ],
+  "alt": "Students seated on mats in forward bends across a wide open hall with chairs along the wall",
+  "subject": "Students sit on mats in forward bends across a wide open hall with white chairs along the wall and a light stand at the right.",
+  "activity": "asana-practice",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920,
+   2560
+  ]
+ },
+ {
+  "id": "ss-dsc07120",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "none",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.5,
+   0.32
+  ],
+  "alt": "A practitioner balances on one leg with palms together at the chest during a class.",
+  "subject": "A practitioner stands balanced on one leg with the other foot at the inner thigh and palms pressed together at the chest, looking towards the camera.",
+  "activity": "asana-practice",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07126",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "right",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.5,
+   0.38
+  ],
+  "alt": "A practitioner balances on one leg with both arms lifted overhead in an outdoor class.",
+  "subject": "A practitioner in a blue shirt balances on one leg with both arms lifted overhead, with blurred white chairs and green painted floor behind.",
+  "activity": "asana-practice",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07153",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "bottom",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.45,
+   0.42
+  ],
+  "alt": "Kneeling classical dancer with one arm raised in a hand gesture, mid-performance.",
+  "subject": "The dancer kneels low on the painted stage circle with one arm raised overhead in a hand gesture and the other at her waist, her crimson drape spread across the floor, against a plain white wall.",
+  "activity": "dance-performance",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07154",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "bottom",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.5,
+   0.42
+  ],
+  "alt": "Classical dancer kneeling low, arm extended overhead, crimson drape spread on the floor.",
+  "subject": "A frame from the same sequence with the raised arm further extended and the head turned to follow the hand, the drape fanned out on the pale stage floor.",
+  "activity": "dance-performance",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07155",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "bottom",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.52,
+   0.42
+  ],
+  "alt": "Dancer kneeling with a raised hand near her head, eyes following the gesture.",
+  "subject": "The kneeling dancer holds a raised hand close beside her head with her gaze following it and her free hand at her hip, the branded medallion on the wall behind her out of focus.",
+  "activity": "dance-performance",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07160",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "bottom",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.52,
+   0.45
+  ],
+  "alt": "Dancer balanced on one leg mid-step, her drape swinging, banner behind.",
+  "subject": "The dancer is caught mid-step balanced on one leg with the other knee lifted, one hand raised beside her face and the crimson drape swinging out, in front of the printed banner.",
+  "activity": "dance-performance",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07161",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "bottom",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.55,
+   0.44
+  ],
+  "alt": "Dancer standing mid-phrase with both hands in a gesture, weight on one leg.",
+  "subject": "The dancer stands with weight on one leg, both hands held in a gesture in front of her chest and her gaze directed off to one side, the printed banner behind her.",
+  "activity": "dance-performance",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07165",
+  "role": "portrait",
+  "quality": 5,
+  "headroom": "bottom",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.5,
+   0.22
+  ],
+  "alt": "Dancer with both arms raised overhead, fingers curled in a mudra, leg turned out",
+  "subject": "The dancer raises both arms overhead with fingers curled in a mudra, one leg turned out, in front of the mural and a hanging banner.",
+  "activity": "dance-performance",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07118",
+  "role": "grid",
+  "quality": 5,
+  "headroom": "none",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.5,
+   0.42
+  ],
+  "alt": "A teacher leans in and holds a hand above a student's back to adjust a plank position.",
+  "subject": "A teacher leans over a student and holds his hand just above the student's back to correct the line of a plank position.",
+  "activity": "teaching-adjustment",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07137",
+  "role": "grid",
+  "quality": 5,
+  "headroom": "top",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.35,
+   0.45
+  ],
+  "alt": "A barefoot man on a green stool talks to a small group seated on the floor beside him.",
+  "subject": "A man in a light blue kurta sits barefoot on a green plastic stool talking, with listeners seated on the concrete floor at the right and an air cooler, shelving and a hanging canopy behind him.",
+  "activity": "lecture-discussion",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07143",
+  "role": "grid",
+  "quality": 5,
+  "headroom": "none",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.5,
+   0.55
+  ],
+  "alt": "Four panellists on wooden chairs on a green stage before a wall with a painted tree and mandala.",
+  "subject": "Four panellists sit on wooden chairs on a green-painted stage beside a small table holding a plant and a glass, in front of a white wall with a painted tree, a circular mandala emblem and a colour-wheel chart.",
+  "activity": "panel",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-dsc07144",
+  "role": "grid",
+  "quality": 5,
+  "headroom": "none",
+  "w": 7008,
+  "h": 4672,
+  "ratio": 1.5,
+  "focal": [
+   0.55,
+   0.55
+  ],
+  "alt": "One of four seated panellists speaks into a handheld microphone while the others listen.",
+  "subject": "The same four panellists on stage, the man at the right speaking into a handheld microphone while the other three sit listening.",
+  "activity": "panel",
+  "setting": "stage",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-ven0024",
+  "role": "texture",
+  "quality": 4,
+  "headroom": "none",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.38
+  ],
+  "alt": "Framed paintings on a wooden rack beneath a tree with a moulded face on its trunk",
+  "subject": "A wooden rack of small framed paintings stands under a tree whose trunk carries a moulded white face, with leaves and a purple drape around it.",
+  "activity": "artwork",
+  "setting": "outdoor-courtyard",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-ven0025",
+  "role": "texture",
+  "quality": 4,
+  "headroom": "bottom",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.52,
+   0.46
+  ],
+  "alt": "Two framed child portrait paintings hanging on cords against a white draped wall",
+  "subject": "Two framed child portrait paintings hang on jute cords in front of a white draped fabric wall.",
+  "activity": "artwork",
+  "setting": "gallery",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-ven0027",
+  "role": "texture",
+  "quality": 4,
+  "headroom": "top",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.44,
+   0.32
+  ],
+  "alt": "Framed portrait of an elderly man above a wooden desk with a mantel clock and brass objects",
+  "subject": "A framed portrait painting of an elderly man hangs on a dark curtain above a wooden desk holding a mantel clock, a brass lamp and small objects.",
+  "activity": "artwork",
+  "setting": "gallery",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-ven0028",
+  "role": "texture",
+  "quality": 4,
+  "headroom": "right",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.36,
+   0.5
+  ],
+  "alt": "Quiet exhibition corner with a framed portrait on a dark curtain above an antique desk",
+  "subject": "A wider view of the same display corner: the framed portrait on a dark curtain, the wooden writing desk beneath it, and a large expanse of curtain to the right.",
+  "activity": "venue-detail",
+  "setting": "gallery",
+  "widths": [
+   960,
+   1920
+  ]
+ },
+ {
+  "id": "ss-ven0165",
+  "role": "texture",
+  "quality": 4,
+  "headroom": "none",
+  "w": 1280,
+  "h": 720,
+  "ratio": 1.778,
+  "focal": [
+   0.5,
+   0.42
+  ],
+  "alt": "Vintage blue truck cab mounted above bookshelves as a cafe interior installation.",
+  "subject": "The front cab of a vintage blue truck is mounted above a wall of bookshelves inside the cafe, with a globe light above it and a framed sign below.",
+  "activity": "venue-detail",
+  "setting": "cafe",
+  "widths": [
+   960,
+   1920
+  ]
+ }
+]

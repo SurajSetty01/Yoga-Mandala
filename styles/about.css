@@ -1,0 +1,413 @@
+/* about — owned solely by the about section. No other file may declare these selectors. */
+
+/* ══════════════════════════════════════════════════════════════════════
+   PAGE 1 — the sections beneath the hero and section 02.
+
+   The brief for this page is the one that has failed before: five prose
+   blocks in a row become a cream text column. So each block was asked
+   what SHAPE it wants, and none of them answered the same way. The three
+   grounds alternate so a long read keeps a pulse and no two neighbours
+   share a material:
+
+     03 · premise     warm   a two-column spread with a rule down the
+                             middle. No picture at all — the section
+                             after four photographs is deliberately mute,
+                             and the premise is the largest thing in it.
+     04 · purpose     deep   a MANDALA: four quadrants set around a
+                             centre, the rules broken where the lead sits.
+                             The page's structural centrepiece, reversed.
+     05 · approach    paper  an aside — pushed to the right of the measure
+                             and marked with a clay change-bar, the way an
+                             editor marks a passage that matters. Quiet.
+     06 · members     warm   one full-bleed photograph carrying no type at
+                             all, then a three-column colophon beneath it.
+     07 · guiding     deep   one sentence, centred, at the page's top
+                             scale. The only centred thing on the page.
+
+   Continuity is the register mark (.ab-eyebrow is .within__eyebrow's own
+   object), the type scale, the tokens and the reveal primitive. Nothing
+   here reuses the hero's language (a sticky sequence, type inside the
+   picture) or section 02's (four narrow stills in a row with type beside
+   them). Contrast is measured, not estimated — see NOTES.md.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.ab {
+  /* z-index 3 puts these on the same layer as .within, above the hero's
+     sticky stage (z-index 1) which is still in flow behind them. */
+  position: relative;
+  z-index: 3;
+
+  --ab-pad: clamp(3.6rem, 9vw, 8.5rem);
+  --ab-max: 92rem;
+
+  padding-block: var(--ab-pad);
+  background: var(--ground);
+  color: var(--ink);
+}
+
+/* One measure for every section. It HANGS OFF THE LEFT RAIL rather than
+   centring, because section 02's head and the hero's type both do, and
+   at 2560 a centred column would step 470px away from the left edge the
+   two sections above it share. Below ~1600px it is wider than the
+   viewport and does nothing at all. */
+.ab__inner {
+  max-width: calc(var(--ab-max) + 2 * var(--rail));
+  padding-inline: var(--rail);
+}
+/* The two symmetrical compositions are the exception: a mandala whose
+   centre is not the page's centre is not a mandala, and a centred
+   closing sentence has to be centred on the screen. Both therefore span
+   rail to rail exactly as section 02's row of four frames does. */
+.ab-purpose > .ab__inner,
+.ab-guiding > .ab__inner { max-width: none; }
+
+/* ── the register mark ──────────────────────────────────────────────
+   Deliberately the same object as .within__eyebrow: same size, same
+   tracking, same clay numeral. It is how the reader knows these
+   sections and section 02 belong to one document.
+   teal-deep on --ground-warm measures 6.16:1, clay-deep 5.31:1.        */
+.ab-eyebrow {
+  margin: 0 0 clamp(1.7rem, 3.6vw, 2.8rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.ab-eyebrow span {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+/* On the reversed ground neither voice can carry small text: --clay is
+   4.37:1 on #1C1714 and --sand is ornament by rule. Cream is 17.2:1 and
+   cream at 0.72 is 9.4:1, so the mark inverts to the two inks the hero
+   already uses on a dark ground rather than inventing a third. */
+.ab--deep .ab-eyebrow { color: var(--ink-onDark); }
+.ab--deep .ab-eyebrow span { color: var(--ink-onDark-soft); }
+
+.ab--warm { background: var(--ground-warm); }
+.ab--deep { background: var(--ground-deep); color: var(--ink-onDark); }
+
+/* ══ 03 · THE PREMISE ═════════════════════════════════════════════════
+   Section 02 ends by whispering the first half of this paragraph in
+   italic at 1.35rem. Here the whole sentence returns at twice the size
+   in full ink: the same words, arrived at rather than repeated.
+
+   Two columns with a hairline between them — a spread, not a column.
+   The section carries no photograph on purpose. After four stills in a
+   row the page needs a page of type, and the mute beat is what makes
+   the full-bleed photograph in 06 land.                               */
+.ab-open__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: start;
+  gap: 0 clamp(2rem, 5vw, 5rem);
+}
+.ab-open__def {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.3rem, 1.02rem + 1.3vw, 2.05rem);
+  font-weight: 400;
+  line-height: 1.16;
+  letter-spacing: -0.022em;
+  text-wrap: pretty;
+}
+.ab-open__r {
+  border-left: 1px solid var(--rule);
+  padding-left: clamp(2rem, 5vw, 5rem);
+}
+/* the same clay mark the provenance caption carries, at section scale */
+.ab-open__r::before {
+  content: '';
+  display: block;
+  width: clamp(2.2rem, 5vw, 3.4rem);
+  height: 2px;
+  background: var(--clay);
+  margin-bottom: clamp(1.1rem, 2.4vw, 1.8rem);
+}
+.ab-open__premise {
+  margin: 0;
+  max-width: 27ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.45rem, 1.02rem + 1.95vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.026em;
+  text-wrap: pretty;
+}
+.ab-open__now {
+  margin: clamp(2rem, 4vw, 3.2rem) 0 0;
+  max-width: 46ch;
+  padding-top: clamp(1.3rem, 2.6vw, 2rem);
+  border-top: 1px solid var(--rule);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* ══ 04 · OUR PURPOSE — the mandala ═══════════════════════════════════
+   Four things around a centre is what the community is called. So the
+   four are not a row and not a numbered register — page 2's pillars are
+   both of those, and section 02 above is already four-in-a-row. They are
+   quadrants: the horizontal rules break in the middle, the lead sits in
+   the break, and each quadrant's type is pushed AWAY from the centre so
+   the negative space reads as a ring.
+
+   Mobile-first: the stack below is the base and the quadrants only exist
+   from 861px up, so there is no !important anywhere in this block.     */
+.ab-mandala {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.ab-mandala__lead {
+  margin: 0 0 clamp(0.4rem, 1vw, 0.8rem);
+  padding: clamp(1rem, 2.4vw, 1.4rem) clamp(1.3rem, 3vw, 2.4rem);
+  border: 1px solid var(--rule-onDark);
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.02rem, 0.95rem + 0.42vw, 1.3rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--ink-onDark);
+  text-wrap: pretty;
+}
+.ab-q {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 3.4vw, 2.6rem) 0 0;
+  border-top: 1px solid var(--rule-onDark);
+  margin-top: clamp(1.5rem, 3.4vw, 2.6rem);
+}
+/* Fraunces ROMAN, large, cream. Section 02's four names are Fraunces
+   ITALIC at 1.6rem on cream above a hairline — the two sets share a
+   family and nothing else, which is the point: they are not the same
+   list and must not look like the same component. */
+.ab-q h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.5rem, 1.05rem + 2vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.026em;
+  color: var(--ink-onDark);
+}
+.ab-q p {
+  margin: clamp(0.7rem, 1.6vw, 1rem) 0 0;
+  max-width: 34ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.58;
+  color: var(--ink-onDark-soft);
+  text-wrap: pretty;
+}
+
+@media (min-width: 861px) {
+  .ab-mandala {
+    /* centred, and capped so the quadrants stay squarer than the screen:
+       at 2560 a rail-to-rail figure is a 2424px band, not a plate. */
+    max-width: 104rem;
+    margin-inline: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(clamp(11rem, 17vw, 15rem), auto) auto minmax(clamp(11rem, 17vw, 15rem), auto);
+    grid-template-areas:
+      'q1 q2'
+      'lead lead'
+      'q3 q4';
+  }
+  /* definite placement first; the four quadrants then auto-fill q1..q4
+     in DOM order around it, so the markup stays lead-then-list. */
+  .ab-mandala__lead {
+    grid-area: lead;
+    justify-self: center;
+    max-width: 30rem;
+    margin: clamp(2rem, 4vw, 3.2rem) 0;
+    border-radius: 999px;
+    text-align: center;
+  }
+  .ab-q {
+    margin: 0;
+    border: 0;
+    padding: clamp(1.6rem, 3vw, 2.6rem) clamp(1.4rem, 3.2vw, 3rem);
+  }
+  .ab-q--1,
+  .ab-q--3 { border-right: 1px solid var(--rule-onDark); }
+  .ab-q--1,
+  .ab-q--2 { border-bottom: 1px solid var(--rule-onDark); justify-content: flex-start; }
+  .ab-q--3,
+  .ab-q--4 { border-top: 1px solid var(--rule-onDark); justify-content: flex-end; }
+  .ab-q--1,
+  .ab-q--3 { padding-left: 0; }
+  .ab-q--2,
+  .ab-q--4 { padding-right: 0; }
+}
+
+/* ══ 05 · OUR APPROACH ════════════════════════════════════════════════
+   A position, not a description, and the page's one quiet moment. It is
+   the only block on the page pushed to the RIGHT of its measure, and the
+   only one carrying a change-bar — the mark an editor puts in the margin
+   beside a passage that matters. Clay is a hairline here, never text.
+   The scale descends across the three lines: the claim, the correction,
+   the invitation.                                                      */
+.ab-approach__body {
+  max-width: 48rem;
+  margin-left: auto;
+  padding-left: clamp(1.3rem, 3.2vw, 2.8rem);
+  border-left: 2px solid var(--clay);
+}
+.ab-approach__one {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.35rem, 1.02rem + 1.55vw, 2.25rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  text-wrap: pretty;
+}
+.ab-approach__two {
+  margin: clamp(1.1rem, 2.4vw, 1.7rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -0.014em;
+}
+.ab-approach__three {
+  margin: clamp(1.4rem, 2.8vw, 2rem) 0 0;
+  max-width: 52ch;
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  line-height: 1.64;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* ══ 06 · A COMMUNITY BUILT BY ITS MEMBERS ════════════════════════════
+   The section's headline is a photograph. One frame, edge to edge,
+   carrying no type whatsoever — the exact inverse of the hero, where
+   every word sits inside the picture, and of section 02, where four
+   small frames are captioned beside their type.
+
+   Underneath, the three lines are set as a colophon in three columns
+   rather than a paragraph, with the middle one — the pivot — in the
+   display face. Its centre of gravity rhymes with the mandala's without
+   repeating its shape.                                                 */
+.ab-members__fig {
+  margin: 0 0 clamp(2.2rem, 5vw, 3.8rem);
+  background: var(--ground);
+  overflow: hidden;
+}
+.ab-members__fig img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: 50% 62%;
+}
+.ab-members__lines {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.4rem, 3vw, 2.8rem);
+}
+.ab-members__lines p {
+  margin: 0;
+  padding-top: clamp(0.9rem, 1.8vw, 1.2rem);
+  border-top: 1px solid var(--rule);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.ab-members__lines p.ab-members__pivot {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.2rem, 1rem + 0.9vw, 1.65rem);
+  font-weight: 400;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+@media (min-width: 861px) {
+  .ab-members__fig img { aspect-ratio: 16 / 7; }
+  .ab-members__lines { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* ══ 07 · OUR GUIDING THOUGHT ═════════════════════════════════════════
+   One sentence closing a long page, so it gets the page's top scale and
+   the whole plate to itself. It is the only centred composition here —
+   everything above it is left-aligned — which is what makes it read as
+   an ending rather than another section. Italic is this page's emphatic
+   voice: the hero's second line and section 02's second line are both
+   set in it.                                                           */
+.ab-guiding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: min(72svh, 40rem);
+  text-align: center;
+}
+.ab-guiding .ab__inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ab-guiding .ab-eyebrow { justify-content: center; }
+.ab-guiding__line {
+  margin: 0;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.15rem, 1rem + 5.6vw, 5.4rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.02;
+  letter-spacing: -0.032em;
+  color: var(--ink-onDark);
+  text-wrap: balance;
+}
+
+/* ── ≤ 860px ────────────────────────────────────────────────────────
+   The premise spread folds to one column and its hairline turns from a
+   spine into a seam. Nothing else needs to change: every other block is
+   already a single column at this width.                              */
+@media (max-width: 860px) {
+  .ab-open__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.7rem, 5vw, 2.4rem) 0;
+  }
+  .ab-open__def { max-width: 26ch; }
+  .ab-open__r {
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+    padding-left: 0;
+    padding-top: clamp(1.7rem, 5vw, 2.4rem);
+  }
+  .ab-open__premise { max-width: 30ch; }
+  .ab-approach__body { border-left-width: 2px; }
+  .ab-guiding__line { max-width: 13ch; }
+}
+
+/* ── MOTION OFF ─────────────────────────────────────────────────────
+   Nothing in these sections is reachable only through motion: the
+   shared [data-r] primitive is the only movement, and globals.css
+   already pins it open under reduce. This kills the one transition of
+   our own so nothing eases under a reduce preference.                 */
+@media (prefers-reduced-motion: reduce) {
+  .ab * { transition: none !important; }
+}

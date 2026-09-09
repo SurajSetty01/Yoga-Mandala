@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B · Immersive — Yoga Mandala</title>
+<link rel="stylesheet" href="/_shared.css">
+<style>
+/* ============================================================
+   VARIANT B — THE IMMERSIVE
+   Header : a floating translucent pill, centred, sitting OVER
+            the picture. Light-on-dark while it is on the image,
+            flipping to dark-on-light the moment it leaves it.
+   Hero   : one photograph filling the viewport, type set INSIDE
+            it on the frame's own dark region — the exact move
+            the previous build outlawed. A directional scrim,
+            angled to the light in the frame, keeps every word
+            above 4.5:1 without flattening the picture.
+   Why it might win: the only one that hits like a real
+            organisation's site in the first half second. The
+            picture is the argument.
+   ============================================================ */
+
+/* ── HEADER : the pill ─────────────────────────────────────── */
+.hdr {
+  position: fixed; z-index: 100;
+  top: clamp(0.85rem, 2vw, 1.5rem); left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100% - 2 * var(--page)), 1180px);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0.6rem 0.55rem 1.35rem;
+  border-radius: 999px;
+  background: rgba(28, 23, 20, 0.34);
+  border: 1px solid rgba(251, 247, 242, 0.16);
+  backdrop-filter: blur(16px) saturate(1.25);
+  color: var(--ink-onDark);
+  transition: background 0.45s var(--ease), border-color 0.45s var(--ease),
+              color 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+/* off the picture, the pill inverts rather than disappearing */
+.hdr.light {
+  background: rgba(251, 247, 242, 0.90);
+  border-color: var(--rule);
+  color: var(--ink);
+  box-shadow: 0 6px 28px rgba(36, 29, 24, 0.10);
+}
+.mark {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
+  font-weight: 500; letter-spacing: -0.015em;
+  text-decoration: none; line-height: 1; white-space: nowrap;
+}
+.nav { display: flex; align-items: center; gap: clamp(0.9rem, 1.8vw, 1.8rem); }
+.nav a {
+  font-size: 13.5px; font-weight: 500; text-decoration: none;
+  opacity: 0.74; transition: opacity 0.25s;
+}
+.nav a:hover, .nav a[aria-current] { opacity: 1; }
+.cta {
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  padding: 0.6rem 1.15rem; border-radius: 999px;
+  background: var(--ink-onDark); color: var(--ink);
+  opacity: 1 !important; white-space: nowrap;
+  transition: background 0.25s, color 0.25s, transform 0.25s var(--ease);
+}
+.hdr.light .cta { background: var(--teal); color: var(--ink-onDark); }
+.cta:hover { transform: translateY(-1px); }
+.nav .menu { display: none; }
+
+/* ── HERO ──────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+  background: var(--ground-deep);
+  isolation: isolate;
+}
+.hero__bg { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.hero__bg img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: 62% 50%;
+  transform: scale(1.08);
+  will-change: transform;
+}
+/* the scrim is DIRECTIONAL — heavy where the type sits, gone where
+   the subject sits, so the picture is protected, not muddied. */
+.hero__bg::after {
+  content: ''; position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg,
+      rgba(20, 15, 12, 0.90)  0%,
+      rgba(20, 15, 12, 0.74) 28%,
+      rgba(20, 15, 12, 0.28) 56%,
+      rgba(20, 15, 12, 0.06) 78%,
+      rgba(20, 15, 12, 0.22) 100%),
+    linear-gradient(0deg,
+      rgba(20, 15, 12, 0.62) 0%,
+      rgba(20, 15, 12, 0.00) 46%);
+}
+
+/*
+ * Sized so the whole block clears the seated teacher and lands on the dark
+ * floor and doorway at the frame's lower left — the one region of this
+ * photograph that is genuinely empty. Type over a picture is allowed here;
+ * type over a person's face is not, and the fix is the type's size and
+ * position, not a heavier scrim.
+ */
+.hero__type {
+  position: relative;
+  padding: 0 var(--page) clamp(3.5rem, 9vh, 6rem);
+  color: var(--ink-onDark);
+  max-width: 37rem;
+}
+.hero .eyebrow { color: #E8B79A; }
+.hero h1 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.6rem, 1.4rem + 4.2vw, 4.75rem);
+  font-weight: 400; line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin: 1.1rem 0 0;
+  text-wrap: balance;
+}
+.hero h1 em { font-style: italic; font-weight: 300; }
+.hero .lede {
+  color: var(--ink-onDark-soft);
+  margin: 1.6rem 0 0; max-width: 42ch;
+}
+.acts { display: flex; flex-wrap: wrap; gap: 0.85rem; margin-top: 2.25rem; }
+.btn {
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  padding: 0.9rem 1.7rem; border-radius: 999px;
+  transition: transform 0.25s var(--ease), background 0.25s, border-color 0.25s;
+}
+.btn--fill { background: var(--ground); color: var(--ink); }
+.btn--fill:hover { transform: translateY(-2px); background: #fff; }
+.btn--line {
+  border: 1px solid rgba(251,247,242,0.42); color: var(--ink-onDark);
+}
+.btn--line:hover { border-color: var(--ink-onDark); transform: translateY(-2px); }
+
+/* provenance, bottom-right, so the frame is always credited */
+.hero .cap {
+  position: absolute; right: var(--page); bottom: clamp(1.25rem, 3vh, 2rem);
+  color: var(--ink-onDark-soft);
+}
+.hero .cap::before { background: #E8B79A; }
+
+/* the scroll cue — a hairline that breathes, not a bouncing chevron */
+.cue {
+  position: absolute; left: var(--page); bottom: 0;
+  width: 1px; height: clamp(2rem, 5vh, 3.25rem);
+  background: linear-gradient(180deg, transparent, rgba(251,247,242,0.75));
+  transform-origin: bottom;
+  animation: cue 2.6s var(--ease) infinite;
+}
+@keyframes cue {
+  0%, 100% { transform: scaleY(0.35); opacity: 0.35; }
+  50%      { transform: scaleY(1);    opacity: 1; }
+}
+
+/* ── the four words, reversed out under the fold ───────────── */
+.register {
+  background: var(--ground-deep); color: var(--ink-onDark);
+  padding: clamp(3rem, 7vw, 5.5rem) var(--page);
+  display: grid; gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.register div { border-top: 1px solid var(--rule-onDark); padding-top: 1.1rem; }
+.register b {
+  display: block; font-family: var(--font-display);
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.9rem);
+  font-weight: 400; font-style: italic; margin-bottom: 0.4rem;
+}
+.register p {
+  margin: 0; font-size: 14.5px; line-height: 1.55;
+  color: var(--ink-onDark-soft);
+}
+.register i {
+  font-style: normal; font-size: 11px; letter-spacing: 0.14em;
+  color: #E8B79A; display: block; margin-bottom: 0.7rem;
+}
+
+@media (max-width: 900px) {
+  /* A portrait viewport crops this 3:2 frame hard. At 68% the crop landed on the
+     air cooler and threw the teacher off-screen entirely — the subject of the
+     picture, gone. 30% keeps him and the nearest listeners in frame. */
+  .hero__bg img { object-position: 30% 50%; }
+  .hero__bg::after {
+    background:
+      linear-gradient(0deg,
+        rgba(20,15,12,0.94) 0%, rgba(20,15,12,0.72) 38%,
+        rgba(20,15,12,0.20) 68%, rgba(20,15,12,0.34) 100%);
+  }
+  .nav a:not(.cta) { display: none; }
+  /* a.menu, not .menu: `.nav a:not(.cta)` above is (0,2,1) and outweighs a
+     bare `.nav .menu` (0,2,0), which hid the mobile nav entirely. */
+  .nav a.menu { display: block; font-size: 13px; font-weight: 600; opacity: 1; }
+  .hero .cap { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hdr" id="hdr">
+  <a class="mark" href="#">Yoga Mandala</a>
+  <nav class="nav">
+    <a href="#" aria-current="page">About</a>
+    <a href="#">Within</a>
+    <a href="#">Join</a>
+    <a href="#">Contact</a>
+    <a class="cta" href="https://wa.me/919110891897" target="_blank" rel="noopener noreferrer">Join</a>
+    <a class="menu" href="#">Menu</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <img src="/media/stills/ss-dsc07137-1920.webp" id="bg"
+           alt="A teacher in a light blue kurta sits talking to a group seated on the floor around him">
+    </div>
+
+    <div class="hero__type">
+      <p class="eyebrow" data-r="up">A community of Yoga teachers</p>
+      <h1 data-r="up" style="--d:90ms">Yoga is vast.<br><em>No one holds it all.</em></h1>
+      <p class="lede" data-r="up" style="--d:180ms">
+        Teachers and serious practitioners, meeting across traditions —
+        to connect, learn, collaborate and grow.
+      </p>
+      <div class="acts" data-r="up" style="--d:260ms">
+        <a class="btn btn--fill" href="https://wa.me/919110891897" target="_blank" rel="noopener noreferrer">Join the WhatsApp community</a>
+        <a class="btn btn--line" href="#">What happens within</a>
+      </div>
+    </div>
+
+    <p class="cap">Samskrithi Sadhana · Bengaluru</p>
+    <span class="cue" aria-hidden="true"></span>
+  </section>
+
+  <section class="register">
+    <div data-r="up"><i>01</i><b>Connect</b><p>Build real relationships with fellow teachers and practitioners.</p></div>
+    <div data-r="up" style="--d:80ms"><i>02</i><b>Learn</b><p>Find authentic study, resources and discussion that keep you learning.</p></div>
+    <div data-r="up" style="--d:160ms"><i>03</i><b>Collaborate</b><p>Work together, exchange expertise, build things that matter.</p></div>
+    <div data-r="up" style="--d:240ms"><i>04</i><b>Grow</b><p>Support one another in becoming better teachers and contributors.</p></div>
+  </section>
+</main>
+
+<nav class="switch" hidden>
+  <b>Hero</b>
+  <a href="A-split.html">A · Split</a>
+  <a href="B-immersive.html" aria-current="page">B · Immersive</a>
+  <a href="C-mosaic.html">C · Mosaic</a>
+</nav>
+
+<script>
+document.documentElement.classList.add('js');
+
+const io = new IntersectionObserver((es) => {
+  for (const e of es) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('[data-r]').forEach(el => io.observe(el));
+
+const hdr = document.getElementById('hdr');
+const bg  = document.getElementById('bg');
+const hero = document.getElementById('hero');
+
+// The pill inverts exactly when it leaves the picture — measured against the
+// hero's real bottom edge, not a guessed scroll number, so it stays correct
+// at every viewport height.
+const flip = new IntersectionObserver(([e]) => {
+  hdr.classList.toggle('light', !e.isIntersecting);
+}, { rootMargin: '-72px 0px 0px 0px', threshold: 0 });
+flip.observe(hero);
+
+let ticking = false;
+addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    const y = scrollY;
+    if (y < innerHeight) bg.style.transform = `translate3d(0, ${y * 0.22}px, 0) scale(1.08)`;
+    ticking = false;
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CANDIDATE · FRAME
+   Thesis: THE IMAGE IS FRAMED, NOT PASTED.
+
+   Immersion by composition rather than coverage. One picture, held inside an
+   architecture of warm ground, hairlines and negative space — and the
+   architecture MOVES: the aperture closes from a plate to a masthead band as
+   you descend, giving its height back to the ground, and the headline it was
+   carrying lands in ink on that ground.
+
+   Performance contract: the aperture is two OPAQUE GROUND-COLOURED BLADES that
+   only ever translate. No width/height/top/left is animated anywhere. The one
+   clip-path in the file is on a small, non-observed child (see the trap note).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* the frame's own ruling — a touch firmer than --rule, it is structure */
+  --rule-frame:  rgba(36, 29, 24, 0.30);
+  --rule-hair:   rgba(36, 29, 24, 0.13);
+  --clay-deep:   #9E4B2B;          /* clay, dark enough to carry cream text  */
+  --sand:        #E8B79A;          /* the warm light, for type on the plinth */
+
+  /* THE MAT — the negative space is a dimension of the design, so it is named */
+  --rail: clamp(1.15rem, 6.4vw, 6.25rem);   /* left mat: the frame's spine   */
+  --matT: clamp(3.9rem, 8.6vh, 6.1rem);     /* top mat: the masthead sits here*/
+  /* the bottom mat is NOT a guessed number: grid-row 3 sizes itself from the
+     type it carries, and the plate takes whatever is left.                  */
+  --gut:  clamp(1rem, 3vw, 3.25rem);        /* the right inset for furniture  */
+
+  /* how far the aperture closes. Read by frame.js, overridden per breakpoint. */
+  --ct-max: 0.07;
+  --cb-max: 0.42;
+
+  /* runtime, written once per rAF by frame.js */
+  --p: 0;  --ct: 0px;  --cb: 0px;  --hcut: 0px;
+  --plinth-h: 17rem;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body { background: var(--ground); }
+::selection { background: var(--sand); color: var(--ink); }
+
+/* focus: one visible treatment, everywhere, on both grounds */
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+.on-dark :focus-visible, .plinth ~ * :focus-visible { outline-color: var(--sand); }
+
+.skip {
+  position: fixed; z-index: 300; top: 0; left: 0;
+  transform: translateY(-120%);
+  background: var(--ground-deep); color: var(--ink-onDark);
+  padding: 0.75rem 1.25rem; font-size: 13px; font-weight: 600;
+  text-decoration: none; transition: transform 0.2s var(--ease);
+}
+.skip:focus-visible { transform: none; }
+
+/* ═══════════════════ MASTHEAD ═══════════════════════════════════════════════
+   At rest: a bar on the warm mat whose bottom hairline IS the frame's top
+   rule. Ink on ground — the transparent-header-over-a-photograph contrast trap
+   simply does not arise. It becomes the glass pill only once it has left the
+   frame behind, which is the one moment the pill has to earn.            */
+.mast {
+  position: fixed; z-index: 200;
+  top: 0; left: 50%;
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  height: var(--matT);
+  padding: 0 var(--gut) 0 var(--rail);
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  transform: translateX(-50%);
+  transition:
+    width 0.62s var(--ease), height 0.62s var(--ease), padding 0.62s var(--ease),
+    border-radius 0.62s var(--ease), background 0.4s linear,
+    border-color 0.4s linear, box-shadow 0.5s var(--ease),
+    transform 0.45s var(--ease), color 0.35s linear;
+}
+/* the masthead's hairline — full bleed, and at rest it is exactly the frame's
+   top rule, continuing left across the rail. A hairline that is also a rule. */
+.mast::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--rule-frame);
+  transition: opacity 0.4s linear;
+}
+.mast[data-state="pill"] {
+  width: min(calc(100% - 2 * var(--gut)), 62rem);
+  height: 3.35rem;
+  top: clamp(0.7rem, 1.8vw, 1.35rem);
+  padding: 0 0.45rem 0 1.3rem;
+  border-radius: 999px;
+  background: rgba(251, 247, 242, 0.82);
+  border-color: var(--rule);
+  box-shadow: 0 10px 34px rgba(36, 29, 24, 0.13);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+.mast[data-state="pill"]::after, .mast[data-flat="1"]::after { opacity: 0; }
+/* over the reversed-out section the pill inverts — its own ground either way */
+.mast[data-state="pill"][data-dark="1"] {
+  background: rgba(24, 20, 17, 0.72);
+  border-color: rgba(251, 247, 242, 0.20);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.32);
+  color: var(--ink-onDark);
+}
+.mast[data-hidden="1"] { transform: translateX(-50%) translateY(-135%); }
+
+.mast__mark {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 0.9rem + 0.45vw, 1.26rem);
+  font-weight: 500; letter-spacing: -0.015em; line-height: 1;
+  text-decoration: none; white-space: nowrap;
+}
+.mast__nav { position: relative; display: flex; align-items: center; gap: clamp(1rem, 2vw, 2.1rem); }
+/* single-class selectors on purpose: `.nav a` (0,2,0) beating a bare button
+   class shipped an unreadable CTA on this project once already.            */
+.lnk {
+  position: relative;
+  font-size: 13.5px; font-weight: 500; letter-spacing: 0.005em;
+  text-decoration: none; padding: 0.55rem 0; white-space: nowrap;
+  color: inherit; opacity: 0.72;
+  transition: opacity 0.22s linear;
+}
+.lnk:hover, .lnk:focus-visible, .lnk[aria-current] { opacity: 1; }
+/* one shared indicator that slides, rather than four underlines that blink */
+.mast__ind {
+  position: absolute; left: 0; bottom: 0.35rem;
+  width: 1px; height: 2px; background: var(--clay);
+  transform-origin: 0 50%;
+  transform: translateX(var(--ix, 0px)) scaleX(var(--iw, 0));
+  transition: transform 0.4s var(--ease), background 0.3s linear;
+  pointer-events: none;
+}
+.mast[data-dark="1"] .mast__ind { background: var(--sand); }
+.mast__cta {
+  font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap;
+  padding: 0.62rem 1.15rem; border-radius: 2px;
+  background: var(--ground-deep); color: var(--ink-onDark);
+  transition: background 0.24s linear, transform 0.24s var(--ease);
+}
+.mast__cta:hover, .mast__cta:focus-visible { background: var(--clay-deep); }
+.mast[data-state="mast"] .mast__cta { background: transparent; color: inherit; box-shadow: inset 0 0 0 1px var(--rule-frame); padding-inline: 1.05rem; }
+.mast[data-state="mast"] .mast__cta:hover,
+.mast[data-state="mast"] .mast__cta:focus-visible { background: var(--ground-deep); color: var(--ink-onDark); box-shadow: none; }
+.mast__burger { display: none; }
+
+/* ═══════════════════ MOBILE SHEET ═══════════════════════════════════════════ */
+.sheet {
+  position: fixed; z-index: 199; inset: 0 0 auto 0;
+  padding: calc(var(--matT) + 1.25rem) var(--rail) 2rem;
+  background: var(--ground-warm);
+  border-bottom: 1px solid var(--rule-frame);
+  box-shadow: 0 20px 50px rgba(36, 29, 24, 0.16);
+  transform: translateY(-101%);
+  transition: transform 0.5s var(--ease);
+}
+.sheet[data-open="1"] { transform: none; }
+.sheet__nav { display: grid; gap: 0.15rem; margin-bottom: 1.6rem; }
+.sheet__nav a {
+  font-family: var(--font-display); font-size: 1.7rem; font-weight: 400;
+  letter-spacing: -0.02em; text-decoration: none; padding: 0.45rem 0;
+  border-bottom: 1px solid var(--rule-hair);
+}
+.sheet__cta { width: 100%; justify-content: space-between; }
+
+/* ═══════════════════ HERO ═══════════════════════════════════════════════════
+   A scroll REGION, with the composition pinned inside it. Scroll-driven, not
+   scroll-jacked: nothing is intercepted, the page just has somewhere to go
+   while the frame changes shape.                                          */
+.hero { position: relative; height: 172svh; }
+/* The mat is a GRID, not four guessed offsets: rail | plate, and
+   masthead / plate / bottom mat down. The bottom mat sizes itself from the
+   type it carries and the plate takes what is left, so nothing can ever
+   collide at a viewport nobody screenshotted. */
+.hero__pin {
+  position: sticky; top: 0;
+  height: 100svh; min-height: 34rem;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  grid-template-rows: var(--matT) minmax(0, 1fr) auto;
+}
+
+/* ── THE PLATE ─────────────────────────────────────────────────────────────
+   Ruled on the left, top and bottom. Bleeds off the right edge: one side is a
+   decision to let the picture leave the page, and it is the reading edge.  */
+.stage {
+  grid-column: 2; grid-row: 2;
+  position: relative;
+  background: var(--ground-warm);
+}
+.stage__clip { position: absolute; inset: 0; overflow: hidden; }
+
+.media { position: absolute; inset: 0; z-index: 0; }
+.media picture, .media img, .media__vid {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 54%;
+}
+.media img, .media__vid {
+  transform: translate3d(0, calc((var(--ct) - var(--cb)) * 0.55), 0)
+             scale(calc(1.055 - var(--p) * 0.055));
+  will-change: transform;
+}
+.media__vid { opacity: 0; transition: opacity 0.9s var(--ease); z-index: 1; }
+.media__vid[data-on="1"] { opacity: 1; }
+
+/* ── THE PLINTH ────────────────────────────────────────────────────────────
+   A hard-topped panel of the frame's own warm black lying across the plate's
+   lower left, feathered only at its outboard end so it reads as a band of
+   shade rather than a sticker. It is a KNOWN ground: 0.92 of #1C1714 over pure
+   white still measures 12.5:1 against the cream, so the headline is legible
+   whatever the photograph happens to be doing underneath it.              */
+.plinth {
+  position: absolute; z-index: 1;
+  left: 0; bottom: 0;
+  /* its right edge is not arbitrary: it is the SAME column the actions in the
+     bottom mat end on, so the panel belongs to the composition's ruling. */
+  width: min(calc(100% - 13.5rem), 54rem);
+  height: var(--plinth-h);
+  opacity: var(--plinth-o, 1);
+  background:
+    linear-gradient(180deg, rgba(28,23,20,0.90) 0%, rgba(28,23,20,0.945) 62%, rgba(28,23,20,0.955) 100%);
+}
+.plinth::before {   /* the panel's own hairline: it is mounted, not spilled */
+  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: rgba(251, 247, 242, 0.34);
+}
+.plinth::after {    /* and it has an edge, declared, not dissolved */
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, rgba(251,247,242,0.34), rgba(251,247,242,0.10));
+}
+
+/* ── THE TYPE, WELDED TO THE FRAME'S BOTTOM RULE ───────────────────────────
+   Two copies in the same place. The light one lives under the blades; the ink
+   one is drawn above them and clipped to the ground side of the bottom rule.
+   The rule sweeps across the headline as the aperture closes, so the words do
+   not move, fade or restate — they simply change ground. Both states are
+   provable: cream on the plinth (12.5:1) and ink on the mat (13.5:1).     */
+.type {
+  position: absolute;
+  left: clamp(1.15rem, 2.6vw, 2.9rem);
+  bottom: var(--type-b, clamp(1.9rem, 5vh, 3.4rem));
+  width: min(58%, 46rem);
+  pointer-events: none;
+}
+.type--light { z-index: 2; color: var(--ink-onDark); }
+.type--dark  { z-index: 4; color: var(--ink); clip-path: inset(var(--hcut) 0 0 0); }
+
+.type .eyebrow { margin: 0; font-size: 11.5px; letter-spacing: 0.185em; }
+.type--light .eyebrow { color: var(--sand); }
+.type--dark  .eyebrow { color: var(--teal); }
+
+.type h1, .type .h1x {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.2rem, 1rem + 4.35vw, 4.9rem);
+  font-weight: 400; line-height: 0.99; letter-spacing: -0.034em;
+  margin: 0.85rem 0 0; text-wrap: balance;
+}
+.type em { font-style: italic; font-weight: 300; }
+
+/* ── THE APERTURE ──────────────────────────────────────────────────────────
+   Two opaque blades of the page's own ground. They TRANSLATE. The picture is
+   never resized, the layout never reflows, and every edge the user sees is a
+   blade edge — which is why the reshaping costs nothing and reads as a matte
+   closing rather than a box shrinking.                                    */
+.blade {
+  position: absolute; z-index: 3; left: 0; right: 0;
+  height: 100%;
+  background: var(--ground);
+  will-change: transform;
+}
+.blade--t { bottom: 100%; transform: translate3d(0, var(--ct), 0); }
+.blade--b { top: 100%;    transform: translate3d(0, calc(-1 * var(--cb)), 0); }
+
+/* the frame's rules, riding the blade edges. Underneath the blades, so the
+   blades trim them; no scaling, no measuring. */
+.edge { position: absolute; z-index: 2; background: var(--rule-frame); }
+.edge--t { left: 0; right: 0; top: 0;    height: 1px; transform: translate3d(0, var(--ct), 0); }
+.edge--b { left: 0; right: 0; bottom: 0; height: 1px; transform: translate3d(0, calc(-1 * var(--cb)), 0); }
+.edge--l { left: 0; top: 0; bottom: 0;   width: 1px; }
+
+/* ── THE SECOND FRAME ──────────────────────────────────────────────────────
+   The old right-side provenance caption, rebuilt as architecture: a smaller
+   plate tipped in against the primary one, arriving in the ground the closing
+   aperture gives back. The archive shows two of its registers — the room and
+   the hand — without becoming a grid.                                     */
+.inset {
+  position: absolute; z-index: 6;
+  right: var(--gut); top: 100%;
+  width: clamp(6.5rem, 10vw, 9.75rem);
+  margin: 0;
+  transform: translate3d(0, calc(-1 * var(--cb) + 1.35rem + (1 - var(--p)) * 2.25rem), 0);
+  opacity: clamp(0, calc((var(--p) - 0.5) * 3.4), 1);
+  will-change: transform, opacity;
+}
+.inset img {
+  width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 42%;
+  box-shadow: 0 0 0 1px var(--rule-frame), 0 16px 40px rgba(36, 29, 24, 0.16);
+}
+.inset figcaption {
+  margin-top: 0.6rem; font-size: 10px; line-height: 1.5;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-soft);
+  border-top: 1px solid var(--rule-hair); padding-top: 0.45rem;
+}
+.inset i { font-style: normal; font-weight: 600; color: var(--ink); display: block; }
+
+/* ── THE PLATE REGISTER, ON THE RAIL ───────────────────────────────────────
+   Provenance as a fixture of the frame rather than furniture beside it: it
+   runs up the spine and is welded to the bottom rule, so it rises with it. */
+.reg {
+  grid-column: 1; grid-row: 2; align-self: end; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  transform: translate3d(0, calc(-1 * var(--cb)), 0);
+}
+.reg__n { font-family: var(--font-display); font-style: italic; font-size: 13px; color: var(--ink); }
+.reg__r { width: 1px; height: clamp(1.5rem, 4vh, 2.75rem); background: var(--rule-frame); }
+.reg__t {
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-size: 10px; letter-spacing: 0.19em; text-transform: uppercase;
+  color: var(--ink-soft); white-space: nowrap;
+}
+
+/* ── THE BOTTOM MAT: lede + the two actions ────────────────────────────────
+   The buttons never sit on a photograph, so their focus rings are always
+   visible and their contrast never depends on a crop. They are squared to the
+   frame's own 2px, not pilled: hardware, not chrome.                      */
+.foot {
+  grid-column: 2; grid-row: 3;
+  width: min(calc(100% - 13.5rem), 54rem);
+  padding-bottom: clamp(1.4rem, 3.4vh, 2.4rem);
+  padding-top: clamp(1rem, 2.4vh, 1.75rem);
+  display: flex; flex-wrap: wrap; align-items: flex-end;
+  gap: clamp(1rem, 2.6vw, 2.75rem);
+}
+.foot .lede { margin: 0; flex: 1 1 17rem; max-width: 38ch; font-size: clamp(0.97rem, 0.92rem + 0.3vw, 1.12rem); }
+.acts { display: flex; flex-wrap: wrap; gap: 0.9rem 1.6rem; align-items: center; }
+
+.btn {
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 0.85rem;
+  font-size: 13.5px; font-weight: 600; letter-spacing: 0.005em;
+  text-decoration: none; border-radius: 2px;
+  transition: color 0.24s linear;
+}
+.btn__arw { width: 20px; height: 8px; overflow: visible; flex: none; }
+.btn__arw path { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.btn span { transition: transform 0.3s var(--ease); }
+
+/* primary — a chip of the frame's own warm black, filled by clay on hover */
+.btn--solid { padding: 0.95rem 1.35rem; color: var(--ink-onDark); background: var(--ground-deep); }
+.btn--solid::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: var(--clay-deep); transform-origin: 50% 100%;
+  transform: scaleY(0); transition: transform 0.42s var(--ease);
+}
+.btn--solid:hover::before, .btn--solid:focus-visible::before { transform: scaleY(1); }
+.btn--solid:hover .btn__arw, .btn--solid:focus-visible .btn__arw { transform: translateX(4px); }
+.btn__arw { transition: transform 0.32s var(--ease); }
+
+/* secondary — a label standing on its own rule, which is the frame's rule
+   again at a smaller scale. Not an outlined pill.                        */
+.btn--ruled { padding: 0.95rem 0 0.85rem; color: var(--ink); }
+.btn--ruled::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--rule-frame);
+  transform-origin: 0 50%;
+  transition: transform 0.42s var(--ease), background 0.24s linear;
+}
+.btn--ruled:hover::after, .btn--ruled:focus-visible::after { background: var(--clay); transform: scaleY(2); }
+.btn--ruled:hover .btn__arw, .btn--ruled:focus-visible .btn__arw { transform: translateX(4px); }
+
+/* ── the scroll cue: the rail's hairline, with one travelling tick ───────── */
+.cue {
+  grid-column: 1; grid-row: 3; align-self: start; justify-self: center;
+  position: relative;
+  width: 1px; height: clamp(2rem, 5.5vh, 3.6rem);
+  background: linear-gradient(180deg, var(--rule-frame), transparent);
+  overflow: hidden;
+  opacity: clamp(0, calc(1 - var(--p) * 4), 1);
+}
+.cue i { position: absolute; inset: 0; background: var(--clay); animation: tick 2.8s var(--ease) infinite; }
+@keyframes tick { 0% { transform: translateY(-100%); } 55%, 100% { transform: translateY(100%); } }
+
+/* ═══════════════════ WHAT FOLLOWS ═══════════════════════════════════════════
+   The frame's left rule keeps going: it is this section's first column edge,
+   and the hairline between the items is the same hairline.                */
+.four {
+  position: relative;
+  background: var(--ground-deep); color: var(--ink-onDark);
+  isolation: isolate;
+  padding: clamp(4rem, 10vh, 7rem) var(--gut) clamp(4.5rem, 12vh, 8rem) var(--rail);
+}
+/* the frame's left rule does not stop at the hero: it is this section's spine */
+.four::before {
+  content: ''; position: absolute; z-index: 0;
+  left: var(--rail); top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, rgba(251,247,242,0.26), rgba(251,247,242,0.02));
+}
+.four__lead {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 1.1rem + 1.6vw, 2.5rem);
+  font-weight: 300; line-height: 1.18; letter-spacing: -0.02em;
+  margin: 0 0 clamp(2.25rem, 6vh, 4rem); max-width: 24ch;
+}
+.four__lead em { font-style: italic; color: var(--sand); }
+.four__list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: clamp(1.4rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+}
+.four__list li { border-top: 1px solid var(--rule-onDark); padding-top: 1.05rem; }
+.four i { font-style: normal; font-size: 10.5px; letter-spacing: 0.16em; color: var(--sand); display: block; margin-bottom: 0.75rem; }
+.four b {
+  display: block; font-family: var(--font-display); font-style: italic;
+  font-size: clamp(1.25rem, 1.05rem + 0.75vw, 1.8rem); font-weight: 400; margin-bottom: 0.45rem;
+}
+/* .four p (0,1,1) would beat .four__lead (0,1,0) and shrink the lead line
+   to 14.5px — the same specificity trap that shipped twice on this project. */
+.four__list p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-onDark-soft); }
+
+/* the closing band: back on the warm ground, still on the frame's spine */
+.tail {
+  position: relative;
+  min-height: 26rem;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(1rem, 3vh, 2rem);
+  padding: clamp(3rem, 8vh, 5rem) var(--gut) clamp(3rem, 8vh, 5rem) var(--rail);
+  border-top: 1px solid var(--rule-frame);
+}
+.tail::before {
+  content: ''; position: absolute;
+  left: var(--rail); top: 0; height: 100%; width: 1px;
+  background: linear-gradient(180deg, var(--rule-frame), transparent 78%);
+}
+.tail__k { margin: 0; font-size: 10.5px; letter-spacing: 0.19em; text-transform: uppercase; color: var(--ink-soft); }
+.tail__a {
+  display: inline-flex; align-items: flex-end; gap: 1.5rem;
+  text-decoration: none; color: var(--ink); width: fit-content;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 1.2rem + 2.2vw, 3.4rem);
+  font-weight: 400; line-height: 1.03; letter-spacing: -0.028em;
+}
+.tail__a em { font-style: italic; font-weight: 300; color: var(--ink-soft); }
+.tail__a .btn__arw { width: 34px; height: 12px; margin-bottom: 0.7rem; transition: transform 0.32s var(--ease); }
+.tail__a:hover .btn__arw, .tail__a:focus-visible .btn__arw { transform: translateX(8px); }
+.tail__a:hover, .tail__a:focus-visible { color: var(--clay-deep); }
+
+/* ═══════════════════ BREAKPOINTS ═══════════════════════════════════════════ */
+
+/* Below 720 the viewport is genuinely portrait, so the frame genuinely IS a
+   tall portal, and it opens toward landscape instead of toward a band. The
+   media changes with it: a 16:9 hall cropped to 0.6 is a slice of two torsos,
+   which is exactly the crop trap this project has hit before.             */
+@media (max-width: 719.98px) {
+  :root {
+    --rail: 1.35rem;
+    --matT: 3.65rem;
+    --gut: 1.15rem;
+    --ct-max: 0.055;
+    --cb-max: 0.40;
+  }
+  .hero { height: 168svh; }
+  .media img { object-position: 50% 38%; }
+
+  .mast { padding-right: 0.9rem; }
+  .lnk, .mast__cta { display: none; }
+  .mast__burger {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: none; border: 0; padding: 0.6rem 0.35rem; cursor: pointer;
+    color: inherit; font: inherit; font-size: 12.5px; font-weight: 600;
+    letter-spacing: 0.09em; text-transform: uppercase;
+  }
+  .mast__burger-l { position: relative; width: 20px; height: 9px; }
+  .mast__burger-l::before, .mast__burger-l::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor;
+    transition: transform 0.35s var(--ease);
+  }
+  .mast__burger-l::before { top: 0; }
+  .mast__burger-l::after  { bottom: 0; }
+  .mast__burger[aria-expanded="true"] .mast__burger-l::before { transform: translateY(3.75px) rotate(38deg); }
+  .mast__burger[aria-expanded="true"] .mast__burger-l::after  { transform: translateY(-3.75px) rotate(-38deg); }
+
+  .type { width: calc(100% - 2.3rem); }
+  .type h1, .type .h1x { font-size: clamp(2rem, 1.05rem + 4.9vw, 2.6rem); margin-top: 0.7rem; }
+  .plinth { width: 100%; -webkit-mask-image: none; mask-image: none; }
+
+  .foot { width: 100%; padding-right: var(--gut); gap: 1.15rem; }
+  .foot .lede { flex: 1 1 100%; max-width: 40ch; font-size: 0.95rem; }
+  .acts { width: 100%; gap: 0.85rem 1.4rem; }
+  .btn--solid { flex: 1 1 auto; justify-content: space-between; }
+
+  .type .eyebrow { font-size: 10.5px; letter-spacing: 0.14em; }
+
+  .inset { display: none; }     /* honest: there is no room, and a 100px plate
+                                   in a 390px column is furniture, not range */
+  .reg, .cue { display: none; } /* a 1px rule inside a 22px rail is a defect,
+                                   not a cue — and touch users already know */
+  .four, .tail { padding-left: var(--rail); }
+  .tail { min-height: 18rem; }
+  .tail__a { gap: 1rem; }
+}
+
+/* between the sheet breakpoint and comfortable desktop, keep the rail thin */
+@media (min-width: 720px) and (max-width: 1000px) {
+  :root { --rail: clamp(2rem, 4.6vw, 3.5rem); --cb-max: 0.44; }
+  .type { width: min(74%, 34rem); }
+  .plinth { width: min(80%, 38rem); }
+  .foot { width: min(calc(100% - 11rem), 40rem); }
+}
+
+/* very wide: hold the composition's shoulders so the plate does not become a
+   letterbox before the scroll has said anything */
+@media (min-width: 1800px) {
+  :root { --rail: clamp(6.25rem, 8vw, 12rem); --matT: clamp(6rem, 9vh, 7.5rem); --cb-max: 0.46; }
+  /* the panel and the actions keep sharing a right edge — the column just
+     grows, so the composition scales instead of stranding a small block in a
+     very wide plate. */
+  .plinth, .foot { width: min(calc(100% - 20rem), 74rem); }
+  .type { width: min(58%, 56rem); }
+  .type h1, .type .h1x { font-size: clamp(4.9rem, 2.4rem + 1.5vw, 5.9rem); }
+}
+
+/* ═══════════════════ REDUCED MOTION ════════════════════════════════════════
+   No pin, no scroll driving, no autoplay. The frame RESTS in a resolved
+   shape — aperture already part-closed, headline already in ink on the mat,
+   the second plate already tipped in — so nothing here is reachable only
+   through motion.                                                        */
+@media (prefers-reduced-motion: reduce) {
+  /* the resting shape is the RESOLVED one: aperture open at ~3.4:1, headline
+     already in ink on the mat, second plate already tipped in. Nothing here
+     is reachable only by scrolling. The aperture closes less far than it does
+     under motion, so the picture keeps a real presence at rest. */
+  :root { --ct-max: 0.055; --cb-max: 0.42; }
+  .hero { height: auto; min-height: 100svh; }
+  .hero__pin { position: relative; }
+  .media img, .media__vid, .blade, .edge, .inset, .reg { will-change: auto; }
+  .media img { transform: none; }
+  .cue { display: none; }
+  .mast, .lnk, .btn span, .btn__arw, .btn--solid::before, .btn--ruled::after,
+  .mast__ind, .sheet { transition: none; }
+  .inset { transform: translate3d(0, calc(-1 * var(--cb) + 1.5rem), 0); opacity: 1; }
+}
+
+/* ═══════════════════ TOUCH ════════════════════════════════════════════════ */
+@media (hover: none) {
+  .btn--ruled::after { transform: scaleY(2); background: var(--clay); }
+}

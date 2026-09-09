@@ -1,0 +1,681 @@
+/* ════════════════════════════════════════════════════════════════════
+   JOIN / CONNECT — owned solely by the join section.
+   No other file may declare a .jn- selector.
+
+   THE IDEA: an invitation, then three doors of unequal size.
+
+   The hero is a sticky three-movement film with type inside the picture.
+   This page inverts that relationship twice over. Movement 1 puts the
+   pictures BESIDE the words and lays them by hand rather than on a grid.
+   Movement 2 lets the photograph DISSOLVE INTO the ground it is standing
+   on, so the words below sit on flat, measured warm black and no glyph
+   ever meets a pixel of picture — the contrast trap of DESIGN-SYSTEM §1
+   is designed out rather than tuned around.
+
+   Everything here inherits the tokens, the type scale and the interaction
+   grammar (a hairline that draws, a ground that wipes) from the hero.
+   ════════════════════════════════════════════════════════════════════ */
+
+.jn-invite,
+.jn-open,
+.jn-door__body {
+  /* one measure for the whole page, so the three blocks share a spine */
+  max-width: 92rem;
+  margin-inline: auto;
+}
+
+/* Focus inverted for the paper blocks, exactly as .within does: a dark ring
+   inside a cream halo. The dark block keeps the global cream-on-shade ring. */
+.jn-paper :focus-visible {
+  outline-color: var(--ink);
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* the shared eyebrow. teal-deep is 6.95:1 on cream; the clay tick is
+   ornament, where ratios do not apply. */
+.jn-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  font: 600 12px/1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.jn-eyebrow::before {
+  content: '';
+  flex: none;
+  width: 1.6rem;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--clay);
+}
+.jn-eyebrow--dark {
+  color: var(--sand);
+}
+
+/* ── MOVEMENT 1 — THE ADDRESS ────────────────────────────────────── */
+.jn-invite {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  gap: clamp(2.4rem, 5vw, 4.5rem);
+  align-items: center;
+  background: var(--ground);
+  padding: clamp(7rem, 15vh, 10.5rem) var(--rail) clamp(3.4rem, 7vw, 6rem);
+}
+
+.jn-invite h1 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.3rem, 1.3rem + 3.4vw, 4.05rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.033em;
+  margin: clamp(0.9rem, 2vw, 1.25rem) 0 0;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+
+/*
+ * THE DIALOGUE. The client's opening is the only copy on this site addressed
+ * to one person, so it is set as speech rather than as a paragraph: the
+ * question in display italic and soft ink (6.86:1 on cream), the answer
+ * outdented past a clay rule in full ink. Call, then reply.
+ */
+.jn-ask {
+  margin: clamp(1.5rem, 3.2vw, 2.3rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.2rem, 1.02rem + 0.8vw, 1.68rem);
+  line-height: 1.34;
+  letter-spacing: -0.012em;
+  color: var(--ink-soft);
+  max-width: 28ch;
+  text-wrap: pretty;
+}
+.jn-reply {
+  position: relative;
+  margin: clamp(1.1rem, 2.2vw, 1.55rem) 0 0;
+  padding-left: clamp(2.5rem, 5vw, 3.9rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.3rem, 1.06rem + 1.05vw, 1.95rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  max-width: 21ch;
+}
+.jn-reply::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: clamp(1.5rem, 3.4vw, 2.6rem);
+  height: 2px;
+  border-radius: 1px;
+  background: var(--clay);
+}
+.jn-invite__note {
+  margin: clamp(1.4rem, 2.6vw, 1.9rem) 0 0;
+  max-width: 36ch;
+  font-size: clamp(0.97rem, 0.93rem + 0.2vw, 1.06rem);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* two photographs laid by hand: one person, and one person inside a room.
+   Neither carries type; the small frame is mounted on the paper itself. */
+.jn-plate {
+  position: relative;
+  margin: 0;
+}
+.jn-plate__a,
+.jn-plate__b {
+  margin: 0;
+  overflow: hidden;
+  background: var(--ground-warm);
+}
+.jn-plate__a {
+  width: 80%;
+  margin-left: auto;
+  border-radius: 4px;
+}
+.jn-plate__a img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 32%;
+}
+.jn-plate__b {
+  position: absolute;
+  left: 0;
+  bottom: -7%;
+  width: 46%;
+  border: 7px solid var(--ground);
+  border-radius: 3px;
+  box-shadow: 0 18px 44px rgba(var(--shade), 0.2);
+}
+.jn-plate__b img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: 46% 66%;
+}
+
+/* ── MOVEMENT 2 — THE DOOR ───────────────────────────────────────── */
+.jn-door {
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  margin-top: clamp(2.2rem, 5vw, 4rem);
+  scroll-margin-top: clamp(4.75rem, 11vh, 6.5rem);
+}
+
+/* THE PHOTOGRAPH BECOMES THE GROUND.
+   The strip is full-bleed and ends in exactly --ground-deep, so there is no
+   seam and no bar: the picture simply runs out of light. Every stop carries
+   the same RGB triple, because a fade to `transparent` interpolates through
+   a dead grey in the middle on some engines. Nothing legible is ever on it. */
+.jn-door__strip {
+  position: relative;
+  overflow: hidden;
+  height: clamp(9.5rem, 27vh, 20rem);
+}
+.jn-door__strip img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 56%;
+}
+.jn-door__dissolve {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(28, 23, 20, 0.22) 0%,
+    rgba(28, 23, 20, 0.04) 24%,
+    rgba(28, 23, 20, 0.22) 52%,
+    rgba(28, 23, 20, 0.7) 76%,
+    rgba(28, 23, 20, 0.95) 92%,
+    #1c1714 100%
+  );
+}
+
+.jn-door__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  grid-template-areas:
+    'head list'
+    'act  list';
+  grid-template-rows: auto 1fr;
+  column-gap: clamp(2rem, 4.5vw, 4.5rem);
+  row-gap: clamp(1.6rem, 3vw, 2.4rem);
+  padding: clamp(2rem, 4vw, 3.2rem) var(--rail) clamp(3.6rem, 8vw, 6rem);
+}
+.jn-door__head {
+  grid-area: head;
+}
+.jn-door h2 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.95rem, 1.15rem + 2.8vw, 3.3rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.031em;
+  margin: clamp(0.85rem, 1.8vw, 1.15rem) 0 0;
+  max-width: 12ch;
+  text-wrap: balance;
+}
+/* the lead introduces the list, so it lives with the list — title on the left,
+   what actually happens on the right, the door across the bottom. */
+.jn-door__what {
+  grid-area: list;
+  align-self: start;
+  min-width: 0;
+}
+.jn-door__lead {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  max-width: 38ch;
+  font-size: clamp(0.97rem, 0.93rem + 0.2vw, 1.06rem);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+  text-wrap: pretty;
+}
+
+/* the seven things, as a litany rather than a bulleted list. cream on warm
+   black is 16.6:1 at every size, on every viewport, forever. */
+.jn-litany {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-self: start;
+}
+.jn-litany li {
+  display: flex;
+  gap: clamp(0.75rem, 1.6vw, 1.05rem);
+  border-top: 1px solid rgba(251, 247, 242, 0.18);
+  padding: clamp(0.6rem, 1.3vw, 0.85rem) 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.02rem, 0.94rem + 0.4vw, 1.24rem);
+  line-height: 1.3;
+  letter-spacing: -0.008em;
+  color: var(--ink-onPic);
+}
+.jn-litany li:last-child {
+  border-bottom: 1px solid rgba(251, 247, 242, 0.18);
+}
+.jn-litany li::before {
+  content: '';
+  flex: none;
+  width: 0.75rem;
+  height: 1px;
+  margin-top: 0.78em;
+  background: var(--sand);
+}
+
+/* ── THE PRIMARY ACTION ──────────────────────────────────────────────
+   It is not a button with more padding. It is a slab: the full measure of
+   its column, set in display type at headline scale, on the only clay
+   ground that can legally carry a label. --clay-deep gives cream 5.98:1 and
+   --clay-press 8.5:1, so every pixel of every state — resting, wiping,
+   hovered, focused, pressed — clears 4.5 with room. */
+/* THE DOOR TAKES THE WHOLE QUARTER IT STANDS IN. The heading holds the top of
+   the left column and the slab holds the bottom of it, edge to edge, while the
+   seven things run down the right. Presence by architecture, not by ornament. */
+.jn-door__act {
+  grid-area: act;
+  align-self: end;
+  margin-top: clamp(1.4rem, 3.5vw, 2.6rem);
+}
+.jn-slab {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.9rem, 2.2vw, 1.6rem);
+  width: 100%;
+  padding: clamp(1.15rem, 2.4vw, 1.75rem) clamp(1.25rem, 2.6vw, 2rem);
+  border-radius: 6px;
+  background: var(--clay-deep);
+  color: #fbf7f2;
+  text-decoration: none;
+  box-shadow: 0 14px 40px rgba(var(--shade), 0.45);
+}
+.jn-slab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--clay-press);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.52s var(--ease);
+}
+.jn-slab:hover::before,
+.jn-slab:focus-visible::before,
+.jn-slab:active::before {
+  transform: scaleX(1);
+}
+.jn-slab__text {
+  min-width: 0;
+}
+.jn-slab__label {
+  display: block;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.08rem, 0.95rem + 0.72vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+.jn-slab__sub {
+  display: block;
+  margin-top: 0.5rem;
+  font: 600 12px/1 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fbf7f2;
+}
+.jn-slab__arw {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: clamp(2.7rem, 5vw, 3.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 247, 242, 0.55);
+  transition: transform 0.45s var(--ease), border-color 0.35s var(--ease);
+}
+.jn-slab:hover .jn-slab__arw,
+.jn-slab:focus-visible .jn-slab__arw {
+  transform: translateX(5px);
+  border-color: #fbf7f2;
+}
+
+/* ── MOVEMENTS 3 & 4 — the two smaller doors, on paper ───────────── */
+.jn-open {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+  background: var(--ground);
+  padding: clamp(3.2rem, 7vw, 5.5rem) var(--rail) clamp(4rem, 9vw, 7rem);
+}
+.jn-card {
+  min-width: 0;
+}
+/* hierarchy is carried by ground and measure, not by a badge. */
+.jn-card--major {
+  background: var(--ground-warm);
+  border-top: 2px solid var(--clay);
+  border-radius: 0 0 5px 5px;
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+}
+.jn-card--minor {
+  border-top: 1px solid var(--rule);
+  padding: clamp(1.5rem, 3vw, 2.4rem) 0 0;
+}
+.jn-card h2 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.026em;
+  margin: 0;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.jn-card--major h2 {
+  font-size: clamp(1.5rem, 1.1rem + 1.5vw, 2.15rem);
+  max-width: 18ch;
+}
+.jn-card--minor h2 {
+  font-size: clamp(1.3rem, 1.05rem + 0.95vw, 1.72rem);
+  max-width: 18ch;
+}
+.jn-card__lead {
+  margin: clamp(0.9rem, 1.8vw, 1.2rem) 0 0;
+  font-size: clamp(0.97rem, 0.93rem + 0.2vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 40ch;
+  text-wrap: pretty;
+}
+.jn-card__cue {
+  margin: clamp(1rem, 2vw, 1.4rem) 0 0;
+  font: 600 12px/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.jn-list {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+}
+.jn-list li {
+  display: flex;
+  gap: 0.85rem;
+  border-top: 1px solid var(--rule);
+  padding: 0.62rem 0;
+  font-size: clamp(0.95rem, 0.92rem + 0.16vw, 1.02rem);
+  line-height: 1.45;
+  color: var(--ink);
+}
+.jn-list li:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.jn-list li::before {
+  content: '';
+  flex: none;
+  width: 0.7rem;
+  height: 1px;
+  margin-top: 0.72em;
+  background: var(--clay);
+}
+.jn-card__close {
+  margin: clamp(1.1rem, 2.2vw, 1.5rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1.08rem, 0.98rem + 0.45vw, 1.32rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+.jn-card__via {
+  margin: clamp(1rem, 2vw, 1.35rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1.08rem, 0.98rem + 0.45vw, 1.32rem);
+  line-height: 1.3;
+  color: var(--ink);
+  max-width: 20ch;
+}
+.jn-card__note {
+  margin: clamp(1.3rem, 2.6vw, 1.8rem) 0 0;
+  padding-top: clamp(0.9rem, 1.8vw, 1.2rem);
+  border-top: 1px solid var(--rule);
+}
+/* the rule spans the column, the measure does not — the same split as .jn-close */
+.jn-card__note p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+
+/* the secondary action. Deliberately a link and not a button: there is one
+   primary action on this page. clay-deep is 5.98:1 on cream and 5.35:1 on
+   the warm inset — both clear 4.5 at 14px. The hairline is already drawn
+   and brightens on hover, the same grammar the navigation uses. */
+.jn-act {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-top: clamp(1.15rem, 2.4vw, 1.7rem);
+  padding: 0.5rem 0 0.62rem;
+  font: 600 14px/1.35 var(--font-text);
+  letter-spacing: 0.004em;
+  color: var(--clay-deep);
+  text-decoration: none;
+}
+/* THE RULE UNDERLINES THE WORDS, NOT THE BOX. An absolutely positioned hairline
+   looks right until the label wraps — at 320px it draws one full-width line under
+   the last word and under the arrow. A real text-decoration follows each wrapped
+   line and stops where the words do. It is already drawn and brightens on hover,
+   which is the grammar the navigation uses. */
+.jn-act__t {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.42em;
+  /* --clay-deep at 42% */
+  text-decoration-color: rgba(156, 69, 38, 0.42);
+  transition: text-decoration-color 0.3s var(--ease);
+}
+.jn-act:hover .jn-act__t,
+.jn-act:focus-visible .jn-act__t {
+  text-decoration-color: currentColor;
+}
+.jn-act__arw {
+  flex: none;
+  transition: transform 0.4s var(--ease);
+}
+.jn-act:hover .jn-act__arw,
+.jn-act:focus-visible .jn-act__arw {
+  transform: translateX(4px);
+}
+
+.jn-close {
+  grid-column: 1 / -1;
+  margin: clamp(2.6rem, 5.5vw, 4.2rem) 0 0;
+  padding-top: clamp(1.6rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--rule);
+}
+.jn-close p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.15rem, 1rem + 0.75vw, 1.62rem);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--ink-soft);
+  max-width: 26ch;
+}
+
+/* ── reveal ──────────────────────────────────────────────────────────
+   Applied by script, and only to elements that were below the first screen
+   when it ran, so nothing the reader can already see is ever hidden. With
+   no JavaScript the class never lands and the page is simply there. */
+.jn-armed {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.jn-armed.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.8s var(--ease), transform 1s var(--ease);
+  transition-delay: var(--jn-d, 0ms);
+}
+
+/* ── ≤ 980px — the columns fold ─────────────────────────────────── */
+@media (max-width: 980px) {
+  .jn-invite {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.6rem, 8vw, 3.6rem);
+    align-items: start;
+  }
+  .jn-invite h1 {
+    max-width: none;
+  }
+  .jn-ask {
+    max-width: 32ch;
+  }
+  .jn-plate {
+    padding-bottom: 4%;
+  }
+  .jn-plate__a {
+    width: 72%;
+  }
+  .jn-plate__a img {
+    aspect-ratio: 3 / 4;
+  }
+  .jn-plate__b {
+    width: 42%;
+    bottom: 0;
+  }
+
+  .jn-door__body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'list'
+      'act';
+    grid-template-rows: none;
+    row-gap: clamp(1.5rem, 4vw, 2.2rem);
+  }
+  .jn-door h2 {
+    max-width: 16ch;
+  }
+  .jn-slab {
+    max-width: none;
+  }
+  .jn-door__lead {
+    max-width: 40ch;
+  }
+
+  .jn-open {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.4rem, 7vw, 3.4rem);
+  }
+  .jn-card--minor {
+    padding-top: clamp(1.4rem, 4vw, 2rem);
+  }
+  .jn-close p {
+    max-width: 30ch;
+  }
+}
+
+/* ── ≤ 600px ─────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .jn-invite {
+    padding-top: clamp(6.2rem, 17vh, 8rem);
+  }
+  .jn-plate__a {
+    width: 78%;
+  }
+  .jn-plate__b {
+    width: 44%;
+    border-width: 6px;
+  }
+  .jn-slab {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .jn-slab__arw {
+    margin-top: 0.15rem;
+  }
+  .jn-door__strip {
+    height: clamp(8.5rem, 22vh, 12rem);
+  }
+}
+
+/* ── ≤ 380px — the smallest supported frame ─────────────────────── */
+@media (max-width: 380px) {
+  .jn-invite h1 {
+    font-size: 2.15rem;
+  }
+  .jn-ask {
+    font-size: 1.14rem;
+  }
+  .jn-reply {
+    font-size: 1.24rem;
+    padding-left: 2.1rem;
+  }
+  .jn-slab__label {
+    font-size: 1.02rem;
+  }
+  .jn-slab__sub {
+    letter-spacing: 0.09em;
+  }
+}
+
+/* ── MOTION OFF ──────────────────────────────────────────────────────
+   Nothing on this page is reachable only through motion: the reveal is the
+   only animation, and it is never armed under reduce. These rules exist so
+   that a preference switched mid-session cannot strand anything. */
+@media (prefers-reduced-motion: reduce) {
+  .jn-armed,
+  .jn-armed.is-in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .jn-slab::before,
+  .jn-slab__arw,
+  .jn-act__t,
+  .jn-act__arw {
+    transition: none;
+  }
+}

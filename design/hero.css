@@ -1,0 +1,624 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SEQUENCE — the hero is a moving image.
+
+   Three clips of one class in one hall, in the order the class
+   happened: FOLD -> SETTLE -> REST. The bodies in the frame descend
+   as the reader descends. Then the next section climbs over the
+   picture for 46svh so the two are on screen together, moving as one.
+
+   Everything animated here is transform or opacity. Nothing reads
+   layout inside a scroll listener. Colours below are measured, not
+   guessed — see the header comments on each.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* --clay #C1613C from _shared.css is 3.90:1 with cream and 3.99:1
+     with ink. It CANNOT carry text. It is a hairline colour here.
+     --clay-deep is the ground the CTA actually stands on: 5.98:1. */
+  --clay-deep:  #9C4526;
+  --clay-press: #7A3319;   /* 8.5:1 with cream */
+  --teal-deep:  #265E5B;   /* 6.95:1 on cream, and still 5.06:1 under the
+                              light pill's own drop shadow, which is where
+                              the section-02 eyebrow actually lands. */
+  --sand:       #F6D9C1;   /* on-picture accent. Paler than the clay it comes
+                              from, because on a photograph luminance is the only
+                              contrast lever that survives every frame. */
+  --ink-onPic:  #FBF7F2;
+  --ink-onPic-2:rgba(251,247,242,0.90);
+  --shade:      16,12,10;  /* the scrim's ink, warm not blue */
+
+  --heroH:   250svh;
+  --overlap:  46svh;
+  --rail:    clamp(1.35rem, 4.2vw, 4.25rem);
+  --ease:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: auto; }
+body { overflow-x: clip; }
+
+/* one focus treatment that is visible on ANY ground: a cream ring
+   inside a dark halo. Never removed, never colour-dependent. */
+:focus-visible {
+  outline: 2px solid #FBF7F2;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--shade), 0.92);
+  border-radius: 3px;
+}
+.within :focus-visible, .sheet :focus-visible {
+  outline-color: #241D18;
+  box-shadow: 0 0 0 4px rgba(251,247,242,0.95);
+}
+
+.sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: fixed; z-index: 300; top: 0; left: 50%;
+  transform: translate(-50%, -140%);
+  background: var(--ground); color: var(--ink);
+  padding: 0.7rem 1.2rem; border-radius: 0 0 6px 6px;
+  font: 600 13px/1 var(--font-text); text-decoration: none;
+  transition: transform 0.25s var(--ease);
+}
+.skip:focus-visible { transform: translate(-50%, 0); }
+
+/* ── NAVIGATION ─────────────────────────────────────────────────────
+   Concept B used rgba(28,23,20,0.34). Over the skylight in these
+   frames (~#E8E8E0) that composites to ~#7e7c76 and gives cream 3.91:1
+   — a fail. 0.74 composites to ~#4b4743 and gives 8.6:1. The bar owns
+   a ground; that is the only fix that survives every frame.          */
+.pill {
+  position: fixed; z-index: 100;
+  top: clamp(0.75rem, 1.6vw, 1.35rem); left: 50%;
+  width: min(calc(100% - 2 * var(--page)), 1200px);
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.3rem;
+  border-radius: 999px;
+  background: rgba(var(--shade), 0.74);
+  border: 1px solid rgba(251,247,242,0.20);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  color: var(--ink-onPic);
+  --pillY: 0%;
+  transform: translate(-50%, var(--pillY));
+  transition: transform 0.42s var(--ease), background 0.4s var(--ease),
+              border-color 0.4s var(--ease), color 0.4s var(--ease);
+}
+.pill.is-away { --pillY: calc(-100% - clamp(0.75rem, 1.6vw, 1.35rem) - 6px); }
+.pill:focus-within { --pillY: 0% !important; }
+
+/* off the picture the pill inverts to paper. Ink on cream is 15.6:1. */
+.pill.is-light {
+  background: rgba(251,247,242,0.90);
+  border-color: rgba(36,29,24,0.16);
+  color: var(--ink);
+  box-shadow: 0 8px 30px rgba(36,29,24,0.12);
+}
+
+.pill__mark {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1.02rem, 0.94rem + 0.4vw, 1.22rem);
+  font-weight: 500; letter-spacing: -0.018em;
+  text-decoration: none; line-height: 1; white-space: nowrap;
+  padding: 0.35rem 0.1rem;
+}
+.pill__nav { display: flex; align-items: center; gap: clamp(0.8rem, 1.5vw, 1.6rem); }
+.pill__links {
+  display: flex; align-items: center; gap: clamp(0.8rem, 1.6vw, 1.7rem);
+  list-style: none; margin: 0; padding: 0;
+}
+/* full-opacity labels. Dimming links to 0.74 was the old contrast bug;
+   hover is carried by a hairline that DRAWS, not by opacity. */
+.pill__links a {
+  position: relative; display: block;
+  font: 500 13.5px/1 var(--font-text); text-decoration: none;
+  padding: 0.55rem 0.1rem; color: inherit;
+}
+.pill__links a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0.28rem; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s var(--ease);
+}
+.pill__links a:hover::after, .pill__links a:focus-visible::after { transform: scaleX(1); }
+
+.pill__cta {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-block;
+  font: 600 13px/1 var(--font-text); text-decoration: none;
+  padding: 0.72rem 1.25rem; border-radius: 999px;
+  background: var(--clay-deep); color: #FBF7F2;
+  white-space: nowrap;
+  transition: background 0.3s var(--ease);
+}
+.pill__cta::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: var(--clay-press);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.pill__cta:hover::before, .pill__cta:focus-visible::before, .pill__cta:active::before { transform: scaleX(1); }
+
+.pill__menu {
+  display: none; align-items: center; gap: 0.5rem;
+  font: 600 13px/1 var(--font-text); color: inherit;
+  background: transparent; border: 1px solid currentColor;
+  padding: 0.68rem 0.95rem; border-radius: 999px; cursor: pointer;
+}
+.pill__bars { display: inline-flex; flex-direction: column; gap: 3px; width: 14px; }
+.pill__bars i { display: block; height: 1.5px; background: currentColor; transition: transform 0.3s var(--ease); }
+.pill__menu[aria-expanded="true"] .pill__bars i:first-child { transform: translateY(2.2px) rotate(15deg); }
+.pill__menu[aria-expanded="true"] .pill__bars i:last-child  { transform: translateY(-2.2px) rotate(-15deg); }
+
+/* ── the mobile sheet ─────────────────────────────────────────────── */
+.sheet {
+  position: fixed; inset: 0; z-index: 99;
+  background: var(--ground);
+  display: flex; align-items: center;
+  padding: 0 var(--page);
+}
+.sheet[hidden] { display: none; }
+.sheet__nav { display: flex; flex-direction: column; gap: 0.4rem; width: 100%; }
+.sheet__nav a {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1.9rem, 1.3rem + 3vw, 2.6rem); font-weight: 400;
+  letter-spacing: -0.02em; text-decoration: none; color: var(--ink);
+  padding: 0.5rem 0; border-bottom: 1px solid var(--rule);
+}
+.sheet__cta {
+  margin-top: 1.4rem; align-self: flex-start;
+  background: var(--clay-deep); color: #FBF7F2 !important;
+  font-family: var(--font-text) !important; font-size: 15px !important;
+  font-weight: 600 !important; letter-spacing: 0 !important;
+  padding: 1rem 1.5rem !important; border-radius: 5px; border-bottom: 0 !important;
+}
+
+/* ── HERO ───────────────────────────────────────────────────────────
+   The tall box only exists when JS is running the choreography, so a
+   no-JS reader gets one screen of photograph, not three of nothing.  */
+.hero { position: relative; min-height: 100svh; background: var(--ground-deep); }
+.js .hero { height: var(--heroH); }
+.html-static .hero, html.is-static .hero { height: auto; min-height: 100svh; }
+
+.stage {
+  position: sticky; top: 0; z-index: 1;
+  height: 100svh; overflow: hidden; isolation: isolate;
+  background: var(--ground-deep);
+}
+html.is-static .stage { position: relative; }
+
+.frame {
+  position: absolute; inset: 0; z-index: 0;
+  transform: scale(1.10); transform-origin: 50% 42%;
+  will-change: transform;
+}
+.mov { position: absolute; inset: 0; }
+.mov[data-mov="1"], .mov[data-mov="2"] { opacity: 0; will-change: opacity; }
+.mov picture { display: block; position: absolute; inset: 0; }
+.mov__still, .mov__vid {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; max-width: none;
+  object-fit: cover; object-position: 50% 50%;
+}
+/* the poster NEVER leaves. The video fades in on top of it once it is
+   genuinely playing, so a stall, an eviction or a blocked autoplay
+   shows a photograph rather than a black rectangle. */
+.mov__vid { opacity: 0; transition: opacity 0.75s var(--ease-io); }
+.mov__vid.is-live { opacity: 1; }
+
+/* ── the scrim: a POOL, not a wash ──────────────────────────────────
+   Anchored bottom-left where the type is. 0.90 at the anchor, gone by
+   72% across, so the hall, the light and the bodies are untouched.
+   0.75 alpha over the worst pixel in these frames measures cream at
+   8.9:1 and the sand eyebrow at 5.3:1.                               */
+.scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    /* the corner the type stands in */
+    radial-gradient(88% 98% at -4% 106%,
+      rgba(var(--shade),0.94) 0%,  rgba(var(--shade),0.90) 34%,
+      rgba(var(--shade),0.74) 52%, rgba(var(--shade),0.36) 70%,
+      rgba(var(--shade),0.07) 88%, rgba(var(--shade),0.00) 100%),
+    /* a wedge that follows the light. In all three frames the hall
+       brightens towards the centre-right skylight, so the shade thins
+       in the same direction the room does. It never crosses 72%. */
+    linear-gradient(97deg,
+      rgba(var(--shade),0.66) 0%,  rgba(var(--shade),0.54) 20%,
+      rgba(var(--shade),0.28) 38%, rgba(var(--shade),0.07) 56%,
+      rgba(var(--shade),0.00) 72%),
+    /* ground the frame */
+    linear-gradient(to top,
+      rgba(var(--shade),0.58) 0%,  rgba(var(--shade),0.28) 20%,
+      rgba(var(--shade),0.07) 40%, rgba(var(--shade),0.00) 56%),
+    linear-gradient(to left,
+      rgba(var(--shade),0.40) 0%,  rgba(var(--shade),0.08) 14%,
+      rgba(var(--shade),0.00) 28%);
+}
+/* a constant, light top band so the pill is never pasted onto glare */
+.scrim-right {
+  position: absolute; inset: 0 0 0 auto; width: 22%; z-index: 1; pointer-events: none;
+  background: linear-gradient(to left,
+    rgba(var(--shade),0.40) 0%, rgba(var(--shade),0.16) 42%, rgba(var(--shade),0.00) 100%);
+}
+.scrim-top {
+  position: absolute; inset: 0 0 auto 0; height: 34svh; z-index: 1; pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(var(--shade),0.46) 0%, rgba(var(--shade),0.16) 42%, rgba(var(--shade),0.00) 100%);
+}
+
+/* ── HERO TYPE ──────────────────────────────────────────────────────
+   Set inside the frame, on the frame's own dark corner. It recedes as
+   you scroll; it never gains anything, so nothing is motion-only.    */
+.type {
+  position: absolute; z-index: 2;
+  left: var(--rail); bottom: clamp(4.5rem, 12svh, 8rem);
+  width: min(38rem, calc(100% - 2 * var(--rail)));
+  color: var(--ink-onPic);
+  will-change: transform, opacity;
+}
+/* A LOCAL LIFT, NOT A HEAVIER SCRIM.
+   The global pool is anchored at the bottom-left corner and reaches the headline
+   comfortably (6.8:1) but has thinned by the top of the block, where the eyebrow
+   sits over the hall's brightest wall — 3.76:1 even in full cream.
+
+   Deepening the global scrim to fix nine words would flatten the photograph
+   everywhere, which is the mistake the framed candidate was marked down for. So
+   the lift travels WITH the type instead: an oversized, heavily feathered ellipse
+   centred on this block, strongest at its top-left where the words begin and gone
+   well before the frame's edges. It scrolls and fades with the type, so the
+   moment the words leave, the picture is completely clear of it. */
+/* The box must be large enough for the ellipse to reach ZERO before it meets an
+   edge, or the edge itself becomes a visible seam across the photograph. Centred
+   at 26%/55%, the fade completes at -7% top and 92% right — inside the box on
+   both. It clips only left and bottom, which sit outside the frame and inside the
+   global pool's darkest corner respectively, where nothing can show. */
+.type::before {
+  content: ''; position: absolute; z-index: -1;
+  inset: -9rem -34% -5rem -7rem;
+/* Six stops, not five, and the tail spread across the outer 45% rather than the
+   outer 20%. The flat concrete in the lower right of these frames is the one
+   surface with no texture to hide a gradient in, and a falloff any faster than
+   this reads there as a visible arc drawn over the photograph. */
+  background: radial-gradient(92% 72% at 32% 52%,
+    rgba(var(--shade), var(--lift, 0.62)) 0%,
+    rgba(var(--shade), calc(var(--lift, 0.62) * 0.90)) 24%,
+    rgba(var(--shade), calc(var(--lift, 0.62) * 0.66)) 44%,
+    rgba(var(--shade), calc(var(--lift, 0.62) * 0.36)) 62%,
+    rgba(var(--shade), calc(var(--lift, 0.62) * 0.14)) 79%,
+    rgba(var(--shade), calc(var(--lift, 0.62) * 0.04)) 90%,
+    rgba(var(--shade), 0.00) 100%);
+  pointer-events: none;
+}
+/* A SHORT VIEWPORT IS THE HARD CASE, AND IT IS A HEIGHT PROBLEM, NOT A WIDTH ONE.
+   At 1024x640 the type block has nowhere to sit but high in the frame, where the
+   hall's skylight roof is brightest — the headline measured 2.43:1 there while
+   1440x900 and 2560x1440 were both clean. Laptops in this band are common, so it
+   cannot be treated as an edge case. The lift scales with the room available
+   rather than with the width, because height is what actually moved the type. */
+@media (max-height: 780px) { .type { --lift: 0.80; } }
+@media (max-height: 620px) { .type { --lift: 0.88; } }
+/* THE EYEBROW WAS THE ONE MEASURED FAILURE IN THIS HERO.
+   Sand at 11.5px measured 2.93:1 against the composited pixels — not the
+   5.3:1 estimated from the scrim's worst pixel, because the eyebrow sits at the
+   TOP of the type block, furthest from a pool anchored at the bottom-left corner,
+   over the brightest part of the hall.
+
+   The fix is not a heavier scrim, which would flatten the photograph to rescue
+   nine words. The warm accent moves into a RULE — ornament, where contrast rules
+   do not apply — and the text itself goes to full cream, which is the same ink
+   the headline already proves at this position. Larger and wider-tracked too:
+   11.5px was under the 12px floor this text should have had anyway. */
+/* IT IS A LABEL, SO IT GETS A LABEL'S GROUND.
+   Tuning a gradient until this passed turned into whack-a-mole: 1440 and 2560
+   would pass while 1280x720 failed, because a fixed-geometry scrim cannot
+   guarantee a ratio over an arbitrary photograph at an arbitrary viewport. The
+   nine smallest words on the page were dictating how dark the whole picture had
+   to be — the tail wagging the dog.
+
+   So it stops depending on the photograph. It carries the same smoked-glass
+   material as the navigation pill, which makes its contrast a constant (8.9:1)
+   at every size, on every frame, including the two clips it has never been
+   measured against. Reusing the pill's material rather than inventing a third
+   surface is cohesion; the sand rule stays as ornament, where ratios do not apply. */
+.type .eyebrow {
+  color: var(--ink-onPic); margin: 0;
+  font-size: 12.5px; letter-spacing: 0.2em; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 0.8em;
+  padding: 0.5rem 0.95rem 0.5rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(var(--shade), 0.74);
+  border: 1px solid rgba(251, 247, 242, 0.18);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+}
+.type .eyebrow::before {
+  content: ''; flex: none;
+  width: 1.5rem; height: 2px; border-radius: 1px;
+  background: var(--sand);
+}
+.type h1 {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(2.55rem, 1.15rem + 4.6vw, 5.1rem);
+  font-weight: 400; line-height: 0.98; letter-spacing: -0.032em;
+  margin: 1.05rem 0 0; text-wrap: balance;
+  text-shadow: 0 1px 26px rgba(var(--shade), 0.5);
+}
+.type h1 em { font-style: italic; font-weight: 300; }
+.type .lede {
+  color: var(--ink-onPic-2);
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.17rem);
+  line-height: 1.6; margin: 1.35rem 0 0; max-width: 30rem; text-wrap: pretty;
+  text-shadow: 0 1px 20px rgba(var(--shade), 0.55);
+}
+.acts { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.6rem; margin-top: 2.1rem; }
+
+/* ── the CTA, reconsidered ──────────────────────────────────────────
+   Not a white pill. A clay rectangle — the colour is off the shala
+   floor and the slings in these very photographs, deepened to
+   #9C4526 so cream on it measures 5.98:1 (the raw --clay is 3.90:1
+   and cannot legally carry a label). The secondary is demoted from a
+   button to a link, because there is one primary action, not two.
+   Hover is a ground that WIPES in, so touch gets it on :active too.  */
+.btn-join {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 0.75em;
+  padding: 1.02rem 1.6rem; border-radius: 5px;
+  background: var(--clay-deep); color: #FBF7F2;
+  font: 600 14px/1 var(--font-text); letter-spacing: 0.005em;
+  text-decoration: none;
+  box-shadow: 0 10px 34px rgba(var(--shade), 0.42);
+}
+.btn-join::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: var(--clay-press);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.48s var(--ease);
+}
+.btn-join:hover::before, .btn-join:focus-visible::before, .btn-join:active::before { transform: scaleX(1); }
+.btn-join__arw { transition: transform 0.4s var(--ease); flex: none; }
+.btn-join:hover .btn-join__arw, .btn-join:focus-visible .btn-join__arw { transform: translateX(4px); }
+
+.lnk {
+  position: relative; display: inline-flex; align-items: center;
+  padding: 1.02rem 0; color: var(--ink-onPic);
+  font: 500 14px/1 var(--font-text); text-decoration: none;
+  text-shadow: 0 1px 16px rgba(var(--shade), 0.6);
+}
+.lnk::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0.82rem; height: 1px;
+  background: currentColor; opacity: 0.42;
+  transform-origin: left; transition: opacity 0.3s, transform 0.45s var(--ease);
+}
+.lnk:hover::after, .lnk:focus-visible::after { opacity: 1; transform: scaleX(1.04); }
+
+/* ── THE SEQUENCE INDEX ─────────────────────────────────────────────
+   Replaces both the provenance caption and the bouncing chevron. It
+   states what the hero actually is — three movements — shows where
+   you are, and lets you jump. Each mark is a real 30px button with a
+   screen-reader name; only the active label is drawn, on its own
+   ground, so contrast never depends on the frame behind it.          */
+.idx {
+  position: absolute; z-index: 2;
+  right: var(--rail); top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 0.85rem;
+}
+.idx__rule {
+  position: relative; width: 1px; height: clamp(5rem, 13svh, 8rem);
+  background: rgba(251,247,242,0.50); order: 2;
+}
+.idx__fill {
+  position: absolute; inset: 0; background: var(--sand);
+  transform: scaleY(0); transform-origin: top; will-change: transform;
+}
+.idx__marks {
+  order: 3; list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; justify-content: space-between;
+  height: clamp(5rem, 13svh, 8rem);
+}
+.idx__mark {
+  display: grid; place-items: center;
+  width: 30px; height: 30px; margin: -8px -8px -8px 0;
+  padding: 0; border: 0; background: transparent; cursor: pointer;
+}
+.idx__dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(251,247,242,0.68);
+  box-shadow: 0 0 0 3px rgba(var(--shade), 0.30);
+  transition: background 0.35s, transform 0.35s var(--ease);
+}
+.idx__mark:hover .idx__dot { background: #FBF7F2; transform: scale(1.3); }
+.idx__mark[aria-current="true"] .idx__dot { background: var(--sand); transform: scale(1.75); }
+
+.idx__now {
+  order: 1; position: relative; margin: 0;
+  width: 5.6rem; height: 1.9rem;
+  font: 600 10.5px/1.9rem var(--font-text);
+  transition: transform 0.55s var(--ease);
+  letter-spacing: 0.2em; text-transform: uppercase; text-align: right;
+}
+/* SAND IS ORNAMENT, NEVER TEXT — the rule the eyebrow already follows.
+   Sand on 0.72 shade measured 4.0:1 at 1280x720 against the hall's brightest
+   wall, short of the 4.5 this 10.5px label needs. Sand's luminance is simply too
+   close to the frames it sits on, and darkening the ground until a dim ink works
+   is solving the wrong end. Cream on the pill's own 0.74 material clears it with
+   room at every size, and the sand stays where it belongs: the rule beside the
+   eyebrow, the tick on this rail, the hairline under the caption. */
+.idx__now span {
+  position: absolute; inset: 0;
+  padding: 0 0.6rem; border-radius: 3px;
+  background: rgba(var(--shade), 0.78);
+  border: 1px solid rgba(251, 247, 242, 0.14);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  color: var(--ink-onPic);
+  opacity: 0; transform: translateY(4px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.idx__now span.is-on { opacity: 1; transform: none; }
+
+/* the static provenance line, used only when motion is off */
+.cap {
+  position: absolute; z-index: 2; display: none;
+  right: var(--rail); bottom: clamp(1.2rem, 3svh, 2rem);
+  color: var(--ink-onPic-2); margin: 0;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  text-shadow: 0 1px 14px rgba(var(--shade), 0.8);
+}
+.cap::before { content: ''; width: 18px; height: 1px; background: var(--sand);
+  display: inline-block; margin-right: 0.7em; transform: translateY(-4px); }
+
+/* ── SECTION 02 — the handoff and its own idea ──────────────────────
+   Pulled up over the hero. For 46svh the moving picture and the paper
+   are both on screen and moving together at the same speed; the hero
+   is not cut, it is covered. The clay hairline is the seam, named.   */
+.within {
+  position: relative; z-index: 3;
+  background: var(--ground); color: var(--ink);
+  border-top: 2px solid var(--clay);
+  box-shadow: 0 -30px 70px rgba(var(--shade), 0.30);
+  padding: clamp(1.7rem, 3.2vw, 2.9rem) var(--rail) clamp(3.5rem, 8vw, 6rem);
+  /* an in-page target must never land under the fixed pill */
+  scroll-margin-top: clamp(4.75rem, 11vh, 6.5rem);
+}
+.js .within { margin-top: calc(-1 * var(--overlap)); }
+html.is-static .within { margin-top: 0; }
+
+.within__head {
+  display: grid; gap: clamp(1.2rem, 3vw, 2rem);
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 78rem;
+}
+.within__eyebrow {
+  margin: 0; display: flex; align-items: baseline; gap: 0.8rem;
+  font: 600 11.5px/1 var(--font-text); letter-spacing: 0.19em;
+  text-transform: uppercase; color: var(--teal-deep);
+}
+.within__eyebrow span {
+  font-family: var(--font-display); font-size: 13px; letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.within__h {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1.75rem, 1.0rem + 2.6vw, 3.1rem);
+  font-weight: 400; line-height: 1.08; letter-spacing: -0.028em;
+  margin: 0; max-width: 22ch; text-wrap: balance;
+}
+.within__h em { font-style: italic; font-weight: 300; color: var(--ink-soft); }
+
+/* one wide moving frame became four narrow still ones. */
+.reg {
+  list-style: none; margin: clamp(2.5rem, 6vw, 4.5rem) 0 0; padding: 0;
+  display: grid; gap: clamp(1rem, 2.4vw, 2rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.reg__fig { margin: 0; overflow: hidden; border-radius: 3px; background: var(--ground-warm); }
+.reg__fig img {
+  width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block;
+  transition: transform 0.7s var(--ease);
+}
+.reg__i:hover .reg__fig img { transform: scale(1.035); }
+.reg__n {
+  margin: 0.9rem 0 0; font: 600 11px/1 var(--font-text);
+  letter-spacing: 0.16em; color: var(--clay-deep);
+}
+.reg__w {
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1.15rem, 0.95rem + 0.7vw, 1.6rem);
+  font-weight: 400; font-style: italic; letter-spacing: -0.01em;
+  margin: 0.4rem 0 0; padding-top: 0.55rem; border-top: 1px solid var(--rule);
+}
+.within__foot {
+  margin: clamp(2.5rem, 6vw, 4rem) 0 0; max-width: 34ch;
+  font-family: var(--font-display); font-optical-sizing: auto;
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem);
+  font-style: italic; font-weight: 300; line-height: 1.45; color: var(--ink-soft);
+}
+.tail { height: 42svh; background: var(--ground); position: relative; z-index: 3; }
+
+/* ── ≤ 860px ────────────────────────────────────────────────────────
+   Art direction, not a squeeze: portrait source frames from the same
+   room, because a 16:9 hall cropped into a 390px phone is a slice of
+   nothing. See the <picture> media queries in the markup.
+   The links live in .pill__links, a container — so hiding them is a
+   single (0,1,0) rule and there is no specificity fight with .cta.   */
+@media (max-width: 860px) {
+  :root { --heroH: 210svh; --overlap: 40svh; }
+  .pill { padding-left: 1.05rem; }
+  .pill__links { display: none; }
+  .pill__cta { display: none; }
+  .pill__menu { display: inline-flex; }
+  .type { bottom: clamp(4.6rem, 9.5svh, 6rem); width: calc(100% - 2 * var(--rail)); }
+  .type .eyebrow { font-size: 12px; letter-spacing: 0.17em; gap: 0.65em; }
+  .type .eyebrow::before { width: 1.3rem; }
+  .type .lede { font-size: 1rem; line-height: 1.5; margin-top: 1.15rem; max-width: none; }
+  .type h1 { margin-top: 0.9rem; }
+  .type h1 { font-size: clamp(2.4rem, 1.1rem + 6.6vw, 3.4rem); }
+  .type .lede { max-width: 32ch; }
+  .acts { gap: 0.2rem 1.2rem; margin-top: 1.7rem; }
+  .btn-join { width: 100%; justify-content: space-between; }
+  .scrim {
+    background:
+      linear-gradient(to top,
+        rgba(var(--shade),0.90) 0%,  rgba(var(--shade),0.90) 18%,
+        rgba(var(--shade),0.84) 34%, rgba(var(--shade),0.71) 47%,
+        rgba(var(--shade),0.42) 60%, rgba(var(--shade),0.14) 74%,
+        rgba(var(--shade),0.02) 86%, rgba(var(--shade),0.16) 100%);
+  }
+  .scrim-right { display: none; }
+  .scrim-right {
+  position: absolute; inset: 0 0 0 auto; width: 22%; z-index: 1; pointer-events: none;
+  background: linear-gradient(to left,
+    rgba(var(--shade),0.40) 0%, rgba(var(--shade),0.16) 42%, rgba(var(--shade),0.00) 100%);
+}
+.scrim-top { height: 26svh; }
+  /* the index goes horizontal and sits under the type block */
+  .idx {
+    top: auto; bottom: clamp(1.1rem, 3svh, 1.8rem); right: auto; left: var(--rail);
+    transform: none; flex-direction: row-reverse; align-items: center; gap: 0.7rem;
+  }
+  .idx__rule { display: none; }
+  .idx__marks { flex-direction: row; height: auto; gap: 0.15rem; }
+  .idx__mark { margin: 0; }
+  .idx__now { width: 5rem; height: 1.7rem; line-height: 1.7rem; text-align: left; }
+  .idx__now span { padding: 0 0.5rem; }
+  .reg { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.4rem 0.9rem; }
+  .within { border-top-width: 2px; }
+  .within__h { max-width: 18ch; }
+}
+@media (max-width: 480px) {
+  .eyebrow__where { display: none; }
+}
+@media (max-width: 400px) {
+  .type h1 { font-size: 2.25rem; }
+  .type .lede { font-size: 0.97rem; }
+}
+
+/* ── MOTION OFF ─────────────────────────────────────────────────────
+   A complete, static, usable hero: one photograph, all of the type,
+   no video element ever given a src, no sticky range to scroll
+   through, and the sequence index replaced by honest provenance
+   rather than a control that would lead nowhere.                     */
+@media (prefers-reduced-motion: reduce) {
+  .hero, .js .hero { height: auto; min-height: 100svh; }
+  .stage { position: relative; }
+  .frame { transform: scale(1.02); }
+  .mov[data-mov="1"], .mov[data-mov="2"] { display: none; }
+  .mov__vid { display: none; }
+  .type { opacity: 1 !important; transform: none !important; }
+  .idx { display: none; }
+  .cap { display: block; }
+  .js .within, .within { margin-top: 0; }
+  .pill { transition: none; }
+  .pill.is-away { --pillY: 0%; }
+  .btn-join::before, .pill__cta::before { transition: none; }
+  .reg__fig img { transition: none; }
+}
+/* with no JS there is no progress to report, so the sequence index would
+   be a control that leads nowhere. Show the provenance line instead. */
+html:not(.js) .idx { display: none; }
+html:not(.js) .cap { display: block; }
+html.is-static .mov[data-mov="1"], html.is-static .mov[data-mov="2"] { display: none; }
+html.is-static .mov__vid { display: none; }
+html.is-static .idx { display: none; }
+html.is-static .cap { display: block; }
+html.is-static .frame { transform: scale(1.02); }

@@ -1,0 +1,245 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   THE SITEWIDE FOOTER
+
+   It appears beneath four very different sections, so its job is to settle
+   the page: one warm-black band, a quiet masthead row of facts and links,
+   then the client's two closing lines given the whole width. Those lines are
+   the last thing anyone reads on this site, so they are the largest type
+   down here — a footer that ends on a sentence rather than on a copyright.
+
+   Clay hairline on top: the same seam .within uses to meet the hero, at 1px
+   instead of 2px so it reads as that rule's quieter cousin rather than as a
+   second announcement. --clay is ornament and this is ornament.
+
+   No new colour. Cream and one solid soft cream, both measured.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.ft {
+  /* rgba(251,247,242,0.72) already composited on --ground-deep, kept solid so
+     what a probe reads is what a reader sees. 9.07:1 on this ground. */
+  --ft-soft: #bdb8b4;
+  --ft-hair: rgba(251, 247, 242, 0.15);
+  --ft-max: 1200px;
+
+  position: relative;
+  z-index: 3;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  border-top: 1px solid var(--clay);
+  padding: clamp(3.2rem, 7vw, 5rem) var(--rail) clamp(2.2rem, 4vw, 3rem);
+}
+.ft__in {
+  max-width: var(--ft-max);
+  margin-inline: auto;
+}
+
+/* ── the masthead row ─────────────────────────────────────────────────── */
+.ft__mast {
+  display: grid;
+  gap: clamp(2.1rem, 5vw, 3.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+.ft__id {
+  min-width: 0;
+}
+.ft__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.55rem, 1.2rem + 1.3vw, 2.15rem);
+  font-weight: 400;
+  letter-spacing: -0.024em;
+  line-height: 1.1;
+  color: var(--ink-onDark);
+}
+.ft__desc {
+  margin: 0.5rem 0 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ft-soft);
+}
+/* the tagline, verbatim — Connect · Learn · Collaborate · GROW, which is not
+   page 2's four pillars (those end on Share). Set as a register, not a
+   sentence, with a sand rule above it: ornament, where ratios do not apply. */
+.ft__reg {
+  margin: 1.35rem 0 0;
+  padding-top: 1.05rem;
+  position: relative;
+  font: 600 12px/1.7 var(--font-text);
+  letter-spacing: 0.2em;
+  word-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ft-soft);
+  /* rem, not ch: `ch` resolves against this element's own 12px, so 34ch was
+     224px and broke the register across two lines at every width. */
+  max-width: 27rem;
+  text-wrap: balance;
+}
+.ft__reg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.25rem;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--sand);
+}
+
+.ft__col {
+  min-width: 0;
+}
+.ft__k {
+  margin: 0 0 0.9rem;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ft-soft);
+}
+.ft__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+/* full-opacity labels: dimming a link to carry its resting state is the
+   contrast bug the navigation already learned. The hairline draws instead. */
+.ft__a {
+  position: relative;
+  display: inline-block;
+  padding: 0.42rem 0;
+  font: 500 14.5px/1.35 var(--font-text);
+  color: var(--ink-onDark);
+  text-decoration: none;
+}
+.ft__a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.28rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease);
+}
+.ft__a:hover::after,
+.ft__a:focus-visible::after {
+  transform: scaleX(1);
+}
+.ft__sub {
+  display: block;
+  margin-top: 0.15rem;
+  font: 500 12.5px/1.4 var(--font-text);
+  letter-spacing: 0.04em;
+  color: var(--ft-soft);
+}
+
+/* ── the envoi. The client's two closing lines, with room. ────────────── */
+.ft__envoi {
+  margin-top: clamp(2.8rem, 7vw, 4.5rem);
+  padding-top: clamp(2rem, 4vw, 2.8rem);
+  border-top: 1px solid var(--ft-hair);
+}
+.ft__rise {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.75rem, 1.15rem + 2.4vw, 3rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.026em;
+  color: var(--ink-onDark);
+}
+.ft__better {
+  margin: 0.7rem 0 0;
+  font-size: clamp(0.98rem, 0.94rem + 0.25vw, 1.1rem);
+  line-height: 1.5;
+  color: var(--ft-soft);
+}
+
+/* ── the base line. Two facts and nothing else: there is no address, no
+   email, no year and no count to put here, and a plausible-looking one
+   would be worse than a gap.                                             */
+.ft__base {
+  margin-top: clamp(2.2rem, 5vw, 3.2rem);
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--ft-hair);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+.ft__trust {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--ft-soft);
+}
+.ft__top {
+  position: relative;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  white-space: nowrap;
+}
+.ft__top::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.1rem;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease);
+}
+.ft__top:hover::after,
+.ft__top:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ── ≥ 760px ──────────────────────────────────────────────────────────── */
+@media (min-width: 760px) {
+  .ft__mast {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.6rem, 4vw, 3.5rem);
+  }
+}
+
+/* ── ≥ 1000px · the envoi takes the width, the register sits beside it ── */
+@media (min-width: 1000px) {
+  .ft__mast {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .ft__envoi {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr);
+    align-items: baseline;
+    gap: 1rem clamp(1.6rem, 4vw, 3.5rem);
+  }
+  .ft__better {
+    margin-top: 0;
+    justify-self: end;
+    text-align: right;
+    max-width: 30ch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ft__a::after,
+  .ft__top::after {
+    transition: none;
+  }
+}

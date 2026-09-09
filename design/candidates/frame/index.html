@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frame — Yoga Mandala</title>
+<meta name="description" content="Yoga Mandala — a community of Yoga teachers and serious practitioners in Bengaluru.">
+<link rel="stylesheet" href="/_shared.css">
+<link rel="stylesheet" href="frame.css">
+<link rel="preload" as="image" href="/media/posters/ss-ven0096.avif" type="image/avif" media="(min-width: 720px)">
+</head>
+<body>
+
+<a class="skip" href="#lede">Skip to content</a>
+
+<!-- ═══════════ MASTHEAD ═══════════
+     Not a pill floating over a photograph. At rest it is a bar sitting on the
+     warm mat, resting on the SAME hairline that is the frame's top rule — so
+     the navigation is part of the frame's architecture, and its contrast is
+     ink-on-ground, provable, and independent of whatever the picture is doing.
+     It becomes the client's glass pill only once it detaches from the frame. -->
+<header class="mast" id="mast" data-state="mast">
+  <a class="mast__mark" href="#">Yoga&nbsp;Mandala</a>
+
+  <nav class="mast__nav" id="nav" aria-label="Primary">
+    <span class="mast__ind" id="ind" aria-hidden="true"></span>
+    <a class="lnk" href="#" aria-current="page">About</a>
+    <a class="lnk" href="#">Within</a>
+    <a class="lnk" href="#">Gatherings</a>
+    <a class="lnk" href="#">Contact</a>
+    <a class="mast__cta" href="#">Join</a>
+  </nav>
+
+  <button class="mast__burger" id="burger" type="button"
+          aria-expanded="false" aria-controls="sheet">
+    <span class="mast__burger-l" aria-hidden="true"></span>
+    <span class="mast__burger-t">Menu</span>
+  </button>
+</header>
+
+<div class="sheet" id="sheet" hidden>
+  <nav class="sheet__nav" aria-label="Primary, expanded">
+    <a href="#">About</a>
+    <a href="#">Within</a>
+    <a href="#">Gatherings</a>
+    <a href="#">Contact</a>
+  </nav>
+  <a class="btn btn--solid sheet__cta" href="#">
+    <span>Join the WhatsApp community</span>
+    <svg class="btn__arw" viewBox="0 0 20 8" aria-hidden="true" focusable="false"><path d="M0 4h18M14.5.7 18 4l-3.5 3.3"/></svg>
+  </a>
+</div>
+
+<main>
+  <!-- ═══════════ HERO ═══════════
+       The hero is a scroll region ~1.7 viewports tall; the composition is
+       pinned inside it with position:sticky, so the frame's reshaping is
+       actually watchable. The user's scroll position is never touched. -->
+  <section class="hero" id="hero" aria-labelledby="h1">
+    <div class="hero__pin" id="pin">
+
+      <!-- THE PLATE. Ruled on three sides, bleeding off the fourth (right). -->
+      <div class="stage" id="stage">
+
+        <div class="stage__clip">
+          <!-- media: art-directed. Desktop gets the hall (community at scale,
+               a 12s silent loop); portrait viewports get the standing figure,
+               because a 16:9 hall cropped to 0.65 is a slice of two torsos. -->
+          <div class="media" id="media">
+            <picture>
+              <source media="(min-width: 720px)" type="image/avif" srcset="/media/posters/ss-ven0096.avif">
+              <source media="(min-width: 720px)" type="image/jpeg" srcset="/media/posters/ss-ven0096.jpg">
+              <source type="image/webp"
+                      srcset="/media/stills/ss-dsc07120-960.webp 960w, /media/stills/ss-dsc07120-1920.webp 1920w"
+                      sizes="100vw">
+              <img id="still" src="/media/stills/ss-dsc07120-960.webp" fetchpriority="high" decoding="async"
+                   alt="A practitioner balances on one leg with palms together at the chest during an outdoor class.">
+            </picture>
+            <video class="media__vid" id="vid" muted playsinline loop preload="none"
+                   poster="/media/posters/ss-ven0096.jpg" aria-hidden="true" tabindex="-1"></video>
+          </div>
+
+          <!-- THE PLINTH. A hard-edged panel of the frame's own warm black,
+               tipped onto the plate's lower left. Not a gradient wash: a
+               known, opaque ground, so every word on it is provably legible
+               whatever the photograph does. As the aperture closes, the
+               plinth is consumed and the type lands on the warm mat. -->
+          <div class="plinth" aria-hidden="true"></div>
+
+          <div class="type type--light">
+            <p class="eyebrow">A community of Yoga teachers · Bengaluru</p>
+            <h1 id="h1">Yoga is vast.<br><em>No one holds it all.</em></h1>
+          </div>
+
+          <!-- the two matte blades. Opaque warm ground; they translate, they
+               never resize. Everything they pass over is simply occluded. -->
+          <div class="blade blade--t" aria-hidden="true"></div>
+          <div class="blade blade--b" aria-hidden="true"></div>
+
+          <!-- the same words in ink, drawn above the blades and clipped to the
+               ground side of the frame's bottom rule. One <h1> in the a11y
+               tree; this copy is decoration. -->
+          <div class="type type--dark" aria-hidden="true">
+            <p class="eyebrow">A community of Yoga teachers · Bengaluru</p>
+            <p class="h1x">Yoga is vast.<br><em>No one holds it all.</em></p>
+          </div>
+
+          <!-- the frame's rules ride the blade edges from underneath, so the
+               blades trim them: no scaling, no per-frame measuring. -->
+          <span class="edge edge--t" aria-hidden="true"></span>
+          <span class="edge edge--b" aria-hidden="true"></span>
+          <span class="edge edge--l" aria-hidden="true"></span>
+        </div>
+
+        <!-- THE RIGHT-SIDE ELEMENT, rebuilt as architecture: a second frame.
+             Not a caption floating in the corner — a smaller plate tipped in
+             against the primary one, carrying its own rule and plate number,
+             arriving in the ground the aperture gives back. -->
+        <figure class="inset" id="inset">
+          <img src="/media/stills/ss-dsc07118-960.webp" loading="lazy" decoding="async"
+               alt="A teacher leans in and holds a hand above a student's back to adjust a plank position.">
+          <figcaption><i>Pl.&nbsp;ii</i> Adjustment · Samskrithi Sadhana</figcaption>
+        </figure>
+      </div>
+
+      <!-- the plate register, on the rail, welded to the frame's bottom rule -->
+      <aside class="reg" id="reg" aria-hidden="true">
+        <span class="reg__n">Pl.&nbsp;i</span>
+        <span class="reg__r"></span>
+        <span class="reg__t" id="regt">Pranava Shala, Bengaluru</span>
+      </aside>
+
+      <!-- the bottom mat: lede + the two actions. Always ink on ground, so the
+           focus rings are always visible and the buttons never sit on a photo. -->
+      <div class="foot">
+        <p class="lede" id="lede">Yoga is a vast tradition, and no single teacher can know
+          everything. Teachers and serious practitioners, meeting across traditions.</p>
+
+        <div class="acts">
+          <a class="btn btn--solid" href="#">
+            <span>Join the WhatsApp community</span>
+            <svg class="btn__arw" viewBox="0 0 20 8" aria-hidden="true" focusable="false"><path d="M0 4h18M14.5.7 18 4l-3.5 3.3"/></svg>
+          </a>
+          <a class="btn btn--ruled" href="#">
+            <span>What happens within</span>
+            <svg class="btn__arw" viewBox="0 0 20 8" aria-hidden="true" focusable="false"><path d="M0 4h18M14.5.7 18 4l-3.5 3.3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <span class="cue" aria-hidden="true"><i></i></span>
+    </div>
+  </section>
+
+  <!-- ═══════════ WHAT FOLLOWS ═══════════
+       The frame's left rule keeps going: it is the first column edge here. -->
+  <section class="four">
+    <p class="four__lead" data-r="up">Everyone has something to learn.<br>
+      <em>Everyone has something to contribute.</em></p>
+    <ol class="four__list">
+      <li data-r="up"><i>01</i><b>Connect</b><p>Build real relationships with fellow teachers and practitioners.</p></li>
+      <li data-r="up" style="--d:70ms"><i>02</i><b>Learn</b><p>Find authentic study, resources and discussion that keep you learning.</p></li>
+      <li data-r="up" style="--d:140ms"><i>03</i><b>Collaborate</b><p>Work together, exchange expertise, build things that matter.</p></li>
+      <li data-r="up" style="--d:210ms"><i>04</i><b>Grow</b><p>Support one another in becoming better teachers and contributors.</p></li>
+    </ol>
+  </section>
+
+  <!-- and back onto the warm ground, on the same spine, so the hero's ruling
+       is still doing work two sections later. -->
+  <section class="tail">
+    <p class="tail__k">Next</p>
+    <a class="tail__a" href="#">
+      <span>What happens within<br><em>Yoga Mandala</em></span>
+      <svg class="btn__arw" viewBox="0 0 20 8" aria-hidden="true" focusable="false"><path d="M0 4h18M14.5.7 18 4l-3.5 3.3"/></svg>
+    </a>
+  </section>
+</main>
+
+<script src="frame.js"></script>
+</body>
+</html>

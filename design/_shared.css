@@ -1,0 +1,145 @@
+/* ============================================================
+   YOGA MANDALA — HERO PROTOTYPES · shared foundation
+   Direction: WARM & HUMAN, IMAGE-FIRST.
+
+   Palette sampled from the actual photographs, not invented:
+   the clay floor of the Pranava shala, the teal of the rope
+   rails and the speaker's kurta, the warm shade under the
+   Samskrithi canopy. Nothing here is cream-on-cream.
+
+   Held CONSTANT across A / B / C on purpose. The three files
+   differ in LAYOUT and HEADER only, so the comparison is fair.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* grounds — warm, but they are a MAT for pictures, never the subject */
+  --ground:      #FBF7F2;
+  --ground-warm: #F2E9DE;
+  --ground-deep: #1C1714;   /* the reversed ground, warm black not grey */
+
+  /* inks */
+  --ink:         #241D18;
+  --ink-soft:    #5C5049;
+  --ink-onDark:  #FBF7F2;
+  --ink-onDark-soft: rgba(251, 247, 242, 0.72);
+
+  /* the two voices, both pulled off the photographs */
+  --teal:        #2C6E6B;   /* rope rails, the blue kurta in shade */
+  --clay:        #C1613C;   /* the shala floor, the red slings     */
+
+  --rule:        rgba(36, 29, 24, 0.14);
+  --rule-onDark: rgba(251, 247, 242, 0.22);
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-text:    'Inter', system-ui, sans-serif;
+
+  --page: clamp(1.25rem, 4vw, 4.5rem);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* ── the variant switcher. Prototype furniture, not design. ────── */
+.switch {
+  position: fixed; z-index: 999;
+  bottom: 1rem; right: 1rem;
+  display: flex; align-items: center; gap: 2px;
+  opacity: 0.4; transition: opacity 0.3s;
+  padding: 4px; border-radius: 999px;
+  background: rgba(28, 23, 20, 0.88);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  font-family: var(--font-text);
+}
+.switch:hover { opacity: 1; }
+.switch a {
+  display: block; padding: 7px 15px; border-radius: 999px;
+  font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+  color: rgba(251,247,242,0.62); text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.switch a:hover { color: #fff; }
+.switch a[aria-current] { background: var(--ground); color: var(--ink); }
+.switch b {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(251,247,242,0.38); padding: 0 10px 0 8px; font-weight: 500;
+}
+
+/* ── reveal primitives. Every variant uses these. ──────────────── */
+.js [data-r] { opacity: 0; }
+.js [data-r="up"]    { transform: translateY(28px); }
+.js [data-r="right"] { transform: translateX(-28px); }
+.js [data-r="scale"] { transform: scale(1.06); }
+
+/*
+ * THE WIPE GOES ON THE CHILD, NEVER ON THE OBSERVED ELEMENT.
+ * Chromium computes an IntersectionObserver's intersection rect AFTER applying
+ * clips, so an element carrying `clip-path: inset(0 0 100%)` reports ratio 0 and
+ * never fires its own reveal — it stays invisible forever. Opacity is safe
+ * (IntersectionObserver v1 ignores it); clip-path is not. Clipping the inner
+ * image instead keeps the figure's box full-size for the observer.
+ */
+.js [data-r="wipe"] > img,
+.js [data-r="wipe"] > picture { clip-path: inset(0 0 100% 0); }
+
+.js [data-r].in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.1s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-r="wipe"].in > img,
+.js [data-r="wipe"].in > picture {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.1s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-r] { opacity: 1 !important; transform: none !important; }
+  .js [data-r="wipe"] > img, .js [data-r="wipe"] > picture { clip-path: none !important; }
+  .js [data-r].in { transition: none; }
+  * { animation: none !important; }
+}
+
+/* ── shared type ───────────────────────────────────────────────── */
+.eyebrow {
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--teal);
+}
+.lede {
+  font-size: clamp(1.0625rem, 0.98rem + 0.42vw, 1.25rem);
+  line-height: 1.62; color: var(--ink-soft);
+  max-width: 34ch;
+}
+
+/* ── the caption every picture carries. Provenance, small. ─────── */
+.cap {
+  font-size: 11px; letter-spacing: 0.06em;
+  color: var(--ink-soft); text-transform: uppercase;
+  display: flex; gap: 0.6em; align-items: baseline;
+}
+.cap::before {
+  content: ''; width: 18px; height: 1px;
+  background: var(--clay); display: inline-block;
+  transform: translateY(-4px);
+}

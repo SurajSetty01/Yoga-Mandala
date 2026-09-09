@@ -1,0 +1,19 @@
+{
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/Context/**": true,
+    "**/archive/**": true,
+    "**/design/media/**": true
+  },
+  "search.exclude": {
+    "Context": true,
+    "archive": true,
+    "design/media": true,
+    "design/vendor": true,
+    "out": true,
+    "public/media": true
+  },
+  "files.exclude": { "Context": true, "archive": true },
+  "typescript.tsserver.watchOptions": { "excludeDirectories": ["Context", "archive", "design"] }
+}

@@ -1,0 +1,36 @@
+# ── Trees inside the repo that are not part of the application ──────────────
+# Context/ is ~37 GB of source media and the vision audit: the project's read-only
+# source of truth, kept locally and never committed.
+/Context/
+# archive/ holds the two failed prototypes, each with its own node_modules.
+/archive/
+
+# ── deps / build ────────────────────────────────────────────────────────────
+/node_modules
+/.next
+/out
+/.turbo
+*.tsbuildinfo
+next-env.d.ts
+
+# ── env ─────────────────────────────────────────────────────────────────────
+.env*
+!.env.example
+
+# ── design workspace ────────────────────────────────────────────────────────
+# The hero candidates and their notes ARE worth keeping — they are the record of
+# how the design was chosen. Their media derivatives are not: those are rebuilt
+# from Context/ and would otherwise put ~70 MB of binaries in every clone.
+/design/media/
+/design/vendor/
+/design/candidates/**/shot-*.png
+/design/candidates/**/*.png
+
+# ── os / editor ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+/.vscode/*
+!/.vscode/settings.json
+
+# Curated web derivatives ARE the site's assets — keep them tracked.
+!/public/media/

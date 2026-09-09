@@ -1,0 +1,630 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   PAGE 4 — CONNECT WITH US
+
+   The design problem: two of the three channels the client's own document
+   lists were never supplied. There is no address, no general email and no
+   collaborations email. There is one live human channel.
+
+   So this page is not a form and a rack of slots. It is one open line given
+   the strongest ground on the site, with the number set at display scale and
+   a person's name above it, and then two paper bands that say what you might
+   write about and whose accounts these are. An empty slot is never drawn —
+   see components/contact/ChannelList.tsx.
+
+   Its own idea, not the hero's. Nothing here is full-bleed, nothing moves,
+   and no type sits on a photograph. The only scroll behaviour is a sticky
+   invitation column, which is position rather than motion and therefore
+   survives prefers-reduced-motion whole.
+
+   Every colour below is one already measured in design/DESIGN-SYSTEM.md, or
+   a solid composite of one. Nothing new was invented.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.cx {
+  /* SOLID, NOT rgba. --ink-onDark-soft is rgba(251,247,242,0.72); this is that
+     value already composited on --ground-deep #1C1714, so the colour a probe
+     reads is the colour the reader sees. 9.07:1 on the band, 8.0:1 on the
+     card's slightly lifted ground. */
+  --cx-soft: #bdb8b4;
+  --cx-hair: rgba(251, 247, 242, 0.16);
+  /* the navigation pill's own width — the page's columns line up with the bar
+     that floats above them */
+  --cx-max: 1200px;
+  background: var(--ground);
+}
+
+/* ── BAND 01 · THE OPEN LINE ────────────────────────────────────────────
+   Warm black. The one real channel gets the page's strongest ground; the
+   two paper bands beneath it are supporting material.                    */
+.cx-open {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding: clamp(7.25rem, 16vh, 10.5rem) var(--rail) clamp(3.4rem, 7vw, 5.5rem);
+}
+.cx-open__in {
+  max-width: var(--cx-max);
+  margin-inline: auto;
+}
+
+.cx-brow {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85em;
+  font: 600 12.5px/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+}
+/* sand is ornament and only ever ornament — 4.0:1 as text, a rule as a rule */
+.cx-brow::before {
+  content: '';
+  flex: none;
+  width: 1.5rem;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--sand);
+}
+
+.cx-h1 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.5rem, 1.2rem + 4.4vw, 4.9rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.032em;
+  margin: 1rem 0 0;
+  text-wrap: balance;
+}
+.cx-say {
+  margin: 1.35rem 0 0;
+  max-width: 40ch;
+  font-size: clamp(1.02rem, 0.96rem + 0.4vw, 1.22rem);
+  line-height: 1.58;
+  color: var(--cx-soft);
+  text-wrap: pretty;
+}
+
+.cx-open__grid {
+  margin-top: clamp(2.6rem, 6vw, 4.5rem);
+  display: grid;
+  gap: clamp(2.2rem, 5vw, 3.6rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+.cx-open__col {
+  min-width: 0;
+}
+
+/* the ledger marker: this page has three numbered ways in, and the number is
+   never sand — it is text, so it takes an ink that passes */
+.cx-mark {
+  margin: 0 0 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.cx-mark__n {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--cx-soft);
+}
+.cx-mark__r {
+  display: block;
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--cx-hair);
+}
+.cx-mark--paper .cx-mark__n {
+  color: var(--clay-deep);
+}
+.cx-mark--paper .cx-mark__r {
+  background: var(--rule);
+}
+
+.cx-h2 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+  margin: 0;
+  color: var(--ink-onDark);
+}
+.cx-h2--paper {
+  color: var(--ink);
+}
+.cx-lead {
+  margin: 0.9rem 0 0;
+  max-width: 42ch;
+  font-size: clamp(0.97rem, 0.94rem + 0.2vw, 1.07rem);
+  line-height: 1.6;
+  color: var(--cx-soft);
+  text-wrap: pretty;
+}
+
+/* ── THE CARD ───────────────────────────────────────────────────────────
+   A single object, not a grid of slots. One filled row reads as complete;
+   three slots with two of them empty reads as broken.                    */
+.cx-card {
+  margin-top: clamp(1.5rem, 3.2vw, 2.2rem);
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border: 1px solid var(--cx-hair);
+  border-radius: 4px;
+  /* 0.055 cream over #1C1714 composites to about #2A2521 — a lift you can
+     feel and a ground cream still clears at 13:1 */
+  background: rgba(251, 247, 242, 0.055);
+}
+.cx-card__k {
+  margin: 0;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--cx-soft);
+}
+.cx-card__who {
+  margin: 0.6rem 0 0;
+  /* THE TEXT FACE, NOT THE DISPLAY ONE, AND NOT A STYLE CHOICE.
+     Fraunces as loaded here mis-sets U+012B: "Praṇav Śāstrī" renders with the
+     macron detached and floating to the right of the i, at any size. Inter, and
+     every system fallback, set it correctly. The number below carries the display
+     face, which is the right hierarchy anyway — the number is the point.
+     The real fix is subsets: ['latin', 'latin-ext'] on the Fraunces loader in
+     app/layout.tsx, which this page does not own. */
+  font-family: var(--font-text);
+  font-size: clamp(1.22rem, 1.02rem + 0.8vw, 1.55rem);
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--ink-onDark);
+}
+
+.cx-ch {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cx-ch__i {
+  padding-top: 1.15rem;
+  margin-top: 1.15rem;
+  border-top: 1px solid var(--cx-hair);
+}
+.cx-ch__i:first-child {
+  border-top: 0;
+  margin-top: 1.4rem;
+  padding-top: 0;
+}
+.cx-ch__k {
+  margin: 0;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--cx-soft);
+}
+/* the number is the point of the page, so it is set like one */
+.cx-ch__v {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.42rem, 1rem + 2vw, 2.35rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  color: var(--ink-onDark);
+  overflow-wrap: anywhere;
+}
+/* an address is longer than a phone number and has no natural break, so when
+   one arrives it gets its own size rather than its own layout */
+.cx-ch__i[data-kind='email'] .cx-ch__v {
+  font-size: clamp(1.05rem, 0.9rem + 0.9vw, 1.4rem);
+}
+.cx-ch__act {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.1rem;
+}
+
+/* ── the action. Clay, wiping, exactly as the hero's — continuity is the
+   interaction grammar, not the composition. --clay is 3.90:1 and cannot
+   carry a label; --clay-deep is 5.98:1 and is what the ground actually is.
+   #9C4526 against warm black is 2.84:1 as a shape, so on dark it also takes
+   a cream hairline to own its edge.                                      */
+.cx-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75em;
+  padding: 0.95rem 1.45rem;
+  border: 1px solid rgba(251, 247, 242, 0.18);
+  border-radius: 5px;
+  background: var(--clay-deep);
+  color: #fbf7f2;
+  font: 600 14px/1 var(--font-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.cx-cta--paper {
+  border-color: transparent;
+}
+.cx-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--clay-press);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.46s var(--ease);
+}
+.cx-cta:hover::before,
+.cx-cta:focus-visible::before,
+.cx-cta:active::before {
+  transform: scaleX(1);
+}
+.cx-cta__arw {
+  flex: none;
+  transition: transform 0.4s var(--ease);
+}
+.cx-cta:hover .cx-cta__arw,
+.cx-cta:focus-visible .cx-cta__arw {
+  transform: translateX(4px);
+}
+
+/* ── copy the number. Progressive enhancement only: it does not exist until
+   JavaScript has confirmed a clipboard, and the number is selectable text
+   whether it appears or not.                                             */
+.cx-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.cx-copy__b {
+  position: relative;
+  padding: 0.62rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-onDark);
+  font: 500 13.5px/1 var(--font-text);
+  cursor: pointer;
+}
+.cx-copy__b::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.42rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
+  transition: opacity 0.3s var(--ease);
+}
+.cx-copy__b:hover::after,
+.cx-copy__b:focus-visible::after {
+  opacity: 1;
+}
+.cx-copy__ok {
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cx-soft);
+}
+
+/* ── the photograph. Framed and contained: the hero owns full-bleed, and no
+   word on this page sits on a picture. The inner shade is cosmetic only —
+   it lets the frame meet the band instead of being pasted onto it.       */
+.cx-fig {
+  margin: 0;
+  min-width: 0;
+  /* two rows: the picture, then its provenance. The shade overlay shares the
+     picture's cell rather than being positioned against the figure, so it stays
+     in register whatever height the picture takes. */
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+/* ART DIRECTION, NOT A SQUEEZE. A 3:2 hall dropped into a 390px column puts
+   four people at thumbnail size. The narrow crop is portrait and pushed right,
+   so what a phone gets is the man with the microphone and the one listening to
+   him — the picture keeps its subject instead of keeping its framing. */
+.cx-fig img {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 87% 46%;
+  border: 1px solid var(--cx-hair);
+  border-radius: 3px;
+  background: #14100e;
+}
+.cx-fig::after {
+  content: '';
+  grid-area: 1 / 1;
+  /* the image carries a 1px border and box-sizing is border-box, so the overlay
+     needs the same box or it lands a pixel out of register */
+  border: 1px solid transparent;
+  border-radius: 3px;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to right,
+      rgba(var(--shade), 0.5) 0%,
+      rgba(var(--shade), 0.12) 34%,
+      rgba(var(--shade), 0) 62%
+    ),
+    linear-gradient(to top, rgba(var(--shade), 0.34) 0%, rgba(var(--shade), 0) 38%);
+}
+.cx-fig__cap {
+  grid-area: 2 / 1;
+  margin: 0.85rem 0 0;
+  display: flex;
+  gap: 0.7em;
+  align-items: baseline;
+  font: 500 11px/1.4 var(--font-text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cx-soft);
+}
+.cx-fig__cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--sand);
+  transform: translateY(-4px);
+}
+
+/* ── BAND 02 · THE SUBJECTS ─────────────────────────────────────────────
+   Paper, and a register rather than a paragraph. The invitation sticks; the
+   eight subjects move past it.                                            */
+.cx-collab {
+  background: var(--ground);
+  color: var(--ink);
+  padding: clamp(3.4rem, 8vw, 6rem) var(--rail) clamp(3.4rem, 8vw, 6rem);
+}
+.cx-collab__in {
+  max-width: var(--cx-max);
+  margin-inline: auto;
+  display: grid;
+  gap: clamp(2.2rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+.cx-ask {
+  margin: 1rem 0 0;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.1rem, 0.98rem + 0.6vw, 1.42rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+.cx-collab__ask .cx-cta {
+  margin-top: 1.7rem;
+}
+.cx-dest {
+  margin: 0.85rem 0 0;
+  font: 500 12.5px/1.5 var(--font-text);
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.cx-reg__lead {
+  margin: 0;
+  font: 600 11.5px/1.5 var(--font-text);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.cx-reg {
+  list-style: none;
+  margin: 1.3rem 0 0;
+  padding: 0;
+}
+.cx-reg__i {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: 0 0.9rem;
+  align-items: baseline;
+  padding: 1.05rem 0;
+  border-top: 1px solid var(--rule);
+}
+.cx-reg__i:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+.cx-reg__n {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.cx-reg__t {
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.18rem);
+  line-height: 1.45;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ── BAND 03 · WHOSE ACCOUNTS THESE ARE ─────────────────────────────────
+   Warm paper, so the two links read as objects on a ground rather than as a
+   list at the bottom of the page. The parent-organisation fact leads, because
+   it is the reason the handle looks the way it does.                      */
+.cx-social {
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding: clamp(3.2rem, 7vw, 5rem) var(--rail) clamp(3.6rem, 8vw, 6rem);
+}
+.cx-social__in {
+  max-width: var(--cx-max);
+  margin-inline: auto;
+  display: grid;
+  gap: clamp(1.8rem, 4vw, 3.4rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+.cx-trust {
+  margin: 1rem 0 0;
+  max-width: 46ch;
+  font-size: clamp(0.97rem, 0.94rem + 0.2vw, 1.07rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+/* auto-fit rather than a breakpoint: at 980-1150 the section's own two columns
+   left each card about 165px of text and broke "@thepranavshastri" across two
+   lines. A track that will not go under 17rem drops to one card per row instead
+   of splitting a handle. */
+.cx-soc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+.cx-soc__a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.2rem 1rem;
+  padding: 1.05rem 1.25rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--ground);
+  text-decoration: none;
+  transition:
+    border-color 0.35s var(--ease),
+    background 0.35s var(--ease);
+}
+.cx-soc__a:hover,
+.cx-soc__a:focus-visible {
+  border-color: var(--clay);
+}
+.cx-soc__k {
+  grid-column: 1;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.cx-soc__v {
+  grid-column: 1;
+  margin-top: 0.4rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.28rem);
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.cx-soc__arw {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  flex: none;
+  color: var(--clay-deep);
+  transition: transform 0.4s var(--ease);
+}
+.cx-soc__a:hover .cx-soc__arw,
+.cx-soc__a:focus-visible .cx-soc__arw {
+  transform: translateX(4px);
+}
+
+/* ── focus on paper. The global treatment is a cream ring in a dark halo,
+   which is right on the photograph and on the dark band; on paper it
+   inverts, exactly as .within already does.                              */
+.cx-collab :focus-visible,
+.cx-social :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── ≥ 620px · the column is wide enough for the room to read ───────── */
+@media (min-width: 620px) {
+  .cx-fig img {
+    aspect-ratio: 16 / 10;
+    object-position: 66% 46%;
+  }
+}
+
+/* ── ≥ 980px · two columns, and the invitation stays with you ─────────
+   The sticky offset clears the fixed navigation pill (about 80px at its
+   tallest) with room to spare. Sticky is position, not motion: reduced
+   motion keeps it, and it degrades to a normal block wherever it is
+   unsupported.                                                          */
+@media (min-width: 980px) {
+  .cx-open__grid {
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+    gap: clamp(2.5rem, 5vw, 4.25rem);
+  }
+  /* The picture is as tall as the type beside it — no dead corner under the
+     card, no picture running past the band's bottom edge. Stretch gives the
+     figure the row's height; the 1fr row gives the image whatever is left
+     above the caption. */
+  .cx-open__grid {
+    align-items: stretch;
+  }
+  .cx-fig img {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 19rem;
+    object-position: 74% 46%;
+  }
+
+  .cx-collab__in {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  }
+  .cx-collab__ask {
+    position: sticky;
+    top: clamp(6.25rem, 14vh, 8rem);
+  }
+
+  .cx-social__in {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .cx-social .cx-soc {
+    align-self: center;
+  }
+}
+
+/* ── ≤ 560px ────────────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .cx-ch__act {
+    gap: 0.55rem 1rem;
+  }
+  .cx-ch__act .cx-cta {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .cx-collab__ask .cx-cta {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .cx-reg__i {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0 0.7rem;
+  }
+}
+
+/* ── MOTION OFF ───────────────────────────────────────────────────────
+   Nothing on this page is reachable only through motion, so there is
+   nothing to restore: the transitions simply stop.                     */
+@media (prefers-reduced-motion: reduce) {
+  .cx-cta::before,
+  .cx-cta__arw,
+  .cx-copy__b::after,
+  .cx-soc__a,
+  .cx-soc__arw {
+    transition: none;
+  }
+}
