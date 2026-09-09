@@ -44,25 +44,29 @@ const line = about.guiding.line;
  * followed it, so the concatenation is character-for-character the client's sentence.
  */
 const words = line.split(' ');
-const BREAKS = [3, 6];
-const groups = [
-  words.slice(0, BREAKS[0]).join(' ') + ' ',
-  words.slice(BREAKS[0], BREAKS[1]).join(' ') + ' ',
-  words.slice(BREAKS[1]).join(' '),
-];
+/**
+ * TWO lines, split 4/3: "Yoga is better when" / "we learn together." — 19 characters and 18,
+ * which is as evenly as this sentence divides. It was three; the client asked for two, and
+ * two lets the setting be larger for the same measure.
+ */
+const groups = [words.slice(0, 4).join(' ') + ' ', words.slice(4).join(' ')];
 
 export function Guiding() {
   return (
     <section className="ab-sec ab-guide" aria-label={about.guiding.heading}>
       <div className="ab-rail">
         <blockquote className="ab-quote" data-r="quote">
-          <span className="ab-quote__mk ab-quote__mk--o" aria-hidden="true">
-            {'“'}
-          </span>
-
           <p className="ab-quote__line">
             {groups.map((g, i) => (
               <span className="ab-quote__row" key={g} style={{ '--i': i } as React.CSSProperties}>
+                {/* INLINE marks, tight against the text: the opening one immediately before
+                    the first letter and the closing one immediately after the last, rather
+                    than hung as blocks above and below the sentence. */}
+                {i === 0 ? (
+                  <span className="ab-quote__mk ab-quote__mk--o" aria-hidden="true">
+                    {'“'}
+                  </span>
+                ) : null}
                 {g}
                 {i === groups.length - 1 ? (
                   <span className="ab-quote__mk ab-quote__mk--c" aria-hidden="true">

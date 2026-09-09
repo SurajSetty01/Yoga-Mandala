@@ -792,3 +792,4 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/preview-contact-a.css";
 @import "../styles/preview-contact-b.css";
 @import "../styles/preview-contact-c.css";
+@import "../styles/preview-quote.css";

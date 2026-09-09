@@ -141,6 +141,27 @@ const ROUNDS: Round[] = [
       },
     ],
   },
+  {
+    id: 'quote',
+    title: 'The closing quotation — three fills',
+    blurb: 'Shared by all three: the marks are inline (tight before the first letter, tight after the last), two lines, centred. Only the fill differs. Fraunces is pushed to the top of its weight axis with SOFT at 100, because thin strokes cannot hold a photograph — that is why the reference works and a lighter setting turns to mud.',
+    concepts: [
+      { k: 'a', title: 'A · “Yoga” only', line: 'One word carries the picture', stat: 'quietest' },
+      { k: 'b', title: 'B · the whole quotation', line: 'Every word is a window', stat: 'boldest · saturation 0.487' },
+      { k: 'c', title: 'C · “Yoga” and “together.”', line: 'The two words that hold the sentence up', stat: 'bracketed' },
+    ],
+    rows: [
+      {
+        file: 'q-', n: '', name: 'Yoga is better when we learn together.',
+        content: 'The page’s last line. No section number and no heading: a saying introduced by a label is a heading with a quotation under it.',
+        takes: {
+          a: 'Only the first word is a window; the rest is ink. The photograph is an accent, not the treatment.',
+          b: 'The whole sentence is one continuous photograph seen through the letterforms.',
+          c: 'The first and last words carry the picture and the middle stays ink, so the sentence is bracketed by it.',
+        },
+      },
+    ],
+  },
 ];
 
 export const metadata = { title: 'Concepts — comparison' };
@@ -166,7 +187,9 @@ export default function ComparePage() {
             {r.concepts.map((c) => (
               <div key={c.k}>
                 <b>
-                  <a href={`/preview/${r.id}-${c.k}/`}>{c.title}</a>
+                  <a href={r.id === 'quote' ? '/preview/quote/' : `/preview/${r.id}-${c.k}/`}>
+                    {c.title}
+                  </a>
                 </b>
                 <span>{c.line}</span>
                 <i>{c.stat}</i>
@@ -178,16 +201,20 @@ export default function ComparePage() {
           {r.rows.map((row) => (
             <div className="cmp__row" key={row.n}>
               <div className="cmp__label">
-                <p className="cmp__n">{row.n}</p>
+                {row.n ? <p className="cmp__n">{row.n}</p> : null}
                 <h3>{row.name}</h3>
                 <p className="cmp__content">{row.content}</p>
               </div>
               <div className="cmp__grid">
                 {r.concepts.map((c) => (
                   <figure key={c.k}>
-                    <a href={`/compare/${row.file}${c.k}-${row.n}.png`} target="_blank" rel="noreferrer">
+                    <a
+                      href={`/compare/${row.n ? `${row.file}${c.k}-${row.n}` : `${row.file}${c.k}`}.png`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <img
-                        src={`/compare/${row.file}${c.k}-${row.n}.png`}
+                        src={`/compare/${row.n ? `${row.file}${c.k}-${row.n}` : `${row.file}${c.k}`}.png`}
                         alt={`${r.title}, concept ${c.k.toUpperCase()}, ${row.name}`}
                         loading="lazy"
                       />

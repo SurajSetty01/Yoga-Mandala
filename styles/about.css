@@ -607,9 +607,11 @@
   margin: 0;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(2.6rem, 0.4rem + 7.4vw, 9.5rem);
-  font-weight: 620;
-  font-variation-settings: "opsz" 144, "wght" 620, "SOFT" 0, "WONK" 0;
+  font-size: clamp(2.1rem, 0.4rem + 6.1vw, 7.6rem);
+  font-weight: 700;
+  /* SOFT 100 rounds the terminals, widening the thinnest part of every stroke. It matters
+     even unfilled, and it is what makes a photographic fill legible here at all. */
+  font-variation-settings: "opsz" 144, "wght" 700, "SOFT" 100, "WONK" 0;
   line-height: 0.98;
   letter-spacing: -0.035em;
   color: var(--ink);
@@ -641,27 +643,19 @@
    (below ~0.72 the ink of a quote mark escapes the top of its own box and
    lands on whatever is above it); the negative margin then closes the dead
    space the box carries underneath. */
+/* Both marks now sit IN the line. The generous side bearing on a quote glyph is pulled back
+   so each reads as touching its word rather than floating a space away from it. */
 .ab-quote__mk--o {
-  display: block;
-  font-size: clamp(3.6rem, 0.5rem + 11vw, 13rem);
-  line-height: 0.78;
-  /* centred over the sentence rather than hung off its left edge */
-  margin: 0 0 -0.34em;
-  transform-origin: 50% 78%;
+  letter-spacing: -0.04em;
+  margin-inline-start: -0.06em;
 }
 /* THE CLOSING MARK — hung off the end of the last clause, out of the flow, so
    a mark three times the size of the sentence cannot open a gap under it. */
+/* The closing mark is inline too now, so it needs no absolute placement: it simply follows
+   the full stop. The old rule hung it at left:100% of the last row and anchored it from the
+   top, which was necessary only while it was a 248px block out of flow. */
 .ab-quote__mk--c {
-  position: absolute;
-  left: 100%;
-  /* anchored from the TOP, because a mark this size carries a 248px box and
-     its ink sits in the top third of it: bottom-anchoring parks the ink a
-     whole line above the clause it belongs to. */
-  top: -0.05em;
-  font-size: 2.1em;
-  line-height: 1;
-  margin-left: 0.045em;
-  transform-origin: 22% 30%;
+  letter-spacing: -0.04em;
 }
 @media (min-width: 861px) {
   /* 15ch resolves against the DISPLAY size here, so it is the measure that decides where
@@ -685,7 +679,6 @@
 }
 .js .ab-quote .ab-quote__row { transform: translate3d(0, 30px, 0); }
 .js .ab-quote .ab-quote__mk--o { transform: translate3d(-0.14em, -0.2em, 0) scale(1.22); }
-.js .ab-quote .ab-quote__mk--c { transform: translate3d(0.2em, 0.26em, 0) scale(1.22); }
 
 .js .ab-quote.in .ab-quote__row,
 .js .ab-quote.in .ab-quote__mk {
