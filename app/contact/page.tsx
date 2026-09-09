@@ -1,6 +1,9 @@
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
 import { ChannelList, buildChannels } from '@/components/contact/ChannelList';
+import { Collaborations } from '@/components/contact/Collaborations';
+import { Depth } from '@/components/contact/Depth';
+import { Social } from '@/components/contact/Social';
 import { contact } from '@/content/copy';
 import { contactPerson, links, site } from '@/content/site';
 
@@ -19,12 +22,17 @@ import { contactPerson, links, site } from '@/content/site';
  * The absent channels are absent. Nothing marks the hole — see ChannelList.tsx for how,
  * and why adding an address later is a data change rather than a redesign.
  *
- * ITS OWN IDEA, not the hero's. The hero is a sticky three-movement video sequence with the
- * type inside the picture. Here nothing moves and nothing is full-bleed: one still
- * photograph sits in a framed column beside the type, and the only scroll behaviour is the
- * invitation column staying with you while the eight subjects scroll past it — the line
- * stays open for as long as you are reading. Continuity is the tokens, the type scale, the
- * caption and the clay CTA with its wiping ground.
+ * BENEATH IT, the eight subjects the client is open to conversations around are not a list.
+ * They are eight arched photographic openings cut down the paper — four sizes, tilted,
+ * overlapping, two of them running off the edge — with each subject set as a nameplate into
+ * the picture it belongs to, and social is two more doorways cut into a dark wall and lit
+ * from the far side. See components/contact/Collaborations.tsx and Social.tsx.
+ *
+ * ITS OWN IDEA, not the hero's. The open line is contained and rectangular: type beside one
+ * framed still on warm black, nothing bleeding, no word on a photograph. Everything below it
+ * is the inverse — paper, non-rectangular media, layered, off the edge, type set into the
+ * pictures. Continuity is the tokens, the type scale, the caption system and the clay CTA
+ * with its wiping ground.
  */
 export const metadata = {
   title: contact.title,
@@ -43,20 +51,15 @@ const FIGURE = {
   caption: 'Samskrithi Sadhana · Bengaluru',
 };
 
-/** Derived from the link itself so the two can never drift apart. */
-const igHandle = `@${links.instagram.replace(/\/+$/, '').split('/').pop()}`;
-
 export default function ContactPage() {
   const general = buildChannels(links.emailGeneral);
-  const collab = buildChannels(links.emailCollaborations);
-  /* The collaborations block's own words are "Write to us", and the destination is named
-     beneath them in plain sight. Nothing is re-labelled and nothing is implied: the one
-     open line is the one open line, whatever you are writing about. */
-  const collabWrite = collab[0]!;
 
   return (
     <>
       <SiteNav />
+      {/* The colonnade's reveal and its two-lane depth. Nothing below is reachable only
+          through it, and it does not run at all under prefers-reduced-motion. */}
+      <Depth />
 
       <main className="cx" id="top">
         {/* ── THE OPEN LINE ───────────────────────────────────────────────────
@@ -105,142 +108,17 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── THE SUBJECTS ────────────────────────────────────────────────────
-            Paper. The invitation and its action are sticky on wide viewports while
-            the eight subjects run past — the way to reach a person is never scrolled
-            off while you read what you might reach them about. Sticky is position,
-            not motion, so this survives prefers-reduced-motion intact. */}
-        <section className="cx-collab" aria-labelledby="cx-collab-h">
-          <div className="cx-collab__in">
-            <div className="cx-collab__ask">
-              <p className="cx-mark cx-mark--paper">
-                <span className="cx-mark__n">02</span>
-                <span className="cx-mark__r" aria-hidden="true" />
-              </p>
-              <h2 className="cx-h2 cx-h2--paper" id="cx-collab-h">
-                {contact.collaborations.heading}
-              </h2>
-              <p className="cx-ask">{contact.collaborations.lead}</p>
-              <a
-                className="cx-cta cx-cta--paper"
-                href={collabWrite.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {contact.collaborations.action}
-                <svg
-                  className="cx-cta__arw"
-                  width="15"
-                  height="10"
-                  viewBox="0 0 15 10"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path
-                    d="M0 5h12.5M8.5 1L12.8 5 8.5 9"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  />
-                </svg>
-              </a>
-              <p className="cx-dest">
-                {collabWrite.label} · {collabWrite.value}
-              </p>
-            </div>
-
-            <div className="cx-collab__reg">
-              <p className="cx-reg__lead">{contact.collaborations.listLead}</p>
-              <ol className="cx-reg">
-                {contact.collaborations.items.map((item, i) => (
-                  <li className="cx-reg__i" key={item}>
-                    <span className="cx-reg__n" aria-hidden="true">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="cx-reg__t">{item}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
-        </section>
+        {/* ── THE EIGHT SUBJECTS, AS EIGHT DOORWAYS ──────────────────────────
+            No list. Arched openings cut down the paper, tilted and overlapping,
+            with the subject set into the picture it belongs to. */}
+        <Collaborations />
 
         {/* ── WHOSE ACCOUNTS THESE ARE ────────────────────────────────────────
-            Not a disclaimer at the bottom of a list. Yoga Mandala being an initiative
-            under Pranava Seva Trust is the reason these accounts read the way they do,
-            so it is stated first and the handle is shown in full underneath. */}
-        <section className="cx-social" aria-labelledby="cx-social-h">
-          <div className="cx-social__in">
-            <div className="cx-social__head">
-              <p className="cx-mark cx-mark--paper">
-                <span className="cx-mark__n">03</span>
-                <span className="cx-mark__r" aria-hidden="true" />
-              </p>
-              <h2 className="cx-h2 cx-h2--paper" id="cx-social-h">
-                {contact.social.heading}
-              </h2>
-              <p className="cx-trust">
-                {site.name} is an initiative under {site.parentOrg}, and holds no social
-                accounts of its own.
-              </p>
-            </div>
-
-            <ul className="cx-soc">
-              <li>
-                <a
-                  className="cx-soc__a"
-                  href={links.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="cx-soc__k">Instagram</span>
-                  <span className="cx-soc__v">{igHandle}</span>
-                  <svg
-                    className="cx-soc__arw"
-                    width="15"
-                    height="10"
-                    viewBox="0 0 15 10"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <path
-                      d="M0 5h12.5M8.5 1L12.8 5 8.5 9"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a
-                  className="cx-soc__a"
-                  href={links.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="cx-soc__k">WhatsApp</span>
-                  <span className="cx-soc__v">The community</span>
-                  <svg
-                    className="cx-soc__arw"
-                    width="15"
-                    height="10"
-                    viewBox="0 0 15 10"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <path
-                      d="M0 5h12.5M8.5 1L12.8 5 8.5 9"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
+            The wall goes dark and two more doorways are cut into it. Not a
+            disclaimer at the bottom of a list: Yoga Mandala being an initiative
+            under Pranava Seva Trust is the reason these handles read the way
+            they do, so it is the heading. */}
+        <Social />
       </main>
 
       <SiteFooter />

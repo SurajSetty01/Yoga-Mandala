@@ -76,6 +76,34 @@ await page.addStyleTag({ content: `${selector}{background-image:none!important;}
 await page.waitForTimeout(500);
 const bare = PNG.sync.read(await page.screenshot());
 
+/**
+ * The antialiasing threshold has to ADAPT to the fill.
+ *
+ * A fixed cut-off assumes a bright glyph on a dark ground, where a fully covered pixel
+ * differs from the ground by a lot. But a fill deliberately floored to mid-grey — the way an
+ * image-in-text treatment guarantees its contrast — has a small maximum difference to begin
+ * with, so a fixed cut-off admits half-covered EDGE pixels. Those are darker than any real
+ * glyph core, they dominate the 5th percentile, and the word gets reported as failing when
+ * every pixel a reader actually sees is fine.
+ *
+ * So: find the largest difference anywhere in the box, and count a pixel as glyph core only
+ * if it reaches 70% of it. That is the same rule at every fill brightness.
+ */
+const diffs = [];
+for (let y = box.y; y < Math.min(painted.height, box.y + box.h); y++) {
+  for (let x = box.x; x < Math.min(painted.width, box.x + box.w); x++) {
+    const i = (painted.width * y + x) << 2;
+    diffs.push(
+      Math.abs(painted.data[i] - bare.data[i]) +
+      Math.abs(painted.data[i + 1] - bare.data[i + 1]) +
+      Math.abs(painted.data[i + 2] - bare.data[i + 2])
+    );
+  }
+}
+diffs.sort((a, b) => b - a);
+const peak = diffs[Math.floor(diffs.length * 0.002)] ?? 0;   // robust max, ignoring stray pixels
+const cut = Math.max(60, peak * 0.7);
+
 const ratios = [];
 let sat = 0, n = 0;
 for (let y = box.y; y < Math.min(painted.height, box.y + box.h); y++) {
@@ -84,7 +112,7 @@ for (let y = box.y; y < Math.min(painted.height, box.y + box.h); y++) {
     const fg = [painted.data[i], painted.data[i + 1], painted.data[i + 2]];
     const bg = [bare.data[i], bare.data[i + 1], bare.data[i + 2]];
     const d = Math.abs(fg[0] - bg[0]) + Math.abs(fg[1] - bg[1]) + Math.abs(fg[2] - bg[2]);
-    if (d < 90) continue;                       // ground, or an antialiased edge
+    if (d < cut) continue;                      // ground, or a partially covered edge
     ratios.push(ratio(fg, bg));
     const mx = Math.max(...fg), mn = Math.min(...fg);
     if (mx > 0) { sat += (mx - mn) / mx; n++; }

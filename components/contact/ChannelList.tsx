@@ -53,7 +53,8 @@ export function buildChannels(email: string | null): Channel[] {
   return out;
 }
 
-const Arrow = () => (
+/** Shared with the two sections beneath the hero — one arrow, one behaviour. */
+export const Arrow = () => (
   <svg
     className="cx-cta__arw"
     width="15"

@@ -7,14 +7,18 @@
 
    So this page is not a form and a rack of slots. It is one open line given
    the strongest ground on the site, with the number set at display scale and
-   a person's name above it, and then two paper bands that say what you might
-   write about and whose accounts these are. An empty slot is never drawn —
-   see components/contact/ChannelList.tsx.
+   a person's name above it. An empty slot is never drawn — see
+   components/contact/ChannelList.tsx.
 
-   Its own idea, not the hero's. Nothing here is full-bleed, nothing moves,
-   and no type sits on a photograph. The only scroll behaviour is a sticky
-   invitation column, which is position rather than motion and therefore
-   survives prefers-reduced-motion whole.
+   Beneath it the eight subjects are not a list either. They are eight arched
+   photographic openings cut down the paper — four sizes, tilted, overlapping,
+   two of them running off the rail — and social is two more doorways cut into
+   a dark wall. Band 01 is contained and rectangular, type beside a picture;
+   everything below it is the inverse, with the type set into the pictures.
+
+   Nothing is reachable only through motion: the reveal and the two-lane depth
+   are an opt-in that never runs under prefers-reduced-motion, and the wall
+   stands exactly as it is laid out with JavaScript off.
 
    Every colour below is one already measured in design/DESIGN-SYSTEM.md, or
    a solid composite of one. Nothing new was invented.
@@ -30,12 +34,16 @@
   /* the navigation pill's own width — the page's columns line up with the bar
      that floats above them */
   --cx-max: 1200px;
+  /* the colonnade's own measure: the wall is wider than the nav pill, because
+     eight overlapping doorways need room to be a wall rather than a column */
+  --cx-wide: 88rem;
   background: var(--ground);
 }
 
 /* ── BAND 01 · THE OPEN LINE ────────────────────────────────────────────
-   Warm black. The one real channel gets the page's strongest ground; the
-   two paper bands beneath it are supporting material.                    */
+   Warm black. The one real channel gets the page's strongest ground. THE
+   CLIENT APPROVED THIS BLOCK — it and its markup stay exactly as they are.
+   */
 .cx-open {
   background: var(--ground-deep);
   color: var(--ink-onDark);
@@ -118,12 +126,6 @@
   height: 1px;
   background: var(--cx-hair);
 }
-.cx-mark--paper .cx-mark__n {
-  color: var(--clay-deep);
-}
-.cx-mark--paper .cx-mark__r {
-  background: var(--rule);
-}
 
 .cx-h2 {
   font-family: var(--font-display);
@@ -134,9 +136,6 @@
   letter-spacing: -0.024em;
   margin: 0;
   color: var(--ink-onDark);
-}
-.cx-h2--paper {
-  color: var(--ink);
 }
 .cx-lead {
   margin: 0.9rem 0 0;
@@ -382,169 +381,327 @@
   transform: translateY(-4px);
 }
 
-/* ── BAND 02 · THE SUBJECTS ─────────────────────────────────────────────
-   Paper, and a register rather than a paragraph. The invitation sticks; the
-   eight subjects move past it.                                            */
+/* ── BAND 02 · THE COLONNADE ────────────────────────────────────────────
+   Paper, and no list at all. Eight arched openings cut down the page at
+   four sizes, tilted, overlapping, two of them running off the rail, with
+   each subject a nameplate set into the picture it belongs to. A doorway
+   is the shape of "we are open to".
+
+   Placement lives here rather than in inline styles so a breakpoint can
+   redefine every doorway's size, offset, overlap and tilt outright.
+
+   `overflow-x: clip` is what lets 05 and 08 leave the paper without giving
+   the document a horizontal scrollbar at any width, 320 to 2560.        */
 .cx-collab {
+  position: relative;
+  overflow-x: clip;
   background: var(--ground);
   color: var(--ink);
-  padding: clamp(3.4rem, 8vw, 6rem) var(--rail) clamp(3.4rem, 8vw, 6rem);
+  padding-block: clamp(3rem, 8svh, 5.5rem) clamp(3.5rem, 9svh, 6rem);
 }
-.cx-collab__in {
-  max-width: var(--cx-max);
-  margin-inline: auto;
-  display: grid;
-  gap: clamp(2.2rem, 5vw, 4.5rem);
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-}
-.cx-ask {
-  margin: 1rem 0 0;
-  max-width: 30ch;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.1rem, 0.98rem + 0.6vw, 1.42rem);
-  font-style: italic;
-  font-weight: 300;
-  line-height: 1.4;
-  color: var(--ink-soft);
-}
-.cx-collab__ask .cx-cta {
-  margin-top: 1.7rem;
-}
-.cx-dest {
-  margin: 0.85rem 0 0;
-  font: 500 12.5px/1.5 var(--font-text);
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
+.cx-collab__head {
+  width: 100%;
+  max-width: var(--cx-wide);
+  margin: 0 auto clamp(2.6rem, 7svh, 4.5rem);
+  padding-inline: var(--rail);
 }
 
-.cx-reg__lead {
+/* a word, then a hairline running out to the measure. Clay is 3.90:1 and
+   can never be a label — it is the rule here, never the word. */
+.cx-eyebrow {
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font: 600 0.7rem/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.cx-eyebrow::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--clay);
+  opacity: 0.6;
+}
+/* on the dark wall, the same solid soft cream the rest of this page uses */
+.cx-eyebrow--dark {
+  color: var(--cx-soft);
+}
+
+.cx-q {
+  margin: 0 0 1.1rem;
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.1rem + 4.2vw, 4.4rem);
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.cx-openTo {
   margin: 0;
-  font: 600 11.5px/1.5 var(--font-text);
-  letter-spacing: 0.17em;
+  font: 600 0.72rem/1.5 var(--font-text);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--teal-deep);
 }
-.cx-reg {
-  list-style: none;
-  margin: 1.3rem 0 0;
-  padding: 0;
-}
-.cx-reg__i {
-  display: grid;
-  grid-template-columns: 2.4rem minmax(0, 1fr);
-  gap: 0 0.9rem;
-  align-items: baseline;
-  padding: 1.05rem 0;
-  border-top: 1px solid var(--rule);
-}
-.cx-reg__i:last-child {
-  border-bottom: 1px solid var(--rule);
-}
-.cx-reg__n {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 0.88rem;
-  letter-spacing: 0.06em;
-  color: var(--clay-deep);
-}
-.cx-reg__t {
-  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.18rem);
-  line-height: 1.45;
-  color: var(--ink);
-  text-wrap: pretty;
+
+/* ── the wall ───────────────────────────────────────────────────────── */
+.cx-wall {
+  width: 100%;
+  max-width: var(--cx-wide);
+  margin: 0 auto;
+  padding-inline: var(--rail);
 }
 
-/* ── BAND 03 · WHOSE ACCOUNTS THESE ARE ─────────────────────────────────
-   Warm paper, so the two links read as objects on a ground rather than as a
-   list at the bottom of the page. The parent-organisation fact leads, because
-   it is the reason the handle looks the way it does.                      */
-.cx-social {
+.cx-arch {
+  position: relative;
+  margin: 0;
+  width: var(--w);
+  margin-left: var(--x);
+  margin-top: var(--y);
+  transform: translate3d(0, var(--py, 0px), 0) rotate(var(--r));
+}
+.cx-arch__cut {
+  position: relative;
+  aspect-ratio: var(--ar);
+  overflow: hidden;
+  /* a doorway: a full arch on top, all but square at the threshold */
+  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
   background: var(--ground-warm);
-  color: var(--ink);
-  padding: clamp(3.2rem, 7vw, 5rem) var(--rail) clamp(3.6rem, 8vw, 6rem);
+  box-shadow: 0 26px 64px rgba(36, 29, 24, 0.17);
+}
+.cx-arch__cut img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Depth: the far lane sits back behind a thin veil of the paper's own colour.
+   Painted, never animated — rule 4 forbids filter in a scroll handler. */
+.cx-arch[data-lane='far'] .cx-arch__cut::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(251, 247, 242, 0.17);
+  pointer-events: none;
+}
+.cx-arch[data-lane='far'] .cx-arch__cut {
+  box-shadow: 0 14px 38px rgba(36, 29, 24, 0.12);
+}
+
+/* ── THE NAMEPLATE ──────────────────────────────────────────────────────
+   A label on a photograph gets a GROUND, not a gradient: the navigation
+   pill's own material — rgba(shade,0.74) + a cream hairline + blur —
+   because a fixed-geometry scrim cannot guarantee a ratio over an arbitrary
+   crop at an arbitrary viewport. 0.34 measured 3.91:1 over this same hall's
+   skylight; 0.74 measured 8.6:1. Its contrast is a constant, so it holds on
+   all eight photographs at all seven widths (design/DESIGN-SYSTEM.md §1).
+
+   Two rows, because the plate carries two different kinds of fact: what the
+   community will talk about, and where the photograph was actually taken.  */
+.cx-arch__plate {
+  position: absolute;
+  z-index: 2;
+  left: 6%;
+  bottom: 5%;
+  max-width: 88%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.7rem;
+  row-gap: 0.32rem;
+  align-items: baseline;
+  padding: 0.5rem 0.85rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(var(--shade), 0.74);
+  border: 1px solid rgba(251, 247, 242, 0.18);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.cx-arch__n {
+  grid-column: 1;
+  font: 500 0.72rem/1 var(--font-text);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(251, 247, 242, 0.78);
+}
+.cx-arch__t {
+  grid-column: 2;
+  font-family: var(--font-text);
+  font-size: clamp(0.85rem, 0.76rem + 0.44vw, 1.12rem);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--ink-onPic);
+}
+/* Provenance, set in the caption system the hero's own figure uses: a sand
+   tick, then the event this frame was actually shot at. Sand is the rule and
+   never the word. The subject above it is a subject; this is a fact about the
+   photograph, and carrying both is what stops either being read as the other. */
+/* Full width of the plate, not the label's column: on a 62%-wide doorway the
+   number's column was the difference between one line and two, and a tick
+   hanging out to the plate's own left edge reads as a caption anyway. */
+.cx-arch__src {
+  grid-column: 1 / -1;
+  font: 500 0.62rem/1.4 var(--font-text);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.cx-arch__src::before {
+  content: '';
+  display: inline-block;
+  vertical-align: 0.28em;
+  width: 11px;
+  height: 1px;
+  margin-right: 0.55em;
+  background: var(--sand);
+}
+/* THE DATE IS THE PART THAT DOES NOT FIT. A 58%-wide doorway on a 390px phone
+   gives the plate about 160px of text, and "Samskrithi Sadhana · 29 June 2025"
+   broke to three lines there — a five-line plate stops reading as a plate at
+   all. The event is what the caption has to name, so the event always shows and
+   the date joins it as soon as the doorways are wide enough to hold it.
+   Measured on screenshots, not guessed. */
+.cx-arch__on {
+  display: none;
+}
+
+/* ── the one action ─────────────────────────────────────────────────────
+   `links.emailCollaborations` is null and renders as nothing. The button
+   carries the client's own words and the line beside it names where writing
+   to them actually goes — see components/contact/Collaborations.tsx.     */
+.cx-act {
+  width: 100%;
+  max-width: var(--cx-wide);
+  margin: clamp(3rem, 9svh, 5.5rem) auto 0;
+  padding-inline: var(--rail);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem clamp(1.2rem, 3vw, 2.2rem);
+}
+.cx-dest {
+  margin: 0;
+  font: 500 0.85rem/1.5 var(--font-text);
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+/* ── BAND 03 · TWO MORE DOORWAYS ────────────────────────────────────────
+   The colonnade ends, the wall goes dark, and two openings of the same arch
+   are cut into it and lit from the far side — same shape, no photograph,
+   because what is through them is the Trust's and not ours. The parent
+   organisation is the heading rather than a footnote: it is the reason
+   these handles read the way they do.                                    */
+.cx-social {
+  margin-top: clamp(3.5rem, 10svh, 6.5rem);
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-block: clamp(3.4rem, 9svh, 6rem) clamp(4rem, 11svh, 7rem);
 }
 .cx-social__in {
-  max-width: var(--cx-max);
-  margin-inline: auto;
-  display: grid;
-  gap: clamp(1.8rem, 4vw, 3.4rem);
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
+  width: 100%;
+  max-width: var(--cx-wide);
+  margin: 0 auto;
+  padding-inline: var(--rail);
 }
-.cx-trust {
-  margin: 1rem 0 0;
-  max-width: 46ch;
-  font-size: clamp(0.97rem, 0.94rem + 0.2vw, 1.07rem);
-  line-height: 1.6;
-  color: var(--ink-soft);
-  text-wrap: pretty;
+.cx-social__h {
+  margin: 0 0 0.8rem;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 1rem + 2.6vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--ink-onDark);
 }
-/* auto-fit rather than a breakpoint: at 980-1150 the section's own two columns
-   left each card about 165px of text and broke "@thepranavshastri" across two
-   lines. A track that will not go under 17rem drops to one card per row instead
-   of splitting a handle. */
+.cx-social__say {
+  margin: 0 0 clamp(2rem, 5svh, 3rem);
+  max-width: 42ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.62;
+  color: var(--cx-soft);
+}
 .cx-soc {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 0.9rem;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.1rem, 3vw, 2.2rem);
 }
-.cx-soc__a {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.2rem 1rem;
-  padding: 1.05rem 1.25rem;
-  border: 1px solid var(--rule);
-  border-radius: 4px;
+.cx-door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  width: min(100%, 17rem);
+  aspect-ratio: 1.02;
+  padding: 1.15rem 1.15rem 1.3rem;
+  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
   background: var(--ground);
+  color: var(--ink);
   text-decoration: none;
-  transition:
-    border-color 0.35s var(--ease),
-    background 0.35s var(--ease);
+  box-shadow:
+    0 0 0 1px rgba(246, 217, 193, 0.28),
+    0 24px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s var(--ease);
 }
-.cx-soc__a:hover,
-.cx-soc__a:focus-visible {
-  border-color: var(--clay);
+.cx-door:hover {
+  transform: translateY(-5px);
 }
-.cx-soc__k {
-  grid-column: 1;
-  font: 600 11.5px/1 var(--font-text);
-  letter-spacing: 0.19em;
+/* The doorway is a CREAM tile carrying its own box-shadow, which outranks the
+   global :focus-visible halo on specificity and would have swallowed it,
+   leaving a cream ring on a cream ground. So the ring inverts to ink here and
+   the halo is restated alongside the tile's own shadows. Measured by tabbing,
+   not assumed: this was invisible once, and it stays fixed. */
+.cx-door:focus-visible {
+  outline-color: #241d18;
+  box-shadow:
+    0 0 0 4px rgba(251, 247, 242, 0.95),
+    0 0 0 5px rgba(36, 29, 24, 0.55),
+    0 24px 60px rgba(0, 0, 0, 0.4);
+}
+.cx-door__k {
+  font: 600 0.68rem/1 var(--font-text);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--teal-deep);
 }
-.cx-soc__v {
-  grid-column: 1;
-  margin-top: 0.4rem;
+.cx-door__v {
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.05rem, 0.95rem + 0.45vw, 1.28rem);
-  letter-spacing: -0.012em;
+  font-weight: 400;
+  font-size: clamp(1.02rem, 0.86rem + 0.7vw, 1.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
   color: var(--ink);
   overflow-wrap: anywhere;
 }
-.cx-soc__arw {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  flex: none;
+.cx-door__go {
+  margin-top: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 600 0.78rem/1 var(--font-text);
   color: var(--clay-deep);
-  transition: transform 0.4s var(--ease);
 }
-.cx-soc__a:hover .cx-soc__arw,
-.cx-soc__a:focus-visible .cx-soc__arw {
-  transform: translateX(4px);
+.cx-door:hover .cx-cta__arw,
+.cx-door:focus-visible .cx-cta__arw {
+  transform: translateX(3px);
 }
 
 /* ── focus on paper. The global treatment is a cream ring in a dark halo,
-   which is right on the photograph and on the dark band; on paper it
-   inverts, exactly as .within already does.                              */
-.cx-collab :focus-visible,
-.cx-social :focus-visible {
+   which is right on a photograph and on both dark bands; on paper it
+   inverts, exactly as .within already does. The dark social band keeps the
+   global ring — except its cream doorways, handled above.               */
+.cx-collab :focus-visible {
   outline-color: #241d18;
   box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
 }
@@ -557,21 +714,15 @@
   }
 }
 
-/* ── ≥ 980px · two columns, and the invitation stays with you ─────────
-   The sticky offset clears the fixed navigation pill (about 80px at its
-   tallest) with room to spare. Sticky is position, not motion: reduced
-   motion keeps it, and it degrades to a normal block wherever it is
-   unsupported.                                                          */
+/* ── ≥ 980px · the open line goes to two columns ──────────────────────
+   The picture is as tall as the type beside it — no dead corner under the
+   card, no picture running past the band's bottom edge. Stretch gives the
+   figure the row's height; the 1fr row gives the image whatever is left
+   above the caption.                                                    */
 @media (min-width: 980px) {
   .cx-open__grid {
     grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
     gap: clamp(2.5rem, 5vw, 4.25rem);
-  }
-  /* The picture is as tall as the type beside it — no dead corner under the
-     card, no picture running past the band's bottom edge. Stretch gives the
-     figure the row's height; the 1fr row gives the image whatever is left
-     above the caption. */
-  .cx-open__grid {
     align-items: stretch;
   }
   .cx-fig img {
@@ -579,21 +730,6 @@
     height: 100%;
     min-height: 19rem;
     object-position: 74% 46%;
-  }
-
-  .cx-collab__in {
-    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-  }
-  .cx-collab__ask {
-    position: sticky;
-    top: clamp(6.25rem, 14vh, 8rem);
-  }
-
-  .cx-social__in {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  }
-  .cx-social .cx-soc {
-    align-self: center;
   }
 }
 
@@ -606,25 +742,108 @@
     width: 100%;
     justify-content: space-between;
   }
-  .cx-collab__ask .cx-cta {
-    width: 100%;
-    justify-content: space-between;
+}
+
+/* Occlusion is the depth cue, so the near lane is drawn OVER the far one. Both
+   carry a z-index because a positioned element with `auto` paints in DOM order,
+   which would put the later far doorway on top of the earlier near one.
+
+   The phone overlaps are deliberately shallower than the wide ones. At 430px the
+   doorways are nearly the full column, so a wide-viewport overlap put doorway 05
+   across 04's nameplate and 08 across 07's — measured on screenshots, not
+   guessed. A label that a later doorway can cover is a label that is not there. */
+.cx-arch[data-lane='near'] { z-index: 2; }
+.cx-arch[data-lane='far']  { z-index: 1; }
+
+/* ── the eight placements · phone ────────────────────────────────────────── */
+.cx-arch:nth-child(1)  { --w: 86%; --x: 0%;   --y: 0;     --r: -1deg;   --ar: 0.80; }
+.cx-arch:nth-child(2)  { --w: 62%; --x: 36%;  --y: -9%;   --r: 1.4deg;  --ar: 0.72; }
+.cx-arch:nth-child(3)  { --w: 74%; --x: 2%;   --y: -6%;   --r: 0.8deg;  --ar: 0.84; }
+.cx-arch:nth-child(4)  { --w: 58%; --x: 42%;  --y: -10%;  --r: -1.2deg; --ar: 0.70; }
+.cx-arch:nth-child(5)  { --w: 92%; --x: -8%;  --y: -6%;   --r: 0.6deg;  --ar: 0.94; }
+/* 05 runs off the left rail, so its nameplate moves in far enough to stay on the paper. */
+.cx-arch:nth-child(5) .cx-arch__plate { left: 16%; }
+.cx-arch:nth-child(6)  { --w: 60%; --x: 38%;  --y: -11%;  --r: -0.9deg; --ar: 0.72; }
+.cx-arch:nth-child(7)  { --w: 56%; --x: 4%;   --y: -5%;   --r: 1.2deg;  --ar: 0.68; }
+.cx-arch:nth-child(8)  { --w: 88%; --x: 12%;  --y: -8%;   --r: -0.7deg; --ar: 0.90; }
+
+/* ── the eight placements · wide ─────────────────────────────────────────── */
+@media (min-width: 60rem) {
+  .cx-arch:nth-child(1)  { --w: 44%; --x: 0%;   --y: 0;    --r: -1.2deg; --ar: 0.95; }
+  .cx-arch:nth-child(2)  { --w: 30%; --x: 60%;  --y: -12%; --r: 1.6deg;  --ar: 0.78; }
+  .cx-arch:nth-child(3)  { --w: 38%; --x: 6%;   --y: -4%;  --r: 0.9deg;  --ar: 0.88; }
+  .cx-arch:nth-child(4)  { --w: 27%; --x: 66%;  --y: -16%; --r: -1.5deg; --ar: 0.80; }
+  .cx-arch:nth-child(5)  { --w: 50%; --x: -8%;  --y: -6%;  --r: 0.7deg;  --ar: 1.00; }
+  .cx-arch:nth-child(5) .cx-arch__plate { left: 22%; }
+  .cx-arch:nth-child(6)  { --w: 31%; --x: 62%;  --y: -20%; --r: -1deg;   --ar: 0.80; }
+  .cx-arch:nth-child(7)  { --w: 26%; --x: 14%;  --y: -2%;  --r: 1.4deg;  --ar: 0.74; }
+  .cx-arch:nth-child(8)  { --w: 48%; --x: 56%;  --y: -14%; --r: -0.8deg; --ar: 0.95; }
+
+  .cx-arch__plate {
+    padding: 0.6rem 1rem 0.66rem;
+    column-gap: 0.85rem;
   }
-  .cx-reg__i {
-    grid-template-columns: 2rem minmax(0, 1fr);
-    gap: 0 0.7rem;
+  /* room for the caption system's own tracking */
+  .cx-arch__src {
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+  }
+  .cx-arch__src::before {
+    width: 14px;
+    margin-right: 0.6em;
   }
 }
 
+@media (min-width: 40rem) {
+  .cx-door {
+    width: clamp(11rem, 30vw, 15rem);
+    aspect-ratio: 0.98;
+  }
+  /* 640px is where the narrowest doorway (56% of the measure) finally gives the
+     plate about 260px of text, which is more than the longest provenance needs
+     on one line. Below it the date is dropped rather than allowed to wrap the
+     plate to five lines; the event itself never is. */
+  .cx-arch__on {
+    display: inline;
+  }
+}
+
+/* ── reveal · opt-in, and it hides nothing the browser already painted ────
+   The start state exists only once components/contact/Depth.tsx has added
+   `is-live`, and the approved hero above carries no [data-br] at all.    */
+.cx.is-live [data-br] > * {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.cx.is-live [data-br].in > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.85s var(--ease),
+    transform 1s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
 /* ── MOTION OFF ───────────────────────────────────────────────────────
-   Nothing on this page is reachable only through motion, so there is
-   nothing to restore: the transitions simply stop.                     */
+   Nothing on this page is reachable only through motion. Depth.tsx does
+   not attach a listener or set a property at all, so the doorways keep
+   their tilt and stand exactly where they are laid out.                */
 @media (prefers-reduced-motion: reduce) {
+  .cx-arch {
+    transform: rotate(var(--r));
+  }
   .cx-cta::before,
   .cx-cta__arw,
   .cx-copy__b::after,
-  .cx-soc__a,
-  .cx-soc__arw {
+  .cx-door,
+  .cx-door .cx-cta__arw {
     transition: none;
+  }
+  .cx-door:hover {
+    transform: none;
+  }
+  .cx.is-live [data-br] > * {
+    opacity: 1;
+    transform: none;
   }
 }

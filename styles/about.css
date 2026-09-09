@@ -126,205 +126,159 @@
 
 
 /* ══ 03 · WHY WE BEGAN ══════════════════════════════════════════════════════
-   A whisper, a window, then speech.
+   Concept B, ported as the client chose it. The founding sentence is not set ON
+   a photograph or BESIDE one: the photograph is INSIDE it, so a sentence about
+   no single teacher knowing everything is made out of a room full of them.
 
-   THE WINDOW. One word — `vast` — is the only aperture onto the photograph,
-   and it is the word whose meaning the picture already carries: a room with
-   more people in it than any one teacher could know. The concept this came
-   from filled the WHOLE SENTENCE; at sentence length every glyph is 100px
-   tall, the strokes are ~12px wide, and the picture inside them is texture.
-   Here ONE word fills the whole measure — capitals 382px tall at 1440 — and
-   every letter holds a legible piece of picture.
+   An earlier pass narrowed this to the single word "vast" standing on a paper
+   plate — measurably higher contrast and nearly double the saturation, because
+   inverting the ground lets a picture deepen instead of being washed pale. The
+   client compared both and preferred the whole sentence. Kept as chosen.
 
-   Fraunces does it, and a heavy expanded grotesque was tested and rejected:
-   because Fraunces is narrower it must be set larger to fill the same width,
-   so its capitals come out 43% taller and it shows MORE photograph, not less.
-   The weight and SOFT axes are pushed hard to widen the thinnest strokes.
+   CONTRAST BY CONSTRUCTION. The fill is a 0.50 cream layer over the frame, so
+   the darkest pixel any letter can contain is 0.50 x #FBF7F2 = #7D7B79, which
+   is 4.25:1 on --ground-deep against a 3:1 bar for display type. That holds for
+   any frame in the archive at any crop, so the picture can be swapped without
+   re-measuring.
+   ══════════════════════════════════════════════════════════════════════════ */
 
-   CONTRAST BY CONSTRUCTION, not by luck. The fill is a cream FLOOR under the
-   photograph:  floor 0.44 x #FBF7F2 = #6E6B69, and #6E6B69 on --ground-deep
-   is 3.35:1 where display type needs 3.0. The image therefore runs at the
-   highest opacity the ground allows — 0.56 — instead of being dimmed to be
-   safe, and the figure holds for ANY frame in the archive, at any crop, at
-   any viewport. That is the design system's rule about grounds rather than
-   gradients, applied to a glyph.                                            */
-
+/* Concept B's markup carries no inner rail: it relied on its own section rule for the page
+   gutter. `.ab-sec` here sets padding-block only, because every other section on this page
+   holds its content in an `.ab-rail`. So the gutter is restored on the section itself. */
 .ab-prem {
+  padding-inline: var(--rail);
+  --b-mega: clamp(2.6rem, 1.2rem + 6.2vw, 7.4rem);
+  --b-mid:  clamp(1.05rem, 0.96rem + 0.9vw, 1.62rem);
+  --b-read: clamp(0.97rem, 0.93rem + 0.36vw, 1.18rem);
+  --b-max:  100rem;
   padding-block: clamp(5rem, 12vw, 10rem) clamp(4.5rem, 11vw, 9rem);
 }
 
+.ab-eyebrow {
+  margin: 0 0 clamp(1.6rem, 3.4vw, 2.6rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.ab-eyebrow__n {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.ab-eyebrow--dark { color: var(--ink-onPic-2); }
+.ab-eyebrow--dark .b-eyebrow__n { color: var(--ink-onPic); }
+.ab-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+.ab-prem {
+  min-height: 92svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: clip;
+}
+.ab-prem > * { max-width: var(--b-max); }
+
 .ab-prem__def {
-  margin: 0 0 clamp(2.4rem, 6vw, 5rem);
-  max-width: 46ch;
+  margin: 0 0 clamp(1.6rem, 3.6vw, 2.8rem);
+  max-width: 44ch;
   font-family: var(--font-text);
-  font-size: var(--ab-read);
+  font-size: var(--b-read);
   line-height: 1.62;
   color: var(--ink-onDark-soft);
 }
 
-/* the measure the word is fitted to. 100cqw is this element's inline size,
-   so ONE --fit number holds at every viewport. */
-.ab-prem__claim {
-  margin: 0;
-  container-type: inline-size;
-}
+.ab-prem__p { margin: 0; }
 
-.ab-prem__head,
-.ab-prem__tail {
+/* THE SENTENCE THE PAGE IS BUILT ON.
+   Its fill is a photograph, so the letterforms are the only way the picture is
+   seen at all. The cream layer above the image is not styling: it guarantees a
+   floor. The darkest pixel any letter can contain is 0.50 x #FBF7F2 = #7D7B79,
+   which measures 4.25:1 against --ground-deep — the bar for 100px display type
+   is 3:1, and the figure holds for ANY frame in the archive, at any crop, at
+   any viewport. That is the design system's rule about grounds rather than
+   gradients, applied to a glyph. */
+.ab-prem__mega {
   display: block;
   font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: var(--ab-big);
-  font-weight: 300;
-  font-variation-settings: "opsz" 144, "wght" 300, "SOFT" 40, "WONK" 0;
-  line-height: 1.06;
-  letter-spacing: -0.022em;
+  font-size: var(--b-mega);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0;
+  line-height: 0.95;
+  letter-spacing: -0.032em;
   color: var(--ink-onPic);
   text-wrap: pretty;
 }
-.ab-prem__head {
-  margin-bottom: clamp(0.1rem, 0.4vw, 0.35rem);
-  margin-left: 0.06em;
-}
-.ab-prem__tail {
-  margin-top: clamp(0.35rem, 1.1vw, 1rem);
-  margin-left: 0.06em;
-  max-width: 26ch;
-}
-
-/* THE WORD.
-   --fit is the reciprocal of "VAST"'s advance width in ems at this weight,
-   width and tracking — MEASURED in the browser and iterated to convergence,
-   not estimated. Size is therefore arithmetic: measure / advance.
-   line-height 0.86 wraps the box tightly around the capitals without letting
-   any part of a glyph fall outside it, where the background would not paint. */
-.ab-prem__word {
-  --fit: 0.3779;
-  display: block;
-  position: relative;
-  font-family: var(--font-display);
-  font-size: calc(var(--fit) * 100cqw);
-  font-weight: 700;
-  /* opsz is pinned rather than left to `auto`: the axis saturates at 144 and
-     the explicit value stops any UA deciding otherwise at 500px. SOFT 100
-     rounds the terminals, which widens the narrowest part of every stroke. */
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 144, "wght" 700, "SOFT" 100, "WONK" 1;
-  font-style: normal;
-  line-height: 0.86;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  /* the fallback if background-clip is unavailable: ink, because the plate is paper */
-  color: var(--ink);
-}
-
-/* THE PLATE. A paper band bled to the viewport's edges, so the deepened frame inside the
-   letters reads against light instead of against near-black. A real element: a z-index:-1
-   pseudo-element sinks behind the section's own dark background and never paints. */
-.ab-prem__plate {
-  display: block;
-  position: relative;
-  background: var(--ground);
-  padding-block: clamp(0.6rem, 1.6vw, 1.4rem);
-  /* bleed past the section's gutters without causing horizontal overflow */
-  margin-inline: calc(-1 * var(--rail));
-  padding-inline: var(--rail);
-}
-
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .ab-prem__word {
+  .ab-prem__mega {
     background-image:
-      url("/media/stills/p13-img_0544-deep-2560.webp");
-    /* the frame's full width across the word's full width, so the whole class
-       spans the whole word and every letter gets its own share of the room. */
-    background-size: 100% auto;
-    background-position: 38% 79%;
+      linear-gradient(rgba(251, 247, 242, 0.5), rgba(251, 247, 242, 0.5)),
+      url("/media/stills/p13-img_0615-1920.webp");
+    background-size: cover;
+    background-position: 50% 62%;
     background-repeat: no-repeat;
     -webkit-background-clip: text;
     background-clip: text;
-    /* `color` above stays cream: it is what the contrast probe reads, and it
-       is also the fallback the moment either background-clip declaration is
-       dropped by a browser that claimed to support it. */
     -webkit-text-fill-color: transparent;
   }
-
-  /* THE ROOM BREATHES. A 44-second drift of the crop behind the letters —
-     slow enough that it is never a motion event, large enough that the word
-     is never the same picture twice. It is a CSS animation rather than
-     anything driven by scroll or pointer, so no handler ever touches paint,
-     and globals.css kills every animation under prefers-reduced-motion. It
-     is desktop-only: on a phone the strokes are too narrow for the drift to
-     be legible and the repaint is not worth the battery. */
-  @media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
-    .ab-prem__word {
-      animation: ab-drift 44s var(--ease-io) infinite alternate;
-    }
-  }
-
-  /* A phone gets the 1920 derivative — 2560 across a 390px word is 380 KB of
-     pixels nobody can see — and the crop drops a little further into the room,
-     because at ~96px tall the top of the frame is wall and the bottom is
-     people. Tighter crops were tried and are worse: zoomed past about 2x the
-     bodies stop being bodies and the letters fill with abstract shapes. */
   @media (max-width: 860px) {
-    .ab-prem__word {
-      background-image: url("/media/stills/p13-img_0544-deep-1920.webp");
-      background-position: 46% 80%;
+    .ab-prem__mega {
+      background-image:
+        linear-gradient(rgba(251, 247, 242, 0.5), rgba(251, 247, 242, 0.5)),
+        url("/media/stills/p13-img_0615-960.webp");
     }
   }
 }
 
-/* The room breathes: a slow pan DOWN through the class. Only the y axis moves,
-   because background-size is 100% of the box on x — there is no horizontal
-   slack, and buying some would mean cropping the class narrower than the word. */
-@keyframes ab-drift {
-  from { background-position: 50% 64%; }
-  to   { background-position: 50% 88%; }
-}
-
-.ab-prem__foot {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.4rem, 3vw, 2.2rem);
-  margin-top: clamp(2.6rem, 6vw, 4.6rem);
-}
-.ab-prem__belief {
-  margin: 0;
-  max-width: 52ch;
+.ab-prem__tail {
+  display: block;
+  margin-top: clamp(1.3rem, 2.6vw, 2.1rem);
+  max-width: 54ch;
   font-family: var(--font-text);
-  font-size: var(--ab-read);
-  line-height: 1.62;
+  font-size: var(--b-read);
+  line-height: 1.6;
   color: var(--ink-onPic-2);
 }
+
 .ab-prem__now {
   position: relative;
-  margin: 0;
-  max-width: 34ch;
+  margin: clamp(2.2rem, 5vw, 3.8rem) 0 0;
+  max-width: 30ch;
   font-family: var(--font-display);
   font-style: italic;
-  font-size: var(--ab-mid);
+  font-size: var(--b-mid);
   font-weight: 300;
-  font-variation-settings: "opsz" 144, "wght" 300, "SOFT" 40, "WONK" 1;
+  font-variation-settings: "opsz" 144, "SOFT" 40, "WONK" 1;
   line-height: 1.3;
-  color: var(--ink-onDark-soft);
+  color: var(--ink-onPic-2);
 }
 
 @media (min-width: 861px) {
-  .ab-prem__foot {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(2rem, 5vw, 5rem);
-    align-items: start;
+  .ab-prem__tail { margin-inline-start: clamp(0rem, 20vw, 24rem); }
+  .ab-prem__now  {
+    margin-inline-start: auto;
+    margin-inline-end: max(0px, calc(100% - var(--b-max)));
   }
-  /* the hero's eyebrow rule at a larger scale: a sand hairline reaching from
-     the empty gutter to the aside, so the space reads as measured rather than
-     left over. Sand is ornament, and this is the one thing it is allowed to be. */
+  /* the hero's eyebrow rule at a larger scale: a sand hairline reaching across the
+     empty half of the band to the aside, so the space reads as measured rather than
+     left over. Sand is ornament and this is the one thing it is allowed to be. */
   .ab-prem__now::before {
     content: '';
     position: absolute;
     top: 0.62em;
-    right: calc(100% + 1.4rem);
-    width: clamp(1.5rem, 5vw, 4rem);
+    right: calc(100% + 1.8rem);
+    width: clamp(3rem, 16vw, 14rem);
     height: 1px;
     background: var(--sand);
     opacity: 0.55;
@@ -623,7 +577,15 @@
    display size and hung clear of the measure so no ink ever crosses them.
    Clay is ornament and this is ornament; at this size it is also large text
    by every definition, and #C1613C on #FBF7F2 is 3.90:1 where the bar is
-   3.0.                                                                      */
+   3.0.
+
+   CENTRED, AND SET HEAVY. Every other line on this page is ranged left; this
+   one is not, because it is the only thing on its plate and centring is what
+   says so. The weight follows the client's reference — that page carries its
+   statement in a heavy face at high contrast, so this goes from 360 to 620 on
+   the weight axis and drops SOFT to 0. Fraunces stays: the reference's move is
+   the WEIGHT, not the face, and swapping to a grotesque for one sentence would
+   cost the page its voice to borrow someone else's.                          */
 
 .ab-guide {
   background: var(--ground);
@@ -633,18 +595,23 @@
 
 .ab-quote {
   position: relative;
-  margin: 0;
+  margin: 0 auto;
+  text-align: center;
+  /* NO max-width in ch here: `ch` resolves against THIS element's font-size, which is the
+     body's, not the display size below — 22ch measured ~176px and wrapped the sentence to
+     one word per line. The three clauses already break where they are told to; they only
+     need centring. */
 }
 
 .ab-quote__line {
   margin: 0;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(2.95rem, 0.5rem + 8.2vw, 11.5rem);
-  font-weight: 360;
-  font-variation-settings: "opsz" 144, "wght" 360, "SOFT" 20, "WONK" 0;
-  line-height: 0.99;
-  letter-spacing: -0.032em;
+  font-size: clamp(2.6rem, 0.4rem + 7.4vw, 9.5rem);
+  font-weight: 620;
+  font-variation-settings: "opsz" 144, "wght" 620, "SOFT" 0, "WONK" 0;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   color: var(--ink);
 }
 /* fit-content, so the LAST row's box ends where its last letter does and the
@@ -654,6 +621,10 @@
   position: relative;
   width: fit-content;
   max-width: 100%;
+  /* centred, but still fit-content: the closing mark is hung at left:100% of the
+     LAST row, so that row's box must end where its last letter does. auto margins
+     centre the box without giving the mark a full-width edge to hang off. */
+  margin-inline: auto;
 }
 
 .ab-quote__mk {
@@ -672,10 +643,11 @@
    space the box carries underneath. */
 .ab-quote__mk--o {
   display: block;
-  font-size: clamp(4.6rem, 0.6rem + 14vw, 17rem);
+  font-size: clamp(3.6rem, 0.5rem + 11vw, 13rem);
   line-height: 0.78;
-  margin: 0 0 -0.4em -0.055em;
-  transform-origin: 14% 78%;
+  /* centred over the sentence rather than hung off its left edge */
+  margin: 0 0 -0.34em;
+  transform-origin: 50% 78%;
 }
 /* THE CLOSING MARK — hung off the end of the last clause, out of the flow, so
    a mark three times the size of the sentence cannot open a gap under it. */
@@ -692,7 +664,11 @@
   transform-origin: 22% 30%;
 }
 @media (min-width: 861px) {
-  .ab-quote__line { max-width: 15ch; }
+  /* 15ch resolves against the DISPLAY size here, so it is the measure that decides where
+     the three clauses sit — keep it. But it must also be centred: left-aligned it put the
+     rows' centre 136px left of the section's, so the opening mark looked misplaced when it
+     was the only thing correctly centred. */
+  .ab-quote__line { max-width: 15ch; margin-inline: auto; }
   .ab-quote__mk--o { margin-left: -0.075em; }
 }
 

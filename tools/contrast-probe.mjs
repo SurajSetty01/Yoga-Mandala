@@ -91,6 +91,25 @@ if (scrollTo) {
 const targets = await page.evaluate((sels) => {
   const seen = new Set();
   const out = [];
+  /**
+   * The boxes of any fixed/sticky overlay — the navigation pill, a skip link, a cookie bar.
+   * Text passing UNDER one of those is not a contrast failure, it is a nav bar doing its job,
+   * but sampled at an arbitrary scroll position it reads as cream-on-cream and fails at ~1.2:1.
+   * Anything substantially covered by one is excluded rather than measured.
+   */
+  const overlays = [...document.querySelectorAll('body *')]
+    .filter((el) => {
+      const p = getComputedStyle(el).position;
+      return p === 'fixed' || p === 'sticky';
+    })
+    .map((el) => el.getBoundingClientRect())
+    .filter((r) => r.width > 40 && r.height > 12);
+  const coveredByOverlay = (r) =>
+    overlays.some((o) => {
+      const ix = Math.max(0, Math.min(r.right, o.right) - Math.max(r.left, o.left));
+      const iy = Math.max(0, Math.min(r.bottom, o.bottom) - Math.max(r.top, o.top));
+      return (ix * iy) / Math.max(1, r.width * r.height) > 0.25;
+    });
   for (const sel of sels) {
     for (const el of document.querySelectorAll(sel)) {
       if (seen.has(el)) continue;
@@ -102,6 +121,7 @@ const targets = await page.evaluate((sels) => {
       if (r.width < 8 || r.height < 6) continue;
       if (r.top > innerHeight || r.bottom < 0) continue;
       if (cs.visibility === 'hidden' || +cs.opacity === 0) continue;
+      if (coveredByOverlay(r)) continue;
       // Visually-hidden accessible labels are not seen by anyone and have no contrast to fail.
       if (r.width <= 1 || r.height <= 1) continue;
       if (cs.clipPath === 'inset(50%)' || cs.clip === 'rect(0px, 0px, 0px, 0px)') continue;

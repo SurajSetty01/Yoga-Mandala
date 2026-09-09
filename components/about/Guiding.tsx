@@ -1,10 +1,16 @@
 import { about } from '@/content/copy';
 
 /**
- * 07 — OUR GUIDING THOUGHT.   *The sentence arrives, and the marks close around it.*
+ * 07 — THE GUIDING THOUGHT.   *The sentence arrives, and the marks close around it.*
  *
  * Thirty-eight characters closing nine hundred words, so they get the whole plate and the
  * page's top scale. None of the three tournament concepts was kept here; this is new.
+ *
+ * NO REGISTER MARK AND NO HEADING. Every other section on this page is numbered and named,
+ * and this one deliberately is not: a saying introduced by a label is a heading with a
+ * quotation under it, not a saying. The page has been counting all the way down and simply
+ * stops counting for its last line. The section keeps an accessible name from the quotation
+ * itself, so nothing is lost to assistive technology.
  *
  * THE IDEA. Nobody said this sentence. It is not a testimonial, it has no author, and there
  * is deliberately no attribution — so the quotation marks cannot point at a speaker. Instead
@@ -47,13 +53,8 @@ const groups = [
 
 export function Guiding() {
   return (
-    <section className="ab-sec ab-guide" aria-labelledby="ab-guide-h">
+    <section className="ab-sec ab-guide" aria-label={about.guiding.heading}>
       <div className="ab-rail">
-        <h2 className="ab-eyebrow" id="ab-guide-h">
-          <span className="ab-eyebrow__n">07</span>
-          {about.guiding.heading}
-        </h2>
-
         <blockquote className="ab-quote" data-r="quote">
           <span className="ab-quote__mk ab-quote__mk--o" aria-hidden="true">
             {'“'}
