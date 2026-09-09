@@ -49,7 +49,19 @@ const words = line.split(' ');
  * which is as evenly as this sentence divides. It was three; the client asked for two, and
  * two lets the setting be larger for the same measure.
  */
-const groups = [words.slice(0, 4).join(' ') + ' ', words.slice(4).join(' ')];
+const ROWS = [words.slice(0, 4), words.slice(4)];
+
+/**
+ * Only the first word carries the photograph — variant A of three the client compared.
+ *
+ * Worth recording, because it is a real trade and it was chosen with it visible: a filled
+ * glyph must be DARKER than the paper it stands on but cannot be as dark as solid --ink, so
+ * "Yoga" reads slightly lighter than the words around it. Filling the whole sentence avoids
+ * that (nothing is competing) and was the recommendation; the client preferred the ink to
+ * stay punchy and the picture to be an accent. If it is ever revisited, the fix is not to
+ * lighten the ink — it is to fill more words, not fewer.
+ */
+const FILLED_INDEX = 0;
 
 export function Guiding() {
   return (
@@ -57,24 +69,34 @@ export function Guiding() {
       <div className="ab-rail">
         <blockquote className="ab-quote" data-r="quote">
           <p className="ab-quote__line">
-            {groups.map((g, i) => (
-              <span className="ab-quote__row" key={g} style={{ '--i': i } as React.CSSProperties}>
-                {/* INLINE marks, tight against the text: the opening one immediately before
-                    the first letter and the closing one immediately after the last, rather
-                    than hung as blocks above and below the sentence. */}
-                {i === 0 ? (
-                  <span className="ab-quote__mk ab-quote__mk--o" aria-hidden="true">
-                    {'“'}
-                  </span>
-                ) : null}
-                {g}
-                {i === groups.length - 1 ? (
-                  <span className="ab-quote__mk ab-quote__mk--c" aria-hidden="true">
-                    {'”'}
-                  </span>
-                ) : null}
-              </span>
-            ))}
+            {ROWS.map((row, r) => {
+              const offset = r === 0 ? 0 : ROWS[0]!.length;
+              return (
+                <span className="ab-quote__row" key={r} style={{ '--i': r } as React.CSSProperties}>
+                  {/* INLINE marks, tight against the text: the opening one immediately before
+                      the first letter and the closing one immediately after the last, rather
+                      than hung as blocks above and below the sentence. */}
+                  {r === 0 ? (
+                    <span className="ab-quote__mk ab-quote__mk--o" aria-hidden="true">
+                      {'“'}
+                    </span>
+                  ) : null}
+                  {row.map((w, i) => (
+                    <span
+                      key={`${r}-${i}`}
+                      className={offset + i === FILLED_INDEX ? 'ab-quote__w ab-quote__w--fill' : 'ab-quote__w'}
+                    >
+                      {w + (i < row.length - 1 ? ' ' : '')}
+                    </span>
+                  ))}
+                  {r === ROWS.length - 1 ? (
+                    <span className="ab-quote__mk ab-quote__mk--c" aria-hidden="true">
+                      {'”'}
+                    </span>
+                  ) : null}
+                </span>
+              );
+            })}
           </p>
         </blockquote>
       </div>

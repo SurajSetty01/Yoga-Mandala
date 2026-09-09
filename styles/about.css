@@ -607,7 +607,7 @@
   margin: 0;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(2.1rem, 0.4rem + 6.1vw, 7.6rem);
+  font-size: clamp(2.35rem, 0.4rem + 7.0vw, 8.9rem);
   font-weight: 700;
   /* SOFT 100 rounds the terminals, widening the thinnest part of every stroke. It matters
      even unfilled, and it is what makes a photographic fill legible here at all. */
@@ -656,6 +656,37 @@
    top, which was necessary only while it was a 248px block out of flow. */
 .ab-quote__mk--c {
   letter-spacing: -0.04em;
+}
+
+/* VARIANT A — only the first word is a window; the rest of the sentence is ink.
+   The plate is paper, so the fill must be DARKER than about 140/255 to clear 3:1 — the
+   inverse of the same treatment on --ground-deep, and the reason this uses a deepened,
+   saturated derivative rather than a plain one. Darkening deepens colour where a white veil
+   washes it. Measured on the painted glyph pixels: 7.20:1 against a 3:1 bar.
+
+   The frame is the Samskrithi Sadhana panel, chosen against three others by rendering each
+   inside the letterforms: faces, saris and a blue kurta stay legible at letter scale, where
+   a room of mats becomes texture. It is also four people in conversation, which is what the
+   sentence is about. */
+.ab-quote__w {
+  display: inline;
+  white-space: pre;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .ab-quote__w--fill {
+    background-image: url("/media/stills/ss-dsc07143-deep-2560.webp");
+    background-size: cover;
+    background-position: 50% 52%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (max-width: 860px) {
+    .ab-quote__w--fill {
+      background-image: url("/media/stills/ss-dsc07143-deep-1920.webp");
+    }
+  }
 }
 @media (min-width: 861px) {
   /* 15ch resolves against the DISPLAY size here, so it is the measure that decides where
