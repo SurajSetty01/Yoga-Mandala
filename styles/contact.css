@@ -802,7 +802,15 @@
   /* 640px is where the narrowest doorway (56% of the measure) finally gives the
      plate about 260px of text, which is more than the longest provenance needs
      on one line. Below it the date is dropped rather than allowed to wrap the
-     plate to five lines; the event itself never is. */
+     plate to five lines; the event itself never is.
+
+     A container query on the plate would be the better rule — the doorways come
+     at four sizes, so the smallest still wraps its date at 1440 while its
+     neighbours have room. It was tried and reverted: `container-type:
+     inline-size` changes the plate's sizing model and collapsed every plate to
+     ~50px. Worth revisiting with a wrapper that can carry the containment
+     without being the sized box; not worth a layout regression for an orphaned
+     year. */
   .cx-arch__on {
     display: inline;
   }
