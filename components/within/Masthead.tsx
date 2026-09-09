@@ -1,42 +1,62 @@
 import { within } from '@/content/copy';
-import { pillars } from '@/content/site';
+import { PILLAR_FRAMES } from './frames';
 
 /**
- * THE MASTHEAD — a title page, then a mandala.
+ * THE CONTENTS PAGE, MADE OF EVIDENCE.
  *
- * The hero opens with a moving photograph and puts its type inside the picture. This page
- * opens with the opposite: no picture at all, and the four ideas set as a quartered figure
- * on warm paper. The register above the title is the client's own pillar list — Connect ·
- * Learn · Collaborate · SHARE, which is deliberately not the Grow-ending tagline.
+ * The four ideas are named here as four narrow windows cut through the page — one per pillar,
+ * each showing the frame that pillar's section will open into. The windows hang off the
+ * bottom of the dark band and cross the horizon into the paper below, so the handover to
+ * section 01 happens *through* the pictures rather than at a seam beneath them. That crossing
+ * is the same move the approved hero makes with its 46svh overlap.
  *
- * The quadrant is the page's index as well as its first image: each cell jumps to its
- * chapter, so a reader who wants only "Collaborate" never has to scroll for it.
+ * They are anchors, not decoration: each one jumps to its pillar. That gives the page a real
+ * table of contents that works on touch and on a keyboard, with no hover affordance anywhere.
+ *
+ * The eyebrow is the page's whole argument in one line, and it invents nothing — those are
+ * the three days this archive was shot, read out of the audit. See ./frames.ts.
  */
-export function WithinMasthead() {
+export function Masthead() {
+  const names = ['Connect', 'Learn', 'Collaborate', 'Share'] as const;
+
   return (
     <header className="wi-mast">
-      <p className="wi-mast__eyebrow">{pillars.join(' · ')}</p>
-      <h1 className="wi-mast__h">{within.title}</h1>
-      <p className="wi-mast__lead">{within.lead}</p>
+      <div className="wi-mast__type">
+        <p className="wi-mast__dates">Recorded 13 April · 27 April · 29 June 2025</p>
+        <h1 className="wi-mast__h">{within.title}</h1>
+        <p className="wi-mast__lead">{within.lead}</p>
+      </div>
 
-      <nav className="wi-quad" aria-label="The four ideas">
-        {within.pillars.map((p) => (
-          <a className="wi-quad__c" href={`#idea-${p.index}`} key={p.index}>
-            <span className="wi-quad__n">{p.index}</span>
-            <span className="wi-quad__w">{p.name}</span>
-            <svg
-              className="wi-quad__arw"
-              width="15"
-              height="10"
-              viewBox="0 0 15 10"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path d="M0 5h12.5M8.5 1L12.8 5 8.5 9" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </a>
-        ))}
-      </nav>
+      <ol className="wi-wins">
+        {within.pillars.map((p, i) => {
+          const f = PILLAR_FRAMES[names[i]!]!;
+          return (
+            <li className="wi-wins__i" key={p.index} style={{ '--k': [0.93, 1, 0.85, 0.72][i] } as React.CSSProperties}>
+              <a className="wi-win" href={`#wi-${p.index}`}>
+                <span className="wi-win__mask">
+                  <picture>
+                    <source type="image/avif" srcSet={`/media/posters/${f.id}.avif`} />
+                    <img
+                      className="wi-win__img"
+                      src={`/media/posters/${f.id}.jpg`}
+                      width={f.w}
+                      height={f.h}
+                      style={{ objectPosition: f.posNarrow ?? f.pos }}
+                      decoding="async"
+                      {...(i === 0 ? { fetchPriority: 'high' as const } : { loading: 'lazy' as const })}
+                      alt={f.alt}
+                    />
+                  </picture>
+                </span>
+                <span className="wi-win__lbl">
+                  <span className="wi-win__no">{p.index}</span>
+                  <span className="wi-win__name">{p.name}</span>
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
     </header>
   );
 }

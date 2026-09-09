@@ -1,73 +1,99 @@
 /* about — owned solely by the about section. No other file may declare these selectors. */
 
-/* ══════════════════════════════════════════════════════════════════════
-   PAGE 1 — the sections beneath the hero and section 02.
+/* ══════════════════════════════════════════════════════════════════════════
+   PAGE 1 — sections 03 → 07, the client's final assembly.
 
-   The brief for this page is the one that has failed before: five prose
-   blocks in a row become a cream text column. So each block was asked
-   what SHAPE it wants, and none of them answered the same way. The three
-   grounds alternate so a long read keeps a pulse and no two neighbours
-   share a material:
+   Three concepts were built and compared at /preview/about-a|b|c/. The client
+   chose one idea per section; two were kept unchanged, one was rebuilt to a
+   higher standard, and one was thrown out and replaced. What is here:
 
-     03 · premise     warm   a two-column spread with a rule down the
-                             middle. No picture at all — the section
-                             after four photographs is deliberately mute,
-                             and the premise is the largest thing in it.
-     04 · purpose     deep   a MANDALA: four quadrants set around a
-                             centre, the rules broken where the lead sits.
-                             The page's structural centrepiece, reversed.
-     05 · approach    paper  an aside — pushed to the right of the measure
-                             and marked with a clay change-bar, the way an
-                             editor marks a passage that matters. Quiet.
-     06 · members     warm   one full-bleed photograph carrying no type at
-                             all, then a three-column colophon beneath it.
-     07 · guiding     deep   one sentence, centred, at the page's top
-                             scale. The only centred thing on the page.
+     03 · why we began   deep   ONE WORD is a window onto a photograph. The
+                                sentence sits around it at reading scale.
+                                Rebuilt: the concept filled the whole
+                                sentence, which is why the picture inside it
+                                read as noise. See components/about/NOTES.md.
+     04 · our purpose    warm   Four mounted plates dealt left to right, each
+                                laid over the last. Grow is the only one you
+                                see whole. (Concept C, carried over.)
+     05 · our approach   paper  Two voices from one typeface — the refusal
+                                light and wide, the answer heavy and italic —
+                                over one figure feathered out of the paper.
+                                (Concept B, carried over; ground changed.)
+     06 · members        deep   The display line's baseline IS the horizon;
+                                the four-clause sentence walks down into the
+                                crowd. (Concept B, carried over.)
+     07 · guiding        paper  A quotation with no author: the marks close
+                                around the sentence as it lands. (New.)
+
+   Grounds alternate — deep · warm · paper · deep · paper — so no two
+   neighbours share a material, section 02's cream hands over to a reversed
+   plate, and the footer's dark is the page's actual ending.
 
    Continuity is the register mark (.ab-eyebrow is .within__eyebrow's own
-   object), the type scale, the tokens and the reveal primitive. Nothing
-   here reuses the hero's language (a sticky sequence, type inside the
-   picture) or section 02's (four narrow stills in a row with type beside
-   them). Contrast is measured, not estimated — see NOTES.md.
-   ══════════════════════════════════════════════════════════════════════ */
+   object), the type scale, the tokens and the shared [data-r] reveal that
+   hero-choreography drives for the whole page. Novelty is composition,
+   media treatment and behaviour.
+
+   Every colour here was measured against its real ground; the arithmetic for
+   the composited cases is in components/about/NOTES.md.
+   ══════════════════════════════════════════════════════════════════════════ */
 
 .ab {
   /* z-index 3 puts these on the same layer as .within, above the hero's
-     sticky stage (z-index 1) which is still in flow behind them. */
+     sticky stage (z-index 1), which is still in flow behind them. */
   position: relative;
   z-index: 3;
+  display: block;
 
-  --ab-pad: clamp(3.6rem, 9vw, 8.5rem);
+  /* The type scale. Steps are FAR apart on purpose: this run has one shout
+     (the word in 03), two speaking voices and two whispers, and nothing in
+     between, so a reader always knows which of the three they are in. */
+  --ab-huge: clamp(2.05rem, 1.15rem + 4.5vw, 7rem);
+  --ab-big: clamp(1.5rem, 1.05rem + 2.5vw, 3.5rem);
+  --ab-mid: clamp(1.05rem, 0.96rem + 0.9vw, 1.62rem);
+  --ab-read: clamp(0.97rem, 0.93rem + 0.36vw, 1.18rem);
+
+  --ab-pad: clamp(4.2rem, 10vw, 8.5rem);
   --ab-max: 92rem;
+}
 
+.ab-sec {
+  position: relative;
   padding-block: var(--ab-pad);
   background: var(--ground);
   color: var(--ink);
+  /* only x is clipped: nothing may escape sideways, but a plate dealt past
+     the bottom of its own section has to cross the seam. */
+  overflow-x: clip;
+}
+.ab-sec--deep {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
 }
 
 /* One measure for every section. It HANGS OFF THE LEFT RAIL rather than
-   centring, because section 02's head and the hero's type both do, and
-   at 2560 a centred column would step 470px away from the left edge the
-   two sections above it share. Below ~1600px it is wider than the
-   viewport and does nothing at all. */
-.ab__inner {
+   centring, because section 02's head and the hero's type both do, and at
+   2560 a centred column would step ~470px away from the left edge the two
+   sections above it share. */
+.ab-rail {
   max-width: calc(var(--ab-max) + 2 * var(--rail));
   padding-inline: var(--rail);
 }
-/* The two symmetrical compositions are the exception: a mandala whose
-   centre is not the page's centre is not a mandala, and a centred
-   closing sentence has to be centred on the screen. Both therefore span
-   rail to rail exactly as section 02's row of four frames does. */
-.ab-purpose > .ab__inner,
-.ab-guiding > .ab__inner { max-width: none; }
+/* Compositions that are objects rather than a measure — the hand of plates —
+   run rail to rail at any width, exactly as the approved section 02's row of
+   four frames does. Only running text is capped. */
+.ab-wide {
+  padding-inline: var(--rail);
+}
 
-/* ── the register mark ──────────────────────────────────────────────
-   Deliberately the same object as .within__eyebrow: same size, same
-   tracking, same clay numeral. It is how the reader knows these
-   sections and section 02 belong to one document.
-   teal-deep on --ground-warm measures 6.16:1, clay-deep 5.31:1.        */
+/* ── the register mark ────────────────────────────────────────────────────
+   Section 02's object, unchanged, so the page keeps one voice for "where am
+   I": 11.5px Inter, 0.19em, uppercase, a Fraunces numeral in clay. On the
+   reversed plates teal is 2.44:1 and clay 4.2:1, neither of which can carry
+   an 11.5px label, so the mark goes cream and the accent becomes a sand
+   RULE — which is the one thing sand is allowed to be. */
 .ab-eyebrow {
-  margin: 0 0 clamp(1.7rem, 3.6vw, 2.8rem);
+  margin: 0 0 clamp(1.6rem, 3.4vw, 2.6rem);
   display: flex;
   align-items: baseline;
   gap: 0.8rem;
@@ -76,7 +102,7 @@
   text-transform: uppercase;
   color: var(--teal-deep);
 }
-.ab-eyebrow span {
+.ab-eyebrow__n {
   flex: none;
   font-family: var(--font-display);
   font-optical-sizing: auto;
@@ -84,330 +110,694 @@
   letter-spacing: 0.06em;
   color: var(--clay-deep);
 }
-/* On the reversed ground neither voice can carry small text: --clay is
-   4.37:1 on #1C1714 and --sand is ornament by rule. Cream is 17.2:1 and
-   cream at 0.72 is 9.4:1, so the mark inverts to the two inks the hero
-   already uses on a dark ground rather than inventing a third. */
-.ab--deep .ab-eyebrow { color: var(--ink-onDark); }
-.ab--deep .ab-eyebrow span { color: var(--ink-onDark-soft); }
-
-.ab--warm { background: var(--ground-warm); }
-.ab--deep { background: var(--ground-deep); color: var(--ink-onDark); }
-
-/* ══ 03 · THE PREMISE ═════════════════════════════════════════════════
-   Section 02 ends by whispering the first half of this paragraph in
-   italic at 1.35rem. Here the whole sentence returns at twice the size
-   in full ink: the same words, arrived at rather than repeated.
-
-   Two columns with a hairline between them — a spread, not a column.
-   The section carries no photograph on purpose. After four stills in a
-   row the page needs a page of type, and the mute beat is what makes
-   the full-bleed photograph in 06 land.                               */
-.ab-open__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
-  align-items: start;
-  gap: 0 clamp(2rem, 5vw, 5rem);
+.ab-eyebrow--dark {
+  color: var(--ink-onPic-2);
 }
-.ab-open__def {
+.ab-eyebrow--dark .ab-eyebrow__n {
+  color: var(--ink-onPic);
+}
+.ab-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+
+/* ══ 03 · WHY WE BEGAN ══════════════════════════════════════════════════════
+   A whisper, a window, then speech.
+
+   THE WINDOW. One word — `vast` — is the only aperture onto the photograph,
+   and it is the word whose meaning the picture already carries: a room with
+   more people in it than any one teacher could know. The concept this came
+   from filled the WHOLE SENTENCE; at sentence length every glyph is 100px
+   tall, the strokes are ~12px wide, and the picture inside them is texture.
+   Here ONE word fills the whole measure — capitals 382px tall at 1440 — and
+   every letter holds a legible piece of picture.
+
+   Fraunces does it, and a heavy expanded grotesque was tested and rejected:
+   because Fraunces is narrower it must be set larger to fill the same width,
+   so its capitals come out 43% taller and it shows MORE photograph, not less.
+   The weight and SOFT axes are pushed hard to widen the thinnest strokes.
+
+   CONTRAST BY CONSTRUCTION, not by luck. The fill is a cream FLOOR under the
+   photograph:  floor 0.44 x #FBF7F2 = #6E6B69, and #6E6B69 on --ground-deep
+   is 3.35:1 where display type needs 3.0. The image therefore runs at the
+   highest opacity the ground allows — 0.56 — instead of being dimmed to be
+   safe, and the figure holds for ANY frame in the archive, at any crop, at
+   any viewport. That is the design system's rule about grounds rather than
+   gradients, applied to a glyph.                                            */
+
+.ab-prem {
+  padding-block: clamp(5rem, 12vw, 10rem) clamp(4.5rem, 11vw, 9rem);
+}
+
+.ab-prem__def {
+  margin: 0 0 clamp(2.4rem, 6vw, 5rem);
+  max-width: 46ch;
+  font-family: var(--font-text);
+  font-size: var(--ab-read);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+
+/* the measure the word is fitted to. 100cqw is this element's inline size,
+   so ONE --fit number holds at every viewport. */
+.ab-prem__claim {
   margin: 0;
-  max-width: 24ch;
+  container-type: inline-size;
+}
+
+.ab-prem__head,
+.ab-prem__tail {
+  display: block;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.3rem, 1.02rem + 1.3vw, 2.05rem);
-  font-weight: 400;
-  line-height: 1.16;
+  font-size: var(--ab-big);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300, "SOFT" 40, "WONK" 0;
+  line-height: 1.06;
   letter-spacing: -0.022em;
+  color: var(--ink-onPic);
   text-wrap: pretty;
 }
-.ab-open__r {
-  border-left: 1px solid var(--rule);
-  padding-left: clamp(2rem, 5vw, 5rem);
+.ab-prem__head {
+  margin-bottom: clamp(0.1rem, 0.4vw, 0.35rem);
+  margin-left: 0.06em;
 }
-/* the same clay mark the provenance caption carries, at section scale */
-.ab-open__r::before {
-  content: '';
+.ab-prem__tail {
+  margin-top: clamp(0.35rem, 1.1vw, 1rem);
+  margin-left: 0.06em;
+  max-width: 26ch;
+}
+
+/* THE WORD.
+   --fit is the reciprocal of "VAST"'s advance width in ems at this weight,
+   width and tracking — MEASURED in the browser and iterated to convergence,
+   not estimated. Size is therefore arithmetic: measure / advance.
+   line-height 0.86 wraps the box tightly around the capitals without letting
+   any part of a glyph fall outside it, where the background would not paint. */
+.ab-prem__word {
+  --fit: 0.3779;
   display: block;
-  width: clamp(2.2rem, 5vw, 3.4rem);
-  height: 2px;
-  background: var(--clay);
-  margin-bottom: clamp(1.1rem, 2.4vw, 1.8rem);
+  position: relative;
+  font-family: var(--font-display);
+  font-size: calc(var(--fit) * 100cqw);
+  font-weight: 700;
+  /* opsz is pinned rather than left to `auto`: the axis saturates at 144 and
+     the explicit value stops any UA deciding otherwise at 500px. SOFT 100
+     rounds the terminals, which widens the narrowest part of every stroke. */
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 144, "wght" 700, "SOFT" 100, "WONK" 1;
+  font-style: normal;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* the fallback if background-clip is unavailable: ink, because the plate is paper */
+  color: var(--ink);
 }
-.ab-open__premise {
+
+/* THE PLATE. A paper band bled to the viewport's edges, so the deepened frame inside the
+   letters reads against light instead of against near-black. A real element: a z-index:-1
+   pseudo-element sinks behind the section's own dark background and never paints. */
+.ab-prem__plate {
+  display: block;
+  position: relative;
+  background: var(--ground);
+  padding-block: clamp(0.6rem, 1.6vw, 1.4rem);
+  /* bleed past the section's gutters without causing horizontal overflow */
+  margin-inline: calc(-1 * var(--rail));
+  padding-inline: var(--rail);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .ab-prem__word {
+    background-image:
+      url("/media/stills/p13-img_0544-deep-2560.webp");
+    /* the frame's full width across the word's full width, so the whole class
+       spans the whole word and every letter gets its own share of the room. */
+    background-size: 100% auto;
+    background-position: 38% 79%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* `color` above stays cream: it is what the contrast probe reads, and it
+       is also the fallback the moment either background-clip declaration is
+       dropped by a browser that claimed to support it. */
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* THE ROOM BREATHES. A 44-second drift of the crop behind the letters —
+     slow enough that it is never a motion event, large enough that the word
+     is never the same picture twice. It is a CSS animation rather than
+     anything driven by scroll or pointer, so no handler ever touches paint,
+     and globals.css kills every animation under prefers-reduced-motion. It
+     is desktop-only: on a phone the strokes are too narrow for the drift to
+     be legible and the repaint is not worth the battery. */
+  @media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
+    .ab-prem__word {
+      animation: ab-drift 44s var(--ease-io) infinite alternate;
+    }
+  }
+
+  /* A phone gets the 1920 derivative — 2560 across a 390px word is 380 KB of
+     pixels nobody can see — and the crop drops a little further into the room,
+     because at ~96px tall the top of the frame is wall and the bottom is
+     people. Tighter crops were tried and are worse: zoomed past about 2x the
+     bodies stop being bodies and the letters fill with abstract shapes. */
+  @media (max-width: 860px) {
+    .ab-prem__word {
+      background-image: url("/media/stills/p13-img_0544-deep-1920.webp");
+      background-position: 46% 80%;
+    }
+  }
+}
+
+/* The room breathes: a slow pan DOWN through the class. Only the y axis moves,
+   because background-size is 100% of the box on x — there is no horizontal
+   slack, and buying some would mean cropping the class narrower than the word. */
+@keyframes ab-drift {
+  from { background-position: 50% 64%; }
+  to   { background-position: 50% 88%; }
+}
+
+.ab-prem__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.4rem, 3vw, 2.2rem);
+  margin-top: clamp(2.6rem, 6vw, 4.6rem);
+}
+.ab-prem__belief {
+  margin: 0;
+  max-width: 52ch;
+  font-family: var(--font-text);
+  font-size: var(--ab-read);
+  line-height: 1.62;
+  color: var(--ink-onPic-2);
+}
+.ab-prem__now {
+  position: relative;
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--ab-mid);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "wght" 300, "SOFT" 40, "WONK" 1;
+  line-height: 1.3;
+  color: var(--ink-onDark-soft);
+}
+
+@media (min-width: 861px) {
+  .ab-prem__foot {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+  /* the hero's eyebrow rule at a larger scale: a sand hairline reaching from
+     the empty gutter to the aside, so the space reads as measured rather than
+     left over. Sand is ornament, and this is the one thing it is allowed to be. */
+  .ab-prem__now::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    right: calc(100% + 1.4rem);
+    width: clamp(1.5rem, 5vw, 4rem);
+    height: 1px;
+    background: var(--sand);
+    opacity: 0.55;
+  }
+}
+
+
+/* ══ 04 · OUR PURPOSE — four plates, dealt ══════════════════════════════════
+   Concept C, carried over. Each of the four is a mounted print: the picture
+   inset in a cream board, the word and the client's line printed on the
+   board's bottom margin. No type is ever set on a photograph here, which is
+   the idea AND the reason every label measures the same at every viewport —
+   the ground under the type is a constant, not whatever the crop contains.  */
+
+.ab-purp {
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-block: clamp(5rem, 11vw, 9.5rem) clamp(3.5rem, 8vw, 7rem);
+}
+.ab-purp__lead {
   margin: 0;
   max-width: 27ch;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.45rem, 1.02rem + 1.95vw, 2.6rem);
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: -0.026em;
-  text-wrap: pretty;
-}
-.ab-open__now {
-  margin: clamp(2rem, 4vw, 3.2rem) 0 0;
-  max-width: 46ch;
-  padding-top: clamp(1.3rem, 2.6vw, 2rem);
-  border-top: 1px solid var(--rule);
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
-  line-height: 1.62;
-  color: var(--ink-soft);
-  text-wrap: pretty;
-}
-
-/* ══ 04 · OUR PURPOSE — the mandala ═══════════════════════════════════
-   Four things around a centre is what the community is called. So the
-   four are not a row and not a numbered register — page 2's pillars are
-   both of those, and section 02 above is already four-in-a-row. They are
-   quadrants: the horizontal rules break in the middle, the lead sits in
-   the break, and each quadrant's type is pushed AWAY from the centre so
-   the negative space reads as a ring.
-
-   Mobile-first: the stack below is the base and the quadrants only exist
-   from 861px up, so there is no !important anywhere in this block.     */
-.ab-mandala {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-}
-.ab-mandala__lead {
-  margin: 0 0 clamp(0.4rem, 1vw, 0.8rem);
-  padding: clamp(1rem, 2.4vw, 1.4rem) clamp(1.3rem, 3vw, 2.4rem);
-  border: 1px solid var(--rule-onDark);
-  border-radius: 12px;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.02rem, 0.95rem + 0.42vw, 1.3rem);
   font-style: italic;
-  font-weight: 400;
-  line-height: 1.4;
-  color: var(--ink-onDark);
-  text-wrap: pretty;
-}
-.ab-q {
-  display: flex;
-  flex-direction: column;
-  padding: clamp(1.5rem, 3.4vw, 2.6rem) 0 0;
-  border-top: 1px solid var(--rule-onDark);
-  margin-top: clamp(1.5rem, 3.4vw, 2.6rem);
-}
-/* Fraunces ROMAN, large, cream. Section 02's four names are Fraunces
-   ITALIC at 1.6rem on cream above a hairline — the two sets share a
-   family and nothing else, which is the point: they are not the same
-   list and must not look like the same component. */
-.ab-q h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.5rem, 1.05rem + 2vw, 2.35rem);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.026em;
-  color: var(--ink-onDark);
-}
-.ab-q p {
-  margin: clamp(0.7rem, 1.6vw, 1rem) 0 0;
-  max-width: 34ch;
-  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
-  line-height: 1.58;
-  color: var(--ink-onDark-soft);
-  text-wrap: pretty;
-}
-
-@media (min-width: 861px) {
-  .ab-mandala {
-    /* centred, and capped so the quadrants stay squarer than the screen:
-       at 2560 a rail-to-rail figure is a 2424px band, not a plate. */
-    max-width: 104rem;
-    margin-inline: auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(clamp(11rem, 17vw, 15rem), auto) auto minmax(clamp(11rem, 17vw, 15rem), auto);
-    grid-template-areas:
-      'q1 q2'
-      'lead lead'
-      'q3 q4';
-  }
-  /* definite placement first; the four quadrants then auto-fill q1..q4
-     in DOM order around it, so the markup stays lead-then-list. */
-  .ab-mandala__lead {
-    grid-area: lead;
-    justify-self: center;
-    max-width: 30rem;
-    margin: clamp(2rem, 4vw, 3.2rem) 0;
-    border-radius: 999px;
-    text-align: center;
-  }
-  .ab-q {
-    margin: 0;
-    border: 0;
-    padding: clamp(1.6rem, 3vw, 2.6rem) clamp(1.4rem, 3.2vw, 3rem);
-  }
-  .ab-q--1,
-  .ab-q--3 { border-right: 1px solid var(--rule-onDark); }
-  .ab-q--1,
-  .ab-q--2 { border-bottom: 1px solid var(--rule-onDark); justify-content: flex-start; }
-  .ab-q--3,
-  .ab-q--4 { border-top: 1px solid var(--rule-onDark); justify-content: flex-end; }
-  .ab-q--1,
-  .ab-q--3 { padding-left: 0; }
-  .ab-q--2,
-  .ab-q--4 { padding-right: 0; }
-}
-
-/* ══ 05 · OUR APPROACH ════════════════════════════════════════════════
-   A position, not a description, and the page's one quiet moment. It is
-   the only block on the page pushed to the RIGHT of its measure, and the
-   only one carrying a change-bar — the mark an editor puts in the margin
-   beside a passage that matters. Clay is a hairline here, never text.
-   The scale descends across the three lines: the claim, the correction,
-   the invitation.                                                      */
-.ab-approach__body {
-  max-width: 48rem;
-  margin-left: auto;
-  padding-left: clamp(1.3rem, 3.2vw, 2.8rem);
-  border-left: 2px solid var(--clay);
-}
-.ab-approach__one {
-  margin: 0;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.35rem, 1.02rem + 1.55vw, 2.25rem);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.18;
-  letter-spacing: -0.022em;
-  text-wrap: pretty;
-}
-.ab-approach__two {
-  margin: clamp(1.1rem, 2.4vw, 1.7rem) 0 0;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
-  font-weight: 400;
-  line-height: 1.35;
-  letter-spacing: -0.014em;
-}
-.ab-approach__three {
-  margin: clamp(1.4rem, 2.8vw, 2rem) 0 0;
-  max-width: 52ch;
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
-  line-height: 1.64;
-  color: var(--ink-soft);
-  text-wrap: pretty;
-}
-
-/* ══ 06 · A COMMUNITY BUILT BY ITS MEMBERS ════════════════════════════
-   The section's headline is a photograph. One frame, edge to edge,
-   carrying no type whatsoever — the exact inverse of the hero, where
-   every word sits inside the picture, and of section 02, where four
-   small frames are captioned beside their type.
-
-   Underneath, the three lines are set as a colophon in three columns
-   rather than a paragraph, with the middle one — the pivot — in the
-   display face. Its centre of gravity rhymes with the mandala's without
-   repeating its shape.                                                 */
-.ab-members__fig {
-  margin: 0 0 clamp(2.2rem, 5vw, 3.8rem);
-  background: var(--ground);
-  overflow: hidden;
-}
-.ab-members__fig img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: 50% 62%;
-}
-.ab-members__lines {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.4rem, 3vw, 2.8rem);
-}
-.ab-members__lines p {
-  margin: 0;
-  padding-top: clamp(0.9rem, 1.8vw, 1.2rem);
-  border-top: 1px solid var(--rule);
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
-  line-height: 1.6;
-  color: var(--ink-soft);
-  text-wrap: pretty;
-}
-.ab-members__lines p.ab-members__pivot {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.2rem, 1rem + 0.9vw, 1.65rem);
-  font-weight: 400;
-  line-height: 1.24;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.15rem, 0.95rem + 0.9vw, 1.6rem);
+  line-height: 1.34;
   color: var(--ink);
 }
 
-@media (min-width: 861px) {
-  .ab-members__fig img { aspect-ratio: 16 / 7; }
-  .ab-members__lines { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ab-hand {
+  display: flex;
+  align-items: flex-start;
+  margin-top: clamp(2rem, 4.5vw, 4rem);
 }
+.ab-plate {
+  flex: 0 0 30%;
+  position: relative;
+  z-index: var(--z, 1);
+  margin-top: var(--dy, 0);
+  padding: clamp(0.5rem, 0.75vw, 0.85rem);
+  background: var(--ground);
+  border-radius: 2px;
+  box-shadow:
+    0 18px 36px -18px rgba(36, 29, 24, 0.34),
+    0 2px 5px rgba(36, 29, 24, 0.16),
+    inset 0 0 0 1px rgba(36, 29, 24, 0.07);
+  transform: rotate(var(--rot, 0deg));
+}
+.ab-plate + .ab-plate { margin-left: -6.7%; }
 
-/* ══ 07 · OUR GUIDING THOUGHT ═════════════════════════════════════════
-   One sentence closing a long page, so it gets the page's top scale and
-   the whole plate to itself. It is the only centred composition here —
-   everything above it is left-aligned — which is what makes it read as
-   an ending rather than another section. Italic is this page's emphatic
-   voice: the hero's second line and section 02's second line are both
-   set in it.                                                           */
-.ab-guiding {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: min(72svh, 40rem);
-  text-align: center;
-}
-.ab-guiding .ab__inner {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.ab-guiding .ab-eyebrow { justify-content: center; }
-.ab-guiding__line {
+/* one print — a piece of paper, not a window */
+.ab-print {
   margin: 0;
-  max-width: 15ch;
+  position: relative;
+  overflow: hidden;
+  background: #17120f;
+}
+.ab-print picture { display: block; width: 100%; height: 100%; }
+.ab-print img { width: 100%; height: 100%; object-fit: cover; }
+
+/* THE MOUNT. The word and the client's line are printed on the board, in its
+   bottom margin, flush left — and the margin runs 26% short on the right,
+   which is exactly the strip the next plate covers. So every plate is
+   occluded and every label is whole. */
+.ab-plate__mount {
+  padding: clamp(0.75rem, 1.1vw, 1.15rem) 26% clamp(0.15rem, 0.4vw, 0.35rem) 0;
+}
+.ab-plate__name {
+  margin: 0 0 0.4rem;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(2.15rem, 1rem + 5.6vw, 5.4rem);
-  font-weight: 300;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 0.72rem + 1.35vw, 2.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.ab-plate__line {
+  margin: 0;
+  font-size: clamp(0.8rem, 0.7rem + 0.34vw, 1.1rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* THE DEAL. Every plate starts squared up in the gathered stack — no
+   rotation, a little small, offset back toward where the pile came from —
+   and travels to where it was dealt. Transform and opacity only; the class
+   is written once, by the page's shared [data-r] observer.
+
+   The group itself must NOT fade: globals gives every [data-r] opacity 0,
+   which would land all four plates at once and flatten the sequence. This
+   one rule (0,3,0) beats it (0,2,0) and hands the whole gesture to the
+   children. Start states are scoped to `.js`, so with JavaScript off the
+   hand is simply already dealt. */
+.js .ab-hand[data-r] { opacity: 1; }
+.js .ab-hand .ab-plate {
+  opacity: 0;
+  transform: translate(var(--gx, 0%), 9%) rotate(0deg) scale(0.9);
+}
+.js .ab-hand.in .ab-plate {
+  opacity: 1;
+  transform: translate(0, 0) rotate(var(--rot, 0deg)) scale(1);
+  transition:
+    transform 1.15s var(--ease),
+    opacity 0.7s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+/* PICKING A PLATE UP. It rises and squares itself, and its shadow deepens.
+   What it deliberately does NOT do is change z-index: raising a plate above
+   its right-hand neighbour would put it over that neighbour's label, and no
+   interaction here may cover a word. So the lift reveals nothing and hides
+   nothing — it is the affordance that these are objects, which is why it
+   needs no touch equivalent to invent: below 900px the plates do not overlap
+   their pictures at all, and every word is on the page in both layouts. The
+   shadow is a pseudo-element whose OPACITY transitions, because box-shadow
+   itself must never be animated in a pointer handler. */
+.ab-plate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  box-shadow: 0 34px 60px -24px rgba(36, 29, 24, 0.5);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ab-hand .ab-plate { transition: transform 0.5s var(--ease); }
+  .ab-hand .ab-plate::after { transition: opacity 0.45s var(--ease); }
+  .js .ab-hand.in .ab-plate:hover,
+  .ab-hand .ab-plate:hover {
+    transform: translate(0, -14px) rotate(0deg) scale(1);
+  }
+  .ab-hand .ab-plate:hover::after { opacity: 1; }
+}
+
+
+/* ══ 05 · OUR APPROACH ══════════════════════════════════════════════════════
+   Concept B, carried over. The refusal whispers, the affirmative speaks — and
+   both are full --ink, because tone here is carried by the WEIGHT axis, not
+   by a paler colour. That is a measurement, not a preference: over the figure
+   the worst background a letter can land on is #96948F, which is 5.45:1 with
+   --ink and only 2.55:1 with --ink-soft. Anything pale must stay off the
+   picture, and does.                                                        */
+
+.ab-appr {
+  background: var(--ground);
+  overflow: clip;
+  padding-block: clamp(5rem, 12vw, 9.5rem);
+}
+.ab-appr__in { position: relative; z-index: 1; }
+
+/* No frame anywhere. The figure is feathered out of the paper on every side
+   by a radial mask, sits at 0.40 so any ink may cross it, and bleeds off the
+   right edge so it is a presence in the plate rather than a picture on it. */
+.ab-appr__figure {
+  position: absolute;
+  z-index: 0;
+  top: -6%;
+  left: min(56%, 56rem);
+  width: clamp(16rem, 46vw, 42rem);
+  height: 112%;
+  object-fit: cover;
+  object-position: 52% 34%;
+  opacity: 0.4;
+  -webkit-mask-image: radial-gradient(62% 48% at 52% 44%, #000 22%, rgba(0, 0, 0, 0.6) 54%, transparent 80%);
+  mask-image: radial-gradient(62% 48% at 52% 44%, #000 22%, rgba(0, 0, 0, 0.6) 54%, transparent 80%);
+}
+
+.ab-appr__refusal {
+  margin: 0;
+  max-width: 25ch;
+  font-family: var(--font-display);
+  font-size: var(--ab-big);
+  font-weight: 250;
+  font-variation-settings: "opsz" 144, "wght" 250, "SOFT" 100, "WONK" 0;
+  line-height: 1.14;
+  letter-spacing: 0.004em;
+  color: var(--ink);
+}
+.ab-appr__answer {
+  margin: clamp(1.6rem, 3.4vw, 2.8rem) 0 0;
+  max-width: 21ch;
+  font-family: var(--font-display);
   font-style: italic;
+  font-size: var(--ab-huge);
+  font-weight: 600;
+  font-variation-settings: "opsz" 144, "wght" 600, "SOFT" 0, "WONK" 1;
   line-height: 1.02;
-  letter-spacing: -0.032em;
-  color: var(--ink-onDark);
-  text-wrap: balance;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+.ab-appr__conduct {
+  margin: clamp(2rem, 4.4vw, 3.4rem) 0 0;
+  max-width: 46ch;
+  font-family: var(--font-text);
+  font-size: var(--ab-read);
+  line-height: 1.62;
+  color: var(--ink);
 }
 
-/* ── ≤ 860px ────────────────────────────────────────────────────────
-   The premise spread folds to one column and its hairline turns from a
-   spine into a seam. Nothing else needs to change: every other block is
-   already a single column at this width.                              */
+/* Narrow viewports have no room for a figure beside a measure, so it is
+   anchored to the BOTTOM of the plate instead: the top quarter — where the
+   only non-ink element here, the teal register mark, lives — is then
+   guaranteed clear of it at every width. Teal on the worst pixel the figure
+   can produce is 2.42:1; ink is 5.45:1. The fix is geometry, not a tint,
+   exactly as the nav pill's ground was. */
 @media (max-width: 860px) {
-  .ab-open__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(1.7rem, 5vw, 2.4rem) 0;
+  .ab-appr__figure {
+    top: auto;
+    bottom: -8%;
+    left: 26%;
+    width: 88%;
+    height: 70%;
+    object-position: 52% 28%;
+    opacity: 0.42;
   }
-  .ab-open__def { max-width: 26ch; }
-  .ab-open__r {
-    border-left: 0;
-    border-top: 1px solid var(--rule);
-    padding-left: 0;
-    padding-top: clamp(1.7rem, 5vw, 2.4rem);
-  }
-  .ab-open__premise { max-width: 30ch; }
-  .ab-approach__body { border-left-width: 2px; }
-  .ab-guiding__line { max-width: 13ch; }
 }
 
-/* ── MOTION OFF ─────────────────────────────────────────────────────
-   Nothing in these sections is reachable only through motion: the
-   shared [data-r] primitive is the only movement, and globals.css
-   already pins it open under reduce. This kills the one transition of
-   our own so nothing eases under a reduce preference.                 */
+
+/* ══ 06 · A COMMUNITY BUILT BY ITS MEMBERS ══════════════════════════════════
+   Concept B, carried over. The inverse of 05: one figure there, a whole room
+   here. The photograph has no top edge and no side edges — it is masked
+   upward into the ground and bleeds off the bottom — so the display line
+   rests on a horizon rather than sitting next to a rectangle, and the
+   four-clause sentence steps down into it.                                  */
+
+.ab-mem {
+  min-height: 96svh;
+  overflow: clip;
+  isolation: isolate;
+  /* The bottom padding is not decoration: it is the clearance that keeps the
+     stair above the horizon's mask. Measured — at 320 the four clauses wrap to
+     seven lines, and with the concept's original 15rem floor the last two land
+     on the lit half of the photograph at 1.86:1. 20rem clears it at every
+     width, and the extra space is more room, not empty space. */
+  padding-block: clamp(5rem, 12vw, 9rem) clamp(20rem, 46vw, 27rem);
+}
+.ab-mem__horizon {
+  position: absolute;
+  z-index: 0;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: clamp(21rem, 52%, 42rem);
+  object-fit: cover;
+  object-position: 50% 52%;
+  opacity: 0.94;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.13) 12%, rgba(0, 0, 0, 0.55) 31%, #000 50%, #000 67%, rgba(0, 0, 0, 0.5) 81%, rgba(0, 0, 0, 0.12) 92%, transparent 98%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.13) 12%, rgba(0, 0, 0, 0.55) 31%, #000 50%, #000 67%, rgba(0, 0, 0, 0.5) 81%, rgba(0, 0, 0, 0.12) 92%, transparent 98%);
+}
+.ab-mem__in { position: relative; z-index: 1; }
+
+.ab-mem__refusal {
+  margin: 0;
+  max-width: 42ch;
+  font-family: var(--font-text);
+  font-size: var(--ab-read);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+.ab-mem__answer {
+  margin: clamp(1.6rem, 3.6vw, 3rem) 0 0;
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-size: var(--ab-huge);
+  font-weight: 420;
+  font-variation-settings: "opsz" 144, "wght" 420, "SOFT" 12, "WONK" 0;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink-onPic);
+}
+.ab-mem__stair {
+  margin: clamp(1.8rem, 4vw, 3.2rem) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--ab-mid);
+  font-weight: 350;
+  font-variation-settings: "opsz" 144, "wght" 350, "SOFT" 30, "WONK" 0;
+  line-height: 1.34;
+  color: var(--ink-onPic-2);
+}
+.ab-mem__step {
+  display: block;
+  margin-inline-start: calc(var(--i) * clamp(0.85rem, 2.6vw, 3.1rem));
+}
+
+
+/* ══ 07 · OUR GUIDING THOUGHT ═══════════════════════════════════════════════
+   New. Nobody said this sentence — it is not a testimonial and it has no
+   author — so the marks cannot point at a speaker. They behave instead like
+   a community adopting a saying: they start wide of the sentence and settle
+   IN onto it as it lands, in the order a sentence is spoken. Open, three
+   clauses, close. The last thing that moves on the page is the closing mark.
+
+   The marks are U+201C and U+201D, set in clay at roughly three times the
+   display size and hung clear of the measure so no ink ever crosses them.
+   Clay is ornament and this is ornament; at this size it is also large text
+   by every definition, and #C1613C on #FBF7F2 is 3.90:1 where the bar is
+   3.0.                                                                      */
+
+.ab-guide {
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: clamp(6rem, 14vw, 11rem) clamp(6.5rem, 15vw, 12rem);
+}
+
+.ab-quote {
+  position: relative;
+  margin: 0;
+}
+
+.ab-quote__line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.95rem, 0.5rem + 8.2vw, 11.5rem);
+  font-weight: 360;
+  font-variation-settings: "opsz" 144, "wght" 360, "SOFT" 20, "WONK" 0;
+  line-height: 0.99;
+  letter-spacing: -0.032em;
+  color: var(--ink);
+}
+/* fit-content, so the LAST row's box ends where its last letter does and the
+   closing mark can be hung off it at `left: 100%` at any width, in any wrap. */
+.ab-quote__row {
+  display: block;
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.ab-quote__mk {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-variation-settings: "opsz" 144, "wght" 500, "SOFT" 0, "WONK" 0;
+  color: var(--clay);
+  user-select: none;
+}
+
+/* THE OPENING MARK — a block above the sentence, not punctuation in a line.
+   line-height 0.78 is the tightest box that still contains the glyph's ink
+   (below ~0.72 the ink of a quote mark escapes the top of its own box and
+   lands on whatever is above it); the negative margin then closes the dead
+   space the box carries underneath. */
+.ab-quote__mk--o {
+  display: block;
+  font-size: clamp(4.6rem, 0.6rem + 14vw, 17rem);
+  line-height: 0.78;
+  margin: 0 0 -0.4em -0.055em;
+  transform-origin: 14% 78%;
+}
+/* THE CLOSING MARK — hung off the end of the last clause, out of the flow, so
+   a mark three times the size of the sentence cannot open a gap under it. */
+.ab-quote__mk--c {
+  position: absolute;
+  left: 100%;
+  /* anchored from the TOP, because a mark this size carries a 248px box and
+     its ink sits in the top third of it: bottom-anchoring parks the ink a
+     whole line above the clause it belongs to. */
+  top: -0.05em;
+  font-size: 2.1em;
+  line-height: 1;
+  margin-left: 0.045em;
+  transform-origin: 22% 30%;
+}
+@media (min-width: 861px) {
+  .ab-quote__line { max-width: 15ch; }
+  .ab-quote__mk--o { margin-left: -0.075em; }
+}
+
+/* THE ARRIVAL. The group must not fade as one — globals gives every [data-r]
+   opacity 0, which would land the whole quotation at once and there would be
+   no sequence left. This rule (0,3,0) beats that (0,2,0) and hands the
+   gesture to the children, each of which moves on transform and opacity
+   alone. Start states are scoped to `.js`, so with JavaScript off the
+   quotation is simply set. */
+.js .ab-quote[data-r] { opacity: 1; }
+.js .ab-quote .ab-quote__row,
+.js .ab-quote .ab-quote__mk {
+  opacity: 0;
+}
+.js .ab-quote .ab-quote__row { transform: translate3d(0, 30px, 0); }
+.js .ab-quote .ab-quote__mk--o { transform: translate3d(-0.14em, -0.2em, 0) scale(1.22); }
+.js .ab-quote .ab-quote__mk--c { transform: translate3d(0.2em, 0.26em, 0) scale(1.22); }
+
+.js .ab-quote.in .ab-quote__row,
+.js .ab-quote.in .ab-quote__mk {
+  opacity: 1;
+  transform: none;
+  transition:
+    transform 1.15s var(--ease),
+    opacity 0.75s var(--ease);
+}
+.js .ab-quote.in .ab-quote__mk--o { transition-delay: 0ms; }
+.js .ab-quote.in .ab-quote__row { transition-delay: calc(150ms + var(--i) * 110ms); }
+.js .ab-quote.in .ab-quote__mk--c { transition-delay: 660ms; }
+
+
+/* ══ NARROW ═════════════════════════════════════════════════════════════════
+   Below 900px four plates side by side leave a ~150px measure for each line,
+   which is a trench, so the fan becomes a stack flipped through downwards.
+   The plate ABOVE stays on top, so every plate keeps its whole label and only
+   its upper edge is ever covered — nothing is hidden where nothing can be
+   lifted, which is also why the hover lift needs no touch equivalent.       */
+
+@media (max-width: 900px) {
+  .ab-hand {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ab-plate {
+    flex: 0 0 auto;
+    width: 88%;
+    margin-top: 0;
+    z-index: var(--mz, 1);
+  }
+  .ab-plate:nth-child(even) { align-self: flex-end; }
+  .ab-plate + .ab-plate { margin-left: 0; margin-top: -1.1rem; }
+  .ab-plate__mount { padding-right: 9%; }
+  .js .ab-hand .ab-plate { transform: translate(0, 7%) rotate(0deg) scale(0.93); }
+}
+
+/* THE WORD OWNS THE EDGE. Below 861px the claim steps out of the rail so the
+   window is the full width of the phone — 12% more letter, and the picture
+   runs to both edges of the screen instead of stopping short of them. The two
+   reading-size lines get the rail back individually, so nothing else moves. */
+@media (max-width: 860px) {
+  .ab-prem__claim {
+    margin-inline: calc(-1 * var(--rail));
+  }
+  .ab-prem__head,
+  .ab-prem__tail {
+    padding-inline: var(--rail);
+  }
+}
+
+/* Each section states its own narrow padding. A single `.ab-sec` rule here
+   would win on source order over the section rules above it and flatten them —
+   which is exactly how 06's stair ended up on the lit half of its photograph. */
+@media (max-width: 760px) {
+  .ab-prem { padding-block: clamp(4.2rem, 16vw, 6.5rem) clamp(3.4rem, 13vw, 5.4rem); }
+  .ab-purp { padding-block: clamp(3.4rem, 13vw, 5rem) clamp(3rem, 11vw, 4.5rem); }
+  .ab-appr { padding-block: clamp(3.8rem, 14vw, 6rem); }
+  /* 06 keeps a deep foot on a phone BECAUSE the four clauses wrap to seven
+     lines here: the clearance is what holds the stair above the horizon's
+     mask, and the space it buys is filled by the photograph, not left empty.
+     Measured at 320, 360 and 390 — see components/about/NOTES.md. */
+  .ab-mem { padding-block: clamp(4rem, 15vw, 6rem) clamp(23.5rem, 100vw, 27rem); }
+  .ab-guide { padding-block: clamp(4.4rem, 16vw, 6.5rem) clamp(5rem, 18vw, 7.5rem); }
+  .ab-hand { margin-top: clamp(1.6rem, 7vw, 2.6rem); }
+}
+
+
+/* ══ MOTION OFF ═════════════════════════════════════════════════════════════
+   A complete, static, usable page: the hand already dealt, the quotation
+   already set, the drift never started, and nothing reachable only through
+   motion. globals.css resolves every [data-r] container; these are the
+   children it cannot see.                                                   */
+
 @media (prefers-reduced-motion: reduce) {
-  .ab * { transition: none !important; }
+  .js .ab-hand .ab-plate,
+  .js .ab-hand.in .ab-plate {
+    opacity: 1 !important;
+    transform: rotate(var(--rot, 0deg)) !important;
+    transition: none !important;
+  }
+  .js .ab-quote .ab-quote__row,
+  .js .ab-quote .ab-quote__mk,
+  .js .ab-quote.in .ab-quote__row,
+  .js .ab-quote.in .ab-quote__mk {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }

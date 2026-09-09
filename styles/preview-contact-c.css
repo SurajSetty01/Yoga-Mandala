@@ -1,0 +1,223 @@
+/* preview concept contact-c — owned solely by its agent. Namespace every selector with .contact-c
+   ─────────────────────────────────────────────────────────────────────────────────────────
+   CONCEPT C · ONE STATEMENT.
+
+   The list is refused outright. The client's eight subjects are set as one running sentence
+   at poster scale, rail to rail, so the line breaks fall where they fall — a list has rows,
+   a statement does not. Scale is the whole gesture: a small question, then an answer four
+   times its size that fills the page.
+
+   Two colour facts govern the marks:
+     · --clay is 3.90:1 on cream. It may never set a character, so the eight separators are
+       DISCS, not interpuncts — an empty inline-block with a background, which also keeps the
+       glyph-diff contrast probe from measuring an ornament as text.
+     · --clay-deep is 5.98:1 on cream and carries the action; --teal-deep is 6.95:1 and
+       carries the eyebrow.
+   ───────────────────────────────────────────────────────────────────────────────────────── */
+
+.contact-c {
+  --cc-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --cc-max: 84rem;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.contact-c .cc-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.contact-c :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+.contact-c .cc-handoff {
+  min-height: clamp(7rem, 16svh, 11rem);
+  background: var(--ground-deep);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--cc-rail) 1.1rem;
+}
+.contact-c .cc-handoff__t {
+  font: 600 0.66rem/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+
+.contact-c .cc-in {
+  width: 100%;
+  max-width: var(--cc-max);
+  margin: 0 auto;
+  padding-inline: var(--cc-rail);
+}
+
+/* ── COLLABORATIONS · the statement ──────────────────────────────────────── */
+.contact-c .cc-say {
+  padding-block: clamp(3rem, 8svh, 5.5rem) clamp(4rem, 11svh, 7rem);
+}
+
+.contact-c .cc-head {
+  max-width: 26rem;
+  margin-bottom: clamp(2rem, 5.5svh, 3.4rem);
+}
+.contact-c .cc-brow {
+  margin: 0 0 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font: 600 0.7rem/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.contact-c .cc-brow::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--clay);
+  opacity: 0.6;
+}
+/* The question is deliberately the SMALL type on this page. The answer is the poster. */
+.contact-c .cc-q {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(0.98rem, 0.92rem + 0.34vw, 1.18rem);
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+  color: var(--ink-soft);
+}
+
+.contact-c .cc-run {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 0.55rem + 5.1vw, 4.5rem);
+  line-height: 1.07;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  text-wrap: pretty;
+  hyphens: none;
+}
+/* The sentence that carries the eight is softer than the eight themselves, so the subjects
+   read as the content and the grammar recedes. 5C5049 on cream is 7.0:1. */
+.contact-c .cc-run__lead {
+  color: var(--ink-soft);
+}
+.contact-c .cc-i {
+  /* keeps a subject and the disc that follows it on the same line */
+  white-space: normal;
+}
+.contact-c .cc-i:nth-of-type(even) .cc-i__t {
+  font-style: italic;
+}
+
+.contact-c .cc-dot {
+  display: inline-block;
+  width: 0.2em;
+  height: 0.2em;
+  margin: 0 0.34em 0.14em 0.42em;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: var(--clay);
+}
+
+.contact-c .cc-go {
+  /* the arrow is part of the clause, and must never be left alone on the next line */
+  white-space: nowrap;
+  color: var(--clay-deep);
+  text-decoration: none;
+  border-bottom: 0.055em solid var(--clay);
+  padding-bottom: 0.02em;
+  transition: color 0.28s var(--ease-io), border-color 0.28s var(--ease-io);
+}
+.contact-c .cc-go:hover {
+  color: var(--clay-press);
+  border-bottom-color: var(--clay-press);
+}
+/* Tailwind's preflight sets `svg { display: block }`, which turned this arrow into a block
+   box and broke it onto its own line under "Write to us". Measured in the browser, not read
+   off the stylesheet. It has to be forced back inline. */
+.contact-c .cc-go__arw {
+  display: inline-block;
+  vertical-align: baseline;
+  width: 0.46em;
+  height: 0.32em;
+  margin-left: 0.2em;
+  overflow: visible;
+  transition: transform 0.34s var(--ease);
+}
+.contact-c .cc-go:hover .cc-go__arw {
+  transform: translateX(0.08em);
+}
+
+.contact-c .cc-dest {
+  margin: clamp(1.6rem, 4svh, 2.6rem) 0 0;
+  font: 500 0.85rem/1.5 var(--font-text);
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+}
+
+/* ── SOCIAL · the same voice, one size down ──────────────────────────────── */
+.contact-c .cc-social {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(3rem, 8svh, 5rem) clamp(4rem, 11svh, 7rem);
+}
+.contact-c .cc-brow--b {
+  color: var(--ink-soft);
+}
+.contact-c .cc-run--b {
+  font-size: clamp(1.35rem, 0.75rem + 2.5vw, 2.7rem);
+  line-height: 1.14;
+  letter-spacing: -0.022em;
+  max-width: 34ch;
+}
+.contact-c .cc-run--b .cc-dot {
+  margin-bottom: 0.2em;
+}
+
+/* ── the statement assembles · opt-in, hides nothing already painted ─────── */
+.contact-c.is-live [data-cr] {
+  opacity: 0;
+  transform: translateY(0.16em);
+}
+.contact-c.is-live [data-cr].in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.8s var(--ease);
+}
+.contact-c.is-live .cc-i:nth-of-type(2).in { transition-delay: 40ms; }
+.contact-c.is-live .cc-i:nth-of-type(3).in { transition-delay: 90ms; }
+.contact-c.is-live .cc-i:nth-of-type(4).in { transition-delay: 140ms; }
+.contact-c.is-live .cc-i:nth-of-type(5).in { transition-delay: 190ms; }
+.contact-c.is-live .cc-i:nth-of-type(6).in { transition-delay: 240ms; }
+.contact-c.is-live .cc-i:nth-of-type(7).in { transition-delay: 290ms; }
+.contact-c.is-live .cc-i:nth-of-type(8).in { transition-delay: 340ms; }
+.contact-c.is-live .cc-i:nth-of-type(9).in { transition-delay: 390ms; }
+.contact-c.is-live .cc-i:nth-of-type(10).in { transition-delay: 440ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-c .cc-go,
+  .contact-c .cc-go__arw {
+    transition: none;
+  }
+  .contact-c .cc-go:hover .cc-go__arw {
+    transform: none;
+  }
+  .contact-c.is-live [data-cr] {
+    opacity: 1;
+    transform: none;
+  }
+}

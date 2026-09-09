@@ -1,0 +1,399 @@
+/* preview concept contact-b — owned solely by its agent. Namespace every selector with .contact-b
+   ─────────────────────────────────────────────────────────────────────────────────────────
+   CONCEPT B · EIGHT DOORWAYS.
+
+   No list. Eight arched openings cut down the paper at four sizes, overlapping, tilted, two
+   of them running off the edge — and each subject is a nameplate set into the picture it
+   belongs to. A doorway is the shape of "we are open to".
+
+   The nameplate reuses the navigation pill's own material — rgba(shade,0.74) + a cream
+   hairline + blur — because a fixed-geometry gradient cannot guarantee a ratio over an
+   arbitrary crop at an arbitrary viewport, and 0.34 measured 3.91:1 over the same hall's
+   skylight while 0.74 measured 8.6:1 (design/DESIGN-SYSTEM.md §1). Its contrast is a
+   constant, so it holds on all eight photographs at all seven viewports.
+
+   Layout lives here rather than in inline styles so a breakpoint can redefine every
+   doorway's size, offset, overlap and tilt outright.
+   ───────────────────────────────────────────────────────────────────────────────────────── */
+
+.contact-b {
+  --cb-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --cb-max: 88rem;
+  background: var(--ground);
+}
+
+.contact-b .cb-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.contact-b .cb-handoff {
+  min-height: clamp(7rem, 16svh, 11rem);
+  background: var(--ground-deep);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--cb-rail) 1.1rem;
+}
+.contact-b .cb-handoff__t {
+  font: 600 0.66rem/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+
+/* ── COLLABORATIONS · the colonnade ──────────────────────────────────────── */
+.contact-b .cb-collab {
+  position: relative;
+  overflow-x: clip;
+  padding-block: clamp(3rem, 8svh, 5.5rem) clamp(3.5rem, 9svh, 6rem);
+}
+
+.contact-b .cb-head {
+  width: 100%;
+  max-width: var(--cb-max);
+  margin: 0 auto clamp(2.6rem, 7svh, 4.5rem);
+  padding-inline: var(--cb-rail);
+}
+.contact-b .cb-brow {
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font: 600 0.7rem/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.contact-b .cb-brow::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--clay);
+  opacity: 0.6;
+}
+.contact-b .cb-q {
+  margin: 0 0 1.1rem;
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.1rem + 4.2vw, 4.4rem);
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.contact-b .cb-lead {
+  margin: 0;
+  font: 600 0.72rem/1.5 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+
+/* ── the wall ────────────────────────────────────────────────────────────── */
+.contact-b .cb-wall {
+  width: 100%;
+  max-width: var(--cb-max);
+  margin: 0 auto;
+  padding-inline: var(--cb-rail);
+}
+
+.contact-b .cb-m {
+  position: relative;
+  margin: 0;
+  width: var(--w);
+  margin-left: var(--x);
+  margin-top: var(--y);
+  transform: translate3d(0, var(--py, 0px), 0) rotate(var(--r));
+}
+.contact-b .cb-m__arch {
+  position: relative;
+  aspect-ratio: var(--ar);
+  overflow: hidden;
+  /* a doorway: a full arch on top, all but square at the threshold */
+  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
+  background: var(--ground-warm);
+  box-shadow: 0 26px 64px rgba(36, 29, 24, 0.17);
+}
+.contact-b .cb-m__arch img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Depth: the far lane sits back behind a thin veil of the paper's own colour. Static, never
+   animated — rule 4 forbids filter in a scroll handler, so this is a painted layer. */
+.contact-b .cb-m[data-lane='far'] .cb-m__arch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(251, 247, 242, 0.17);
+  pointer-events: none;
+}
+.contact-b .cb-m[data-lane='far'] .cb-m__arch {
+  box-shadow: 0 14px 38px rgba(36, 29, 24, 0.12);
+}
+
+.contact-b .cb-m__plate {
+  position: absolute;
+  z-index: 2;
+  left: 6%;
+  bottom: 5%;
+  max-width: 88%;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.5rem 0.85rem 0.55rem;
+  border-radius: 4px;
+  background: rgba(var(--shade), 0.74);
+  border: 1px solid rgba(251, 247, 242, 0.18);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.contact-b .cb-m__n {
+  flex: none;
+  font: 500 0.72rem/1 var(--font-text);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(251, 247, 242, 0.78);
+}
+.contact-b .cb-m__t {
+  font-family: var(--font-text);
+  font-size: clamp(0.85rem, 0.76rem + 0.44vw, 1.12rem);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--ink-onPic);
+}
+
+/* ── the one action ──────────────────────────────────────────────────────── */
+.contact-b .cb-act {
+  width: 100%;
+  max-width: var(--cb-max);
+  margin: clamp(3rem, 9svh, 5.5rem) auto 0;
+  padding-inline: var(--cb-rail);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem clamp(1.2rem, 3vw, 2.2rem);
+}
+.contact-b .cb-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.9rem 1.4rem;
+  background: var(--clay-deep);
+  color: var(--ink-onPic);
+  border-radius: 3px;
+  font: 600 0.95rem/1 var(--font-text);
+  text-decoration: none;
+  transition: background 0.28s var(--ease-io);
+}
+.contact-b .cb-cta svg {
+  transition: transform 0.34s var(--ease);
+}
+.contact-b .cb-cta:hover {
+  background: var(--clay-press);
+}
+.contact-b .cb-cta:hover svg {
+  transform: translateX(3px);
+}
+.contact-b .cb-dest {
+  margin: 0;
+  font: 500 0.85rem/1.5 var(--font-text);
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+/* ── SOCIAL · the plate at the end of the wall ───────────────────────────── */
+.contact-b .cb-social {
+  margin-top: clamp(3.5rem, 10svh, 6.5rem);
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-block: clamp(3.4rem, 9svh, 6rem) clamp(4rem, 11svh, 7rem);
+}
+.contact-b .cb-social__in {
+  width: 100%;
+  max-width: var(--cb-max);
+  margin: 0 auto;
+  padding-inline: var(--cb-rail);
+}
+.contact-b .cb-brow--dark {
+  color: var(--ink-onDark-soft);
+}
+.contact-b .cb-social__h {
+  margin: 0 0 0.8rem;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 1rem + 2.6vw, 3rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+.contact-b .cb-social__say {
+  margin: 0 0 clamp(2rem, 5svh, 3rem);
+  max-width: 42ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+.contact-b .cb-social__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.1rem, 3vw, 2.2rem);
+}
+/* Two openings cut into the dark wall and lit from the far side. Same arch as the eight,
+   no photograph in them — because what is through them is the Trust's, not ours. */
+.contact-b .cb-door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  width: min(100%, 17rem);
+  aspect-ratio: 1.02;
+  padding: 1.15rem 1.15rem 1.3rem;
+  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
+  background: var(--ground);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: 0 0 0 1px rgba(246, 217, 193, 0.28), 0 24px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s var(--ease);
+}
+.contact-b .cb-door:hover {
+  transform: translateY(-5px);
+}
+/* The doorway is a CREAM tile, and it carries its own box-shadow — which outranks the global
+   :focus-visible halo on specificity and would have swallowed it, leaving a cream ring on a
+   cream ground. So the ring inverts to ink here and the halo is restated alongside the
+   tile's own shadows. Measured by tabbing, not assumed: this was invisible before. */
+.contact-b .cb-door:focus-visible {
+  outline-color: #241d18;
+  box-shadow:
+    0 0 0 4px rgba(251, 247, 242, 0.95),
+    0 0 0 5px rgba(36, 29, 24, 0.55),
+    0 24px 60px rgba(0, 0, 0, 0.4);
+}
+.contact-b .cb-door__k {
+  font: 600 0.68rem/1 var(--font-text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.contact-b .cb-door__v {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.02rem, 0.86rem + 0.7vw, 1.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.contact-b .cb-door__go {
+  margin-top: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 600 0.78rem/1 var(--font-text);
+  color: var(--clay-deep);
+}
+.contact-b .cb-door__go svg {
+  transition: transform 0.34s var(--ease);
+}
+.contact-b .cb-door:hover .cb-door__go svg {
+  transform: translateX(3px);
+}
+
+/* Occlusion is the depth cue, so the near lane is drawn OVER the far one. Both carry a
+   z-index because a positioned element with `auto` paints in DOM order, which would put the
+   later far doorway on top of the earlier near one.
+
+   The phone overlaps are deliberately shallower than the wide ones. At 430px the doorways
+   are nearly the full column, so a wide-viewport overlap put doorway 05 across 04's
+   nameplate and 08 across 07's — measured on screenshots, not guessed. A label that a later
+   doorway can cover is a label that is not there. */
+.contact-b .cb-m[data-lane='near'] { z-index: 2; }
+.contact-b .cb-m[data-lane='far']  { z-index: 1; }
+
+/* ── the eight placements · phone ────────────────────────────────────────── */
+.contact-b .cb-m:nth-child(1)  { --w: 86%; --x: 0%;   --y: 0;     --r: -1deg;   --ar: 0.80; }
+.contact-b .cb-m:nth-child(2)  { --w: 62%; --x: 36%;  --y: -9%;   --r: 1.4deg;  --ar: 0.72; }
+.contact-b .cb-m:nth-child(3)  { --w: 74%; --x: 2%;   --y: -6%;   --r: 0.8deg;  --ar: 0.84; }
+.contact-b .cb-m:nth-child(4)  { --w: 58%; --x: 42%;  --y: -10%;  --r: -1.2deg; --ar: 0.70; }
+.contact-b .cb-m:nth-child(5)  { --w: 92%; --x: -8%;  --y: -6%;   --r: 0.6deg;  --ar: 0.94; }
+/* 05 runs off the left rail, so its nameplate moves in far enough to stay on the paper. */
+.contact-b .cb-m:nth-child(5) .cb-m__plate { left: 16%; }
+.contact-b .cb-m:nth-child(6)  { --w: 60%; --x: 38%;  --y: -11%;  --r: -0.9deg; --ar: 0.72; }
+.contact-b .cb-m:nth-child(7)  { --w: 56%; --x: 4%;   --y: -5%;   --r: 1.2deg;  --ar: 0.68; }
+.contact-b .cb-m:nth-child(8)  { --w: 88%; --x: 12%;  --y: -8%;   --r: -0.7deg; --ar: 0.90; }
+
+/* ── the eight placements · wide ─────────────────────────────────────────── */
+@media (min-width: 60rem) {
+  .contact-b .cb-m:nth-child(1)  { --w: 44%; --x: 0%;   --y: 0;    --r: -1.2deg; --ar: 0.95; }
+  .contact-b .cb-m:nth-child(2)  { --w: 30%; --x: 60%;  --y: -12%; --r: 1.6deg;  --ar: 0.78; }
+  .contact-b .cb-m:nth-child(3)  { --w: 38%; --x: 6%;   --y: -4%;  --r: 0.9deg;  --ar: 0.88; }
+  .contact-b .cb-m:nth-child(4)  { --w: 27%; --x: 66%;  --y: -16%; --r: -1.5deg; --ar: 0.80; }
+  .contact-b .cb-m:nth-child(5)  { --w: 50%; --x: -8%;  --y: -6%;  --r: 0.7deg;  --ar: 1.00; }
+  .contact-b .cb-m:nth-child(5) .cb-m__plate { left: 22%; }
+  .contact-b .cb-m:nth-child(6)  { --w: 31%; --x: 62%;  --y: -20%; --r: -1deg;   --ar: 0.80; }
+  .contact-b .cb-m:nth-child(7)  { --w: 26%; --x: 14%;  --y: -2%;  --r: 1.4deg;  --ar: 0.74; }
+  .contact-b .cb-m:nth-child(8)  { --w: 48%; --x: 56%;  --y: -14%; --r: -0.8deg; --ar: 0.95; }
+
+  .contact-b .cb-m__plate {
+    padding: 0.6rem 1rem 0.66rem;
+    gap: 0.85rem;
+  }
+}
+
+@media (min-width: 40rem) {
+  .contact-b .cb-door {
+    width: clamp(11rem, 30vw, 15rem);
+    aspect-ratio: 0.98;
+  }
+}
+
+/* ── reveal · opt-in, and it hides nothing the browser already painted ───── */
+.contact-b.is-live [data-br] > * {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.contact-b.is-live [data-br].in > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.85s var(--ease),
+    transform 1s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-b .cb-m {
+    transform: rotate(var(--r));
+  }
+  .contact-b .cb-cta,
+  .contact-b .cb-cta svg,
+  .contact-b .cb-door,
+  .contact-b .cb-door__go svg {
+    transition: none;
+  }
+  .contact-b .cb-door:hover {
+    transform: none;
+  }
+  .contact-b.is-live [data-br] > * {
+    opacity: 1;
+    transform: none;
+  }
+}

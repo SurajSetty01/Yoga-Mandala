@@ -19,7 +19,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0516",
@@ -41,7 +42,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0544",
@@ -63,7 +65,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0614",
@@ -85,7 +88,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0615",
@@ -107,7 +111,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0617",
@@ -129,7 +134,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0620",
@@ -151,7 +157,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "p13-img_0621",
@@ -173,7 +180,8 @@
    960,
    1920,
    2560
-  ]
+  ],
+  "maxWidth": 2560
  },
  {
   "id": "ss-ven0267",
@@ -192,10 +200,9 @@
   "activity": "dance-performance",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0318",
@@ -214,10 +221,9 @@
   "activity": "dance-performance",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0208",
@@ -236,10 +242,9 @@
   "activity": "panel",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0056",
@@ -258,10 +263,9 @@
   "activity": "venue-detail",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0092",
@@ -280,10 +284,9 @@
   "activity": "asana-practice",
   "setting": "other",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0096",
@@ -302,10 +305,9 @@
   "activity": "asana-practice",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0139",
@@ -324,10 +326,9 @@
   "activity": "asana-practice",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920,
-   2560
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-dsc07120",
@@ -348,7 +349,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07126",
@@ -369,7 +371,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07153",
@@ -390,7 +393,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07154",
@@ -411,7 +415,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07155",
@@ -432,7 +437,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07160",
@@ -453,7 +459,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07161",
@@ -474,7 +481,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07165",
@@ -495,7 +503,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07118",
@@ -516,7 +525,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07137",
@@ -537,7 +547,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07143",
@@ -558,7 +569,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-dsc07144",
@@ -579,7 +591,8 @@
   "widths": [
    960,
    1920
-  ]
+  ],
+  "maxWidth": 1920
  },
  {
   "id": "ss-ven0024",
@@ -598,9 +611,9 @@
   "activity": "artwork",
   "setting": "outdoor-courtyard",
   "widths": [
-   960,
-   1920
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0025",
@@ -619,9 +632,9 @@
   "activity": "artwork",
   "setting": "gallery",
   "widths": [
-   960,
-   1920
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0027",
@@ -640,9 +653,9 @@
   "activity": "artwork",
   "setting": "gallery",
   "widths": [
-   960,
-   1920
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0028",
@@ -661,9 +674,9 @@
   "activity": "venue-detail",
   "setting": "gallery",
   "widths": [
-   960,
-   1920
-  ]
+   960
+  ],
+  "maxWidth": 960
  },
  {
   "id": "ss-ven0165",
@@ -682,8 +695,8 @@
   "activity": "venue-detail",
   "setting": "cafe",
   "widths": [
-   960,
-   1920
-  ]
+   960
+  ],
+  "maxWidth": 960
  }
 ]

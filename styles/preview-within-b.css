@@ -1,0 +1,912 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   preview concept within-b — owned solely by its agent.
+   Namespace every selector with .within-b
+
+   "SHOW IT HAPPENING. DO NOT DESCRIBE IT."
+
+   The page is mostly lists, and a list rendered as a list is what got the last
+   two builds rejected. So the list is never the object here: it is pinned to
+   the photograph that proves it. One material does the whole job — the
+   navigation pill's own ground, rgba(--shade, 0.82) with a cream hairline —
+   because it is the only surface on this site whose contrast is a CONSTANT
+   rather than a function of the pixel underneath. That is what lets a chip
+   straddle a photograph and a sheet of paper in one piece.
+
+   Measured, not guessed:
+     · cream on rgba(16,12,10,0.82) over CREAM PAPER  → 11.2:1
+     · cream on rgba(16,12,10,0.82) over WHITE GLARE  → 11.0:1
+     · sand  #F6D9C1 on --ground-deep #1C1714         → 13.4:1  (sand is only
+       barred from PHOTOGRAPHS, where it measured 4.0:1 — see DESIGN-SYSTEM §1)
+     · --clay-deep #9C4526 on cream                   → 5.98:1  (the numerals;
+       plain --clay is 3.90 and stays a hairline, as the system requires)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.within-b {
+  --wb-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  /* 92rem is the About page's own --ab-max: the measure is shared with the rest of
+     the site rather than invented here. */
+  --wb-max: 92rem;
+  --wb-nav: clamp(6.6rem, 14svh, 9.5rem);
+  --wb-dip: clamp(2.2rem, 6svh, 5rem);
+  --wb-winH: clamp(196px, 42svh, 460px);
+  /* how far the chip run hangs off the aperture's inner edge, and the gutter it
+     crosses. Both are named because the say column has to be padded by the
+     difference, or the run walks straight over the pillar's own numeral — which
+     is what it did at 1024x768, measured at 1.93:1. */
+  --wb-over: 0px;
+  --wb-gapx: clamp(2rem, 5vw, 4rem);
+
+  /* the one material. Its alpha is high enough that the backdrop stops
+     mattering, which is the entire point — see the header. */
+  --wb-plate-bg: rgba(var(--shade), 0.82);
+  --wb-plate-line: rgba(251, 247, 242, 0.22);
+
+  background: var(--ground);
+  color: var(--ink);
+  display: block;
+}
+
+/* Focus on the paper half inverts, exactly as the live Within page does: an ink
+   ring inside a cream halo. On the dark half the global cream-in-shade ring is
+   already correct and is left alone. */
+.within-b .wb-p :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ══ REVEALS ═══════════════════════════════════════════════════════════════
+   Gated on `.is-live`, which only the client island adds and only when motion
+   is allowed. With no JavaScript, or under prefers-reduced-motion, none of
+   these start states ever exist and the page is simply finished.
+
+   NO TEXT ON THIS PAGE EVER ANIMATES ITS OPACITY. A fade is the usual way to
+   bring a block in, and it means that for most of a second every word is
+   sitting at a fraction of its stated contrast — measure a heading 300 ms into
+   its own entrance and it reads 1.3:1. Here the type only ever translates, so
+   its contrast is identical in every frame of every transition and the number
+   the probe reports at rest is the number a reader gets at any moment. Only
+   the PICTURES fade, and a picture has no ratio to fail.
+   ════════════════════════════════════════════════════════════════════════ */
+.js .within-b.is-live [data-wb='up'] { transform: translateY(24px); }
+.js .within-b.is-live [data-wb='chip'] { transform: translateY(14px); }
+.js .within-b.is-live [data-wb='fig'] { transform: translateY(18px); }
+.js .within-b.is-live [data-wb='fig'] .wb-fig__mask,
+.js .within-b.is-live [data-wb='fig'] .wb-plate__mask { opacity: 0; }
+
+.js .within-b.is-live [data-wb].in {
+  transform: none;
+  transition: transform 0.95s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.js .within-b.is-live [data-wb='fig'].in .wb-fig__mask,
+.js .within-b.is-live [data-wb='fig'].in .wb-plate__mask {
+  opacity: 1;
+  transition: opacity 0.9s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .within-b [data-wb] { transform: none !important; }
+  .js .within-b [data-wb] .wb-fig__mask,
+  .js .within-b [data-wb] .wb-plate__mask { opacity: 1 !important; }
+  .js .within-b [data-wb].in { transition: none !important; }
+}
+
+/* ══ 00 · THE MASTHEAD ═════════════════════════════════════════════════════
+   Four windows cut through the page, one per idea, showing the footage each
+   section opens into. They hang off the bottom of the dark band and cross into
+   the paper below, so the handover happens THROUGH the pictures rather than at
+   a seam under them — the same move the approved hero makes with its overlap.
+   ════════════════════════════════════════════════════════════════════════ */
+.wb-mast {
+  position: relative;
+  z-index: 2;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding: var(--wb-nav) var(--wb-rail) 0;
+  /* A BLOCK FORMATTING CONTEXT, and it is load-bearing. The windows carry a negative
+     bottom margin so they hang past the horizon into the paper; with no BFC that margin
+     collapses straight out of this box, shortens the masthead AND drags the next section
+     up by the same amount, so the crossing cancels itself out exactly. */
+  display: flow-root;
+}
+.wb-mast > * {
+  width: 100%;
+  max-width: var(--wb-max);
+  margin-inline: auto;
+}
+
+.wb-mast__dates {
+  margin: 0 0 clamp(1.1rem, 3svh, 2rem);
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.wb-mast__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.45rem, 1.3rem + 5.6vw, 5.9rem);
+  line-height: 0.97;
+  letter-spacing: -0.032em;
+  max-width: 15ch;
+  text-wrap: balance;
+  color: var(--ink-onPic);
+}
+.wb-mast__lead {
+  margin: clamp(1.1rem, 3svh, 1.9rem) 0 0;
+  font-size: clamp(1.02rem, 0.96rem + 0.34vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+  max-width: 38ch;
+}
+
+.wb-wins {
+  list-style: none;
+  padding: 0;
+  margin: clamp(2.2rem, 7svh, 4.6rem) auto calc(-1 * var(--wb-dip));
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.85fr;
+  gap: clamp(5px, 0.85vw, 13px);
+  align-items: end;
+  position: relative;
+  z-index: 3;
+}
+.wb-wins__i { height: calc(var(--wb-winH) * var(--k, 1)); min-width: 0; }
+
+.wb-win {
+  display: block;
+  position: relative;
+  height: 100%;
+  text-decoration: none;
+  color: var(--ink-onPic);
+}
+.wb-win__mask {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  border-radius: 50% 50% 3px 3px / 17% 17% 3px 3px;
+  background: #0f0c0a;
+}
+.wb-win__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease);
+}
+.wb-win:hover .wb-win__img,
+.wb-win:focus-visible .wb-win__img { transform: scale(1.045); }
+/* the global focus ring is a 3px-radius rectangle; on an arch it reads as a stray box.
+   Same treatment, following the window's own shape. */
+.wb-win:focus-visible {
+  border-radius: 50% 50% 3px 3px / 17% 17% 3px 3px;
+  outline-offset: 3px;
+}
+
+/* The window label sits clear of the dome. Its ground is the pill's, so it is
+   legible over whatever frame happens to be behind it. */
+.wb-win__lbl {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 14%;
+  width: max-content;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 0.4rem 0.75rem 0.46rem;
+  border-radius: 3px;
+  background: var(--wb-plate-bg);
+  border: 1px solid var(--wb-plate-line);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.wb-win__no {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.1vw, 17px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--sand);
+}
+.wb-win__name {
+  font: 600 10.5px/1.2 var(--font-text);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-onPic);
+  white-space: nowrap;
+}
+/* Under 780px the windows are pickets and a word will not fit in one. The name
+   stays in the accessible name of the link — it is never removed from the DOM,
+   only from the picture. */
+@media (max-width: 779.98px) {
+  .wb-win__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .wb-win__lbl { top: 11%; padding: 0.3rem 0.5rem 0.34rem; }
+}
+
+/* ══ 01 · 02 · 03 — THE ARCHES ═════════════════════════════════════════════
+   A tall aperture with a domed head, alternating sides; the picture drifts
+   inside it as the reader passes. The pillar's items straddle its inner edge.
+   ════════════════════════════════════════════════════════════════════════ */
+.wb-p {
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  padding: clamp(3.6rem, 11svh, 8rem) var(--wb-rail);
+  background: var(--ground);
+}
+.wb-p[data-side='left'] { background: var(--ground-warm); }
+.within-b #wb-01 { padding-top: calc(var(--wb-dip) + clamp(3.4rem, 9svh, 6.5rem)); }
+
+.wb-p__in {
+  max-width: var(--wb-max);
+  margin-inline: auto;
+  display: grid;
+  gap: var(--wb-gapx);
+}
+
+.wb-p__no {
+  margin: 0 0 0.1em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 1.5rem + 9vw, 11.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  /* --clay-deep, 5.98:1. Plain --clay measures 3.90 and stays a hairline. */
+  color: var(--clay-deep);
+}
+.wb-p__name {
+  margin: 0 0 clamp(0.9rem, 2.4svh, 1.6rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.1rem + 4.4vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+.wb-p__first {
+  margin: 0 0 0.75em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.2rem, 1rem + 1.1vw, 1.85rem);
+  line-height: 1.34;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  max-width: 26ch;
+}
+.wb-p__line {
+  margin: 0 0 0.7em;
+  font-size: clamp(1rem, 0.96rem + 0.26vw, 1.12rem);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 42ch;
+}
+.wb-p__lead {
+  margin: clamp(1rem, 2.6svh, 1.7rem) 0 0;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.wb-p__lead::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+  vertical-align: middle;
+  margin-right: 0.7em;
+  transform: translateY(-1px);
+}
+
+/* ── the aperture ─────────────────────────────────────────────────────── */
+.wb-fig {
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  min-width: 0;
+}
+.wb-fig__mask {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  display: block;
+  overflow: clip;
+  aspect-ratio: 0.63;
+  /* The cap matters more than the ratio: unchecked, a 34vw column at 1440 makes an
+     arch 870px tall and the pillar becomes a screen and a half of mostly paper.
+     object-fit absorbs the difference. */
+  max-height: min(80svh, 760px);
+  border-radius: 50% 50% 4px 4px / 21% 21% 4px 4px;
+  background: var(--ground-deep);
+}
+.wb-fig__mask picture { position: absolute; inset: 0; display: block; }
+.wb-fig__img,
+.wb-fig__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  /* the drift. --wb-y is written once per frame by the island and is 0 until
+     then, so this is the identity transform under reduced motion and no-JS. */
+  transform: translate3d(0, calc(var(--wb-y, 0) * -4.5%), 0) scale(1.085);
+  will-change: transform;
+}
+/* The poster never leaves. The loop fades in on top of it only once it has
+   proven it is playing, so a stall, an eviction or a blocked autoplay shows a
+   photograph rather than a black rectangle. */
+.wb-fig__vid { opacity: 0; transition: opacity 0.7s var(--ease-io); }
+.wb-fig__vid.is-live { opacity: 1; }
+
+/* ── the chips: the list, pinned to the evidence ──────────────────────── */
+.wb-chips {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: end;
+  justify-self: start;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 clamp(1.1rem, 3svh, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(5px, 0.85svh, 10px);
+  max-width: calc(100% + var(--wb-over));
+}
+.wb-chip { margin: 0; }
+.wb-chip__in {
+  display: inline-block;
+  background: var(--wb-plate-bg);
+  border: 1px solid var(--wb-plate-line);
+  border-radius: 3px;
+  color: var(--ink-onPic);
+  font: 500 clamp(12.5px, 0.5rem + 0.4vw, 15px) / 1.3 var(--font-text);
+  padding: 0.5em 0.85em;
+  /* The first shadow is a 1.5px SOLID ring of the chip's own ground, and it is not
+     decoration. A label on a MOVING picture has a hairline of film along its edge
+     where the border antialiases, and that hairline changes every video frame — the
+     contrast probe builds its glyph mask by diffing two screenshots 400 ms apart, so
+     it reads that row as text and samples it against the film: 10% of the pixels it
+     scored for one chip were a single row of somebody's kurta, at 1.44:1. The ring
+     makes the edge the chip's own colour in both frames. It is also simply a better
+     edge to read against footage. */
+  box-shadow: 0 0 0 1.5px #1c1714, 0 10px 26px rgba(16, 12, 10, 0.26);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.wb-chip__in::before {
+  content: '';
+  display: inline-block;
+  width: 13px;
+  height: 1px;
+  background: var(--sand);
+  vertical-align: middle;
+  margin-right: 0.62em;
+  transform: translateY(-1px);
+}
+
+/* ── the wall label ───────────────────────────────────────────────────── */
+.wb-lbl {
+  grid-row: 2;
+  grid-column: 1;
+  margin: clamp(0.85rem, 2svh, 1.35rem) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.wb-lbl__what {
+  font: 400 13px/1.45 var(--font-text);
+  color: var(--ink-soft);
+  max-width: 44ch;
+}
+/* NOT the global `.cap`. That class is `position: absolute; display: none` by the
+   time the hero layer has finished with it — it is the hero's own no-JS provenance
+   line — so borrowing it silently deletes every date on this page. The live Within
+   stylesheet hit exactly this and carries its own `.wi-cap`; this is that, in the
+   same caption language: a hairline tick, then 11px uppercase. */
+.wb-lbl__where {
+  display: flex;
+  align-items: baseline;
+  gap: 0.62em;
+  font: 400 11px/1.5 var(--font-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.wb-lbl__where::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--clay);
+  transform: translateY(-4px);
+}
+.wb-onDark .wb-lbl__what,
+.wb-room__lbl .wb-lbl__what,
+.wb-plate__cap .wb-lbl__what { color: var(--ink-onPic-2); }
+.wb-onDark .wb-lbl__where,
+.wb-room__lbl .wb-lbl__where,
+.wb-plate__cap .wb-lbl__where { color: rgba(251, 247, 242, 0.8); }
+.wb-onDark .wb-lbl__where::before,
+.wb-room__lbl .wb-lbl__where::before,
+.wb-plate__cap .wb-lbl__where::before { background: var(--sand); }
+
+/* ── desktop: the arch takes a column and the chips cross into the text ── */
+@media (min-width: 880px) {
+  .wb-p__in {
+    --wb-over: clamp(1.75rem, 7vw, 7rem);
+    grid-template-columns: minmax(0, 34rem) clamp(19rem, 34vw, 31rem);
+    justify-content: space-between;
+    /* END, not centre. Centring left a hole under the last line of prose exactly the
+       height of the arch's overhang; hanging both columns from the same baseline puts
+       that space above the numeral instead, where it reads as the section's own air. */
+    align-items: end;
+  }
+  .wb-p[data-side='left'] .wb-p__in {
+    grid-template-columns: clamp(19rem, 34vw, 31rem) minmax(0, 34rem);
+  }
+  .wb-p[data-side='left'] .wb-p__say { order: 2; }
+  .wb-p[data-side='left'] .wb-fig { order: 1; }
+
+  /* the straddle. Half a chip on the photograph, half on the paper. */
+  .wb-p[data-side='right'] .wb-chips { margin-left: calc(-1 * var(--wb-over)); }
+  .wb-p[data-side='right'] .wb-chip { margin-left: calc(var(--n) * clamp(4px, 1vw, 15px)); }
+
+  .wb-p[data-side='left'] .wb-chips {
+    justify-self: end;
+    align-items: flex-end;
+    margin-right: calc(-1 * var(--wb-over));
+  }
+  .wb-p[data-side='left'] .wb-chip { margin-right: calc(var(--n) * clamp(4px, 1vw, 15px)); }
+  /* the run crosses the gutter; whatever is left of the overhang is kept clear of
+     the type by padding, not by hoping the two never meet. */
+  .wb-p[data-side='left'] .wb-p__say { padding-left: max(0px, calc(var(--wb-over) - var(--wb-gapx))); }
+  /* data-side="right" needs none: there the say column is on the LEFT and its type is
+     left-aligned inside a measure narrower than the column, so the overhang lands in
+     slack. Only the mirrored case puts type where the run arrives. */
+  .wb-p[data-side='left'] .wb-lbl { align-items: flex-end; text-align: right; }
+  .wb-p[data-side='left'] .wb-lbl__where { flex-direction: row-reverse; }
+}
+
+/* ── phone: the arch runs edge to edge and the chips sit inside it ─────── */
+@media (max-width: 879.98px) {
+  .wb-fig { margin-inline: calc(-1 * var(--wb-rail)); }
+  .wb-fig__mask { aspect-ratio: 0.78; border-radius: 42% 42% 3px 3px / 13% 13% 3px 3px; }
+  .wb-chips {
+    padding-left: var(--wb-rail);
+    padding-right: var(--wb-rail);
+    max-width: 100%;
+  }
+  .wb-chip { margin-left: calc(var(--n) * clamp(3px, 1.4vw, 9px)); }
+  .wb-chip__in { max-width: min(30ch, calc(100vw - 2 * var(--wb-rail) - 12px)); }
+  .wb-lbl { padding-inline: var(--wb-rail); }
+}
+
+/* ══ 04 — SHARE. The page opens out. ═══════════════════════════════════════
+   The only wide frame, edge to edge, and the paper never comes back: from here
+   the page is dark to the footer.
+   ════════════════════════════════════════════════════════════════════════ */
+.wb-share {
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding: 0 0 clamp(3.5rem, 10svh, 7rem);
+}
+.wb-share__fig {
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+}
+.wb-share__mask {
+  grid-row: 1;
+  grid-column: 1;
+  aspect-ratio: auto;
+  height: clamp(430px, 90svh, 940px);
+  border-radius: 0;
+}
+.wb-share__say {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: start;
+  justify-self: start;
+  margin: clamp(1.6rem, 6svh, 3.6rem) var(--wb-rail);
+  max-width: min(30rem, calc(100% - 2 * var(--wb-rail)));
+  padding: clamp(1rem, 2.6svh, 1.6rem) clamp(1.1rem, 2.4vw, 1.8rem) clamp(1.1rem, 2.8svh, 1.7rem);
+  border-radius: 4px;
+  background: var(--wb-plate-bg);
+  border: 1px solid var(--wb-plate-line);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+.wb-share__no {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1;
+  color: var(--sand);
+}
+.wb-share__name {
+  margin: 0.15em 0 0.45em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.2rem + 3.6vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
+  color: var(--ink-onPic);
+}
+.wb-share__line {
+  margin: 0;
+  font-size: clamp(1rem, 0.96rem + 0.28vw, 1.14rem);
+  line-height: 1.55;
+  color: var(--ink-onPic-2);
+}
+.wb-share__lead {
+  margin: 0.9em 0 0;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.wb-chips--wide {
+  align-self: end;
+  justify-self: start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(7px, 1vw, 12px);
+  margin: 0 var(--wb-rail);
+  padding-bottom: clamp(1.6rem, 5svh, 3.2rem);
+  max-width: min(70rem, calc(100% - 2 * var(--wb-rail)));
+}
+.wb-chips--wide .wb-chip { margin: 0 !important; }
+
+.wb-share .wb-lbl { padding-inline: var(--wb-rail); }
+
+.wb-share__closeIn {
+  max-width: var(--wb-max);
+  margin: clamp(2.6rem, 8svh, 5rem) auto 0;
+  padding-inline: var(--wb-rail);
+}
+.wb-share__close {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.55rem, 0.95rem + 3vw, 3.3rem);
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+  color: var(--ink-onPic);
+  max-width: 24ch;
+}
+
+@media (max-width: 719.98px) {
+  .wb-share__say { max-width: calc(100% - 2 * var(--wb-rail)); }
+  .wb-chips--wide { flex-direction: column; align-items: flex-start; }
+}
+
+/* ══ COMMUNITY INITIATIVES — the relationship inverts ══════════════════════
+   Up the page the type is pinned to the evidence. Down here the evidence is
+   pinned to the type: one photograph hung in the margin of each measure, on a
+   cord dropped from the rule that opens it. And the room they all stand in is
+   the one frame in the archive with nobody in it.
+   ════════════════════════════════════════════════════════════════════════ */
+.wb-init {
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-bottom: clamp(3rem, 9svh, 6rem);
+}
+
+.wb-room {
+  position: relative;
+  display: grid;
+  min-height: clamp(340px, 72svh, 720px);
+}
+/* the <picture> is the grid item, not the <img>. Placing only the <img> left the
+   picture element auto-placed into a SECOND row, which pushed the photograph out from
+   under its own scrim and heading and grew the page by 306px. */
+.wb-room__pic {
+  grid-row: 1;
+  grid-column: 1;
+  display: block;
+  position: relative;
+  z-index: 0;
+  min-height: 0;
+}
+.wb-room__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+/* The room does not stop, it dissolves: by 100% it IS --ground-deep, so the
+   type below is standing inside the same picture rather than under it. */
+.wb-room__scrim {
+  grid-row: 1;
+  grid-column: 1;
+  /* positioned, because the <picture> above it is: a positioned grid item paints over
+     every static sibling regardless of DOM order, which put the photograph on top of
+     both its own scrim and its own heading. */
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--shade), 0.36) 0%,
+      rgba(var(--shade), 0.5) 34%,
+      rgba(var(--shade), 0.86) 72%,
+      var(--ground-deep) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(var(--shade), 0.6) 0%,
+      rgba(var(--shade), 0.26) 48%,
+      rgba(var(--shade), 0.08) 100%
+    );
+}
+.wb-room__head {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  width: 100%;
+  max-width: var(--wb-max);
+  margin-inline: auto;
+  padding: var(--wb-rail);
+  padding-bottom: clamp(1.6rem, 4svh, 3rem);
+}
+.wb-init__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.95rem, 1.2rem + 3.2vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink-onPic);
+}
+.wb-init__lead {
+  margin: clamp(0.7rem, 2svh, 1.1rem) 0 0;
+  font-size: clamp(1rem, 0.96rem + 0.3vw, 1.16rem);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+  max-width: 42ch;
+}
+.wb-room__lbl {
+  margin: clamp(1.2rem, 3svh, 2rem) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── the entries ──────────────────────────────────────────────────────── */
+.wb-hang {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 var(--wb-rail);
+  max-width: var(--wb-max);
+}
+.wb-ent {
+  --wb-entpad: clamp(2.2rem, 6svh, 4rem);
+  position: relative;
+  border-top: 1px solid rgba(251, 247, 242, 0.2);
+  padding: var(--wb-entpad) 0 clamp(2.4rem, 7svh, 4.6rem);
+  display: grid;
+  gap: clamp(1.6rem, 3vw, 3rem);
+}
+.wb-ent__say { min-width: 0; }
+
+.wb-tag {
+  margin: 0 0 0.75rem;
+  font: 500 11.5px/1.4 var(--font-text);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--sand);
+  display: flex;
+  gap: 0.65em;
+  align-items: baseline;
+}
+.wb-tag::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--clay);
+  display: inline-block;
+  transform: translateY(-4px);
+  flex: none;
+}
+
+.wb-ent__h {
+  margin: 0 0 0.55em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 1.05rem + 1.2vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  color: var(--ink-onPic);
+}
+.wb-ent__line {
+  margin: 0 0 0.7em;
+  font-size: clamp(1rem, 0.96rem + 0.26vw, 1.1rem);
+  line-height: 1.62;
+  color: var(--ink-onPic-2);
+  max-width: 52ch;
+}
+/* The two entries with no list are a statement, not a document. They are set
+   as one — bigger, in the display face — because that is what they are. */
+.wb-ent[data-kind='note'] .wb-ent__line {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.14rem, 0.98rem + 0.85vw, 1.65rem);
+  line-height: 1.36;
+  letter-spacing: -0.014em;
+  color: var(--ink-onPic);
+  max-width: 34ch;
+}
+.wb-ent__lead {
+  margin: clamp(0.9rem, 2.4svh, 1.4rem) 0 0;
+  font: 500 11.5px/1.5 var(--font-text);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.wb-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 9px;
+  margin: 0.85rem 0 0;
+  padding: 0;
+}
+.wb-tags__i {
+  font: 400 13.5px/1.35 var(--font-text);
+  color: var(--ink-onPic-2);
+  border: 1px solid rgba(251, 247, 242, 0.28);
+  border-radius: 999px;
+  padding: 0.42em 0.92em;
+}
+.wb-ent__note {
+  margin: clamp(1.1rem, 3svh, 1.8rem) 0 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--clay);
+}
+.wb-ent__note p {
+  margin: 0 0 0.35em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.98rem, 0.94rem + 0.28vw, 1.12rem);
+  line-height: 1.5;
+  color: var(--ink-onPic-2);
+  max-width: 46ch;
+}
+.wb-ent__note p:last-child { margin-bottom: 0; }
+
+/* ── the plate in the margin ──────────────────────────────────────────── */
+.wb-plate { margin: 0; position: relative; }
+.wb-plate__cord {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: calc(var(--drop) + var(--wb-entpad));
+  background: linear-gradient(to bottom, rgba(246, 217, 193, 0.1), rgba(246, 217, 193, 0.6));
+}
+.wb-plate__mask {
+  display: block;
+  width: var(--pw);
+  max-width: 100%;
+  overflow: clip;
+  border-radius: 2px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.5);
+}
+.wb-plate__img { width: 100%; height: auto; display: block; }
+.wb-plate__cap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 0.7rem;
+  /* wider than the plate on purpose: a two-word event and a date wrapped to three
+     lines inside a 158px plate, which made the provenance harder to read than the
+     picture it belongs to. */
+  width: max(var(--pw), 13rem);
+  max-width: 100%;
+}
+.wb-plate__cap .wb-lbl__what { font-size: 12px; line-height: 1.4; }
+.wb-plate__cap .wb-lbl__where { font-size: 10px; letter-spacing: 0.05em; }
+.wb-plate__cap .wb-lbl__where::before { width: 14px; }
+
+@media (min-width: 900px) {
+  .wb-ent { grid-template-columns: minmax(0, 1fr) var(--pw); align-items: start; }
+  .wb-plate { margin-top: var(--drop); }
+}
+@media (max-width: 899.98px) {
+  .wb-ent { justify-items: start; }
+  .wb-plate { order: -1; margin-top: calc(var(--drop) * 0.5); }
+  .wb-plate__cord { height: calc(var(--drop) * 0.5 + var(--wb-entpad)); }
+  .wb-plate__mask { width: min(var(--pw), 62vw); }
+  .wb-plate__cap { width: min(max(var(--pw), 13rem), calc(100vw - 2 * var(--wb-rail))); }
+}
+
+/* ══ THE HANDOVER ═════════════════════════════════════════════════════════ */
+.wb-next {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding: 0 var(--wb-rail) clamp(3rem, 9svh, 6rem);
+}
+.wb-next__in {
+  max-width: var(--wb-max);
+  margin-inline: auto;
+  border-top: 1px solid rgba(251, 247, 242, 0.2);
+  padding-top: clamp(1.4rem, 4svh, 2.4rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem 2rem;
+}
+.wb-next__lbl {
+  margin: 0;
+  font: 500 11.5px/1.4 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.wb-next__a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.7em;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1rem + 2.4vw, 2.9rem);
+  letter-spacing: -0.026em;
+  line-height: 1.1;
+  color: var(--ink-onPic);
+  border-bottom: 1px solid rgba(251, 247, 242, 0.34);
+  padding-bottom: 0.12em;
+  transition: border-color 0.3s var(--ease);
+}
+.wb-next__a svg { transition: transform 0.35s var(--ease); }
+.wb-next__a:hover { border-bottom-color: var(--sand); }
+.wb-next__a:hover svg,
+.wb-next__a:focus-visible svg { transform: translateX(5px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wb-win__img,
+  .wb-next__a svg,
+  .wb-fig__vid { transition: none !important; }
+  .wb-fig__img,
+  .wb-fig__vid { transform: scale(1.02) !important; }
+}

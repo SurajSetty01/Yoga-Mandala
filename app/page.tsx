@@ -1,6 +1,6 @@
 import { SiteNav } from '@/components/SiteNav';
 import { Hero } from '@/components/hero/Hero';
-import { Opening } from '@/components/about/Opening';
+import { Premise } from '@/components/about/Premise';
 import { Purpose } from '@/components/about/Purpose';
 import { Approach } from '@/components/about/Approach';
 import { Members } from '@/components/about/Members';
@@ -98,21 +98,26 @@ export default function AboutPage() {
         </section>
 
         {/*
-          03 → 07. The client's own order, each with its own reason to exist visually and no
-          two neighbours sharing a ground: a mute two-column spread on warm paper, the four
-          purposes as a mandala reversed out on the deep ground, the approach as a quiet
-          right-hand aside, one full-bleed photograph carrying no type, and the guiding
-          thought centred at the page's top scale. See components/about/NOTES.md.
+          03 → 07. The client's final assembly, chosen from the three concepts at
+          /preview/about-a|b|c/. Each section has its own reason to exist visually and no two
+          neighbours share a ground — deep, warm, paper, deep, paper:
 
-          `.tail` — a 42svh cream spacer that used to hold the bottom of the page open while
-          there was nothing under section 02 — is gone: there is now a page under it, and it
-          would have left a stripe of paper between the closing dark plate and the footer.
+            03  one word is a window onto a photograph, and the word is `vast`
+            04  four mounted plates dealt left to right, Grow the only one still whole
+            05  two voices from one typeface over a figure with no edges
+            06  the display line's baseline is the horizon of a room
+            07  a quotation with no author; the marks close around it as it lands
+
+          The whole run is wrapped in one `.ab` element so the type scale and the grounds are
+          declared once. See components/about/NOTES.md.
         */}
-        <Opening />
-        <Purpose />
-        <Approach />
-        <Members />
-        <Guiding />
+        <div className="ab">
+          <Premise />
+          <Purpose />
+          <Approach />
+          <Members />
+          <Guiding />
+        </div>
       </main>
       <SiteFooter />
     </>

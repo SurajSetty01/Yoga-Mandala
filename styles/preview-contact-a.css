@@ -1,0 +1,495 @@
+/* preview concept contact-a — owned solely by its agent. Namespace every selector with .contact-a
+   ─────────────────────────────────────────────────────────────────────────────────────────
+   CONCEPT A · THE BOARD.
+
+   Eight subjects, one open line. `links.emailCollaborations` is null, so every one of these
+   conversations lands in the same place — and that is drawn rather than stated: eight keys,
+   eight cords, one socket, one plate.
+
+   Colour decisions here are measurement, not taste:
+     · --teal on --ground-deep is 3.08:1. It cannot be an eyebrow on the dark ground, so the
+       eyebrows are cream at 0.72 alpha (~9:1).
+     · --clay on --ground-deep is 4.32:1 — under 4.5. Clay is a CORD here and never a glyph.
+     · --sand on flat warm black measures 13.4:1, but design/DESIGN-SYSTEM.md §1 forbids sand
+       as text outright. It draws the live cord and the socket ring; it sets no word.
+     · The button stands on --clay-deep (5.98:1) and presses to --clay-press (8.5:1).
+   ───────────────────────────────────────────────────────────────────────────────────────── */
+
+.contact-a {
+  --ca-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --ca-max: 78rem;
+  --ca-hair: rgba(251, 247, 242, 0.14);
+  background: var(--ground);
+}
+
+.contact-a .ca-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.contact-a .ca-in {
+  width: 100%;
+  max-width: var(--ca-max);
+  margin: 0 auto;
+  padding-inline: var(--ca-rail);
+}
+
+/* ── the stand-in for the approved hero's lower edge ─────────────────────── */
+.contact-a .ca-handoff {
+  min-height: clamp(7rem, 16svh, 11rem);
+  background: var(--ground-deep);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--ca-rail) 1.1rem;
+}
+.contact-a .ca-handoff__t {
+  font: 600 0.66rem/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+
+/* ── COLLABORATIONS · the board ──────────────────────────────────────────── */
+.contact-a .ca-collab {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-block: clamp(2.4rem, 6svh, 4rem) clamp(4rem, 11svh, 7rem);
+}
+
+.contact-a .ca-brow {
+  margin: 0 0 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font: 600 0.7rem/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.contact-a .ca-brow::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--clay);
+  opacity: 0.55;
+}
+
+.contact-a .ca-head {
+  margin-bottom: clamp(2.2rem, 6svh, 3.6rem);
+}
+.contact-a .ca-q {
+  margin: 0;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.85rem, 1.1rem + 3.4vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+
+/* ── the board itself ────────────────────────────────────────────────────── */
+.contact-a .ca-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.4rem, 5svh, 3.4rem);
+}
+
+.contact-a .ca-cords {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+.contact-a .ca-cord__base {
+  fill: none;
+  stroke: var(--clay);
+  stroke-opacity: 0.46;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+.contact-a .ca-cord__live {
+  fill: none;
+  stroke: var(--sand);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.5s var(--ease);
+}
+.contact-a .ca-cord.is-on .ca-cord__live {
+  stroke-dashoffset: 0;
+}
+.contact-a .ca-plug {
+  fill: rgba(251, 247, 242, 0.3);
+  transition: fill 0.3s var(--ease-io);
+}
+.contact-a .ca-plug.is-on {
+  fill: var(--sand);
+}
+
+/* ── the eight keys ──────────────────────────────────────────────────────── */
+.contact-a .ca-keys {
+  position: relative;
+  z-index: 1;
+  /* The gutter is the cords' working width. Below ~40px the eight curves stack into one
+     vertical stripe and the whole idea disappears, so it is held at 4.6rem on a phone. */
+  padding-left: 4.6rem;
+}
+.contact-a .ca-keys__lead {
+  margin: 0 0 0.9rem;
+  font: 600 0.7rem/1.4 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.contact-a .ca-keys__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ca-hair);
+}
+.contact-a .ca-keys__list > li {
+  border-bottom: 1px solid var(--ca-hair);
+}
+
+.contact-a .ca-key {
+  appearance: none;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0;
+  padding: clamp(0.72rem, 1.5svh, 1.05rem) 0.9rem;
+  background: transparent;
+  border: 0;
+  border-radius: 2px;
+  text-align: left;
+  color: var(--ink-onPic);
+  font-family: var(--font-text);
+  cursor: pointer;
+  transition: background 0.28s var(--ease-io), transform 0.32s var(--ease);
+}
+.contact-a .ca-key__n {
+  font: 500 0.78rem/1 var(--font-text);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(251, 247, 242, 0.62);
+  transition: color 0.28s var(--ease-io);
+}
+.contact-a .ca-key__t {
+  font-size: clamp(1rem, 0.86rem + 0.66vw, 1.34rem);
+  line-height: 1.28;
+  letter-spacing: -0.005em;
+}
+.contact-a .ca-key.is-on {
+  background: var(--clay-deep);
+  transform: translateX(-0.55rem);
+}
+.contact-a .ca-key.is-on .ca-key__n {
+  color: var(--ink-onPic);
+}
+.contact-a .ca-key:active {
+  background: var(--clay-press);
+}
+
+/* ── the plate the eight cords arrive at ─────────────────────────────────── */
+.contact-a .ca-jack {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(246, 217, 193, 0.5);
+  padding-top: clamp(1.5rem, 3.4svh, 2.1rem);
+}
+.contact-a .ca-jack__socket {
+  position: absolute;
+  top: 0;
+  left: 0.55rem;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  background: var(--ground-deep);
+  border-radius: 50%;
+}
+.contact-a .ca-jack__ring {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--sand);
+  box-shadow: inset 0 0 0 3px var(--ground-deep), inset 0 0 0 5.5px var(--clay);
+}
+.contact-a .ca-jack__k {
+  margin: 0 0 0.55rem;
+  font: 600 0.7rem/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(251, 247, 242, 0.66);
+}
+.contact-a .ca-jack__say {
+  margin: 0 0 1.35rem;
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 1.05rem + 1.1vw, 1.95rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--ink-onPic);
+}
+
+.contact-a .ca-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.82rem 1.25rem;
+  background: var(--clay-deep);
+  color: var(--ink-onPic);
+  border-radius: 3px;
+  font: 600 0.92rem/1 var(--font-text);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: background 0.28s var(--ease-io);
+}
+.contact-a .ca-cta svg {
+  transition: transform 0.34s var(--ease);
+}
+.contact-a .ca-cta:hover {
+  background: var(--clay-press);
+}
+.contact-a .ca-cta:hover svg {
+  transform: translateX(3px);
+}
+.contact-a .ca-cta:active {
+  background: var(--clay-press);
+}
+
+.contact-a .ca-jack__dest {
+  margin: 0.95rem 0 0.2rem;
+  font: 500 0.82rem/1.5 var(--font-text);
+  letter-spacing: 0.02em;
+  color: var(--ink-onDark-soft);
+}
+.contact-a .ca-jack__draft {
+  margin: 0;
+  font: 400 0.82rem/1.5 var(--font-text);
+  color: rgba(251, 247, 242, 0.66);
+}
+.contact-a .ca-jack__pick {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.02em;
+  color: var(--ink-onPic);
+}
+
+/* ── SOCIAL · the two lines out ──────────────────────────────────────────── */
+.contact-a .ca-out {
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: clamp(3.4rem, 9svh, 6rem) clamp(4rem, 11svh, 7rem);
+}
+.contact-a .ca-out :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+.contact-a .ca-brow--paper {
+  color: var(--ink-soft);
+}
+.contact-a .ca-out__h {
+  margin: 0 0 0.85rem;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 1.1rem + 2.2vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.contact-a .ca-out__say {
+  margin: 0 0 clamp(2rem, 5svh, 3rem);
+  max-width: 44ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.62;
+  color: var(--ink-soft);
+}
+
+.contact-a .ca-out__wrap {
+  position: relative;
+  padding-left: clamp(3.4rem, 9vw, 6.5rem);
+}
+.contact-a .ca-out__wire {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(3.4rem, 9vw, 6.5rem);
+  height: 100%;
+  pointer-events: none;
+}
+.contact-a .ca-out__wire path {
+  fill: none;
+  stroke: var(--clay);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+}
+.contact-a .ca-out__plug {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translate(-1px, -50%);
+  border-radius: 50%;
+  border: 1.5px solid var(--clay-deep);
+  background: var(--ground);
+  box-shadow: inset 0 0 0 2.5px var(--ground), inset 0 0 0 4.5px var(--clay);
+}
+.contact-a .ca-out__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.contact-a .ca-out__i {
+  border-bottom: 1px solid var(--rule);
+}
+.contact-a .ca-line {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 clamp(0.9rem, 2.4vw, 1.8rem);
+  padding: clamp(1.1rem, 2.6svh, 1.7rem) 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+.contact-a .ca-line__k {
+  font: 600 0.72rem/1 var(--font-text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.contact-a .ca-line__v {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 0.95rem + 1vw, 1.85rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.contact-a .ca-line__arw {
+  color: var(--clay-deep);
+  transition: transform 0.34s var(--ease);
+}
+.contact-a .ca-line:hover .ca-line__arw {
+  transform: translateX(4px);
+}
+.contact-a .ca-line:hover .ca-line__v {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+/* ── wide: the keys stand to the right of the gutter the cords run down ──── */
+@media (min-width: 60rem) {
+  .contact-a .ca-board {
+    grid-template-columns: minmax(14rem, 22rem) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(3rem, 11vw, 9.5rem);
+    row-gap: clamp(2rem, 5svh, 3.5rem);
+  }
+  .contact-a .ca-head {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+  .contact-a .ca-keys {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    padding-left: 0;
+  }
+  .contact-a .ca-jack {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    margin-bottom: 0.4rem;
+  }
+  /* Wide: the socket moves to the plate's outer corner, so the bundle converges in the
+     gap between plate and keys and no cord can cross the plate's own words. */
+  .contact-a .ca-jack__socket {
+    left: auto;
+    right: 0.4rem;
+  }
+  .contact-a .ca-q {
+    font-size: clamp(2.05rem, 0.9rem + 2.4vw, 3.2rem);
+    max-width: none;
+  }
+  .contact-a .ca-line {
+    grid-template-columns: minmax(7rem, auto) minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 26rem) {
+  .contact-a .ca-keys {
+    padding-left: 3.9rem;
+  }
+  .contact-a .ca-key {
+    grid-template-columns: 2.1rem minmax(0, 1fr);
+    padding-inline: 0.65rem;
+  }
+  .contact-a .ca-line {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 0.2rem;
+    align-items: center;
+  }
+  .contact-a .ca-line__k,
+  .contact-a .ca-line__v {
+    grid-column: 1;
+  }
+  .contact-a .ca-line__arw {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .contact-a .ca-out__wrap {
+    padding-left: 2.4rem;
+  }
+  .contact-a .ca-out__wire {
+    width: 2.4rem;
+  }
+}
+
+/* ── reduced motion: the board is geometry, not motion. Only the transitions go. ── */
+@media (prefers-reduced-motion: reduce) {
+  .contact-a .ca-key,
+  .contact-a .ca-key__n,
+  .contact-a .ca-cord__live,
+  .contact-a .ca-plug,
+  .contact-a .ca-cta,
+  .contact-a .ca-cta svg,
+  .contact-a .ca-line__arw {
+    transition: none;
+  }
+  .contact-a .ca-key.is-on {
+    transform: none;
+  }
+  .contact-a .ca-cord__live {
+    stroke-dashoffset: 1;
+  }
+  .contact-a .ca-cord.is-on .ca-cord__live {
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,31 +1,77 @@
 import { about } from '@/content/copy';
 
 /**
- * 07 — OUR GUIDING THOUGHT.
+ * 07 — OUR GUIDING THOUGHT.   *The sentence arrives, and the marks close around it.*
  *
- * Thirty-seven characters closing a page of about nine hundred words, so they get the page's
- * top type scale and the whole plate to themselves. This is the only centred composition on
- * the page — everything above it is ranged left — and that alone is what makes it read as an
- * ending rather than as one more section.
+ * Thirty-eight characters closing nine hundred words, so they get the whole plate and the
+ * page's top scale. None of the three tournament concepts was kept here; this is new.
  *
- * Fraunces italic is this page's emphatic voice: the hero's second line and section 02's
- * second line are both set in it, so the close is spoken in the same register the page opened
- * with. The sentence is not split and no word is picked out; it is short enough to carry
- * itself.
+ * THE IDEA. Nobody said this sentence. It is not a testimonial, it has no author, and there
+ * is deliberately no attribution — so the quotation marks cannot point at a speaker. Instead
+ * they behave like a community adopting a saying: the marks start wide of the sentence and
+ * settle IN onto it as it lands, in the order a sentence is spoken — open, three clauses,
+ * close. The last thing that moves on the page is the closing mark, which is the full stop of
+ * the whole document.
  *
- * The bottom of the page is left open for the site footer.
+ * They are typographic marks, U+201C and U+201D, not straight quotes, and they are treated as
+ * a designed element rather than punctuation: set in clay at roughly three times the display
+ * size, hung outside the measure so they never touch a letter, and `aria-hidden` because the
+ * <blockquote> already carries the quotation to assistive technology and "left double
+ * quotation mark" is not something anybody needs read to them.
+ *
+ * Clay is ornament, and this is ornament. At this size it is also large text by every
+ * definition the probe uses: #C1613C on #FBF7F2 is 3.90:1 where the bar is 3.0. The marks are
+ * placed clear of the sentence at every width, so no ink ever crosses them.
+ *
+ * The sentence is split into three groups at its OWN spaces so the clauses can arrive in
+ * sequence; the spans concatenate back to the client's line exactly, spaces included, and
+ * nothing is retyped. Under `prefers-reduced-motion` and with JavaScript off the plate is
+ * complete and still — the start states are scoped to `.js` and globals.css forces every
+ * [data-r] to its finished state.
  */
+
+const line = about.guiding.line;
+
+/**
+ * Three clauses at the sentence's own word boundaries: "Yoga is better / when we learn /
+ * together." The split is a line break, not an edit — each group keeps the space that
+ * followed it, so the concatenation is character-for-character the client's sentence.
+ */
+const words = line.split(' ');
+const BREAKS = [3, 6];
+const groups = [
+  words.slice(0, BREAKS[0]).join(' ') + ' ',
+  words.slice(BREAKS[0], BREAKS[1]).join(' ') + ' ',
+  words.slice(BREAKS[1]).join(' '),
+];
+
 export function Guiding() {
   return (
-    <section className="ab ab--deep ab-guiding">
-      <div className="ab__inner">
-        <h2 className="ab-eyebrow">
-          <span>07</span>
+    <section className="ab-sec ab-guide" aria-labelledby="ab-guide-h">
+      <div className="ab-rail">
+        <h2 className="ab-eyebrow" id="ab-guide-h">
+          <span className="ab-eyebrow__n">07</span>
           {about.guiding.heading}
         </h2>
-        <p className="ab-guiding__line" data-r="up">
-          {about.guiding.line}
-        </p>
+
+        <blockquote className="ab-quote" data-r="quote">
+          <span className="ab-quote__mk ab-quote__mk--o" aria-hidden="true">
+            {'“'}
+          </span>
+
+          <p className="ab-quote__line">
+            {groups.map((g, i) => (
+              <span className="ab-quote__row" key={g} style={{ '--i': i } as React.CSSProperties}>
+                {g}
+                {i === groups.length - 1 ? (
+                  <span className="ab-quote__mk ab-quote__mk--c" aria-hidden="true">
+                    {'”'}
+                  </span>
+                ) : null}
+              </span>
+            ))}
+          </p>
+        </blockquote>
       </div>
     </section>
   );

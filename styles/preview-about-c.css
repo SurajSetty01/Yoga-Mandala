@@ -1,0 +1,705 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW CONCEPT C — About, sections 03 → 07.
+   Owned solely by its agent. EVERY selector is namespaced under `.about-c`.
+
+   PREMISE: THE PHOTOGRAPHS ARE OBJECTS, NOT WINDOWS.
+
+   A window is a hole in the page you look through; it has to be a rectangle
+   and it has to sit still. An object can be picked up. So every photograph
+   here is a physical print on a surface: it has a paper edge, it casts a
+   shadow, it sits a degree or two off true, it is cut to a size somebody
+   chose, it overlaps and hides its neighbours, and it runs off the edge of
+   the table because the table is bigger than the screen — 1,311 frames.
+
+   ONE PILE, FIVE HANDLINGS:
+     03  OPENED   one frame enlarged past recognition, then the pile it came
+                  out of dealt around it. No single frame is the tradition.
+     04  DEALT    four mounted plates, each laid over the last, Grow whole.
+     05  SPLICED  four strips from four rooms taped into one band.
+     06  SPREAD   the whole table flat, nothing featured, type as cards.
+     07  PUT BACK the frame from 03, whole, small, and the only object on the
+                  page at exactly 0°.
+
+   THE RULE THAT MAKES IT MEASURE: no type is ever set on a photograph. A
+   label belongs on the mount, which is what a print actually is — and it
+   means every text run on this page stands on a flat, known ground, so its
+   contrast is a constant rather than a function of the crop and the
+   viewport. That is DESIGN-SYSTEM §1 ("a label on a photograph gets a
+   ground, not a gradient") taken to its conclusion: give it the mount.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.about-c {
+  --ac-max: 92rem;               /* the same measure as .ab__inner, so these  */
+  --ac-pad: clamp(3.6rem, 9vw, 8.5rem);  /* sections keep the page's rhythm   */
+
+  /* an object on a dark table, and the same object on paper */
+  --ac-lift-dark:
+    0 22px 44px -20px rgba(0, 0, 0, 0.78),
+    0 3px 8px rgba(0, 0, 0, 0.42),
+    inset 0 0 0 1px rgba(251, 247, 242, 0.11);
+  --ac-lift-paper:
+    0 18px 36px -18px rgba(36, 29, 24, 0.34),
+    0 2px 5px rgba(36, 29, 24, 0.16),
+    inset 0 0 0 1px rgba(36, 29, 24, 0.07);
+
+  display: block;
+  position: relative;
+  z-index: 3;
+}
+
+.about-c-sec {
+  position: relative;
+  padding-block: var(--ac-pad);
+  /* prints run off both edges; nothing may escape sideways, but the
+     handoffs need to cross the horizontal seams, so only x is clipped. */
+  overflow-x: clip;
+}
+
+.about-c-rail {
+  max-width: calc(var(--ac-max) + 2 * var(--rail));
+  padding-inline: var(--rail);
+}
+/* Compositions that are objects rather than a measure — the hand of plates,
+   the table — run rail to rail at any width, exactly as the approved
+   section 02's row of four frames does. Only running text is capped. */
+.about-c-wide { padding-inline: var(--rail); }
+
+/* ── the register mark, unchanged from the rest of the site ──────────────
+   Same object as .within__eyebrow and .ab-eyebrow: same size, same tracking,
+   same clay numeral. It is how the reader knows this belongs to one
+   document. On the reversed ground it inverts to the two inks the hero
+   already uses — teal-deep is 2.4:1 on #1C1714 and clay is 4.2:1, neither of
+   which can carry an 11.5px label. */
+.about-c-eyebrow {
+  margin: 0 0 clamp(1.7rem, 3.6vw, 2.8rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.about-c-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.about-c-open .about-c-eyebrow,
+.about-c-members .about-c-eyebrow,
+.about-c-guiding .about-c-eyebrow { color: var(--ink-onDark); }
+.about-c-open .about-c-eyebrow__n,
+.about-c-members .about-c-eyebrow__n,
+.about-c-guiding .about-c-eyebrow__n { color: var(--ink-onDark-soft); }
+
+/* ── one print ──────────────────────────────────────────────────────────
+   Not a figure with a caption beside it: a piece of paper. White border-
+   less edge, a real shadow, a hairline so it separates from its neighbour
+   when two overlap, and a crop taken at the audit's own focal point. */
+.about-c-print {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  background: #17120f;
+  border-radius: 1.5px;
+  box-shadow: var(--ac-lift-dark);
+}
+.about-c-print picture { display: block; width: 100%; height: 100%; }
+.about-c-print img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* the label a print carries on the table beside it — never on the picture */
+.about-c-label {
+  margin: 0.85rem 0 0;
+  font: 500 10.5px/1.4 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+}
+.about-c-label::before {
+  content: '';
+  flex: none;
+  width: 16px;
+  height: 1px;
+  background: var(--clay);
+  transform: translateY(-3.5px);
+}
+
+/* ══ THE DEAL ═══════════════════════════════════════════════════════════
+   Every object starts squared up in the gathered stack — no rotation, a
+   little small, offset back toward wherever the pile came from — and
+   travels to where it was dealt. Transform and opacity only; the class is
+   written once per group by an IntersectionObserver and then unobserved.
+
+   Scoped to `.js`, which the root layout sets before first paint, so with
+   JavaScript off the page is simply already dealt.                        */
+.js .about-c [data-cd] {
+  opacity: 0;
+  transform:
+    translate(var(--gx, 0%), var(--gy, 0%))
+    rotate(var(--rot0, 0deg))
+    scale(var(--gs, 0.93));
+}
+.js .about-c [data-c-deal].is-in [data-cd] {
+  opacity: 1;
+  transform: translate(0, 0) rotate(var(--rot, 0deg)) scale(1);
+  transition:
+    transform 1.15s var(--ease),
+    opacity 0.7s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+/* objects that are dealt but whose group has not fired yet must still be
+   laid out; the no-JS and reduce paths both land here. */
+.about-c [data-cd] { transform: rotate(var(--rot, 0deg)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .about-c [data-cd],
+  .js .about-c [data-c-deal].is-in [data-cd] {
+    opacity: 1 !important;
+    transform: rotate(var(--rot, 0deg)) !important;
+    transition: none !important;
+  }
+}
+
+/* ══ 03 · WHY WE BEGAN — the pile is opened ═════════════════════════════ */
+
+/* Stacking is what makes the handoffs possible: a print dealt past the end
+   of its own section has to paint over the section beneath it, so 03 and 06
+   sit above their neighbours rather than below. */
+.about-c-open { z-index: 2; }
+.about-c-purpose { z-index: 1; }
+.about-c-approach { z-index: 0; }
+.about-c-members { z-index: 2; }
+.about-c-guiding { z-index: 1; }
+
+.about-c-open {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-top: clamp(7.5rem, 15vh, 11rem);
+  padding-bottom: clamp(5rem, 11vw, 10rem);
+}
+
+.about-c-open__def {
+  margin: 0;
+  max-width: 33ch;
+  font-size: clamp(1.0625rem, 0.98rem + 0.42vw, 1.28rem);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+
+/* THE TABLE. A fixed-ratio field so every object's place is a percentage
+   and the whole composition scales instead of reflowing. Objects are
+   allowed outside it on every side — that is the point. */
+.about-c-pile {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8.6;
+  margin: clamp(1.8rem, 6vw, 9rem) 0 clamp(1.6rem, 4vw, 3rem);
+}
+/* THE INTERLOCK. Above 1100px the foot is pulled UP into the table's empty
+   lower-left quarter, so the premise sits in the space the prints left
+   rather than in a band under a picture. Below that the measure is wide
+   relative to the viewport and the type would run under the lowest print,
+   so the table simply ends first — checked at 768, 1024 and 1100. */
+@media (min-width: 761px) {
+  .about-c-pile { margin-bottom: -9vw; }
+}
+@media (min-width: 1100px) {
+  .about-c-pile { margin-bottom: -20.5vw; }
+}
+.about-c-pile > * { position: absolute; margin: 0; }
+.about-c-pile__p {
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  z-index: var(--z, 1);
+}
+.about-c-pile__enl {
+  /* squared to the same left rail as the type: the enlargement is the one
+     object on this table lined up with the page it sits on. */
+  left: var(--rail);
+  top: -6%;
+  width: 22%;
+  z-index: 8;
+  --rot: -1.7deg;
+  --rot0: 0deg;
+  --gx: 34%;
+  --gy: -12%;
+  --gs: 0.9;
+  --d: 0ms;
+}
+
+/* THE ENLARGEMENT — 3.5× inside a 3:4 window, offset so the centre of the
+   window lands on (0.46, 0.655) of the source frame. Placed by arithmetic,
+   not by eye, and checked against the frame: the figure that fills it is
+   whole, hands to feet. Nobody is cropped out to make the shape work. */
+.about-c-enl {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #17120f;
+  border-radius: 1.5px;
+  box-shadow: var(--ac-lift-dark);
+}
+.about-c-enl__img {
+  position: absolute;
+  width: 350%;
+  max-width: none;
+  height: auto;
+  left: -111%;
+  top: -46.7%;
+}
+
+.about-c-open__foot {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--rail);
+  row-gap: clamp(1.2rem, 2.6vw, 2rem);
+}
+/* the founding premise. The biggest type in the section, but a paragraph
+   and not a poster: the argument is being made by the pile above it. */
+.about-c-open__premise {
+  grid-column: 1 / 8;
+  margin: 0;
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.38rem, 0.92rem + 2.05vw, 2.4rem);
+  line-height: 1.26;
+  letter-spacing: -0.005em;
+  color: var(--ink-onDark);
+  text-wrap: pretty;
+}
+/* THE HANDOFF. Positioned against the section, so it hangs past the bottom
+   edge of the dark table and lands on the paper of 04. `.about-c-sec` clips
+   only the x axis, which is what lets this through while still stopping the
+   pile escaping sideways. */
+.about-c-open__cross {
+  position: absolute;
+  right: clamp(1rem, 6vw, 8rem);
+  bottom: calc(-1 * clamp(3rem, 6vw, 6.5rem));
+  width: clamp(148px, 21vw, 360px);
+  z-index: 6;
+  --rot: 2.7deg;
+  --gx: -34%;
+  --gy: -26%;
+  --gs: 0.9;
+  --d: 480ms;
+}
+
+.about-c-open__now {
+  grid-column: 3 / 9;
+  margin: 0;
+  max-width: 44ch;
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.06rem);
+  line-height: 1.66;
+  color: var(--ink-onDark-soft);
+}
+
+/* ══ 04 · OUR PURPOSE — four plates, dealt ══════════════════════════════ */
+
+.about-c-purpose {
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-top: clamp(5rem, 11vw, 9.5rem);
+  padding-bottom: clamp(3.5rem, 8vw, 7rem);
+}
+.about-c-purpose__lead {
+  margin: 0;
+  max-width: 27ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1.15rem, 0.95rem + 0.9vw, 1.6rem);
+  line-height: 1.34;
+  color: var(--ink);
+}
+
+.about-c-hand {
+  display: flex;
+  align-items: flex-start;
+  margin-top: clamp(2rem, 4.5vw, 4rem);
+}
+.about-c-plate {
+  flex: 0 0 30%;
+  position: relative;
+  z-index: var(--z, 1);
+  margin-top: var(--dy, 0);
+  padding: clamp(0.5rem, 0.75vw, 0.85rem);
+  background: var(--ground);
+  border-radius: 2px;
+  box-shadow: var(--ac-lift-paper);
+  --rot0: 0deg;
+  --gy: 9%;
+  --gs: 0.9;
+}
+.about-c-plate + .about-c-plate { margin-left: -6.7%; }
+.about-c-plate .about-c-print { box-shadow: none; border-radius: 0; }
+
+/* THE MOUNT. The word and the client's line are printed on the board, in
+   its bottom margin, flush left — and the margin runs 26% short on the
+   right, which is exactly the strip the next plate covers. So every plate
+   is occluded and every label is whole. */
+.about-c-plate__mount {
+  padding: clamp(0.75rem, 1.1vw, 1.15rem) 26% clamp(0.15rem, 0.4vw, 0.35rem) 0;
+}
+.about-c-plate__name {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 0.72rem + 1.35vw, 2.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.about-c-plate__line {
+  margin: 0;
+  font-size: clamp(0.8rem, 0.7rem + 0.34vw, 1.1rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* PICKING A PLATE UP. It rises and SQUARES ITSELF — the same gesture the
+   page ends on in 07 — and its shadow deepens.
+   What it deliberately does NOT do is change z-index. Raising a plate above
+   its right-hand neighbour would put it over that neighbour's label, and no
+   interaction on this page may cover a word. So the lift reveals nothing and
+   hides nothing: it is the affordance that these are objects, which is why
+   it needs no touch equivalent to invent — the phone layout does not overlap
+   the pictures at all, and every word is on the page in both.
+   The shadow is a pseudo-element whose OPACITY is transitioned, because
+   box-shadow itself must never be animated in a pointer handler. */
+.about-c-plate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  box-shadow: 0 34px 60px -24px rgba(36, 29, 24, 0.5);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .about-c .about-c-hand .about-c-plate {
+    transition: transform 0.5s var(--ease);
+  }
+  .about-c .about-c-hand .about-c-plate::after {
+    transition: opacity 0.45s var(--ease);
+  }
+  .js .about-c .about-c-hand.is-in .about-c-plate:hover,
+  .about-c .about-c-hand .about-c-plate:hover {
+    transform: translateY(-14px) rotate(0deg) scale(1);
+  }
+  .about-c .about-c-hand .about-c-plate:hover::after { opacity: 1; }
+}
+
+/* ══ 05 · OUR APPROACH — one picture cut from four ══════════════════════ */
+
+.about-c-approach {
+  background: var(--ground);
+  color: var(--ink);
+  /* deep enough that 06's crossing print, which hangs up to 12vw over this
+     seam, lands on paper and never on the invitation set at the right of
+     the foot. Measured: the print reaches min(12vw, 11rem), this reserves
+     min(14vw, 12rem). */
+  padding-bottom: clamp(6rem, 14vw, 12rem);
+}
+.about-c-approach__claim {
+  margin: 0;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.3rem, 0.9rem + 1.75vw, 2.05rem);
+  line-height: 1.26;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  --gy: 14%;
+  --gs: 1;
+}
+
+/* THE SPLICE. Four strips, paper showing between them, cut to four lengths
+   and hung at four heights so neither edge of the band is straight and no
+   horizon lines up with its neighbour. */
+.about-c-splice {
+  --p: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  margin: clamp(2.2rem, 5vw, 4rem) 0 clamp(2rem, 4.5vw, 3.5rem);
+  height: clamp(300px, 44vw, 640px);
+}
+/* Four strips cut to four widths as well as four lengths: equal columns
+   would read as a gallery, which is the opposite of the claim above them. */
+.about-c-strip {
+  flex: var(--fx, 1) 1 0;
+  min-width: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  height: var(--h, 100%);
+  align-self: var(--al, flex-start);
+  background: #17120f;
+  box-shadow: 0 14px 30px -16px rgba(36, 29, 24, 0.32);
+}
+.about-c-strip picture { display: contents; }
+.about-c-strip img {
+  position: absolute;
+  left: 0;
+  top: -6%;
+  width: 100%;
+  height: 112%;                    /* slack, so the ±20px slide never shows an edge */
+  object-fit: cover;
+  transform: translate3d(0, calc(var(--p) * var(--k, 0) * 1px), 0);
+}
+
+.about-c-approach__foot {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--rail);
+  row-gap: clamp(1.1rem, 2.4vw, 1.8rem);
+  align-items: end;
+}
+.about-c-approach__correct {
+  grid-column: 1 / 8;
+  margin: 0;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1.5rem, 0.9rem + 2.5vw, 2.7rem);
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.about-c-approach__invite {
+  grid-column: 8 / 13;
+  margin: 0;
+  max-width: 46ch;
+  padding-bottom: 0.4rem;
+  font-size: clamp(0.95rem, 0.9rem + 0.25vw, 1.06rem);
+  line-height: 1.66;
+  color: var(--ink-soft);
+}
+
+/* ══ 06 · BUILT BY ITS MEMBERS — the whole table, flat ══════════════════ */
+
+.about-c-members {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-top: clamp(4.5rem, 10vw, 8.5rem);
+  padding-bottom: clamp(1.5rem, 3vw, 3rem);
+}
+/* the head is NOT the positioning context: the crossing print is aligned to
+   the section's own rail so it lands over the right edge of the table, which
+   runs rail to rail rather than to the text measure. */
+/* THE HANDOFF: one print laid over the seam, half on the paper of 05 and
+   half on this table. It is the full class — the thing the section is about
+   — and it is the only object here bigger than the rest, because it has not
+   been put down yet. */
+.about-c-members__cross {
+  position: absolute;
+  right: var(--rail);
+  top: calc(-1 * clamp(5rem, 12vw, 11rem));
+  width: clamp(150px, 25vw, 380px);
+  z-index: 4;
+  --rot: -2.2deg;
+  --gx: 30%;
+  --gy: -22%;
+  --gs: 0.9;
+  --d: 0ms;
+}
+
+/* A twelve-column field used as a table top, not as a grid: every object is
+   placed by hand, they overlap, and none of them is more than a third
+   bigger than the smallest. Nothing here is featured — that is the
+   argument. */
+.about-c-table {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  aspect-ratio: 12 / 7.8;
+  width: 100%;
+  margin-top: clamp(0.5rem, 2vw, 2rem);
+}
+.about-c-table > * {
+  grid-area: var(--a);
+  z-index: var(--z, 1);
+  align-self: start;
+  justify-self: stretch;
+}
+
+/* the three lines, dealt into the same pile as three cards. Type is not the
+   caption on this table; it is another object on it. */
+.about-c-card {
+  margin: 0;
+  padding: clamp(0.9rem, 1.3vw, 1.9rem) clamp(0.95rem, 1.4vw, 2rem);
+  background: var(--ground);
+  color: var(--ink);
+  border-radius: 2px;
+  box-shadow: var(--ac-lift-dark);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(0.92rem, 0.68rem + 0.78vw, 1.5rem);
+  line-height: 1.4;
+  text-wrap: pretty;
+  --gs: 0.9;
+}
+
+/* ══ 07 · OUR GUIDING THOUGHT — the frame is put back ═══════════════════ */
+
+.about-c-guiding {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-top: clamp(2.5rem, 6vw, 5rem);
+  padding-bottom: clamp(5rem, 12vw, 10rem);
+}
+.about-c-guiding__put {
+  width: clamp(158px, 21vw, 296px);
+  --rot: 0deg;                    /* the only object on the page at true */
+  --rot0: -5deg;
+  --gx: -8%;
+  --gy: 6%;
+  --gs: 0.92;
+}
+.about-c-guiding__sheet { position: relative; }
+.about-c-guiding__plate { box-shadow: var(--ac-lift-dark); }
+
+/* THE CROP MARK. Exactly the region section 03 enlarged — left 31.7%, top
+   31.6%, 28.6% × 67.7% of the frame — drawn the way a crop is marked on a
+   contact sheet. It is a hairline in clay, which is ornament and never text,
+   and it is aria-hidden: the relationship it points at is stated in words by
+   the label underneath. */
+.about-c-guiding__mark {
+  position: absolute;
+  left: 31.7%;
+  top: 31.6%;
+  width: 28.6%;
+  height: 67.7%;
+  border: 1px solid var(--sand);
+  box-shadow: 0 0 0 1px rgba(16, 12, 10, 0.45);
+  pointer-events: none;
+}
+.about-c-label--dark { color: var(--ink-onDark-soft); }
+
+.about-c-guiding__line {
+  margin: clamp(1.8rem, 4vw, 3.2rem) 0 0;
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 1rem + 5.9vw, 5.7rem);
+  line-height: 1;
+  letter-spacing: -0.024em;
+  color: var(--ink-onDark);
+  --gy: 12%;
+  --gs: 1;
+}
+
+/* ══ THE HAND, STACKED ══════════════════════════════════════════════════
+   Below 900px four plates side by side leave a 150px measure for the line,
+   which is a trench, so the fan becomes a stack flipped through downwards.
+   The plate ABOVE stays on top, so every plate keeps its whole label and
+   only its upper edge is covered. */
+@media (max-width: 900px) {
+  .about-c-hand {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .about-c-plate {
+    flex: 0 0 auto;
+    width: 88%;
+    margin-top: 0;
+    z-index: var(--mz, 1);
+  }
+  .about-c-plate:nth-child(even) { align-self: flex-end; }
+  .about-c-plate + .about-c-plate { margin-left: 0; margin-top: -1.1rem; }
+  .about-c-plate__mount { padding-right: 9%; }
+}
+
+/* ══ PHONE — the table is smaller, so the pile is dealt down it ═════════ */
+
+@media (max-width: 760px) {
+  .about-c-sec { padding-block: clamp(3.2rem, 12vw, 5rem); }
+  .about-c-open { padding-top: clamp(6rem, 22vw, 8rem); padding-bottom: clamp(3rem, 11vw, 4.5rem); }
+  .about-c-purpose { padding-top: clamp(3.4rem, 13vw, 5rem); padding-bottom: clamp(3rem, 11vw, 4.5rem); }
+  .about-c-approach { padding-bottom: clamp(3rem, 11vw, 4.5rem); }
+  .about-c-members { padding-top: clamp(4.5rem, 17vw, 6.5rem); padding-bottom: 1.5rem; }
+  .about-c-guiding { padding-top: clamp(2rem, 8vw, 3rem); padding-bottom: clamp(4rem, 16vw, 6rem); }
+
+  .about-c-pile {
+    aspect-ratio: 3 / 4.15;
+    /* no interlock on a phone: there is no room beside the type, so the
+       table simply ends before the premise begins. */
+    margin: clamp(1.8rem, 7vw, 2.6rem) 0 clamp(1.4rem, 6vw, 2.2rem);
+  }
+  .about-c-pile__p {
+    left: var(--mx);
+    top: var(--my);
+    width: var(--mw);
+  }
+  .about-c-pile__enl {
+    left: 3%;
+    top: 0%;
+    width: 46%;
+  }
+
+  /* one column: the twelve-column foot is a desktop composition and turns
+     the premise into a 200px trench on a phone. */
+  .about-c-open__foot,
+  .about-c-approach__foot {
+    grid-template-columns: 1fr;
+  }
+  .about-c-open__premise,
+  .about-c-open__now,
+  .about-c-approach__correct,
+  .about-c-approach__invite {
+    grid-column: 1;
+    max-width: 100%;
+    padding-bottom: 0;
+  }
+  .about-c-open__premise { max-width: 24ch; }
+  .about-c-open__now { max-width: 40ch; }
+  .about-c-approach__correct { max-width: 20ch; }
+
+  .about-c-open__cross {
+    right: var(--rail);
+    bottom: calc(-1 * clamp(2rem, 9vw, 3.4rem));
+    width: clamp(132px, 38vw, 190px);
+  }
+  .about-c-members__cross {
+    top: calc(-1 * clamp(5rem, 20vw, 7rem));
+    width: clamp(120px, 36vw, 180px);
+  }
+
+  .about-c-hand { margin-top: clamp(1.6rem, 7vw, 2.6rem); }
+  /* On the phone the stack is flipped through rather than fanned: the plate
+     ABOVE stays on top, so every plate keeps its whole label and only its
+     upper edge is covered. Nothing is hidden where nothing can be lifted —
+     which is also why the hover lift has no touch equivalent to invent. */
+
+  .about-c-splice {
+    height: clamp(300px, 92vw, 460px);
+    gap: 4px;
+  }
+
+  .about-c-table {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(18, 1fr);
+    aspect-ratio: 6 / 17;
+    margin-top: clamp(0.5rem, 3vw, 1.2rem);
+  }
+  .about-c-table > * { grid-area: var(--ma); }
+
+  .about-c-guiding__put { width: 58%; }
+}

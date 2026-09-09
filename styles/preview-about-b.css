@@ -1,0 +1,477 @@
+/* preview concept about-b — owned solely by its agent. Namespace every selector with .about-b */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ABOUT · CONCEPT B — "THE WORDS ARE THE GRAPHIC"
+
+   The rejected build treated this page's text as text: paragraphs arranged in
+   columns beside rectangles of photograph. The premise here is the opposite —
+   at the right scale, weight and behaviour the typography IS the visual event,
+   and the photograph works INSIDE it:
+
+     03 premise   deep   the founding sentence at viewport scale, with a room
+                         full of teachers clipped inside its letterforms. The
+                         only aperture onto the picture is the words.
+     04 purpose   paper  four words scaled until each fills the same measure.
+                         Size is decided by letter count, not by taste, which
+                         is why GROW is the largest thing on the page.
+     05 approach  warm   two voices from one typeface — the refusal thin and
+                         wide, the answer heavy, wonky and italic — over one
+                         figure feathered out of the paper with no edges.
+     06 members   deep   the display line rests on a horizon of people, and
+                         the four-clause sentence walks down into it.
+     07 guiding   paper  one sentence at the page's top scale. Its last word
+                         draws itself together as the reader reaches the end.
+
+   Continuity with the approved hero and section 02: the same register mark
+   (11.5px Inter, 0.19em, uppercase, a Fraunces numeral in clay), the same
+   tokens, the same left rail, the same reveal grammar. Novelty is scale,
+   weight, and what the photographs are allowed to be.
+
+   Every colour below was measured against its real ground; the arithmetic for
+   the two composited cases is in components/preview/about-b/NOTES.md.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.about-b {
+  /* the type scale. Five steps, and they are FAR apart on purpose — this page
+     has one shout, two speaking voices and two whispers, nothing between. */
+  --b-mega:  clamp(3rem, 0.9rem + 7.4vw, 10.2rem);
+  --b-huge:  clamp(2.05rem, 1.15rem + 4.5vw, 7rem);
+  --b-big:   clamp(1.5rem,  1.05rem + 2.5vw, 3.5rem);
+  --b-mid:   clamp(1.05rem, 0.96rem + 0.9vw, 1.62rem);
+  --b-read:  clamp(0.97rem, 0.93rem + 0.36vw, 1.18rem);
+
+  --b-pad:   clamp(4.6rem, 10.5vw, 9rem);
+  --b-max:   100rem;
+
+  position: relative;
+  z-index: 3;
+  display: block;
+}
+
+/* ── the plate ──────────────────────────────────────────────────────────── */
+.about-b .b-sec {
+  position: relative;
+  padding-block: var(--b-pad);
+  padding-inline: var(--rail);
+  background: var(--ground);
+  color: var(--ink);
+}
+.about-b .b-sec--deep {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+}
+
+/* ── the register mark. Section 02's object, unchanged, so the page keeps one
+      voice for "where am I". On the reversed plates teal fails (2.44:1 on
+      --ground-deep) and clay fails too, so the mark goes cream and the accent
+      becomes a sand RULE — which is the one thing sand is allowed to be. ──── */
+.about-b .b-eyebrow {
+  margin: 0 0 clamp(1.6rem, 3.4vw, 2.6rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.about-b .b-eyebrow__n {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.about-b .b-eyebrow--dark { color: var(--ink-onPic-2); }
+.about-b .b-eyebrow--dark .b-eyebrow__n { color: var(--ink-onPic); }
+.about-b .b-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* Accessible text that is not seen. clip-path: inset(50%) is deliberate: it is
+   the shape tools/contrast-probe.mjs skips, so a duplicate reading of a word
+   cannot be measured as a contrast failure it could never be. */
+.about-b .b-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── reveal. OPT-IN through .is-live, which the client island adds only after
+      it has already marked everything on screen as revealed. With no JS, or
+      before hydration, nothing here is hidden and the page is complete. ───── */
+.about-b.is-live [data-br] {
+  opacity: 0;
+  transform: translateY(26px);
+}
+.about-b.is-live [data-br].in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.85s var(--ease), transform 1.05s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+
+
+/* ══ 03 · THE PREMISE ═══════════════════════════════════════════════════════
+   A whisper, a shout, then speech. The definition is a dictionary entry and is
+   set like one; the founding sentence is the largest sentence on the page; the
+   rest of its own paragraph settles back to reading size and steps right.     */
+
+.about-b .b-prem {
+  min-height: 92svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: clip;
+}
+.about-b .b-prem > * { max-width: var(--b-max); }
+
+.about-b .b-prem__def {
+  margin: 0 0 clamp(1.6rem, 3.6vw, 2.8rem);
+  max-width: 44ch;
+  font-family: var(--font-text);
+  font-size: var(--b-read);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+
+.about-b .b-prem__p { margin: 0; }
+
+/* THE SENTENCE THE PAGE IS BUILT ON.
+   Its fill is a photograph, so the letterforms are the only way the picture is
+   seen at all. The cream layer above the image is not styling: it guarantees a
+   floor. The darkest pixel any letter can contain is 0.50 x #FBF7F2 = #7D7B79,
+   which measures 4.25:1 against --ground-deep — the bar for 100px display type
+   is 3:1, and the figure holds for ANY frame in the archive, at any crop, at
+   any viewport. That is the design system's rule about grounds rather than
+   gradients, applied to a glyph. */
+.about-b .b-prem__mega {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--b-mega);
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0;
+  line-height: 0.95;
+  letter-spacing: -0.032em;
+  color: var(--ink-onPic);
+  text-wrap: pretty;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .about-b .b-prem__mega {
+    background-image:
+      linear-gradient(rgba(251, 247, 242, 0.5), rgba(251, 247, 242, 0.5)),
+      url("/media/stills/p13-img_0615-1920.webp");
+    background-size: cover;
+    background-position: 50% 62%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (max-width: 860px) {
+    .about-b .b-prem__mega {
+      background-image:
+        linear-gradient(rgba(251, 247, 242, 0.5), rgba(251, 247, 242, 0.5)),
+        url("/media/stills/p13-img_0615-960.webp");
+    }
+  }
+}
+
+.about-b .b-prem__tail {
+  display: block;
+  margin-top: clamp(1.3rem, 2.6vw, 2.1rem);
+  max-width: 54ch;
+  font-family: var(--font-text);
+  font-size: var(--b-read);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+}
+
+.about-b .b-prem__now {
+  position: relative;
+  margin: clamp(2.2rem, 5vw, 3.8rem) 0 0;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--b-mid);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 40, "WONK" 1;
+  line-height: 1.3;
+  color: var(--ink-onPic-2);
+}
+
+@media (min-width: 861px) {
+  .about-b .b-prem__tail { margin-inline-start: clamp(0rem, 20vw, 24rem); }
+  .about-b .b-prem__now  {
+    margin-inline-start: auto;
+    margin-inline-end: max(0px, calc(100% - var(--b-max)));
+  }
+  /* the hero's eyebrow rule at a larger scale: a sand hairline reaching across the
+     empty half of the band to the aside, so the space reads as measured rather than
+     left over. Sand is ornament and this is the one thing it is allowed to be. */
+  .about-b .b-prem__now::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    right: calc(100% + 1.8rem);
+    width: clamp(3rem, 16vw, 14rem);
+    height: 1px;
+    background: var(--sand);
+    opacity: 0.55;
+  }
+}
+
+
+/* ══ 04 · OUR PURPOSE ═══════════════════════════════════════════════════════
+   Four completions of one sentence, so they are set as ONE justified block:
+   each word scaled until it fills the same measure exactly. --fit is the
+   reciprocal of the word's measured advance width; nothing here is chosen.   */
+
+.about-b .b-purp { padding-block: var(--b-pad) calc(var(--b-pad) * 1.1); }
+
+.about-b .b-purp__lead {
+  margin: 0 0 clamp(1.8rem, 4vw, 3rem);
+  max-width: 28ch;
+  font-family: var(--font-display);
+  font-size: var(--b-big);
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 60, "WONK" 0;
+  line-height: 1.12;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+
+.about-b .b-purp__fit {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: min(100%, 72rem);
+  container-type: inline-size;
+}
+.about-b .b-purp__row {
+  border-top: 1px solid var(--rule);
+  padding-top: clamp(0.5rem, 1.1vw, 1rem);
+  padding-bottom: clamp(1.4rem, 3vw, 2.4rem);
+}
+.about-b .b-purp__row:last-child { border-bottom: 1px solid var(--rule); }
+
+/* The size of each word is arithmetic: measure / advance. Its weight is optical
+   compensation — the same cut reads heavier at 460px than at 200px, so the big
+   words are drawn lighter and the small ones heavier, and SOFT runs the other
+   way so the smallest word keeps the softest terminals. */
+.about-b .b-purp__word {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: calc(var(--fit) * 100cqw);
+  font-weight: var(--wg);
+  font-variation-settings: "opsz" 144, "wght" var(--wg), "SOFT" var(--soft), "WONK" 0;
+  line-height: 0.84;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.about-b .b-purp__line {
+  margin: clamp(0.5rem, 1.4vw, 1.1rem) 0 0;
+  max-width: 42ch;
+  font-family: var(--font-text);
+  font-size: var(--b-read);
+  line-height: 1.58;
+  color: var(--ink-soft);
+}
+@media (min-width: 861px) {
+  .about-b .b-purp__line { margin-inline-start: 50%; }
+}
+
+
+/* ══ 05 · OUR APPROACH ══════════════════════════════════════════════════════
+   The refusal whispers, the affirmative speaks — and both are full --ink,
+   because tone here is carried by the WEIGHT axis, not by a paler colour. That
+   is a measurement, not a preference: over the figure the worst background a
+   letter can land on is #9D9790, which is 5.00:1 with --ink and only 2.32:1
+   with --ink-soft. Anything pale must stay off the picture, and does.        */
+
+.about-b .b-appr {
+  background: var(--ground-warm);
+  overflow: clip;
+  padding-block: clamp(5rem, 12vw, 9.5rem);
+}
+.about-b .b-appr__in { position: relative; z-index: 1; max-width: var(--b-max); }
+
+/* No frame anywhere. The figure is feathered out of the paper on every side by
+   a radial mask, sits at 0.40 so any ink may cross it, and bleeds off the right
+   edge so it is a presence in the plate rather than a picture on it. */
+.about-b .b-appr__figure {
+  position: absolute;
+  z-index: 0;
+  top: -6%;
+  left: min(56%, 56rem);
+  width: clamp(16rem, 46vw, 42rem);
+  height: 112%;
+  object-fit: cover;
+  object-position: 52% 32%;
+  opacity: 0.4;
+  -webkit-mask-image: radial-gradient(62% 48% at 52% 44%, #000 22%, rgba(0, 0, 0, 0.6) 54%, transparent 80%);
+  mask-image: radial-gradient(62% 48% at 52% 44%, #000 22%, rgba(0, 0, 0, 0.6) 54%, transparent 80%);
+}
+
+.about-b .b-appr__refusal {
+  margin: 0;
+  max-width: 25ch;
+  font-family: var(--font-display);
+  font-size: var(--b-big);
+  font-weight: 250;
+  font-variation-settings: "opsz" 144, "wght" 250, "SOFT" 100, "WONK" 0;
+  line-height: 1.14;
+  letter-spacing: 0.004em;
+  color: var(--ink);
+}
+.about-b .b-appr__answer {
+  margin: clamp(1.6rem, 3.4vw, 2.8rem) 0 0;
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--b-huge);
+  font-weight: 600;
+  font-variation-settings: "opsz" 144, "wght" 600, "SOFT" 0, "WONK" 1;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+.about-b .b-appr__conduct {
+  margin: clamp(2rem, 4.4vw, 3.4rem) 0 0;
+  max-width: 46ch;
+  font-family: var(--font-text);
+  font-size: var(--b-read);
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+/* Narrow viewports have no room for a figure beside a measure, so it is anchored to the
+   BOTTOM of the plate instead: the top quarter — which is where the only non-ink element
+   on this plate, the teal register mark, lives — is then guaranteed clear of it at every
+   width. Teal on the worst pixel the figure can produce is 2.21:1; ink is 5.00:1. The fix
+   is geometry, not a tint, exactly as the nav pill's ground was. */
+@media (max-width: 860px) {
+  .about-b .b-appr__figure {
+    top: auto;
+    bottom: -8%;
+    left: 26%;
+    width: 88%;
+    height: 74%;
+    object-position: 52% 26%;
+    opacity: 0.42;
+  }
+}
+
+
+/* ══ 06 · A COMMUNITY BUILT BY ITS MEMBERS ══════════════════════════════════
+   The inverse of 05: one figure there, a whole room here. The photograph has no
+   top edge and no side edges — it is masked upward into the ground and bleeds
+   off the bottom — so the display line rests on a horizon rather than sitting
+   next to a rectangle. The four-clause sentence steps down into it.          */
+
+.about-b .b-mem {
+  min-height: 96svh;
+  overflow: clip;
+  isolation: isolate;
+  padding-block: clamp(5rem, 12vw, 9rem) clamp(15rem, 30vw, 27rem);
+}
+.about-b .b-mem__horizon {
+  position: absolute;
+  z-index: 0;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: clamp(21rem, 52%, 42rem);
+  object-fit: cover;
+  object-position: 50% 52%;
+  opacity: 0.94;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.13) 12%, rgba(0, 0, 0, 0.55) 31%, #000 50%, #000 67%, rgba(0, 0, 0, 0.5) 81%, rgba(0, 0, 0, 0.12) 92%, transparent 98%);
+  mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.13) 12%, rgba(0, 0, 0, 0.55) 31%, #000 50%, #000 67%, rgba(0, 0, 0, 0.5) 81%, rgba(0, 0, 0, 0.12) 92%, transparent 98%);
+}
+.about-b .b-mem__in { position: relative; z-index: 1; max-width: var(--b-max); }
+
+.about-b .b-mem__refusal {
+  margin: 0;
+  max-width: 42ch;
+  font-family: var(--font-text);
+  font-size: var(--b-read);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+.about-b .b-mem__answer {
+  margin: clamp(1.6rem, 3.6vw, 3rem) 0 0;
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-size: var(--b-huge);
+  font-weight: 420;
+  font-variation-settings: "opsz" 144, "wght" 420, "SOFT" 12, "WONK" 0;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink-onPic);
+}
+.about-b .b-mem__stair {
+  margin: clamp(1.8rem, 4vw, 3.2rem) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--b-mid);
+  font-weight: 350;
+  font-variation-settings: "opsz" 144, "wght" 350, "SOFT" 30, "WONK" 0;
+  line-height: 1.34;
+  color: var(--ink-onPic-2);
+}
+.about-b .b-mem__step {
+  display: block;
+  margin-inline-start: calc(var(--i) * clamp(0.85rem, 2.6vw, 3.1rem));
+}
+
+
+/* ══ 07 · OUR GUIDING THOUGHT ═══════════════════════════════════════════════
+   The page's top scale for its shortest sentence, and the only thing on these
+   five plates that moves: the last word closes up in proportion to how far the
+   reader has come down this plate, so the word is whole exactly when the page
+   is. --b-close defaults to 1 — the finished state — so with no JavaScript,
+   before hydration, or under reduced motion the sentence is simply set.      */
+
+.about-b .b-guide {
+  --b-close: 1;
+  min-height: 72svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(6rem, 14vw, 11rem);
+  overflow-x: clip;
+}
+.about-b .b-guide__line {
+  margin: 0;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 0.95rem + 7.8vw, 9.4rem);
+  font-weight: 360;
+  font-variation-settings: "opsz" 144, "wght" 360, "SOFT" 20, "WONK" 0;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.about-b .b-guide__word { white-space: nowrap; }
+.about-b .b-guide__c {
+  display: inline-block;
+  transform: translate3d(calc(var(--dx) * (1 - var(--b-close))), 0, 0);
+}
+
+
+/* ══ MOTION OFF ═════════════════════════════════════════════════════════════
+   A complete, static, usable page: every reveal resolved, the closing word set
+   as one word, and nothing reachable only through motion. The client island
+   returns before it attaches anything, so this is belt and braces.           */
+@media (prefers-reduced-motion: reduce) {
+  .about-b.is-live [data-br] { opacity: 1 !important; transform: none !important; }
+  .about-b.is-live [data-br].in { transition: none; }
+  .about-b .b-guide { --b-close: 1 !important; }
+  .about-b .b-guide__c { transform: none; }
+}

@@ -36,6 +36,15 @@ const flag = (name, dflt) => {
 };
 const width = +flag('--width', 1440);
 const height = +flag('--height', 900);
+/**
+ * --scroll-to <selector>  measure a section that is not in the fold.
+ * Without it this only ever samples scroll position 0, which silently means most of a long
+ * page is never measured at all — a page can report 0 FAIL while a section below the fold
+ * is unreadable.
+ * --settle <ms>  extra wait after scrolling, for sections whose fill or reveal animates in.
+ */
+const scrollTo = flag('--scroll-to', null);
+const settle = +flag('--settle', 2200);
 const [url, ...rest] = argv;
 const SELECTORS = rest.length ? rest : ['h1', 'h2', 'p', 'a', 'button', 'li', 'span', 'em', 'figcaption'];
 
@@ -52,6 +61,30 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width, height } });
 await page.goto(url, { waitUntil: 'networkidle' });
 await page.waitForTimeout(3200);
+
+if (scrollTo) {
+  // Walk the whole page first so lazy images have loaded and scroll-driven reveals have
+  // fired; a section measured before its own images arrive reports the ground, not the design.
+  const docH = await page.evaluate(() => document.body.scrollHeight);
+  for (let y = 0; y < docH; y += 600) {
+    await page.evaluate((t) => scrollTo({ top: t, behavior: 'instant' }), y);
+    await page.waitForTimeout(140);
+  }
+  const target = await page.evaluate((sel) => {
+    const el = document.querySelector(sel);
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    // land the section's top just under the fixed navigation rather than at y=0
+    return Math.round(r.top + scrollY - 110);
+  }, scrollTo);
+  if (target === null) {
+    console.error(`--scroll-to: no element matches "${scrollTo}"`);
+    await browser.close();
+    process.exit(2);
+  }
+  await page.evaluate((t) => scrollTo({ top: t, behavior: 'instant' }), target);
+  await page.waitForTimeout(settle);
+}
 
 /** Only leaf text elements: a <p> wrapping three <span>s would otherwise be measured twice,
  *  and its box would span all of them including whatever sits between. */
@@ -72,6 +105,17 @@ const targets = await page.evaluate((sels) => {
       // Visually-hidden accessible labels are not seen by anyone and have no contrast to fail.
       if (r.width <= 1 || r.height <= 1) continue;
       if (cs.clipPath === 'inset(50%)' || cs.clip === 'rect(0px, 0px, 0px, 0px)') continue;
+      /**
+       * Image-filled type (`background-clip: text` + a transparent text fill) cannot be
+       * measured by this method at all: the glyph's colour is a photograph, not a value,
+       * and setting `color: transparent` does not hide it, so the painted/unpainted diff
+       * is meaningless and the element reports a phantom ~1:1 failure.
+       * Skip it here and measure it with tools/check-image-text.mjs, which compares the
+       * painted glyph pixels against the ground behind them.
+       */
+      const clip = cs.webkitBackgroundClip || cs.backgroundClip;
+      const fill = cs.webkitTextFillColor || '';
+      if (clip === 'text' && /transparent|rgba\(0, 0, 0, 0\)/.test(fill)) continue;
       seen.add(el);
       const size = parseFloat(cs.fontSize);
       const weight = +cs.fontWeight || 400;

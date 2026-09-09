@@ -1,0 +1,908 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════════
+   PREVIEW CONCEPT — within-a · "FOUR ROOMS"
+
+   Owned solely by this concept. EVERY selector is namespaced under `.within-a`.
+
+   The premise: the reader goes somewhere, four times. Each pillar is a full-viewport place
+   with its own ground, its own light and its own spatial logic, and each one RISES OVER the
+   one before it, so leaving a room is a move rather than a section break.
+
+   THE COVER, in geometry
+   ----------------------
+   Each room is a sticky 100svh stage inside a `--track`-tall block, and every room but the
+   last is pulled up by exactly one viewport height:
+
+       stage N sticks over        scroll ∈ [Tn, Tn + track − 100svh]
+       stage N+1 begins to show   scroll = Tn+1 − 100svh = Tn + track − 200svh
+       stage N+1 fully covers     scroll = Tn+1        = Tn + track − 100svh
+
+   The two end-points are the same instant, which is why room N is held perfectly still for
+   the whole of the cover and lets go on the exact frame it disappears. Any `--pull` shallower
+   than −100svh makes room N jump upward under the incoming room; anything deeper leaves a
+   dead band. It is one number and it is not free to choose.
+
+   Later tracks paint over earlier ones because both are positioned and DOM order decides —
+   the explicit z-indexes below just make that intent readable.
+
+   CONTRAST
+   --------
+   No text anywhere on this page sits on an unprotected photograph. Type is either on a flat
+   ground, on paper, or on the navigation pill's own measured material
+   (`rgba(var(--shade), .78)` + hairline + blur), which composites to a constant regardless of
+   the frame beneath it — see design/DESIGN-SYSTEM.md §1. Sand is used for hairlines and ticks
+   only, never for a glyph.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+
+.within-a {
+  --track: 260svh;
+  --pull: -100svh;
+  --wa-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --wa-top: clamp(5.2rem, 11svh, 8.2rem);
+  --wa-bot: clamp(1.5rem, 4svh, 3rem);
+  --wa-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* the pill's material, reused rather than re-invented — cohesion, and a constant ratio */
+  --wa-mat: rgba(var(--shade), 0.78);
+  --wa-hair: rgba(251, 247, 242, 0.2);
+
+  display: block;
+  background: var(--ground);
+  position: relative;
+}
+
+/* ── the tracks ─────────────────────────────────────────────────────────────────────── */
+
+.within-a__track {
+  position: relative;
+  height: var(--track);
+}
+.within-a__track--approach { z-index: 1; margin-bottom: var(--pull); }
+.within-a__track--1 { z-index: 2; margin-bottom: var(--pull); }
+.within-a__track--2 { z-index: 3; margin-bottom: var(--pull); }
+.within-a__track--3 { z-index: 4; margin-bottom: var(--pull); }
+.within-a__track--4 { z-index: 5; }
+.within-a__track--board { z-index: 6; height: auto; }
+
+.within-a__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ground);
+}
+.within-a__stage--dark,
+.within-a__stage--deep { background: var(--ground-deep); color: var(--ink-onPic); }
+.within-a__stage--warm { background: var(--ground-warm); color: var(--ink); }
+.within-a__stage--paper { background: var(--ground); color: var(--ink); }
+
+.within-a__in {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: var(--wa-top) var(--wa-rail) var(--wa-bot);
+  display: grid;
+  gap: clamp(1rem, 2.6svh, 2rem);
+}
+
+/* ── the photographs ────────────────────────────────────────────────────────────────── */
+
+.within-a__ground,
+.within-a__floor,
+.within-a__wall-img,
+.within-a__panel-fig,
+.within-a__arch { will-change: transform; }
+
+.within-a__ground {
+  position: absolute;
+  inset: -6% 0;
+  z-index: 0;
+}
+.within-a__ground-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 46% 58%;
+}
+
+/* ── reveals. Start states are scoped to `html.js`, so with scripting off nothing on this
+      page is ever hidden and every room is complete on first paint. ─────────────────── */
+
+html.js .within-a [data-wa] { opacity: 0; }
+html.js .within-a [data-wa='up'] { transform: translateY(26px); }
+html.js .within-a [data-wa='rise'] { transform: translateY(30px); }
+html.js .within-a [data-wa='gather'] {
+  transform: translate(var(--sx, 0), var(--sy, 0)) scale(0.94);
+}
+html.js .within-a [data-wa='write'] { transform: translateX(-20px); }
+html.js .within-a [data-wa='drop'] { transform: translateY(-14px); }
+html.js .within-a [data-wa='wire'] { transform: scaleY(0); transform-origin: top center; }
+html.js .within-a [data-wa='reach'] { transform: translateX(-24px); }
+
+html.js .within-a [data-wa].is-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.8s var(--wa-ease),
+    transform 1s var(--wa-ease);
+  transition-delay: var(--d, 0ms);
+}
+html.js .within-a [data-wa='gather'].is-in {
+  transition-duration: 1.05s, 1.4s;
+}
+
+/* focus: the global treatment is a cream ring in a dark halo, which is right on the two dark
+   rooms and invisible on the four light grounds. Inverted here, never removed. */
+.within-a__stage--approach :focus-visible,
+.within-a__stage--warm :focus-visible,
+.within-a__stage--paper :focus-visible,
+.within-a__wall :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ═══ THE APPROACH — the plan of the building ═══════════════════════════════════════ */
+
+.within-a__stage--approach { background: var(--ground); color: var(--ink); }
+
+.within-a__approach {
+  height: 100%;
+  padding: var(--wa-top) var(--wa-rail) 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  max-width: 1400px;
+  margin-inline: auto;
+}
+/* the title band carries the paper with it and dips over the tops of the openings, so the
+   type passes IN FRONT of the photographs instead of sitting above them */
+.within-a__approach-top {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  align-items: end;
+  margin-bottom: clamp(-2.6rem, -4svh, -1rem);
+  background: var(--ground);
+  padding-bottom: clamp(0.6rem, 1.6svh, 1.2rem);
+}
+
+.within-a__kicker {
+  margin: 0 0 clamp(0.9rem, 2.4svh, 1.6rem);
+  font: 500 clamp(10px, 1.1vw, 12px) / 1 var(--font-text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+
+.within-a__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.3rem, 7.2vw, 7.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  font-optical-sizing: auto;
+}
+.within-a__title em { font-style: italic; color: var(--ink-soft); }
+
+.within-a__lead {
+  margin: 0 0 clamp(0.2rem, 1svh, 0.7rem);
+  max-width: 30ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.3vw, 1.34rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.within-a__doors {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 clamp(0.8rem, 2.4svh, 2rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1.6vw, 1.4rem);
+  align-items: stretch;
+  min-height: 0;
+  height: 100%;
+}
+/* four different heights: an elevation, not a row of cards */
+.within-a__door { --lift: calc(var(--i) * 1); min-width: 0; }
+.within-a__door { display: flex; }
+.within-a__door-a {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transform: translateY(calc(var(--i) * -0.9rem));
+}
+.within-a__door-fig {
+  display: block;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--ground-warm);
+  height: 100%;
+  min-height: clamp(112px, 20svh, 200px);
+}
+.within-a__door-fig img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 0.7s var(--wa-ease);
+}
+.within-a__door-a:hover .within-a__door-fig img,
+.within-a__door-a:focus-visible .within-a__door-fig img { transform: scale(1.06); }
+
+.within-a__door-tag {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  padding: 0.5rem 0.62rem;
+  background: var(--wa-mat);
+  border-top: 1px solid var(--wa-hair);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+  color: var(--ink-onPic);
+}
+.within-a__door-n {
+  font: 500 10px / 1 var(--font-text);
+  letter-spacing: 0.14em;
+  color: rgba(251, 247, 242, 0.78);
+  flex: none;
+}
+.within-a__door-name {
+  font-family: var(--font-display);
+  font-size: clamp(0.86rem, 1.5vw, 1.18rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ═══ THE ROOM HEAD — one grammar in all four rooms ════════════════════════════════ */
+
+.within-a__head { display: flex; align-items: baseline; gap: clamp(0.7rem, 2vw, 1.3rem); }
+.within-a__ord {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3.4svh, 3.2rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  opacity: 0.62;
+  flex: none;
+}
+.within-a__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 5.6svh, 5.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  font-optical-sizing: auto;
+}
+.within-a__head::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.24;
+  transform: translateY(-0.4em);
+}
+.within-a__stage--dark .within-a__head::after,
+.within-a__stage--deep .within-a__head::after { background: var(--sand); opacity: 0.5; }
+
+.within-a__line {
+  margin: clamp(0.5rem, 1.4svh, 0.9rem) 0 0;
+  max-width: 46ch;
+  font-size: clamp(0.95rem, 0.92rem + 0.3vw, 1.3rem);
+  line-height: 1.5;
+}
+/* One grammar in all four rooms: the pillar's opening sentence is the room's statement and
+   is set as display type, the sentence that follows it is body. Both are the client's, and
+   this is the only thing the four heads share besides the numeral. */
+.within-a__say .within-a__line:first-of-type {
+  margin-top: clamp(0.7rem, 2svh, 1.3rem);
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3.3svh, 3rem);
+  line-height: 1.16;
+  letter-spacing: -0.014em;
+}
+.within-a__stage--warm .within-a__say .within-a__line:first-of-type,
+.within-a__stage--paper .within-a__say .within-a__line:first-of-type { color: var(--ink); }
+.within-a__stage--dark .within-a__say .within-a__line:first-of-type,
+.within-a__stage--deep .within-a__say .within-a__line:first-of-type { color: var(--ink-onPic); }
+.within-a__cue {
+  margin: clamp(0.7rem, 1.8svh, 1.2rem) 0 0;
+  font: 500 11px / 1 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.within-a__stage--dark .within-a__line,
+.within-a__stage--deep .within-a__line { color: var(--ink-onPic-2); }
+.within-a__stage--dark .within-a__cue,
+.within-a__stage--deep .within-a__cue { color: var(--sand); }
+.within-a__stage--warm .within-a__line,
+.within-a__stage--paper .within-a__line { color: var(--ink-soft); }
+.within-a__stage--warm .within-a__cue,
+.within-a__stage--paper .within-a__cue { color: var(--teal-deep); }
+
+.within-a__cap {
+  margin: 0;
+  font: 400 11px / 1.4 var(--font-text);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+}
+.within-a__cap::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--clay);
+  flex: none;
+  transform: translateY(-4px);
+}
+.within-a__cap--dark {
+  color: rgba(251, 247, 242, 0.9);
+  position: absolute;
+  right: var(--wa-rail);
+  bottom: var(--wa-bot);
+  z-index: 3;
+}
+.within-a__cap--dark::before { background: var(--sand); }
+/* the one caption that can land on a photograph carries the pill's material, so its ratio
+   is a constant rather than a property of whatever frame happens to be behind it */
+.within-a__cap--plate {
+  padding: 0.42rem 0.7rem;
+  background: var(--wa-mat);
+  border: 1px solid var(--wa-hair);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+  border-radius: 2px;
+}
+
+/* ═══ 01 · CONNECT — five things standing apart in a hall, drawing together ═════════ */
+
+.within-a__scrim--1 {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      118% 78% at 6% 24%,
+      rgba(var(--shade), 0.95) 0%,
+      rgba(var(--shade), 0.86) 34%,
+      rgba(var(--shade), 0.55) 62%,
+      rgba(var(--shade), 0.34) 100%
+    ),
+    linear-gradient(180deg, rgba(var(--shade), 0.62) 0%, rgba(var(--shade), 0.3) 38%, rgba(var(--shade), 0.68) 100%);
+}
+
+.within-a__in--1 { grid-template-rows: auto minmax(0, 1fr); align-content: start; }
+
+.within-a__cluster {
+  list-style: none;
+  margin: clamp(1rem, 4svh, 3rem) 0 0 auto;
+  padding: 0 0 clamp(1.6rem, 6svh, 4rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: end;
+  gap: 3px;
+  max-width: min(46ch, 100%);
+}
+.within-a__node {
+  font: 500 clamp(0.82rem, 0.78rem + 0.34vw, 1.24rem) / 1.25 var(--font-text);
+  color: var(--ink-onPic);
+  background: var(--wa-mat);
+  border: 1px solid var(--wa-hair);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  backdrop-filter: blur(14px) saturate(1.25);
+  padding: 0.62rem 0.95rem;
+  border-radius: 2px;
+  will-change: transform;
+}
+
+/* ═══ 02 · LEARN — a board standing in front of the class ══════════════════════════ */
+
+/* --band is the height of the class along the floor; --lap is how far the board stands in
+   front of it. padding-bottom = band − lap puts the board's bottom edge exactly `lap` inside
+   the photograph, deterministically, at every viewport. An `align-self:end` box with a
+   negative bottom margin does NOT do this: it hangs below the stage and gets clipped, which
+   cost three of the client's seven items on the first render. */
+.within-a__stage--warm { --band: clamp(140px, 27svh, 300px); --lap: clamp(24px, 5svh, 62px); }
+.within-a__in--2 {
+  grid-template-rows: auto minmax(0, 1fr);
+  padding-bottom: calc(var(--band) - var(--lap));
+  align-content: start;
+}
+
+.within-a__slate {
+  list-style: none;
+  margin: clamp(0.8rem, 2.4svh, 1.8rem) 0 0;
+  padding: clamp(1.1rem, 4.6svh, 4.4rem) clamp(1.1rem, 3vw, 3.2rem) clamp(1.2rem, 4.8svh, 4.6rem);
+  background: var(--ground);
+  border-top: 2px solid var(--clay);
+  box-shadow: 0 26px 60px -28px rgba(16, 12, 10, 0.55);
+  columns: 2;
+  column-gap: clamp(1.4rem, 4vw, 3.6rem);
+  align-self: end;
+  position: relative;
+  z-index: 2;
+}
+.within-a__chalk {
+  break-inside: avoid;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.1rem, 3.4svh, 3.5rem);
+  line-height: 1.14;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  padding: 0.1em 0;
+  will-change: transform;
+}
+.within-a__chalk:nth-child(even) { color: #3a2f27; }
+
+.within-a__floor {
+  position: absolute;
+  inset: auto 0 -4% 0;
+  z-index: 1;
+  height: var(--band);
+}
+.within-a__floor-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 52% 62%;
+}
+
+/* === 03 . COLLABORATE - seven things hung above the panel =========================
+
+   Three bands: a ceiling the wires come out of, the stage in the middle of the room, and
+   the floor the reader is standing on. The deepest placards hang IN FRONT of the
+   photograph - occlusion, not adjacency. `--dropUnit` is what makes the wires long enough
+   to reach the stage; a short hang reads as a row of chips with ticks over them.        */
+
+.within-a__stage--deep { --dropUnit: clamp(52px, 33svh, 480px); }
+.within-a__in--3 {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(0.9rem, 3svh, 2rem);
+}
+
+.within-a__hang {
+  position: absolute;
+  z-index: 3;
+  top: var(--wa-top);
+  left: var(--wa-rail);
+  right: var(--wa-rail);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: clamp(0.35rem, 0.9vw, 0.85rem);
+  align-items: start;
+}
+.within-a__hang-i {
+  position: relative;
+  min-width: 0;
+  padding-top: calc(var(--drop) * var(--dropUnit));
+}
+.within-a__wire {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: calc(var(--drop) * var(--dropUnit));
+  background: var(--sand);
+  opacity: 0.5;
+  will-change: transform;
+}
+.within-a__card {
+  display: block;
+  background: var(--ground);
+  color: var(--ink);
+  font: 500 clamp(0.7rem, 0.64rem + 0.34vw, 1.1rem) / 1.28 var(--font-text);
+  padding: 0.6rem 0.7rem 0.65rem;
+  border-radius: 2px;
+  border-top: 2px solid var(--clay);
+  overflow-wrap: break-word;
+  box-shadow: 0 16px 34px -18px rgba(0, 0, 0, 0.8);
+  will-change: transform;
+}
+
+.within-a__panel-fig {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  margin-left: clamp(0px, 18vw, 21rem);
+  margin-right: calc(var(--wa-rail) * -1);
+  height: clamp(130px, 30svh, 300px);
+  overflow: hidden;
+  border-radius: 2px 0 0 2px;
+}
+.within-a__panel-fig img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 52% 60%;
+}
+
+.within-a__say--3 { position: relative; z-index: 2; }
+.within-a__say--3 .within-a__line { max-width: 44ch; }
+.within-a__in--3 .within-a__cap { position: static; margin-top: clamp(0.6rem, 1.8svh, 1.1rem); }
+
+/* ═══ 04 · SHARE — six steps across the floor, and the way out ═════════════════════ */
+
+.within-a__arch {
+  position: absolute;
+  right: clamp(-2rem, -1vw, 0rem);
+  bottom: 0;
+  z-index: 1;
+  width: var(--archW);
+  height: clamp(230px, 62svh, 660px);
+  border-radius: 50% 50% 0 0 / 34% 34% 0 0;
+  overflow: hidden;
+}
+.within-a__arch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 54% 40%;
+}
+
+.within-a__in--4 { grid-template-rows: auto auto 1fr auto; align-content: stretch; }
+
+.within-a__stair {
+  list-style: none;
+  margin: clamp(0.6rem, 2svh, 1.4rem) 0 0;
+  padding: 0 calc(var(--archW) + clamp(0.8rem, 2vw, 2.4rem)) 0 0;
+  display: grid;
+  gap: clamp(0.25rem, 1.6svh, 1rem);
+}
+.within-a__stage--paper {
+  --archW: clamp(200px, 32vw, 660px);
+  --step: clamp(10px, 3.6vw, 112px);
+}
+.within-a__step {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1.4vw, 1rem);
+  /* each step reaches a little further across the room than the last */
+  margin-left: calc(var(--i) * var(--step));
+  will-change: transform;
+}
+/* Whole-pixel steps, per breakpoint, never a vw expression, AND a 2px rule: a 1px rule
+   centred in a flex row lands on a fractional device pixel and is composited as two
+   half-strength greys, so half of these reaches rendered clay and half rendered putty. */
+.within-a__reach {
+  flex: none;
+  height: 2px;
+  width: calc(16px + var(--i) * var(--step));
+  background: var(--clay);
+}
+.within-a__step-t {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.7svh, 2.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.within-a__closing {
+  position: relative;
+  z-index: 2;
+  margin: clamp(1.4rem, 5svh, 3.4rem) 0 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.15rem, 3.1svh, 2.9rem);
+  line-height: 1.16;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  background: var(--ground);
+  box-shadow: 0 0 0 0.5rem var(--ground);
+  align-self: end;
+}
+.within-a__in--4 .within-a__cap {
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  width: fit-content;
+  padding-right: 0.6rem;
+  background: var(--ground);
+  margin-top: clamp(0.6rem, 2svh, 1.2rem);
+}
+
+/* ═══ COMMUNITY INITIATIVES — out of the rooms, onto one open wall ═════════════════ */
+
+.within-a__wall {
+  position: relative;
+  background: var(--ground-warm);
+  overflow: hidden;
+  padding: clamp(3.2rem, 11svh, 8rem) 0 clamp(3.5rem, 11svh, 8rem);
+}
+.within-a__wall-img { position: absolute; inset: -5% 0; z-index: 0; opacity: 0.13; }
+.within-a__wall-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
+}
+.within-a__wall { border-top: 1px solid rgba(36, 29, 24, 0.14); }
+.within-a__wall-in {
+  position: relative;
+  z-index: 2;
+  padding-inline: var(--wa-rail);
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+.within-a__init-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.7rem;
+  margin-bottom: clamp(2rem, 6svh, 4rem);
+  max-width: 62ch;
+}
+.within-a__init-h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 5.4vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.within-a__init-lead {
+  margin: 0;
+  max-width: 44ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.3vw, 1.32rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.within-a__notices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1.4rem, 3.4vw, 3rem) clamp(1.2rem, 3vw, 2.6rem);
+  align-items: start;
+}
+.within-a__notice {
+  position: relative;
+  padding: clamp(1.25rem, 2.6vw, 2.1rem) clamp(1.15rem, 2.4vw, 1.9rem) clamp(1.35rem, 2.8vw, 2.2rem);
+  background: var(--ground);
+  border-top: 2px solid var(--clay);
+  box-shadow: 0 20px 46px -30px rgba(16, 12, 10, 0.55);
+  min-width: 0;
+}
+/* four sizes, four heights: a hang, not a grid of equal cards */
+.within-a__notice--a { grid-column: 1 / span 7; grid-row: 1; }
+.within-a__notice--b { grid-column: 8 / span 5; grid-row: 1; margin-top: clamp(0rem, 4vw, 3.4rem); }
+.within-a__notice--c { grid-column: 5 / span 8; grid-row: 2; }
+.within-a__notice--d {
+  grid-column: 1 / span 4;
+  grid-row: 2;
+  margin-top: clamp(0rem, 5vw, 4.6rem);
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  border-top-color: var(--teal);
+}
+
+.within-a__notice-h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.15rem, 0.98rem + 0.85vw, 2.15rem);
+  line-height: 1.12;
+  letter-spacing: -0.014em;
+  color: inherit;
+}
+.within-a__notice-p {
+  margin: 0.7rem 0 0;
+  font-size: clamp(0.92rem, 0.9rem + 0.2vw, 1.15rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 52ch;
+}
+/* the two prose-only entries have no list to carry them, so the prose IS the graphic */
+.within-a__notice-say {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 0.94rem + 0.42vw, 1.5rem);
+  line-height: 1.34;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  max-width: 40ch;
+}
+.within-a__notice--d .within-a__notice-say { color: var(--ink-onPic-2); }
+.within-a__notice--d .within-a__notice-p { color: var(--ink-onPic-2); }
+.within-a__notice .within-a__cue { margin-top: clamp(0.9rem, 2vw, 1.3rem); }
+
+.within-a__from {
+  margin: 0 0 0.85rem;
+  font: 500 clamp(0.78rem, 0.74rem + 0.2vw, 1.02rem) / 1.4 var(--font-text);
+  color: var(--sand);
+  display: flex;
+  gap: 0.55em;
+  align-items: baseline;
+}
+.within-a__from::before {
+  content: '';
+  flex: none;
+  width: 22px;
+  height: 1px;
+  background: var(--teal);
+  transform: translateY(-0.35em);
+}
+/* Fraunces has no precomposed ṇ and drops the mark; the Praṇava name is set in Inter. */
+.within-a__pn { font-family: var(--font-text); font-weight: 600; }
+
+.within-a__chips {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.within-a__chip {
+  font: 400 clamp(0.8rem, 0.78rem + 0.16vw, 1rem) / 1.3 var(--font-text);
+  color: var(--ink);
+  background: var(--ground-warm);
+  border: 1px solid rgba(36, 29, 24, 0.16);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+}
+
+.within-a__note {
+  margin-top: clamp(1rem, 2.2vw, 1.5rem);
+  padding-left: clamp(0.8rem, 1.6vw, 1.1rem);
+  border-left: 2px solid var(--clay);
+}
+.within-a__note p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.92rem, 0.88rem + 0.24vw, 1.2rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.within-a__note p + p { margin-top: 0.3rem; }
+
+/* ═══ RESPONSIVE ═══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1080px) {
+  .within-a__notice--a { grid-column: 1 / span 12; grid-row: auto; }
+  .within-a__notice--b { grid-column: 1 / span 7; grid-row: auto; margin-top: 0; }
+  .within-a__notice--c { grid-column: 1 / span 12; grid-row: auto; }
+  .within-a__notice--d { grid-column: 5 / span 8; grid-row: auto; margin-top: 0; }
+}
+
+@media (max-width: 900px) {
+  .within-a__panel-fig {
+    margin-left: 0;
+    border-radius: 2px;
+    height: clamp(110px, 19svh, 200px);
+  }
+  .within-a__hang { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .within-a__hang-i:nth-child(n + 5) { padding-top: calc(var(--drop) * 0.42 * var(--dropUnit)); }
+  .within-a__hang-i:nth-child(n + 5) .within-a__wire {
+    height: calc(var(--drop) * 0.42 * var(--dropUnit));
+  }
+  .within-a__slate { columns: 1; }
+  /* the doorway drops to the foot of the room, so the stair no longer has to make way */
+  .within-a__stage--paper { --archW: clamp(150px, 46vw, 320px); }
+  .within-a__arch { height: clamp(200px, 44svh, 380px); }
+  .within-a__stair { padding-right: 0; }
+  .within-a__step-t { font-size: clamp(1rem, 2.4svh, 1.4rem); }
+}
+
+@media (max-width: 780px) {
+  /* the title band stacks: at 390px a two-column band squeezes the lead to five characters
+     and pushes it off the right edge */
+  .within-a__approach-top { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .within-a__lead { max-width: 40ch; }
+  .within-a__doors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: auto;
+    align-content: end;
+  }
+  .within-a__door-a { transform: translateY(calc(var(--i) * -0.35rem)); }
+  /* an explicit height, because a percentage height inside an auto-sized grid row does not
+     resolve and the tag detaches from the picture it labels */
+  .within-a__door-fig { height: clamp(132px, 26svh, 250px); min-height: 0; }
+  .within-a__title { font-size: clamp(2.1rem, 9.4vw, 3.4rem); }
+
+  /* room 02: seven items in one column at desktop scale grow up over the room's own head */
+  .within-a__stage--warm { --band: clamp(120px, 20svh, 200px); --lap: clamp(18px, 3.4svh, 40px); }
+  .within-a__chalk { font-size: clamp(1rem, 2.5svh, 1.4rem); line-height: 1.18; }
+  .within-a__slate {
+    padding: clamp(0.9rem, 2.4svh, 1.4rem) 1.1rem clamp(1rem, 2.6svh, 1.5rem);
+    margin-top: clamp(0.6rem, 1.6svh, 1.1rem);
+  }
+
+  /* room 03: the hang joins the flow. Absolutely positioned with desktop drops it lands on
+     top of the room's own heading, and a white placard over a cream heading hides it. */
+  .within-a__in--3 { grid-template-rows: auto minmax(0, 1fr) auto; gap: 0; }
+  .within-a__hang {
+    position: static;
+    --dropUnit: clamp(18px, 4svh, 40px);
+    grid-row: 1;
+    margin-bottom: -24px;
+  }
+  .within-a__panel-fig {
+    grid-row: 2;
+    margin-left: 0;
+    margin-inline: calc(var(--wa-rail) * -1);
+    border-radius: 0;
+  }
+  .within-a__say--3 { grid-row: 3; padding-top: clamp(0.7rem, 2svh, 1.2rem); }
+
+  /* every room has to fit inside one viewport or its stage clips the client's own words:
+     the display statement steps down a size on narrow screens, where it wraps to four lines */
+  .within-a__say .within-a__line:first-of-type {
+    font-size: clamp(1.05rem, 2.7svh, 1.65rem);
+    max-width: 24ch;
+  }
+  .within-a__stage--paper { --archW: clamp(150px, 44vw, 240px); }
+  .within-a__arch { height: clamp(170px, 31svh, 300px); }
+  .within-a__notice--a,
+  .within-a__notice--b,
+  .within-a__notice--c,
+  .within-a__notice--d { grid-column: 1 / span 12; grid-row: auto; margin-top: 0; }
+  .within-a__cluster { justify-content: flex-start; max-width: none; margin-left: 0; }
+  .within-a__in--1 { gap: clamp(0.8rem, 2svh, 1.4rem); }
+  .within-a__hang { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; }
+  .within-a__hang-i:nth-child(n + 4) { padding-top: calc(var(--drop) * var(--dropUnit)); }
+  .within-a__hang-i:nth-child(n + 4) .within-a__wire {
+    height: calc(var(--drop) * var(--dropUnit));
+  }
+}
+
+/* Short viewports cannot hold a full room, and a stage that clips its own list is worse than
+   no mechanic at all. Below this height the cover is dropped and the four rooms simply
+   follow one another — still four grounds, still four lights, still four mechanics. */
+@media (max-height: 600px) {
+  .within-a__track { height: auto; margin-bottom: 0; }
+  .within-a__stage { position: relative; height: auto; min-height: 100svh; }
+  .within-a__slate { margin-bottom: 0; }
+  .within-a__floor { position: relative; inset: auto; height: clamp(150px, 34svh, 260px); }
+  .within-a__in--2 { padding-bottom: clamp(1.4rem, 4svh, 2.4rem); }
+  .within-a__arch { position: relative; right: auto; margin: 1.4rem 0 0 auto; }
+  .within-a__in--4 { padding-bottom: 0; }
+}
+
+/* ═══ REDUCED MOTION — the complete, static page ═══════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .within-a [data-wa] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .within-a__track { height: auto !important; margin-bottom: 0 !important; }
+  .within-a__stage { position: relative !important; height: auto !important; min-height: 100svh; }
+  .within-a__slate { margin-bottom: 0; }
+  .within-a__floor { position: relative; inset: auto; height: clamp(160px, 34svh, 300px); }
+  .within-a__in--2 { padding-bottom: clamp(1.4rem, 4svh, 2.4rem); }
+  .within-a__door-fig img { transition: none; }
+  .within-a__arch { position: relative; right: auto; margin: 1.6rem 0 0 auto; }
+  .within-a__in--4 { padding-bottom: 0; }
+}

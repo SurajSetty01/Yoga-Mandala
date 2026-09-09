@@ -262,7 +262,8 @@ body { overflow-x: clip; }
 
 .pill__cta {
   position: relative; overflow: hidden; isolation: isolate;
-  display: inline-block;
+  /* inline-flex, not inline-block: the label now sits beside a small outbound arrow. */
+  display: inline-flex; align-items: center; gap: 0.45em;
   font: 600 13px/1 var(--font-text); text-decoration: none;
   padding: 0.72rem 1.25rem; border-radius: 999px;
   background: var(--clay-deep); color: #FBF7F2;
@@ -276,6 +277,10 @@ body { overflow-x: clip; }
   transition: transform 0.4s var(--ease);
 }
 .pill__cta:hover::before, .pill__cta:focus-visible::before, .pill__cta:active::before { transform: scaleX(1); }
+/* The arrow leans out on hover — the only cue that this link leaves the site. */
+.pill__ext { flex: none; transition: transform 0.3s var(--ease); }
+.pill__cta:hover .pill__ext, .pill__cta:focus-visible .pill__ext { transform: translate(1.5px, -1.5px); }
+@media (prefers-reduced-motion: reduce) { .pill__ext { transition: none; } }
 
 .pill__menu {
   display: none; align-items: center; gap: 0.5rem;
@@ -772,3 +777,18 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/join.css";
 @import "../styles/contact.css";
 @import "../styles/footer.css";
+
+/* ── Tournament preview concepts ───────────────────────────────────────
+   Competing section designs, each on its own /preview/<slug>/ route and
+   each owning one stylesheet, so three agents can build concurrently
+   without colliding. Deleted once a winner is promoted into the site.
+   ──────────────────────────────────────────────────────────────────── */
+@import "../styles/preview-about-a.css";
+@import "../styles/preview-about-b.css";
+@import "../styles/preview-about-c.css";
+@import "../styles/preview-within-a.css";
+@import "../styles/preview-within-b.css";
+@import "../styles/preview-within-c.css";
+@import "../styles/preview-contact-a.css";
+@import "../styles/preview-contact-b.css";
+@import "../styles/preview-contact-c.css";

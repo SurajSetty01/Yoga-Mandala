@@ -1,0 +1,625 @@
+/* preview concept about-a — owned solely by its agent. Namespace every selector with .about-a */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CONCEPT A — "THE ROOM"
+
+   Premise: the page is a place, and the reader moves through it.
+
+   The five rejected blocks are not five blocks here. They are five moments in
+   ONE traverse of ONE room — the shala with the wooden floor, the white walls,
+   the red ceiling slings and the rope wall. The reader steps in through a lit
+   doorway, walks the length of the room past four things standing in it, stops
+   at its darkest and quietest point, watches the room fill with people, and
+   walks out into the light.
+
+   The mechanics that make that true, and the rules they obey:
+
+   · ONE environment, three depths. `.aa-far` (behind the words), `.aa-path`
+     (the words, in normal document flow) and `.aa-near` (in front of the
+     words). Both photographic layers are `position: sticky; height: 0` with
+     absolutely-positioned 100svh children, so they pin at the section top and
+     stay pinned for its whole length while the text scrolls THROUGH them. The
+     near layer occludes type; the far layer is occluded by it. That is the
+     depth, and it is real, not a shadow.
+
+   · No photograph is a rectangle. Every plane except the doorway is masked to
+     dissolve into the dark on at least two edges, so the pictures read as
+     light in a room rather than as pictures on a page. The doorway is the one
+     hard edge, because a door has one.
+
+   · Text never sits on an unprotected photograph. The room carries a constant
+     `.aa-veil` (you are indoors; your eyes have adjusted) and a left-anchored
+     `.aa-pool` exactly where the reading column is — the hero's proven
+     material, not a full-frame wash, so the picture keeps its life everywhere
+     the reader is not reading.
+
+   · Only transform and opacity are ever written by the scroll driver.
+     Everything else — masks, gradients, grounds — is static CSS.
+
+   · With JavaScript off, with `prefers-reduced-motion: reduce`, or before
+     hydration, the planes drop out of the sticky layer and anchor to their own
+     station (`--at`), so the room becomes a set of stills you scroll past.
+     Complete, static, readable, nothing hidden.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.about-a {
+  /* Station heights. The scroll driver measures the real geometry, so these are
+     free to be tuned without touching a single number in the JavaScript. */
+  --aa-h-thr: 148svh;
+  --aa-h-pur: 216svh;
+  --aa-h-app: 128svh;
+  --aa-h-mem: 150svh;
+  --aa-h-gui: 92svh;
+
+  --aa-rail: var(--rail, clamp(1.35rem, 4.2vw, 4.25rem));
+  --aa-hair: rgba(246, 217, 193, 0.20); /* sand — ORNAMENT. Never text. */
+
+  position: relative;
+  isolation: isolate;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+}
+
+/* ── THE ROOM ───────────────────────────────────────────────────────────
+   Two sticky layers of height 0. Height 0 is deliberate: a sticky box only
+   stays pinned while its own bottom edge is inside its container, so a
+   zero-height box stays pinned for the container's entire length. Its
+   100svh children overflow it, and nothing above clips them.            */
+.about-a .aa-far,
+.about-a .aa-near {
+  position: sticky;
+  top: 0;
+  height: 0;
+}
+.about-a .aa-far { z-index: 0; }
+/* The interior is its own stacking context, so the near layer can sit in front of
+   the words it passes WITHOUT ever being able to reach in front of the arrival —
+   which is a later sibling at a higher level. Structure, not timing. */
+.about-a .aa-interior { position: relative; z-index: 2; }
+.about-a .aa-path { position: relative; z-index: 2; }
+.about-a .aa-near { z-index: 3; pointer-events: none; }
+.about-a .aa-arrival { position: relative; z-index: 4; }
+
+/* the room's walls — an `overflow: clip` box exactly the size of the viewport.
+   Planes are bled past its edges on purpose; this is what keeps that bleed from
+   becoming horizontal page overflow. `overflow: clip` is not a scroll container,
+   and this clips a CHILD of the sticky element rather than the sticky element
+   itself, so the pinning is untouched. */
+.about-a .aa-space {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100svh;
+  overflow: clip;
+}
+
+.about-a .aa-space > * {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100svh;
+  margin: 0;
+}
+
+.about-a .aa-pl img,
+.about-a .aa-fg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.about-a .aa-pl,
+.about-a .aa-fg {
+  opacity: 0;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Between first paint and hydration the room is simply its doorway: correct,
+   calm, and never a stack of four photographs on top of one another. `.aa-live`
+   is added by the driver only AFTER it has written the first set of transforms,
+   so nothing flashes and nothing is ever blank. */
+.about-a:not(.aa-live) .aa-pl--door { opacity: 1; transform: none; }
+
+/* ── the doorway. The only hard-edged picture in the room. ─────────────── */
+.about-a .aa-pl--door {
+  inset: auto;
+  top: 8svh;
+  left: 50%;
+  width: min(58vw, 26rem);
+  height: auto;
+  aspect-ratio: 3 / 4;
+  transform-origin: 50% 46%;
+  margin-left: max(-29vw, -13rem);
+  box-shadow: 0 0 0 1px rgba(246, 217, 193, 0.26);
+}
+
+/* ── the planes inside the room. Each dissolves into the dark. ─────────── */
+.about-a .aa-pl--mats {
+  -webkit-mask-image: radial-gradient(128% 104% at 62% 40%, #000 26%, rgba(0, 0, 0, 0.72) 56%, transparent 92%);
+  mask-image: radial-gradient(128% 104% at 62% 40%, #000 26%, rgba(0, 0, 0, 0.72) 56%, transparent 92%);
+}
+.about-a .aa-pl--room {
+  left: -8%;
+  right: 6%;
+  -webkit-mask-image: radial-gradient(116% 112% at 34% 46%, #000 30%, rgba(0, 0, 0, 0.72) 62%, transparent 94%);
+  mask-image: radial-gradient(116% 112% at 34% 46%, #000 30%, rgba(0, 0, 0, 0.72) 62%, transparent 94%);
+}
+.about-a .aa-pl--work {
+  left: 26%;
+  right: -8%;
+  top: 14svh;
+  height: 78svh;
+  -webkit-mask-image: radial-gradient(112% 118% at 74% 62%, #000 22%, rgba(0, 0, 0, 0.6) 58%, transparent 94%);
+  mask-image: radial-gradient(112% 118% at 74% 62%, #000 22%, rgba(0, 0, 0, 0.6) 58%, transparent 94%);
+}
+
+/* ── the near planes. These are the room's foreground; they pass in FRONT
+      of the words. Both are bled off the bottom and dissolved upward, so
+      they read as the near edge of the floor rather than as pictures.    */
+/* A single radial mask anchored to the corner the plane is bled into. A linear
+   fade was tried first and it left a hard vertical seam down the middle of the
+   room — the exact "boxy image" this concept exists to avoid. Every edge has to
+   go, not just the one facing the words. */
+.about-a .aa-fg--a {
+  top: auto;
+  bottom: -6svh;
+  height: 66svh;
+  left: -10%;
+  right: 44%;
+  -webkit-mask-image: radial-gradient(96% 104% at 26% 96%, #000 18%, rgba(0, 0, 0, 0.72) 48%, transparent 86%);
+  mask-image: radial-gradient(96% 104% at 26% 96%, #000 18%, rgba(0, 0, 0, 0.72) 48%, transparent 86%);
+}
+.about-a .aa-fg--b {
+  top: auto;
+  bottom: -5svh;
+  height: 58svh;
+  left: 40%;
+  right: -12%;
+  -webkit-mask-image: radial-gradient(96% 104% at 72% 96%, #000 16%, rgba(0, 0, 0, 0.68) 46%, transparent 84%);
+  mask-image: radial-gradient(96% 104% at 72% 96%, #000 16%, rgba(0, 0, 0, 0.68) 46%, transparent 84%);
+}
+
+/* ── the room's own light, and the two grounds that keep type legible ──
+      The veil is "you are indoors and your eyes have adjusted". The pool is
+      anchored to the reading column, so the photograph stays alive
+      everywhere the reader is not reading. Same material as the nav pill and
+      the hero scrim: an OWNED ground, never a tuned gradient — see
+      design/DESIGN-SYSTEM.md §1.                                          */
+/* MEASURED, not chosen. Cream (#FBF7F2) over the room's brightest pixel — the
+   window at the far end, effectively #FFF — needs the composited ground below
+   L 0.165 to clear 4.5:1, which is an alpha of 0.59 on its own. 0.62 was tried
+   first and measured 7.3:1 at worst across the whole document, i.e. it was
+   spending picture for contrast it did not need; 0.50 plus the pool below still
+   walks clean and gives the room its light back. A CONSTANT, never a gradient
+   tuned per viewport — that is the trap DESIGN-SYSTEM §1 records. */
+.about-a .aa-veil {
+  background: rgba(var(--shade), 0.5);
+  opacity: 0;
+  will-change: opacity;
+}
+/* and on top of it, a pool anchored where the reading column actually is —
+   left, top and bottom — so the picture keeps its light in the one place the
+   reader never reads: the middle right, which is where the room is. */
+.about-a .aa-pool {
+  background:
+    radial-gradient(92% 86% at 2% 48%,
+      rgba(var(--shade), 0.88) 0%, rgba(var(--shade), 0.78) 32%,
+      rgba(var(--shade), 0.42) 60%, rgba(var(--shade), 0) 88%),
+    linear-gradient(to bottom,
+      rgba(var(--shade), 0.62) 0%, rgba(var(--shade), 0.28) 26%, rgba(var(--shade), 0) 48%),
+    linear-gradient(to top,
+      rgba(var(--shade), 0.5) 0%, rgba(var(--shade), 0) 30%);
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* a breath of warm light from the room's windows. Ornament, on the dark only. */
+.about-a .aa-glow {
+  background: radial-gradient(58% 44% at 78% 24%, rgba(193, 97, 60, 0.16) 0%, rgba(193, 97, 60, 0) 72%);
+  pointer-events: none;
+}
+
+/* ── THE PATH ──────────────────────────────────────────────────────────── */
+.about-a .aa-stop {
+  position: relative;
+  padding-inline: var(--aa-rail);
+  padding-inline-end: max(var(--aa-rail), 6vw);
+}
+
+/* The thread. It is the path itself: it runs at the rail, it is crossed and
+   hidden by whatever passes in front of it, and it is ABSENT through the
+   approach — the one stretch of the room with nothing in it. Sand, hairline,
+   ornament; never text. */
+.about-a .aa-stop::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--aa-rail) - 1px);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0%, var(--aa-hair) 9%, var(--aa-hair) 91%, transparent 100%);
+}
+.about-a .aa-stop--app::before { content: none; }
+
+/* the station marker — the same object as `.within__eyebrow`: same size, same
+   tracking, a tick in place of its clay numeral because these are not numbered
+   sections. They are places in one room. */
+.about-a .aa-mark {
+  margin: 0 0 clamp(1.4rem, 3vw, 2.6rem);
+  font-family: var(--font-text);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+  display: flex;
+  align-items: center;
+  gap: 0.85em;
+}
+.about-a .aa-mark::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  flex: none;
+  background: var(--sand);
+}
+.about-a .aa-stop--gui .aa-mark { color: var(--ink-soft, #5C5049); }
+.about-a .aa-stop--gui .aa-mark::before { background: var(--clay); }
+
+/* ── STATION 1 — you come in ───────────────────────────────────────────── */
+.about-a .aa-stop--thr {
+  min-height: var(--aa-h-thr);
+  padding-top: 58svh;
+  padding-bottom: 8svh;
+}
+.about-a .aa-outside {
+  margin: 0;
+  max-width: 30ch;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.14rem);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+}
+.about-a .aa-premise {
+  margin: 46svh 0 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.42rem, 0.86rem + 2.36vw, 2.7rem);
+  line-height: 1.17;
+  letter-spacing: -0.014em;
+  color: var(--ink-onPic);
+  text-wrap: pretty;
+}
+/* Body copy on a photograph lives in the left band this concept scrims, never
+   on the bright far wall. It steps in rather than lining up, so the three
+   opening paragraphs read as three positions in the room, not a column. */
+.about-a .aa-becoming {
+  margin: 24svh 0 0;
+  max-width: 32ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.24vw, 1.08rem);
+  line-height: 1.66;
+  color: var(--ink-onPic-2);
+}
+
+/* ── STATION 2 — the length of the room ────────────────────────────────── */
+.about-a .aa-stop--pur {
+  min-height: var(--aa-h-pur);
+  padding-top: 16svh;
+  padding-bottom: 12svh;
+}
+.about-a .aa-lead {
+  margin: 0 0 24svh;
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.06rem, 0.98rem + 0.42vw, 1.32rem);
+  line-height: 1.42;
+  color: var(--ink-onPic-2);
+}
+/* Four things standing in a room, at four distances — not four items in a
+   list. Their sizes recede (you pass them) and then break the recession on
+   GROW, which is the far end you arrive at. The client's own emphasis. */
+.about-a .aa-thing { margin: 0 0 22svh; }
+.about-a .aa-thing--2 { margin-left: 9%; }
+.about-a .aa-thing--3 { margin-left: 4%; }
+.about-a .aa-thing:last-child { margin-bottom: 0; }
+.about-a .aa-name {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  line-height: 0.94;
+  color: var(--ink-onPic);
+}
+.about-a .aa-line {
+  margin: 0;
+  max-width: 30ch;
+  font-size: clamp(0.96rem, 0.92rem + 0.24vw, 1.06rem);
+  line-height: 1.62;
+  color: var(--ink-onPic-2);
+}
+.about-a .aa-thing--1 { --aa-w: 100%; }
+.about-a .aa-thing--1 .aa-name { font-size: clamp(2.6rem, 1.5rem + 4.6vw, 5.4rem); }
+.about-a .aa-thing--2 .aa-name { font-size: clamp(2.2rem, 1.4rem + 3.5vw, 4.3rem); }
+.about-a .aa-thing--3 .aa-name { font-size: clamp(1.95rem, 1.3rem + 2.8vw, 3.6rem); }
+.about-a .aa-thing--4 .aa-name { font-size: clamp(2.9rem, 1.5rem + 6vw, 6.6rem); }
+.about-a .aa-thing--4 .aa-line { color: var(--ink-onPic); }
+
+/* ── STATION 3 — the held breath ───────────────────────────────────────── */
+.about-a .aa-stop--app {
+  min-height: var(--aa-h-app);
+  padding-top: 26svh;
+  padding-bottom: 24svh;
+}
+.about-a .aa-breath { margin: 0; max-width: 22ch; }
+.about-a .aa-breath--1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.36rem, 0.9rem + 1.95vw, 2.4rem);
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+  color: var(--ink-onPic);
+}
+.about-a .aa-breath--2 {
+  margin-top: 20svh;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.14rem, 0.98rem + 0.7vw, 1.62rem);
+  line-height: 1.34;
+  color: var(--ink-onPic);
+}
+.about-a .aa-breath--3 {
+  margin-top: 20svh;
+  max-width: 46ch;
+  font-size: clamp(0.96rem, 0.92rem + 0.24vw, 1.06rem);
+  line-height: 1.68;
+  color: var(--ink-onPic-2);
+}
+
+/* ── STATION 4 — the room fills ────────────────────────────────────────── */
+.about-a .aa-stop--mem {
+  min-height: var(--aa-h-mem);
+  padding-top: 18svh;
+  padding-bottom: 14svh;
+}
+.about-a .aa-refusal {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.24vw, 1.08rem);
+  line-height: 1.66;
+  color: var(--ink-onPic-2);
+}
+.about-a .aa-strength {
+  margin: 24svh 0 0;
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 1rem + 3vw, 3.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  color: var(--ink-onPic);
+}
+.about-a .aa-rotation {
+  margin: 22svh 0 0;
+  max-width: 40ch;
+  font-size: clamp(1rem, 0.94rem + 0.34vw, 1.16rem);
+  line-height: 1.7;
+  color: var(--ink-onPic-2);
+}
+
+/* ── STATION 5 — you come out ──────────────────────────────────────────── */
+/* The cream is not a section. It is the light at the far end, and it rises
+   over the room because it is in normal flow while the room is pinned behind
+   it. No JavaScript is involved in the arrival at all. */
+.about-a .aa-stop--gui {
+  min-height: var(--aa-h-gui);
+  padding-top: 26svh;
+  padding-bottom: 24svh;
+  background: var(--ground);
+  color: var(--ink);
+}
+.about-a .aa-stop--gui::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 34svh;
+  background: linear-gradient(to bottom,
+    rgba(251, 247, 242, 0) 0%, rgba(251, 247, 242, 0.1) 26%,
+    rgba(251, 247, 242, 0.44) 58%, rgba(251, 247, 242, 0.86) 84%, var(--ground) 100%);
+  pointer-events: none;
+}
+.about-a .aa-stop--gui::before {
+  background: linear-gradient(to bottom, rgba(193, 97, 60, 0.5) 0%, rgba(193, 97, 60, 0) 88%);
+}
+.about-a .aa-guiding {
+  margin: 0;
+  max-width: 13ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.1rem + 4.4vw, 5rem);
+  line-height: 1.04;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+}
+
+/* ── reveals. Namespaced; the driver opts in with `.aa-live`, so nothing is
+      ever hidden from a reader whose JavaScript never arrives.            */
+.about-a.aa-live [data-ar] { opacity: 0; transform: translateY(22px); }
+.about-a.aa-live [data-ar='far'] { transform: translateY(30px) scale(0.94); }
+.about-a.aa-live [data-ar].aa-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.95s var(--ease), transform 1.15s var(--ease);
+  transition-delay: var(--aa-d, 0ms);
+}
+
+/* ── WIDE — the room gets its length back ──────────────────────────────── */
+@media (min-width: 861px) {
+  .about-a {
+    --aa-h-thr: 172svh;
+    --aa-h-pur: 268svh;
+    --aa-h-app: 152svh;
+    --aa-h-mem: 176svh;
+    --aa-h-gui: 98svh;
+  }
+
+  .about-a .aa-pl--door { top: 6svh; width: min(34vw, 28rem); margin-left: max(-17vw, -14rem); }
+
+  .about-a .aa-outside { margin-left: 0; }
+  .about-a .aa-premise { margin-left: 0; max-width: 22ch; }
+  .about-a .aa-becoming { margin-left: 11%; max-width: 32ch; }
+
+  /* the four distances */
+  .about-a .aa-thing--1 { margin-left: 0; }
+  .about-a .aa-thing--2 { margin-left: 46%; }
+  .about-a .aa-thing--3 { margin-left: 13%; }
+  .about-a .aa-thing--4 { margin-left: 31%; }
+  .about-a .aa-thing { margin-bottom: 26svh; }
+  .about-a .aa-thing--3 { margin-bottom: 32svh; }
+
+  .about-a .aa-breath--1 { max-width: 20ch; }
+  .about-a .aa-breath--2 { margin-left: 20%; }
+  .about-a .aa-breath--3 { margin-left: 38%; max-width: 44ch; }
+
+  .about-a .aa-strength { margin-left: 8%; max-width: 15ch; }
+  .about-a .aa-rotation { margin-left: 30%; max-width: 38ch; }
+
+  .about-a .aa-stop--gui { padding-top: 34svh; padding-bottom: 28svh; }
+}
+
+@media (min-width: 1500px) {
+  .about-a .aa-thing--1 .aa-name { font-size: 5.6rem; }
+  .about-a .aa-thing--4 .aa-name { font-size: 7rem; }
+  .about-a .aa-premise { font-size: 2.9rem; }
+  .about-a .aa-guiding { font-size: 5.4rem; }
+}
+/* At 2560 the room is enormous and the type stops holding the frame, so the display
+   sizes take one more step. The rail does not: `--rail` caps at 4.25rem, which is the
+   left edge the hero and the approved section already share. */
+@media (min-width: 1900px) {
+  .about-a .aa-thing--1 .aa-name { font-size: 6.6rem; }
+  .about-a .aa-thing--2 .aa-name { font-size: 5.2rem; }
+  .about-a .aa-thing--3 .aa-name { font-size: 4.4rem; }
+  .about-a .aa-thing--4 .aa-name { font-size: 8.4rem; }
+  .about-a .aa-premise { font-size: 3.4rem; max-width: 20ch; }
+  .about-a .aa-strength { font-size: 4rem; }
+  .about-a .aa-breath--1 { font-size: 3rem; }
+  .about-a .aa-guiding { font-size: 6.6rem; }
+  .about-a .aa-outside,
+  .about-a .aa-becoming,
+  .about-a .aa-line,
+  .about-a .aa-refusal,
+  .about-a .aa-breath--3 { font-size: 1.16rem; }
+  .about-a .aa-rotation { font-size: 1.28rem; }
+}
+
+/* ── THE STILL ROOM — reduced motion, and no script at all ────────────────
+   The room stops being a camera and becomes a set of stills, each anchored to
+   the station it belongs to (`--aa-at`, in svh from the section top). Nothing
+   moves, nothing is hidden, every word is in place, and the composition —
+   bled, masked, overlapping, occluding — survives intact, because the
+   composition was never the animation.
+
+   Two routes reach it: `.aa-still`, which the driver adds when the reader has
+   asked for reduced motion, and `html:not(.js)`, which is set before first
+   paint for a reader who has no JavaScript at all.                          */
+html:not(.js) .about-a .aa-far,
+html:not(.js) .about-a .aa-near,
+.about-a.aa-still .aa-far,
+.about-a.aa-still .aa-near {
+  position: absolute;
+  /* `left`/`right` are not optional here. An absolutely positioned box with neither
+     shrink-to-fit its width, and this one's only child is itself absolute — so it
+     collapsed to zero width, and `overflow: clip` on the walls then hid the entire
+     still room. It rendered as an empty dark page for reduced-motion readers. */
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+}
+html:not(.js) .about-a .aa-space,
+.about-a.aa-still .aa-space { height: 100%; }
+/* `--aa-at` is a PERCENTAGE of the traverse, not a number of viewport heights: the
+   stations do not occupy the same number of viewports on a phone as on a desktop, so
+   an svh anchor put the still room's pictures in the wrong stations at 390px. */
+html:not(.js) .about-a .aa-space > *,
+.about-a.aa-still .aa-space > * {
+  top: calc(var(--aa-at, 0) * 1%);
+  bottom: auto;
+}
+/* In the still room the foreground drops BEHIND the words. Occlusion is a thing the
+   camera does; with the camera stopped it would just be content covered up, which is
+   the one thing reduced motion must never produce. */
+html:not(.js) .about-a .aa-near,
+.about-a.aa-still .aa-near { z-index: 0; }
+/* No veil and no pool in the still room — a fixed pool cannot follow a column
+   of text it can no longer predict. Instead each still sits BEHIND the words at
+   a fixed opacity on the deep ground, which is a measured constant rather than
+   a gradient tuned per viewport. See DESIGN-SYSTEM §1. */
+html:not(.js) .about-a .aa-veil,
+html:not(.js) .about-a .aa-pool,
+.about-a.aa-still .aa-veil,
+.about-a.aa-still .aa-pool { display: none; }
+
+html:not(.js) .about-a .aa-pl,
+html:not(.js) .about-a .aa-fg,
+.about-a.aa-still .aa-pl,
+.about-a.aa-still .aa-fg { opacity: 0.3; transform: none; }
+html:not(.js) .about-a .aa-pl--door,
+.about-a.aa-still .aa-pl--door { opacity: 0.62; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .about-a [data-ar] { opacity: 1 !important; transform: none !important; }
+  .about-a .aa-pl,
+  .about-a .aa-fg { transition: none !important; }
+}
+
+/* ── Comparison scaffolding (deleted with the preview routes) ───────── */
+.cmp { background: var(--ground); color: var(--ink); padding: 3rem var(--page) 6rem; }
+.cmp__head h1 { font-family: var(--font-display); font-size: clamp(1.6rem,1.2rem+1.8vw,2.6rem);
+  font-weight: 400; letter-spacing: -0.02em; margin: 0 0 0.6rem; }
+.cmp__head p { color: var(--ink-soft); max-width: 62ch; margin: 0 0 2rem; font-size: 15px; }
+.cmp__head a { color: var(--teal-deep); font-weight: 600; }
+.cmp__legend { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  padding: 1.25rem 0; margin-bottom: 3rem; }
+.cmp__legend div { display: flex; flex-direction: column; gap: 0.25rem; }
+.cmp__legend b { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; }
+.cmp__legend span { font-size: 14px; color: var(--ink-soft); }
+.cmp__legend i { font: 500 11px/1 var(--font-text); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--clay-deep); font-style: normal; }
+.cmp__row { margin-bottom: 4.5rem; }
+.cmp__label { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap;
+  border-bottom: 2px solid var(--ink); padding-bottom: 0.7rem; margin-bottom: 1.5rem; }
+.cmp__n { font: 600 13px/1 var(--font-text); letter-spacing: 0.14em; color: var(--clay-deep); margin: 0; }
+.cmp__label h2 { font-family: var(--font-display); font-size: clamp(1.4rem,1.1rem+1.2vw,2rem);
+  font-weight: 400; margin: 0; }
+.cmp__content { margin: 0; font-size: 14px; color: var(--ink-soft); flex: 1 1 20rem; }
+.cmp__grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); }
+.cmp__grid figure { margin: 0; }
+.cmp__grid img { width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top;
+  border: 1px solid var(--rule); border-radius: 3px; background: var(--ground-warm);
+  transition: transform 0.4s var(--ease); }
+.cmp__grid a:hover img { transform: scale(1.012); }
+.cmp__grid figcaption { margin-top: 0.7rem; font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
+.cmp__grid figcaption b { display: block; color: var(--ink); font-family: var(--font-display);
+  font-size: 15px; font-weight: 500; margin-bottom: 0.2rem; }
+.cmp__round { margin-bottom: 6rem; }
+.cmp__roundTitle { font-family: var(--font-display); font-size: clamp(1.5rem,1.1rem+1.6vw,2.3rem);
+  font-weight: 400; letter-spacing: -0.02em; margin: 0 0 0.4rem; padding-top: 2rem;
+  border-top: 3px solid var(--ink); }
+.cmp__roundBlurb { margin: 0 0 1.5rem; color: var(--ink-soft); font-size: 15px; max-width: 66ch; }
+.cmp__legend b a { color: inherit; text-decoration: none; border-bottom: 2px solid var(--clay); }
+.cmp__legend b a:hover { color: var(--clay-deep); }
+.cmp__legend u { font-size: 12px; color: var(--clay-deep); text-decoration: none;
+  font-weight: 600; letter-spacing: 0.01em; }
+.cmp__label h3 { font-family: var(--font-display); font-size: clamp(1.25rem,1rem+1vw,1.7rem);
+  font-weight: 400; margin: 0; }

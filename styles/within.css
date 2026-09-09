@@ -1,629 +1,922 @@
-/* within — owned solely by the within section. No other file may declare these selectors.
-   ══════════════════════════════════════════════════════════════════════════════════════
-   PAGE 2 — "What Happens Within Yoga Mandala".
+/* within — owned solely by PAGE 2, "What Happens Within Yoga Mandala".
+   No other file may declare these selectors. Everything is prefixed `wi-`.
+   ══════════════════════════════════════════════════════════════════════════
 
-   Everything is prefixed `wi-`. globals.css already owns `.within`, `.reg` and `.cap` for
-   the About page's second section and for the hero's provenance line — `.cap` in particular
-   is `position: absolute; display: none` by the time the cascade is finished, so this file
-   carries its own `.wi-cap` rather than borrowing it.
+   "SHOW IT HAPPENING. DO NOT DESCRIBE IT."
 
-   The page's problem is that it is mostly lists: 5 phrases, then 7, then 7, then 6, then two
-   more sets of 6 and 7. Three devices carry it:
+   Promoted verbatim from the approved tournament concept (`/preview/within-b/`,
+   `styles/preview-within-b.css`); this file is that stylesheet re-namespaced from
+   `.within-b` to `.wi` and nothing else. The preview is kept intact for the client's
+   own comparison, so the two are parallel rather than shared.
 
-     1. THE REGISTER. The phrases are one to four words. Set at 1.05–1.4rem in the display
-        face with a hairline above each row and two columns from 720px up, twenty-five
-        bullet points become an index — the same information with a rhythm.
-     2. THE STICKY RAIL. From 900px the chapter's number and name are `position: sticky`, so
-        the idea stays beside its list for the whole of it. CSS only: no scroll listener, no
-        writes to scroll position, and nothing to undo under `prefers-reduced-motion`.
-     3. TWO MATERIALS. The four ideas are a dark ledger; the initiatives come back onto
-        paper as panels, with their lists set as phrases in a field rather than ruled rows.
-        Two content types, two objects — not one template wearing two hats.
+   The page is mostly lists, and a list rendered as a list is what got the last two
+   builds rejected. So the list is never the object here: it is pinned to the
+   photograph that proves it. One material does the whole job — the navigation pill's
+   own ground, rgba(--shade, 0.82) with a cream hairline — because it is the only
+   surface on this site whose contrast is a CONSTANT rather than a function of the
+   pixel underneath. That is what lets a chip straddle a photograph and a sheet of
+   paper in one piece.
 
-   Colour is measured, not chosen. On --ground-deep: cream is 16.6:1, rgba(cream,0.72) is
-   9.0:1 and rgba(cream,0.62) is 7.0:1 — but rgba(cream,0.38) is 3.4:1 and fails, which is
-   why no label here is dimmer than 0.62. On --ground-warm: ink 13.8:1, --ink-soft 6.5:1,
-   --teal-deep 6.2:1, --clay-deep 5.3:1. Sand and clay stay ornament, as §1 of the design
-   system requires: sand is the tick on the dark, clay is the hairline on the paper.
-   ══════════════════════════════════════════════════════════════════════════════════════ */
+   `.cap`, the site's shared caption class, is `position: absolute; display: none` by
+   the time the hero layer has finished with it — it is the hero's no-JS provenance
+   line — so this file carries its own `.wi-lbl__where` in the same caption language
+   rather than borrowing it. Borrowing it deletes every date on this page.
+
+   Measured, not guessed:
+     · cream on rgba(16,12,10,0.82) over CREAM PAPER  → 11.2:1
+     · cream on rgba(16,12,10,0.82) over WHITE GLARE  → 11.0:1
+     · sand  #F6D9C1 on --ground-deep #1C1714         → 13.4:1  (sand is only
+       barred from PHOTOGRAPHS, where it measured 4.0:1 — see DESIGN-SYSTEM §1)
+     · --clay-deep #9C4526 on cream                   → 5.98:1  (the numerals;
+       plain --clay is 3.90 and stays a hairline, as the system requires)
+   ══════════════════════════════════════════════════════════════════════════ */
 
 .wi {
-  --wi-max: 82rem;              /* the reading measure, centred at any width up to 2560 */
-  --wi-stick: clamp(6rem, 14vh, 8rem);      /* sticky offset — clears the fixed pill */
-  --wi-line: rgba(251, 247, 242, 0.16);     /* the rule on the dark ground */
-  --wi-dim: rgba(251, 247, 242, 0.62);      /* 7.0:1 — the floor for a label on the dark */
+  --wi-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  /* 92rem is the About page's own --ab-max: the measure is shared with the rest of
+     the site rather than invented here. */
+  --wi-max: 92rem;
+  --wi-nav: clamp(6.6rem, 14svh, 9.5rem);
+  --wi-dip: clamp(2.2rem, 6svh, 5rem);
+  --wi-winH: clamp(196px, 42svh, 460px);
+  /* how far the chip run hangs off the aperture's inner edge, and the gutter it
+     crosses. Both are named because the say column has to be padded by the
+     difference, or the run walks straight over the pillar's own numeral — which
+     is what it did at 1024x768, measured at 1.93:1. */
+  --wi-over: 0px;
+  --wi-gapx: clamp(2rem, 5vw, 4rem);
+
+  /* the one material. Its alpha is high enough that the backdrop stops
+     mattering, which is the entire point — see the header. */
+  --wi-plate-bg: rgba(var(--shade), 0.82);
+  --wi-plate-line: rgba(251, 247, 242, 0.22);
+
+  background: var(--ground);
+  color: var(--ink);
   display: block;
 }
 
-/* Ink on cream inside a cream halo; the global treatment is built for a photograph. The
-   dark rule is second so it wins for anything that ends up inside the ledger. */
-.wi :focus-visible {
+/* Focus on the paper half inverts: an ink ring inside a cream halo. The global
+   treatment is built for a photograph; on the dark half of this page it is already
+   correct and is left alone. */
+.wi .wi-p :focus-visible {
   outline-color: #241d18;
   box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
 }
-.wi-dark :focus-visible {
-  outline-color: #fbf7f2;
-  box-shadow: 0 0 0 4px rgba(var(--shade), 0.92);
-}
 
-/* ── the reveal ────────────────────────────────────────────────────────
-   Opt-in: without `is-live` — no JS, or reduce — none of this applies and the page is
-   simply complete. Opacity and transform only, and nothing is ever clipped, because
-   IntersectionObserver measures after clips and an element clipped to zero never fires. */
-.wi.is-live [data-wr] { opacity: 0; }
-.wi.is-live [data-wr='up'] { transform: translateY(20px); }
-.wi.is-live [data-wr].in {
-  opacity: 1;
+/* ══ REVEALS ═══════════════════════════════════════════════════════════════
+   Gated on `.is-live`, which only the client island adds and only when motion
+   is allowed. With no JavaScript, or under prefers-reduced-motion, none of
+   these start states ever exist and the page is simply finished.
+
+   NO TEXT ON THIS PAGE EVER ANIMATES ITS OPACITY. A fade is the usual way to
+   bring a block in, and it means that for most of a second every word is
+   sitting at a fraction of its stated contrast — measure a heading 300 ms into
+   its own entrance and it reads 1.3:1. Here the type only ever translates, so
+   its contrast is identical in every frame of every transition and the number
+   the probe reports at rest is the number a reader gets at any moment. Only
+   the PICTURES fade, and a picture has no ratio to fail.
+   ════════════════════════════════════════════════════════════════════════ */
+.js .wi.is-live [data-wi='up'] { transform: translateY(24px); }
+.js .wi.is-live [data-wi='chip'] { transform: translateY(14px); }
+.js .wi.is-live [data-wi='fig'] { transform: translateY(18px); }
+.js .wi.is-live [data-wi='fig'] .wi-fig__mask,
+.js .wi.is-live [data-wi='fig'] .wi-plate__mask { opacity: 0; }
+
+.js .wi.is-live [data-wi].in {
   transform: none;
-  transition: opacity 0.7s var(--ease), transform 0.9s var(--ease);
-  transition-delay: var(--wd, 0ms);
+  transition: transform 0.95s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.js .wi.is-live [data-wi='fig'].in .wi-fig__mask,
+.js .wi.is-live [data-wi='fig'].in .wi-plate__mask {
+  opacity: 1;
+  transition: opacity 0.9s var(--ease);
 }
 
-/* ══ THE MASTHEAD ══════════════════════════════════════════════════════
-   The hero opens with a moving photograph and sets its type inside the picture. This opens
-   with the exact opposite: no picture, and the four ideas as a quartered figure on warm
-   paper. The quadrant is the page's index — every cell is a jump to its chapter. */
+@media (prefers-reduced-motion: reduce) {
+  .js .wi [data-wi] { transform: none !important; }
+  .js .wi [data-wi] .wi-fig__mask,
+  .js .wi [data-wi] .wi-plate__mask { opacity: 1 !important; }
+  .js .wi [data-wi].in { transition: none !important; }
+}
+
+/* ══ 00 · THE MASTHEAD ═════════════════════════════════════════════════════
+   Four windows cut through the page, one per idea, showing the footage each
+   section opens into. They hang off the bottom of the dark band and cross into
+   the paper below, so the handover happens THROUGH the pictures rather than at
+   a seam under them — the same move the approved hero makes with its overlap.
+   ════════════════════════════════════════════════════════════════════════ */
 .wi-mast {
-  max-width: calc(var(--wi-max) + 2 * var(--rail));
-  margin-inline: auto;
-  padding: clamp(6.5rem, 16vh, 10rem) var(--rail) clamp(2.5rem, 6vw, 4.5rem);
-}
-.wi-mast::before {
-  content: '';
-  display: block;
-  height: 1px;
-  background: var(--clay);
-  margin-bottom: clamp(1.1rem, 2.4vw, 1.7rem);
-}
-.wi-mast__eyebrow {
-  margin: 0;
-  font: 600 11.5px/1.5 var(--font-text);
-  letter-spacing: 0.19em;
-  text-transform: uppercase;
-  color: var(--teal-deep);
-  /* the client's four pillar words, which do not fit on one line under 390px. Balanced, the
-     break lands mid-register and reads as a set on two lines; unbalanced it drops a single
-     orphaned SHARE under thirty characters of the others. */
-  text-wrap: balance;
-}
-.wi-mast__h {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(2.4rem, 1.1rem + 5vw, 5rem);
-  font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.032em;
-  margin: clamp(0.9rem, 2vw, 1.4rem) 0 0;
-  max-width: 19ch;
-  color: var(--ink);
-}
-.wi-mast__lead {
-  margin: clamp(1.2rem, 2.6vw, 1.9rem) 0 0;
-  max-width: 34ch;
-  font-size: clamp(1.0625rem, 0.98rem + 0.42vw, 1.25rem);
-  line-height: 1.62;
-  color: var(--ink-soft);
-}
-
-/* the quadrant. 1px gaps over a rule-coloured ground draw the cross without four sets of
-   borders meeting at a seam. */
-.wi-quad {
-  margin-top: clamp(2.2rem, 5.5vw, 3.6rem);
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--rule);
-  border: 1px solid var(--rule);
-}
-.wi-quad__c {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto 1fr;
-  align-items: end;
-  /* The word owns the full width of the cell and the arrow sits up beside the number. Sharing
-     a row with the arrow cost "Collaborate" 25px it did not have at 320 and again at 1024,
-     where the masthead splits in two and the cell is at its narrowest. */
-  grid-template-areas:
-    'n a'
-    'w w';
-  gap: clamp(1.1rem, 3vw, 2.2rem) 0.6rem;
-  min-height: clamp(7rem, 16vh, 10rem);
-  padding: clamp(0.9rem, 2.2vw, 1.8rem);
-  background: var(--ground-warm);
-  color: var(--ink);
-  text-decoration: none;
-  transition: background 0.35s var(--ease);
-}
-.wi-quad__c:hover,
-.wi-quad__c:focus-visible { background: var(--ground); }
-.wi-quad__n {
-  grid-area: n;
-  align-self: start;
-  font: 600 11px/1 var(--font-text);
-  letter-spacing: 0.2em;
-  color: var(--clay-deep);
-}
-.wi-quad__w {
-  grid-area: w;
-  align-self: end;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  /* Two ramps, because the cell has two lives: full width of the page below 1024, and half
-     of a 0.82fr column above it, where it is at its narrowest anywhere. One clamp either
-     starved the wide cell or overflowed "Collaborate" in the narrow one. */
-  font-size: clamp(1.18rem, 0.5rem + 2.6vw, 2.6rem);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.022em;
-}
-.wi-quad__arw {
-  grid-area: a;
-  align-self: start;
-  justify-self: end;
-  margin-top: 0.1em;
-  color: var(--clay-deep);
-  transition: transform 0.4s var(--ease);
-}
-.wi-quad__c:hover .wi-quad__arw,
-.wi-quad__c:focus-visible .wi-quad__arw { transform: translateX(4px); }
-
-/* ══ THE LEDGER ════════════════════════════════════════════════════════ */
-.wi-dark {
+  position: relative;
+  z-index: 2;
   background: var(--ground-deep);
   color: var(--ink-onPic);
+  padding: var(--wi-nav) var(--wi-rail) 0;
+  /* A BLOCK FORMATTING CONTEXT, and it is load-bearing. The windows carry a negative
+     bottom margin so they hang past the horizon into the paper; with no BFC that margin
+     collapses straight out of this box, shortens the masthead AND drags the next section
+     up by the same amount, so the crossing cancels itself out exactly. */
+  display: flow-root;
 }
-
-/* the lintel — the only wide picture on the page, and it carries no type. A fixed height
-   rather than an aspect ratio, so a 2560 screen is not given a 1100px photograph. */
-.wi-lint { margin: 0; }
-.wi-lint img {
+.wi-mast > * {
   width: 100%;
-  height: clamp(240px, 52svh, 620px);
-  object-fit: cover;
-  /* the frame is 16:9 and the band is far wider than that, so the crop takes the top of the
-     room with it — 32% keeps the raised hands inside the frame instead of slicing fingers.
-     On a phone the band is taller than it is wide and the crop turns vertical: a slice
-     through the middle of the class, which is why no mobile object-position is needed. */
-  object-position: 50% 32%;
+  max-width: var(--wi-max);
+  margin-inline: auto;
 }
 
-.wi-cap {
-  margin: 0.85rem 0 0;
+.wi-mast__dates {
+  margin: 0 0 clamp(1.1rem, 3svh, 2rem);
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.wi-mast__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.45rem, 1.3rem + 5.6vw, 5.9rem);
+  line-height: 0.97;
+  letter-spacing: -0.032em;
+  max-width: 15ch;
+  text-wrap: balance;
+  color: var(--ink-onPic);
+}
+.wi-mast__lead {
+  margin: clamp(1.1rem, 3svh, 1.9rem) 0 0;
+  font-size: clamp(1.02rem, 0.96rem + 0.34vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+  max-width: 38ch;
+}
+
+.wi-wins {
+  list-style: none;
+  padding: 0;
+  margin: clamp(2.2rem, 7svh, 4.6rem) auto calc(-1 * var(--wi-dip));
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.85fr;
+  gap: clamp(5px, 0.85vw, 13px);
+  align-items: end;
+  position: relative;
+  z-index: 3;
+}
+.wi-wins__i { height: calc(var(--wi-winH) * var(--k, 1)); min-width: 0; }
+
+.wi-win {
+  display: block;
+  position: relative;
+  height: 100%;
+  text-decoration: none;
+  color: var(--ink-onPic);
+}
+.wi-win__mask {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  border-radius: 50% 50% 3px 3px / 17% 17% 3px 3px;
+  background: #0f0c0a;
+}
+.wi-win__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease);
+}
+.wi-win:hover .wi-win__img,
+.wi-win:focus-visible .wi-win__img { transform: scale(1.045); }
+/* the global focus ring is a 3px-radius rectangle; on an arch it reads as a stray box.
+   Same treatment, following the window's own shape. */
+.wi-win:focus-visible {
+  border-radius: 50% 50% 3px 3px / 17% 17% 3px 3px;
+  outline-offset: 3px;
+}
+
+/* The window label sits clear of the dome. Its ground is the pill's, so it is
+   legible over whatever frame happens to be behind it. */
+.wi-win__lbl {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 14%;
+  width: max-content;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 0.4rem 0.75rem 0.46rem;
+  border-radius: 3px;
+  background: var(--wi-plate-bg);
+  border: 1px solid var(--wi-plate-line);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.wi-win__no {
+  font-family: var(--font-display);
+  font-size: clamp(14px, 1.1vw, 17px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--sand);
+}
+.wi-win__name {
+  font: 600 10.5px/1.2 var(--font-text);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-onPic);
+  white-space: nowrap;
+}
+/* Under 780px the windows are pickets and a word will not fit in one. The name
+   stays in the accessible name of the link — it is never removed from the DOM,
+   only from the picture. */
+@media (max-width: 779.98px) {
+  .wi-win__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .wi-win__lbl { top: 11%; padding: 0.3rem 0.5rem 0.34rem; }
+}
+
+/* ══ 01 · 02 · 03 — THE ARCHES ═════════════════════════════════════════════
+   A tall aperture with a domed head, alternating sides; the picture drifts
+   inside it as the reader passes. The pillar's items straddle its inner edge.
+   ════════════════════════════════════════════════════════════════════════ */
+.wi-p {
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  padding: clamp(3.6rem, 11svh, 8rem) var(--wi-rail);
+  background: var(--ground);
+}
+.wi-p[data-side='left'] { background: var(--ground-warm); }
+.wi #wi-01 { padding-top: calc(var(--wi-dip) + clamp(3.4rem, 9svh, 6.5rem)); }
+
+.wi-p__in {
+  max-width: var(--wi-max);
+  margin-inline: auto;
+  display: grid;
+  gap: var(--wi-gapx);
+}
+
+.wi-p__no {
+  margin: 0 0 0.1em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 1.5rem + 9vw, 11.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  /* --clay-deep, 5.98:1. Plain --clay measures 3.90 and stays a hairline. */
+  color: var(--clay-deep);
+}
+.wi-p__name {
+  margin: 0 0 clamp(0.9rem, 2.4svh, 1.6rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.1rem + 4.4vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+.wi-p__first {
+  margin: 0 0 0.75em;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.2rem, 1rem + 1.1vw, 1.85rem);
+  line-height: 1.34;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  max-width: 26ch;
+}
+.wi-p__line {
+  margin: 0 0 0.7em;
+  font-size: clamp(1rem, 0.96rem + 0.26vw, 1.12rem);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 42ch;
+}
+.wi-p__lead {
+  margin: clamp(1rem, 2.6svh, 1.7rem) 0 0;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.wi-p__lead::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+  vertical-align: middle;
+  margin-right: 0.7em;
+  transform: translateY(-1px);
+}
+
+/* ── the aperture ─────────────────────────────────────────────────────── */
+.wi-fig {
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+  min-width: 0;
+}
+.wi-fig__mask {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  display: block;
+  overflow: clip;
+  aspect-ratio: 0.63;
+  /* The cap matters more than the ratio: unchecked, a 34vw column at 1440 makes an
+     arch 870px tall and the pillar becomes a screen and a half of mostly paper.
+     object-fit absorbs the difference. */
+  max-height: min(80svh, 760px);
+  border-radius: 50% 50% 4px 4px / 21% 21% 4px 4px;
+  background: var(--ground-deep);
+}
+.wi-fig__mask picture { position: absolute; inset: 0; display: block; }
+.wi-fig__img,
+.wi-fig__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  /* the drift. --wi-y is written once per frame by the island and is 0 until
+     then, so this is the identity transform under reduced motion and no-JS. */
+  transform: translate3d(0, calc(var(--wi-y, 0) * -4.5%), 0) scale(1.085);
+  will-change: transform;
+}
+/* The poster never leaves. The loop fades in on top of it only once it has
+   proven it is playing, so a stall, an eviction or a blocked autoplay shows a
+   photograph rather than a black rectangle. */
+.wi-fig__vid { opacity: 0; transition: opacity 0.7s var(--ease-io); }
+.wi-fig__vid.is-live { opacity: 1; }
+
+/* ── the chips: the list, pinned to the evidence ──────────────────────── */
+.wi-chips {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: end;
+  justify-self: start;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 clamp(1.1rem, 3svh, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(5px, 0.85svh, 10px);
+  max-width: calc(100% + var(--wi-over));
+}
+.wi-chip { margin: 0; }
+.wi-chip__in {
+  display: inline-block;
+  background: var(--wi-plate-bg);
+  border: 1px solid var(--wi-plate-line);
+  border-radius: 3px;
+  color: var(--ink-onPic);
+  font: 500 clamp(12.5px, 0.5rem + 0.4vw, 15px) / 1.3 var(--font-text);
+  padding: 0.5em 0.85em;
+  /* The first shadow is a 1.5px SOLID ring of the chip's own ground, and it is not
+     decoration. A label on a MOVING picture has a hairline of film along its edge
+     where the border antialiases, and that hairline changes every video frame — the
+     contrast probe builds its glyph mask by diffing two screenshots 400 ms apart, so
+     it reads that row as text and samples it against the film: 10% of the pixels it
+     scored for one chip were a single row of somebody's kurta, at 1.44:1. The ring
+     makes the edge the chip's own colour in both frames. It is also simply a better
+     edge to read against footage. */
+  box-shadow: 0 0 0 1.5px #1c1714, 0 10px 26px rgba(16, 12, 10, 0.26);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.wi-chip__in::before {
+  content: '';
+  display: inline-block;
+  width: 13px;
+  height: 1px;
+  background: var(--sand);
+  vertical-align: middle;
+  margin-right: 0.62em;
+  transform: translateY(-1px);
+}
+
+/* ── the wall label ───────────────────────────────────────────────────── */
+.wi-lbl {
+  grid-row: 2;
+  grid-column: 1;
+  margin: clamp(0.85rem, 2svh, 1.35rem) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.wi-lbl__what {
+  font: 400 13px/1.45 var(--font-text);
+  color: var(--ink-soft);
+  max-width: 44ch;
+}
+/* NOT the global `.cap`. That class is `position: absolute; display: none` by the
+   time the hero layer has finished with it — it is the hero's own no-JS provenance
+   line — so borrowing it silently deletes every date on this page. The rejected
+   build of this page hit exactly that and carried its own caption class; this is the
+   same move, in the same caption language: a hairline tick, then 11px uppercase. */
+.wi-lbl__where {
   display: flex;
   align-items: baseline;
-  gap: 0.65em;
-  font: 500 11px/1.4 var(--font-text);
-  letter-spacing: 0.12em;
+  gap: 0.62em;
+  font: 400 11px/1.5 var(--font-text);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-onDark-soft);
+  color: var(--ink-soft);
 }
-.wi-cap::before {
+.wi-lbl__where::before {
   content: '';
   flex: none;
   width: 18px;
   height: 1px;
-  background: var(--sand);
-  transform: translateY(-0.32em);
+  background: var(--clay);
+  transform: translateY(-4px);
 }
-.wi-lint .wi-cap {
-  max-width: calc(var(--wi-max) + 2 * var(--rail));
-  margin-inline: auto;
-  padding: 0 var(--rail);
+.wi-onDark .wi-lbl__what,
+.wi-room__lbl .wi-lbl__what,
+.wi-plate__cap .wi-lbl__what { color: var(--ink-onPic-2); }
+.wi-onDark .wi-lbl__where,
+.wi-room__lbl .wi-lbl__where,
+.wi-plate__cap .wi-lbl__where { color: rgba(251, 247, 242, 0.8); }
+.wi-onDark .wi-lbl__where::before,
+.wi-room__lbl .wi-lbl__where::before,
+.wi-plate__cap .wi-lbl__where::before { background: var(--sand); }
+
+/* ── desktop: the arch takes a column and the chips cross into the text ── */
+@media (min-width: 880px) {
+  .wi-p__in {
+    --wi-over: clamp(1.75rem, 7vw, 7rem);
+    grid-template-columns: minmax(0, 34rem) clamp(19rem, 34vw, 31rem);
+    justify-content: space-between;
+    /* END, not centre. Centring left a hole under the last line of prose exactly the
+       height of the arch's overhang; hanging both columns from the same baseline puts
+       that space above the numeral instead, where it reads as the section's own air. */
+    align-items: end;
+  }
+  .wi-p[data-side='left'] .wi-p__in {
+    grid-template-columns: clamp(19rem, 34vw, 31rem) minmax(0, 34rem);
+  }
+  .wi-p[data-side='left'] .wi-p__say { order: 2; }
+  .wi-p[data-side='left'] .wi-fig { order: 1; }
+
+  /* the straddle. Half a chip on the photograph, half on the paper. */
+  .wi-p[data-side='right'] .wi-chips { margin-left: calc(-1 * var(--wi-over)); }
+  .wi-p[data-side='right'] .wi-chip { margin-left: calc(var(--n) * clamp(4px, 1vw, 15px)); }
+
+  .wi-p[data-side='left'] .wi-chips {
+    justify-self: end;
+    align-items: flex-end;
+    margin-right: calc(-1 * var(--wi-over));
+  }
+  .wi-p[data-side='left'] .wi-chip { margin-right: calc(var(--n) * clamp(4px, 1vw, 15px)); }
+  /* the run crosses the gutter; whatever is left of the overhang is kept clear of
+     the type by padding, not by hoping the two never meet. */
+  .wi-p[data-side='left'] .wi-p__say { padding-left: max(0px, calc(var(--wi-over) - var(--wi-gapx))); }
+  /* data-side="right" needs none: there the say column is on the LEFT and its type is
+     left-aligned inside a measure narrower than the column, so the overhang lands in
+     slack. Only the mirrored case puts type where the run arrives. */
+  .wi-p[data-side='left'] .wi-lbl { align-items: flex-end; text-align: right; }
+  .wi-p[data-side='left'] .wi-lbl__where { flex-direction: row-reverse; }
 }
 
-.wi-chapters {
-  max-width: calc(var(--wi-max) + 2 * var(--rail));
-  margin-inline: auto;
-  padding: 0 var(--rail) clamp(3rem, 7vw, 5.5rem);
+/* ── phone: the arch runs edge to edge and the chips sit inside it ─────── */
+@media (max-width: 879.98px) {
+  .wi-fig { margin-inline: calc(-1 * var(--wi-rail)); }
+  .wi-fig__mask { aspect-ratio: 0.78; border-radius: 42% 42% 3px 3px / 13% 13% 3px 3px; }
+  .wi-chips {
+    padding-left: var(--wi-rail);
+    padding-right: var(--wi-rail);
+    max-width: 100%;
+  }
+  .wi-chip { margin-left: calc(var(--n) * clamp(3px, 1.4vw, 9px)); }
+  .wi-chip__in { max-width: min(30ch, calc(100vw - 2 * var(--wi-rail) - 12px)); }
+  .wi-lbl { padding-inline: var(--wi-rail); }
 }
 
-.wi-ch {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.4rem, 3vw, 2rem);
-  padding-block: clamp(2.6rem, 6vw, 5rem);
-  border-top: 1px solid var(--wi-line);
-  /* an in-page target must never land under the fixed pill */
-  scroll-margin-top: clamp(4.75rem, 11vh, 6.5rem);
-}
-.wi-chapters > .wi-ch:first-child { border-top: 0; padding-top: clamp(2.2rem, 5vw, 3.6rem); }
-
-.wi-ch__no {
-  margin: 0;
-  font: 600 11.5px/1 var(--font-text);
-  letter-spacing: 0.2em;
-  color: var(--wi-dim);
-}
-.wi-ch__name {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(2.15rem, 1.35rem + 3.4vw, 3.4rem);
-  font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: -0.028em;
-  margin: clamp(0.5rem, 1.4vw, 0.85rem) 0 0;
-  color: var(--ink-onPic);
-}
-.wi-ch__tick {
-  display: block;
-  width: 2.4rem;
-  height: 2px;
-  border-radius: 1px;
-  background: var(--sand);
-  margin-top: clamp(0.9rem, 2vw, 1.4rem);
-}
-
-.wi-ch__first {
-  margin: 0;
-  max-width: 30ch;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: clamp(1.3rem, 1.05rem + 1.05vw, 1.95rem);
-  font-style: italic;
-  font-weight: 300;
-  line-height: 1.28;
-  letter-spacing: -0.015em;
-  color: var(--ink-onPic);
-  text-wrap: pretty;
-}
-.wi-ch__line {
-  margin: clamp(0.9rem, 2vw, 1.15rem) 0 0;
-  max-width: 52ch;
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.09rem);
-  line-height: 1.62;
-  color: var(--ink-onDark-soft);
-  text-wrap: pretty;
-}
-.wi-ch__lead {
-  margin: clamp(1.6rem, 3.4vw, 2.3rem) 0 0;
-  font: 600 11px/1 var(--font-text);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--wi-dim);
-}
-
-/* THE REGISTER — not bullets. A ruled index in the display face. */
-.wi-reg {
-  list-style: none;
-  margin: clamp(1.2rem, 2.6vw, 1.7rem) 0 0;
-  padding: 0;
-}
-.wi-reg__i {
+/* ══ 04 — SHARE. The page opens out. ═══════════════════════════════════════
+   The only wide frame, edge to edge, and the paper never comes back: from here
+   the page is dark to the footer.
+   ════════════════════════════════════════════════════════════════════════ */
+.wi-share {
   position: relative;
-  padding: 0.72rem 0 0.72rem 1.85rem;
-  border-top: 1px solid var(--wi-line);
+  z-index: 1;
+  overflow: clip;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding: 0 0 clamp(3.5rem, 10svh, 7rem);
+}
+.wi-share__fig {
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto auto;
+}
+.wi-share__mask {
+  grid-row: 1;
+  grid-column: 1;
+  aspect-ratio: auto;
+  height: clamp(430px, 90svh, 940px);
+  border-radius: 0;
+}
+.wi-share__say {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: start;
+  justify-self: start;
+  margin: clamp(1.6rem, 6svh, 3.6rem) var(--wi-rail);
+  max-width: min(30rem, calc(100% - 2 * var(--wi-rail)));
+  padding: clamp(1rem, 2.6svh, 1.6rem) clamp(1.1rem, 2.4vw, 1.8rem) clamp(1.1rem, 2.8svh, 1.7rem);
+  border-radius: 4px;
+  background: var(--wi-plate-bg);
+  border: 1px solid var(--wi-plate-line);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+.wi-share__no {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1;
+  color: var(--sand);
+}
+.wi-share__name {
+  margin: 0.15em 0 0.45em;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.38rem);
   font-weight: 400;
-  line-height: 1.26;
-  letter-spacing: -0.012em;
+  font-size: clamp(2.1rem, 1.2rem + 3.6vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
   color: var(--ink-onPic);
-  break-inside: avoid;
 }
-.wi-reg__i::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  /* padding-box top plus half a line — the tick sits on the phrase's optical centre at
-     every step of the clamp, which a flat `em` offset does not. */
-  top: calc(0.72rem + 0.63em);
-  width: 0.95rem;
-  height: 1px;
-  background: var(--sand);
+.wi-share__line {
+  margin: 0;
+  font-size: clamp(1rem, 0.96rem + 0.28vw, 1.14rem);
+  line-height: 1.55;
+  color: var(--ink-onPic-2);
+}
+.wi-share__lead {
+  margin: 0.9em 0 0;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--sand);
 }
 
-/* SHARE's last line closes the field, so it runs the full measure. */
-.wi-close {
-  margin: clamp(2.2rem, 5vw, 3.2rem) 0 0;
-  padding-top: clamp(1.5rem, 3.4vw, 2.3rem);
-  border-top: 2px solid var(--clay);
-  max-width: 26ch;
+.wi-chips--wide {
+  align-self: end;
+  justify-self: start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(7px, 1vw, 12px);
+  margin: 0 var(--wi-rail);
+  padding-bottom: clamp(1.6rem, 5svh, 3.2rem);
+  max-width: min(70rem, calc(100% - 2 * var(--wi-rail)));
+}
+.wi-chips--wide .wi-chip { margin: 0 !important; }
+
+.wi-share .wi-lbl { padding-inline: var(--wi-rail); }
+
+.wi-share__closeIn {
+  max-width: var(--wi-max);
+  margin: clamp(2.6rem, 8svh, 5rem) auto 0;
+  padding-inline: var(--wi-rail);
+}
+.wi-share__close {
+  margin: 0;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.5rem, 1.05rem + 2vw, 2.85rem);
   font-style: italic;
-  font-weight: 300;
-  line-height: 1.16;
-  letter-spacing: -0.026em;
+  font-weight: 400;
+  font-size: clamp(1.55rem, 0.95rem + 3vw, 3.3rem);
+  line-height: 1.14;
+  letter-spacing: -0.025em;
   color: var(--ink-onPic);
-  text-wrap: balance;
+  max-width: 24ch;
 }
 
-/* the plate at the field's midpoint. Held near the source's own width so it is never
-   upscaled into mush. From 900px it takes the register's own column — centred it read as a
-   stray object floating between two grids; on the column it reads as COLLABORATE's picture,
-   which is what it is. */
-.wi-plate {
-  margin: clamp(2.4rem, 5.5vw, 4rem) auto clamp(0.6rem, 1.5vw, 1.2rem);
-  max-width: 60rem;
-}
-.wi-plate img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: 50% 46%;
+@media (max-width: 719.98px) {
+  .wi-share__say { max-width: calc(100% - 2 * var(--wi-rail)); }
+  .wi-chips--wide { flex-direction: column; align-items: flex-start; }
 }
 
-/* ══ COMMUNITY INITIATIVES ═════════════════════════════════════════════
-   Back on paper. The clay rule is the seam where the ledger ends, named — the same device
-   the About page uses where its cream section climbs over the hero. */
+/* ══ COMMUNITY INITIATIVES — the relationship inverts ══════════════════════
+   Up the page the type is pinned to the evidence. Down here the evidence is
+   pinned to the type: one photograph hung in the margin of each measure, on a
+   cord dropped from the rule that opens it. And the room they all stand in is
+   the one frame in the archive with nobody in it.
+   ════════════════════════════════════════════════════════════════════════ */
 .wi-init {
-  background: var(--ground);
-  color: var(--ink);
-  border-top: 2px solid var(--clay);
-  padding: clamp(2.8rem, 7vw, 5.5rem) var(--rail) clamp(2.5rem, 6vw, 4rem);
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-bottom: clamp(3rem, 9svh, 6rem);
 }
-.wi-init__head {
+
+.wi-room {
+  position: relative;
+  display: grid;
+  min-height: clamp(340px, 72svh, 720px);
+}
+/* the <picture> is the grid item, not the <img>. Placing only the <img> left the
+   picture element auto-placed into a SECOND row, which pushed the photograph out from
+   under its own scrim and heading and grew the page by 306px. */
+.wi-room__pic {
+  grid-row: 1;
+  grid-column: 1;
+  display: block;
+  position: relative;
+  z-index: 0;
+  min-height: 0;
+}
+.wi-room__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+/* The room does not stop, it dissolves: by 100% it IS --ground-deep, so the
+   type below is standing inside the same picture rather than under it. */
+.wi-room__scrim {
+  grid-row: 1;
+  grid-column: 1;
+  /* positioned, because the <picture> above it is: a positioned grid item paints over
+     every static sibling regardless of DOM order, which put the photograph on top of
+     both its own scrim and its own heading. */
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(var(--shade), 0.36) 0%,
+      rgba(var(--shade), 0.5) 34%,
+      rgba(var(--shade), 0.86) 72%,
+      var(--ground-deep) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(var(--shade), 0.6) 0%,
+      rgba(var(--shade), 0.26) 48%,
+      rgba(var(--shade), 0.08) 100%
+    );
+}
+.wi-room__head {
+  grid-row: 1;
+  grid-column: 1;
+  position: relative;
+  z-index: 2;
+  align-self: end;
+  width: 100%;
   max-width: var(--wi-max);
   margin-inline: auto;
-  display: grid;
-  gap: clamp(1rem, 2.4vw, 1.6rem);
+  padding: var(--wi-rail);
+  padding-bottom: clamp(1.6rem, 4svh, 3rem);
 }
 .wi-init__h {
   margin: 0;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.1rem);
   font-weight: 400;
-  line-height: 1.04;
-  letter-spacing: -0.028em;
+  font-size: clamp(1.95rem, 1.2rem + 3.2vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink-onPic);
 }
 .wi-init__lead {
-  margin: 0;
-  max-width: 44ch;
-  font-size: clamp(1.0625rem, 0.98rem + 0.42vw, 1.2rem);
-  line-height: 1.62;
-  color: var(--ink-soft);
+  margin: clamp(0.7rem, 2svh, 1.1rem) 0 0;
+  font-size: clamp(1rem, 0.96rem + 0.3vw, 1.16rem);
+  line-height: 1.6;
+  color: var(--ink-onPic-2);
+  max-width: 42ch;
 }
-
-.wi-init__list {
-  list-style: none;
-  max-width: var(--wi-max);
-  margin: clamp(2rem, 5vw, 3.2rem) auto 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1rem, 2.4vw, 1.8rem);
-}
-
-/* the two programmes with lists are panels; the two that are a paragraph each are open on
-   the paper. The difference is the content's, not decoration. */
-.wi-card--panel {
-  background: var(--ground-warm);
-  border-top: 2px solid var(--clay);
-  padding: clamp(1.3rem, 3vw, 2.3rem);
-  display: grid;
-  gap: clamp(1.2rem, 3vw, 2.2rem);
-}
-.wi-card--open {
-  border-top: 1px solid var(--rule);
-  padding-top: clamp(1.1rem, 2.6vw, 1.7rem);
-}
-
-/* The picture must not set the card's height — a 9:16 frame in a 14rem column is 400px tall
-   and leaves the text stranded beside a column of ceiling. Taking the image out of flow
-   makes the TEXT the tallest thing in the row and the picture fill whatever that comes to,
-   so the crop tightens onto the hands doing the work. */
-.wi-card__fig {
-  position: relative;
-  margin: 0;
-  min-height: 14rem;
-}
-.wi-card__fig img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 52%;
-}
-.wi-card__body { min-width: 0; }
-
-.wi-card__tag {
+.wi-room__lbl {
+  margin: clamp(1.2rem, 3svh, 2rem) 0 0;
   display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  margin: 0 0 0.75rem;
-  font: 500 12px/1.45 var(--font-text);
-  color: var(--teal-deep);
+  flex-direction: column;
+  gap: 5px;
 }
-.wi-card__tag::before {
+
+/* ── the entries ──────────────────────────────────────────────────────── */
+.wi-hang {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 var(--wi-rail);
+  max-width: var(--wi-max);
+}
+.wi-ent {
+  --wi-entpad: clamp(2.2rem, 6svh, 4rem);
+  position: relative;
+  border-top: 1px solid rgba(251, 247, 242, 0.2);
+  padding: var(--wi-entpad) 0 clamp(2.4rem, 7svh, 4.6rem);
+  display: grid;
+  gap: clamp(1.6rem, 3vw, 3rem);
+}
+.wi-ent__say { min-width: 0; }
+
+.wi-tag {
+  margin: 0 0 0.75rem;
+  font: 500 11.5px/1.4 var(--font-text);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--sand);
+  display: flex;
+  gap: 0.65em;
+  align-items: baseline;
+}
+.wi-tag::before {
   content: '';
-  flex: none;
-  width: 1.1rem;
+  width: 20px;
   height: 1px;
   background: var(--clay);
-  transform: translateY(-0.3em);
+  display: inline-block;
+  transform: translateY(-4px);
+  flex: none;
 }
-.wi-card__h {
-  margin: 0;
+
+.wi-ent__h {
+  margin: 0 0 0.55em;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.72rem);
   font-weight: 400;
-  line-height: 1.14;
+  font-size: clamp(1.3rem, 1.05rem + 1.2vw, 2.1rem);
+  line-height: 1.1;
   letter-spacing: -0.022em;
-  text-wrap: balance;
+  color: var(--ink-onPic);
 }
-.wi-card--open .wi-card__h { font-style: italic; font-weight: 300; }
-.wi-card__line {
-  margin: 0.8rem 0 0;
-  max-width: 62ch;
-  font-size: clamp(0.99rem, 0.95rem + 0.2vw, 1.06rem);
-  line-height: 1.6;
-  color: var(--ink-soft);
-  text-wrap: pretty;
+.wi-ent__line {
+  margin: 0 0 0.7em;
+  font-size: clamp(1rem, 0.96rem + 0.26vw, 1.1rem);
+  line-height: 1.62;
+  color: var(--ink-onPic-2);
+  max-width: 52ch;
 }
-.wi-card__lead {
-  margin: clamp(1.2rem, 2.6vw, 1.6rem) 0 0.75rem;
-  font: 600 10.5px/1 var(--font-text);
-  letter-spacing: 0.18em;
+/* The two entries with no list are a statement, not a document. They are set
+   as one — bigger, in the display face — because that is what they are. */
+.wi-ent[data-kind='note'] .wi-ent__line {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.14rem, 0.98rem + 0.85vw, 1.65rem);
+  line-height: 1.36;
+  letter-spacing: -0.014em;
+  color: var(--ink-onPic);
+  max-width: 34ch;
+}
+.wi-ent__lead {
+  margin: clamp(0.9rem, 2.4svh, 1.4rem) 0 0;
+  font: 500 11.5px/1.5 var(--font-text);
+  letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--sand);
 }
-
-/* the second instrument: phrases in a field, not ruled rows. */
-.wi-chips {
+.wi-tags {
   list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px 9px;
+  margin: 0.85rem 0 0;
+  padding: 0;
 }
-.wi-chips li {
-  padding: 0.48rem 0.9rem;
-  border: 1px solid var(--rule);
-  border-radius: 1.4rem;
-  background: var(--ground);
-  color: var(--ink);
-  font-size: clamp(0.84rem, 0.8rem + 0.15vw, 0.94rem);
-  line-height: 1.35;
+.wi-tags__i {
+  font: 400 13.5px/1.35 var(--font-text);
+  color: var(--ink-onPic-2);
+  border: 1px solid rgba(251, 247, 242, 0.28);
+  border-radius: 999px;
+  padding: 0.42em 0.92em;
 }
-
-.wi-card__note {
-  margin: clamp(1.2rem, 2.6vw, 1.6rem) 0 0;
+.wi-ent__note {
+  margin: clamp(1.1rem, 3svh, 1.8rem) 0 0;
   padding-left: 1rem;
   border-left: 2px solid var(--clay);
 }
-.wi-card__note p {
-  margin: 0;
-  font-size: 0.94rem;
-  line-height: 1.55;
+.wi-ent__note p {
+  margin: 0 0 0.35em;
+  font-family: var(--font-display);
   font-style: italic;
-  color: var(--ink-soft);
+  font-size: clamp(0.98rem, 0.94rem + 0.28vw, 1.12rem);
+  line-height: 1.5;
+  color: var(--ink-onPic-2);
+  max-width: 46ch;
 }
-.wi-card__note p + p { margin-top: 0.35rem; }
+.wi-ent__note p:last-child { margin-bottom: 0; }
 
-/* ── the page's own ending ─────────────────────────────────────────── */
-/* the same box as every other block on the page: the measure PLUS the gutter. With only
-   `max-width: var(--wi-max)` it agreed with the rest at 1440 by coincidence and ran flush to
-   both edges of a phone. */
+/* ── the plate in the margin ──────────────────────────────────────────── */
+.wi-plate { margin: 0; position: relative; }
+.wi-plate__cord {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 1px;
+  height: calc(var(--drop) + var(--wi-entpad));
+  background: linear-gradient(to bottom, rgba(246, 217, 193, 0.1), rgba(246, 217, 193, 0.6));
+}
+.wi-plate__mask {
+  display: block;
+  width: var(--pw);
+  max-width: 100%;
+  overflow: clip;
+  border-radius: 2px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.5);
+}
+.wi-plate__img { width: 100%; height: auto; display: block; }
+.wi-plate__cap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 0.7rem;
+  /* wider than the plate on purpose: a two-word event and a date wrapped to three
+     lines inside a 158px plate, which made the provenance harder to read than the
+     picture it belongs to. */
+  width: max(var(--pw), 13rem);
+  max-width: 100%;
+}
+.wi-plate__cap .wi-lbl__what { font-size: 12px; line-height: 1.4; }
+.wi-plate__cap .wi-lbl__where { font-size: 10px; letter-spacing: 0.05em; }
+.wi-plate__cap .wi-lbl__where::before { width: 14px; }
+
+@media (min-width: 900px) {
+  .wi-ent { grid-template-columns: minmax(0, 1fr) var(--pw); align-items: start; }
+  .wi-plate { margin-top: var(--drop); }
+}
+@media (max-width: 899.98px) {
+  .wi-ent { justify-items: start; }
+  .wi-plate { order: -1; margin-top: calc(var(--drop) * 0.5); }
+  .wi-plate__cord { height: calc(var(--drop) * 0.5 + var(--wi-entpad)); }
+  .wi-plate__mask { width: min(var(--pw), 62vw); }
+  .wi-plate__cap { width: min(max(var(--pw), 13rem), calc(100vw - 2 * var(--wi-rail))); }
+}
+
+/* ══ THE HANDOVER ═════════════════════════════════════════════════════════ */
 .wi-next {
-  max-width: calc(var(--wi-max) + 2 * var(--rail));
-  margin: 0 auto;
-  padding: 0 var(--rail) clamp(3rem, 7vw, 5rem);
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding: 0 var(--wi-rail) clamp(3rem, 9svh, 6rem);
 }
 .wi-next__in {
-  border-top: 1px solid var(--rule);
-  padding-top: clamp(1.4rem, 3vw, 2rem);
+  max-width: var(--wi-max);
+  margin-inline: auto;
+  border-top: 1px solid rgba(251, 247, 242, 0.2);
+  padding-top: clamp(1.4rem, 4svh, 2.4rem);
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.6rem 1.5rem;
+  gap: 0.8rem 2rem;
 }
 .wi-next__lbl {
   margin: 0;
-  font: 600 11px/1 var(--font-text);
-  letter-spacing: 0.2em;
+  font: 500 11.5px/1.4 var(--font-text);
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--sand);
 }
 .wi-next__a {
-  position: relative;
   display: inline-flex;
-  align-items: center;
-  gap: 0.8em;
-  padding: 0.35rem 0;
+  align-items: baseline;
+  gap: 0.7em;
+  text-decoration: none;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.3rem, 1rem + 1.2vw, 2rem);
   font-weight: 400;
-  letter-spacing: -0.022em;
-  color: var(--ink);
-  text-decoration: none;
+  font-size: clamp(1.5rem, 1rem + 2.4vw, 2.9rem);
+  letter-spacing: -0.026em;
+  line-height: 1.1;
+  color: var(--ink-onPic);
+  border-bottom: 1px solid rgba(251, 247, 242, 0.34);
+  padding-bottom: 0.12em;
+  transition: border-color 0.3s var(--ease);
 }
-.wi-next__a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.1rem;
-  height: 1px;
-  background: var(--clay);
-  transform: scaleX(1);
-  transform-origin: left;
-  transition: transform 0.45s var(--ease);
-}
-.wi-next__a:hover::after,
-.wi-next__a:focus-visible::after { transform: scaleX(0.35); }
-.wi-next__a svg { flex: none; color: var(--clay-deep); transition: transform 0.4s var(--ease); }
+.wi-next__a svg { transition: transform 0.35s var(--ease); }
+.wi-next__a:hover { border-bottom-color: var(--sand); }
 .wi-next__a:hover svg,
 .wi-next__a:focus-visible svg { transform: translateX(5px); }
 
-/* ── the wide layouts ──────────────────────────────────────────────── */
-@media (min-width: 720px) {
-  /* two columns of register. `break-inside: avoid` keeps a phrase whole, and the rule above
-     each row lands level across both columns because the fill is balanced. */
-  .wi-reg { columns: 2; column-gap: clamp(2rem, 4vw, 3.5rem); }
-}
-
-@media (min-width: 760px) {
-  /* stretch, not start: the picture column runs the full height of the card. */
-  .wi-card--fig { grid-template-columns: minmax(0, 14rem) minmax(0, 1fr); }
-}
-
-@media (min-width: 900px) {
-  .wi-ch {
-    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
-    column-gap: clamp(2.5rem, 5vw, 5.5rem);
-  }
-  /* the reading rail. `align-self: start` is load-bearing — a stretched grid item cannot
-     stick, and without it the name simply scrolls away with the list. */
-  .wi-ch__rail {
-    position: sticky;
-    top: var(--wi-stick);
-    align-self: start;
-  }
-  .wi-ch__name { font-size: clamp(2.2rem, 0.6rem + 1.9vw, 2.7rem); }
-  .wi-plate {
-    display: grid;
-    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
-    column-gap: clamp(2.5rem, 5vw, 5.5rem);
-    max-width: none;
-  }
-  .wi-plate > * { grid-column: 2; }
-  /* NOT `1 / -1`. The rail is still stuck to the top of the viewport when this line arrives,
-     so a full-width closing line scrolls straight through the pinned name — it shipped that
-     way once and read as a rendering fault. It belongs in the body column, under its list. */
-  .wi-close { grid-column: 2; }
-
-  .wi-init__head { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
-  .wi-init__list { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-  .wi-card--panel { grid-column: 1 / -1; }
-}
-
-@media (min-width: 1024px) {
-  .wi-mast {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(19rem, 0.82fr);
-    column-gap: clamp(2rem, 5vw, 5rem);
-    align-items: start;
-  }
-  .wi-mast::before,
-  .wi-mast__eyebrow { grid-column: 1 / -1; }
-  .wi-mast__h,
-  .wi-mast__lead { grid-column: 1; }
-  .wi-quad {
-    grid-column: 2;
-    grid-row: 3 / span 2;
-    margin-top: 0.55rem;
-    align-self: start;
-  }
-  .wi-quad__w { font-size: clamp(1.4rem, 0.5rem + 1.35vw, 2.2rem); }
-}
-
-/* ── MOTION OFF ────────────────────────────────────────────────────────
-   Nothing on this page is reachable only through motion: the reveal is the one animated
-   thing, and it starts from the finished state. Sticky is not motion and stays. */
 @media (prefers-reduced-motion: reduce) {
-  .wi.is-live [data-wr] { opacity: 1 !important; transform: none !important; }
-  .wi.is-live [data-wr].in { transition: none; }
-  .wi-quad__c,
-  .wi-quad__arw,
-  .wi-next__a::after,
-  .wi-next__a svg { transition: none; }
+  .wi-win__img,
+  .wi-next__a svg,
+  .wi-fig__vid { transition: none !important; }
+  .wi-fig__img,
+  .wi-fig__vid { transform: scale(1.02) !important; }
 }

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { SiteNav } from '@/components/SiteNav';
-import { WithinMasthead } from '@/components/within/Masthead';
-import { Ideas } from '@/components/within/Ideas';
+import { Masthead } from '@/components/within/Masthead';
+import { Pillars } from '@/components/within/Pillars';
+import { Share } from '@/components/within/Share';
 import { Initiatives } from '@/components/within/Initiatives';
 import { WithinMotion } from '@/components/within/WithinMotion';
 import { nav } from '@/content/site';
@@ -10,18 +11,31 @@ import { SiteFooter } from '@/components/SiteFooter';
 /**
  * PAGE 2 — What Happens Within Yoga Mandala.
  *
- * The page is mostly lists, and the whole design problem is not letting that become a column
- * of bullet points on cream. So it is built as three objects on two materials:
+ *      SHOW IT HAPPENING. DO NOT DESCRIBE IT.
  *
- *   · a title page on paper, whose index is a quartered figure of the four ideas;
- *   · one dark ledger carrying all four chapters, each list set as a ruled register in the
- *     display face with its number and name held beside it by `position: sticky`;
- *   · the initiatives back on paper, in panels, with their lists set as phrases in a field —
- *     a different content type given a different instrument.
+ * The build this replaced told the reader that this community connects, learns, collaborates
+ * and shares, in twenty-five bullet points. But every one of those twenty-five phrases names
+ * something that has already happened in front of a camera — community discussions, teacher
+ * introductions, workshops, expert conversations — and the archive holds the frames. So the
+ * page is built as evidence rather than as a prospectus:
  *
- * There is no video and no type on a photograph. That is the hero's language, and the client
- * asked for each section to introduce its own visual idea; continuity here is the tokens, the
- * type scale, the caption and the reveal grammar.
+ *   · four narrow windows across the masthead, one per idea, crossing the horizon into the
+ *     paper below — a contents page made of the footage each section opens into;
+ *   · 01–03 as tall arches on paper, each holding a silent loop that drifts inside it, with
+ *     that pillar's items pinned across the frame's inner edge as chips that straddle
+ *     photograph and paper at once;
+ *   · 04, SHARE, opening the page out into the only wide frame — one teacher, one student,
+ *     the room watching — and the client's own closing line set directly beneath it;
+ *   · the initiatives standing in the one room in the archive with nobody in it, where the
+ *     relationship inverts: the evidence hangs in the margin of the type instead.
+ *
+ * Every frame carries a wall label: what is in it, and the day it was shot. Nothing on this
+ * page is counted, estimated or attributed to an event it did not come from — see the header
+ * of components/within/frames.ts.
+ *
+ * <SiteNav light /> because this page has no hero and the pill takes its paper treatment
+ * from the first pixel rather than waiting for a choreography that never runs here;
+ * <SiteFooter /> because the last section hands over to it on the same dark ground.
  */
 export const metadata = {
   title: 'What Happens Within',
@@ -34,13 +48,12 @@ const NEXT = nav.find((n) => n.href === '/join/');
 export default function WithinPage() {
   return (
     <>
-      {/* No hero on this page, so the pill takes its paper treatment from the first pixel
-          rather than waiting for a choreography that never runs here. */}
       <SiteNav light />
 
       <main className="wi" id="top">
-        <WithinMasthead />
-        <Ideas />
+        <Masthead />
+        <Pillars />
+        <Share />
         <Initiatives />
 
         {NEXT ? (

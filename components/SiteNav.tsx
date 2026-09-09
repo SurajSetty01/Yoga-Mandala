@@ -58,13 +58,41 @@ export function SiteNav({ light = false }: { light?: boolean }) {
               </li>
             ))}
           </ul>
+          {/*
+            Labelled "WhatsApp", not "Join".
+            The nav already carries a Join item — the client's own /join/ page — and having
+            both meant two things called Join that went to different places, one of them not
+            even a page. This button leaves the site, so it names its destination instead.
+            The word is doing the work here: nothing else in the nav is a proper noun, so it
+            reads as the one outbound action without needing a verb.
+          */}
           <a
             className="pill__cta"
             href={links.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
           >
-            Join
+            WhatsApp
+            <svg
+              className="pill__ext"
+              width="9"
+              height="9"
+              viewBox="0 0 9 9"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M1.6 7.4 7.4 1.6M3.1 1.6h4.3v4.3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            {/* The visible label already names the destination, so this only has to say what
+                the arrow means: that the link leaves the site. */}
+            <span className="sr"> (opens in a new tab)</span>
           </a>
           <button
             ref={btnRef}

@@ -1,0 +1,1180 @@
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   preview concept within-c — owned solely by its agent. Every selector namespaced .within-c
+
+   THE PAGE IS A MANDALA AND THE READER TURNS IT.
+
+   One disc. Four quadrants. The lit quarter, the clay arc on the rim and the corner the
+   text occupies are all the same number: `--turn: index * 90deg`. Nothing rotates that
+   carries a word — the figure turns, the type stays upright and is read where it is set.
+
+   Grounds and inks are the site's own tokens. The three values this file adds (clay-deep,
+   the scrim triple and the gate material) are the ones design/DESIGN-SYSTEM.md §1 already
+   measured; they are declared locally rather than in :root so this file touches nothing.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+
+.within-c {
+  --wc-clay-deep: #9c4526; /* 5.98:1 on cream — the only clay that may sit under text */
+  --wc-shade: 16, 12, 10; /* scrim ink as an rgb triple */
+  --wc-gate: rgba(16, 12, 10, 0.88); /* the navigation pill's material, reused */
+  --wc-hair: rgba(251, 247, 242, 0.24);
+  --wc-hair-ink: rgba(36, 29, 24, 0.16);
+  --wc-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --wc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  display: block;
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip; /* clip, not hidden: hidden here would make the sticky track a scroller */
+}
+
+.within-c :focus-visible {
+  outline: 2px solid var(--ground);
+  outline-offset: 3px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 5px rgba(16, 12, 10, 0.92);
+}
+
+/* ── 01 · MASTHEAD ─────────────────────────────────────────────────────────────────────
+   Small on purpose. The figure below is the page; a masthead that competes with it is two
+   openings. Left, the title; right, the plan of the figure drawn once at rest.            */
+
+.within-c .wc-mast {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  align-items: center;
+  padding: clamp(7rem, 14vh, 11rem) var(--wc-rail) clamp(3rem, 7vh, 5.5rem);
+  max-width: 96rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 800px) {
+  .within-c .wc-mast {
+    grid-template-columns: minmax(0, 1.25fr) minmax(17rem, 0.75fr);
+  }
+}
+
+.within-c .wc-mast__eyebrow {
+  margin: 0 0 clamp(1rem, 2.4vh, 1.6rem);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #265e5b; /* teal-deep, 6.95:1 on cream */
+}
+
+.within-c .wc-mast__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.35rem, 1.2rem + 5.6vw, 5.1rem);
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+.within-c .wc-mast__h em {
+  display: block;
+  font-style: italic;
+  color: #4a3d34;
+}
+
+.within-c .wc-mast__lead {
+  margin: clamp(1.4rem, 3vh, 2.1rem) 0 0;
+  max-width: 30ch;
+  font-size: clamp(1.02rem, 0.96rem + 0.34vw, 1.22rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.within-c .wc-mast__hint {
+  margin: 1.1rem 0 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+}
+
+.within-c .wc-mast__hint::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+  transform: translateY(-4px);
+  flex: none;
+}
+
+/* the plan: a hairline circle with the four names at its diagonals */
+.within-c .wc-plan {
+  position: relative;
+  width: min(21rem, 78vw);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  justify-self: center;
+}
+
+.within-c .wc-plan__ring,
+.within-c .wc-plan__cross {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  border: 1px solid var(--wc-hair-ink);
+}
+
+/* The plan is drawn with quadrant 01 already marked, so the reader meets the mechanic once
+   in miniature before the figure arrives. A circle's right border is the arc from 45° to
+   135°; rotating the ring by -45° puts that quarter in the north-east, where Connect is. */
+.within-c .wc-plan__ring {
+  border-right-color: var(--clay);
+  transform: rotate(-45deg);
+}
+
+.within-c .wc-plan__cross {
+  border: 0;
+  background:
+    linear-gradient(var(--wc-hair-ink), var(--wc-hair-ink)) center / 1px 100% no-repeat,
+    linear-gradient(var(--wc-hair-ink), var(--wc-hair-ink)) center / 100% 1px no-repeat;
+}
+
+.within-c .wc-plan__lbl {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 0.85rem + 0.4vw, 1.15rem);
+  color: var(--ink);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+}
+
+.within-c .wc-plan__lbl b {
+  font-family: var(--font-text);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--wc-clay-deep);
+}
+
+.within-c .wc-plan__lbl[data-corner='ne'] {
+  left: 79%;
+  top: 21%;
+}
+.within-c .wc-plan__lbl[data-corner='se'] {
+  left: 79%;
+  top: 79%;
+}
+.within-c .wc-plan__lbl[data-corner='sw'] {
+  left: 21%;
+  top: 79%;
+}
+.within-c .wc-plan__lbl[data-corner='nw'] {
+  left: 21%;
+  top: 21%;
+}
+
+@media (max-width: 799px) {
+  .within-c .wc-plan {
+    display: none; /* the figure itself is 200px below; two plans is one too many */
+  }
+}
+
+/* ── 02 · THE FIGURE ───────────────────────────────────────────────────────────────────
+   Dark ground, because a photograph masked to a circle needs a field to sit in and because
+   the change of material is what tells the reader a different kind of object has begun.   */
+
+.within-c .wc-dial {
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  border-radius: 50% 50% 0 0 / 7vw 7vw 0 0; /* the disc rising out of the paper */
+}
+
+.within-c .wc-dial__track {
+  position: relative;
+}
+
+.within-c .wc-dial__stick {
+  position: sticky;
+  top: 0;
+}
+
+/* ── the disc ───────────────────────────────────────────────────────────────────────── */
+
+.within-c .wc-fig {
+  --d: 4.2rem; /* narrow default; the wide layout redefines it */
+  position: relative;
+  width: var(--d);
+  height: var(--d);
+  flex: none;
+}
+
+.within-c .wc-fig__disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%; /* a radius mask, never a clip-path: it cannot clip a box to zero */
+  overflow: hidden;
+  background: #100c0a;
+}
+
+.within-c .wc-fig__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.75s var(--wc-ease);
+}
+
+.within-c .wc-fig__img[data-on] {
+  opacity: 1;
+}
+
+/* The lit quarter. A fixed conic gradient on one element, turned by transform — the
+   gradient is never recomputed, so this costs a composite and nothing else. */
+.within-c .wc-fig__light {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(var(--wc-shade), 0) 0deg 90deg,
+    rgba(var(--wc-shade), 0.55) 90deg 360deg
+  );
+  transform: rotate(var(--turn, 0deg));
+  transition: transform 0.85s var(--wc-ease);
+}
+
+/* The quartering never moves. Only the light does. */
+.within-c .wc-fig__cross {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    linear-gradient(var(--wc-hair), var(--wc-hair)) center / 1px 100% no-repeat,
+    linear-gradient(var(--wc-hair), var(--wc-hair)) center / 100% 1px no-repeat;
+}
+
+.within-c .wc-fig__rim {
+  position: absolute;
+  inset: -4.5%;
+  width: 109%;
+  height: 109%;
+  overflow: visible;
+  transform: rotate(var(--turn, 0deg));
+  transition: transform 0.85s var(--wc-ease);
+}
+
+.within-c .wc-fig__ring {
+  fill: none;
+  stroke: rgba(251, 247, 242, 0.2);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.within-c .wc-fig__arc {
+  fill: none;
+  stroke: var(--clay);
+  stroke-width: 3;
+  stroke-linecap: butt;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The hub: the community all four ideas are arranged around. It is the one thing on the
+   figure that never changes, and it owns a solid ground so its type is never measured
+   against a photograph. */
+.within-c .wc-hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  /* a percentage alone turns the hub into a lid at 2560; capped, it stays a small centre
+     medallion on a large disc and a readable one on a small disc */
+  width: min(38%, 11.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #16110e;
+  border: 1px solid var(--wc-hair);
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.35em;
+  padding: 0.4rem;
+}
+
+.within-c .wc-hub__name,
+.within-c .wc-hub__count {
+  margin: 0;
+}
+
+.within-c .wc-hub__name {
+  font-family: var(--font-display);
+  font-size: clamp(0.62rem, 0.4rem + 0.5vw, 1.05rem);
+  line-height: 1.15;
+  color: var(--ink-onDark);
+  max-width: 6ch;
+}
+
+.within-c .wc-hub__count {
+  font-size: clamp(0.52rem, 0.4rem + 0.24vw, 0.72rem);
+  letter-spacing: 0.14em;
+  color: rgba(251, 247, 242, 0.72);
+  border-top: 1px solid var(--wc-hair);
+  padding-top: 0.4em;
+}
+
+.within-c .wc-hub__no {
+  color: var(--ink-onDark);
+  font-weight: 500;
+}
+
+/* the caption. Provenance-scale type on the section's own ground, never on the picture. */
+.within-c .wc-cap {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(251, 247, 242, 0.72);
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  justify-content: center;
+}
+
+.within-c .wc-cap::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--clay);
+  transform: translateY(-4px);
+  flex: none;
+}
+
+/* ── the gates ──────────────────────────────────────────────────────────────────────── */
+
+.within-c .wc-gate {
+  appearance: none;
+  border: 1px solid rgba(251, 247, 242, 0.2);
+  background: var(--wc-gate);
+  color: rgba(251, 247, 242, 0.82);
+  font: inherit;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  transition:
+    color 0.3s var(--wc-ease),
+    border-color 0.3s var(--wc-ease),
+    background-color 0.3s var(--wc-ease);
+}
+
+.within-c .wc-gate__no {
+  font-size: clamp(0.64rem, 0.6rem + 0.12vw, 0.76rem);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(251, 247, 242, 0.66);
+}
+
+.within-c .wc-gate__name {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 0.83rem + 0.2vw, 1.08rem);
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.within-c .wc-gate[data-on] {
+  background: var(--wc-clay-deep);
+  border-color: rgba(251, 247, 242, 0.4);
+  color: var(--ink-onDark);
+}
+
+.within-c .wc-gate[data-on] .wc-gate__no {
+  color: rgba(251, 247, 242, 0.88);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .within-c .wc-gate:hover {
+    color: var(--ink-onDark);
+    border-color: rgba(251, 247, 242, 0.5);
+  }
+}
+
+/* ── the register, shared by the quadrants and the initiatives ─────────────────────── */
+
+.within-c .wc-reg {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.within-c .wc-reg__i {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  padding-block: 0.36em;
+  padding-left: calc(var(--i) * 6px); /* the set steps outward from the centre */
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 0.93rem + 0.33vw, 1.16rem);
+  line-height: 1.32;
+  color: var(--ink-onDark);
+}
+
+/* the phrase is a flex item beside its tick; without this a long one refuses to shrink and
+   pushes the row past its measure instead of wrapping inside it */
+.within-c .wc-reg__w {
+  min-width: 0;
+}
+
+.within-c .wc-reg__t {
+  flex: none;
+  width: calc(11px + var(--i) * 3px); /* and its tick steps with it */
+  height: 1px;
+  background: var(--clay);
+  transform: translateY(-0.36em);
+}
+
+/* Mirrored on the two left-hand quadrants, so every set faces the centre of the figure. */
+.within-c .wc-panel[data-corner='sw'] .wc-reg__i,
+.within-c .wc-panel[data-corner='nw'] .wc-reg__i {
+  flex-direction: row-reverse;
+  padding-left: 0;
+  padding-right: calc(var(--i) * 6px);
+}
+
+/* ── the panels ─────────────────────────────────────────────────────────────────────── */
+
+.within-c .wc-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 0.4rem;
+}
+
+.within-c .wc-panel__no {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: rgba(251, 247, 242, 0.78);
+}
+
+.within-c .wc-panel__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--clay);
+  max-width: 7rem;
+}
+
+.within-c .wc-panel__name {
+  margin: 0 0 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(2rem, 1.4rem + 2.2vw, 3.1rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--ink-onDark);
+}
+
+.within-c .wc-panel__say p {
+  margin: 0 0 0.5rem;
+  font-size: clamp(0.94rem, 0.9rem + 0.2vw, 1.02rem);
+  line-height: 1.55;
+  color: rgba(251, 247, 242, 0.78);
+}
+
+.within-c .wc-panel__lead {
+  margin: 0.9rem 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(251, 247, 242, 0.72);
+}
+
+.within-c .wc-panel__say + .wc-reg {
+  margin-top: 0.9rem;
+}
+
+.within-c .wc-panel__close {
+  margin: 1.1rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--wc-hair);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.14rem);
+  line-height: 1.4;
+  color: var(--ink-onDark);
+}
+
+/* ══ NARROW (< 1000px) ═════════════════════════════════════════════════════════════════
+   A different object, not a smaller one. The figure becomes a sticky compass no taller
+   than a line of type; the four sets stack in normal flow, each opening on its own disc of
+   photograph; the compass turns to whichever set is in view. On a phone the reader does
+   not turn the figure — they walk around it.                                             */
+
+@media (max-width: 999px) {
+  /* the arc at the top of the band is left empty, so nothing is clipped by its curve */
+  .within-c .wc-dial {
+    padding-top: clamp(1.75rem, 8vw, 5rem);
+  }
+
+  /* the compass docks under the navigation pill, which is fixed and, on a page with no
+     hero choreography, never lifts away */
+  .within-c .wc-dial__stick {
+    top: 4.9rem;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem var(--wc-rail);
+    background: rgba(20, 15, 12, 0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(251, 247, 242, 0.14);
+  }
+
+  .within-c .wc-fig {
+    --d: 2.35rem;
+  }
+
+  .within-c .wc-hub {
+    width: 34%;
+  }
+
+  .within-c .wc-hub__name,
+  .within-c .wc-hub__count {
+    display: none;
+  }
+
+  .within-c .wc-gates {
+    display: flex;
+    gap: 0.3rem;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .within-c .wc-gate {
+    padding: 0.45rem 0.5rem;
+    min-width: 2.6rem;
+    justify-content: center;
+    border-radius: 8px;
+  }
+
+  .within-c .wc-gate__no {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+
+  .within-c .wc-gate__name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .within-c .wc-cap {
+    display: none; /* the compass is a control, not a plate */
+  }
+
+  .within-c .wc-panels {
+    padding: 0 var(--wc-rail) clamp(3rem, 8vh, 5rem);
+  }
+
+  .within-c .wc-panel {
+    padding-top: clamp(2.6rem, 7vh, 4rem);
+  }
+
+  .within-c .wc-panel__fig {
+    position: relative;
+    width: min(17rem, 58vw);
+    aspect-ratio: 1;
+    margin: 0 0 1.4rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #100c0a;
+  }
+
+  .within-c .wc-panel[data-corner='sw'] .wc-panel__fig,
+  .within-c .wc-panel[data-corner='nw'] .wc-panel__fig {
+    margin-left: auto;
+  }
+
+  .within-c .wc-panel__fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* the same quartering the big figure carries, lit on this set's own quadrant */
+  .within-c .wc-panel__figLight {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      rgba(var(--wc-shade), 0.04) 0deg 90deg,
+      rgba(var(--wc-shade), 0.5) 90deg 360deg
+    );
+  }
+
+  .within-c .wc-panel[data-corner='se'] .wc-panel__figLight {
+    rotate: 90deg;
+  }
+  .within-c .wc-panel[data-corner='sw'] .wc-panel__figLight {
+    rotate: 180deg;
+  }
+  .within-c .wc-panel[data-corner='nw'] .wc-panel__figLight {
+    rotate: 270deg;
+  }
+
+  .within-c .wc-panel__figCross {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      linear-gradient(var(--wc-hair), var(--wc-hair)) center / 1px 100% no-repeat,
+      linear-gradient(var(--wc-hair), var(--wc-hair)) center / 100% 1px no-repeat;
+    border: 1px solid rgba(251, 247, 242, 0.18);
+  }
+
+  .within-c .wc-panel__name {
+    font-size: clamp(2.1rem, 1.3rem + 4vw, 3rem);
+  }
+
+  .within-c .wc-panel__say,
+  .within-c .wc-panel__lead,
+  .within-c .wc-reg,
+  .within-c .wc-panel__close {
+    max-width: 34rem;
+  }
+
+  /* the mirroring is a property of the wide figure's corners, not of a phone column */
+  .within-c .wc-panel[data-corner='sw'] .wc-reg__i,
+  .within-c .wc-panel[data-corner='nw'] .wc-reg__i {
+    flex-direction: row;
+    padding-left: calc(var(--i) * 6px);
+    padding-right: 0;
+  }
+}
+
+/* ══ WIDE (≥ 1000px) ═══════════════════════════════════════════════════════════════════
+   The stage. One sticky screen; the disc at its centre; the four gates on the rim at the
+   diagonals; the set that belongs to the lit quadrant in the matching corner of the page. */
+
+@media (min-width: 1000px) {
+  .within-c {
+    /* the diameter of the figure. Everything on the stage is placed off it — the gates sit
+       on its rim, the sets are anchored to its edge — so the whole composition holds
+       together at 1000px and at 2560 without a second set of numbers. */
+    --wc-d: min(48vh, 44rem, 31vw);
+  }
+
+  .within-c .wc-dial__track {
+    height: 420svh; /* four quadrants of scroll plus the screen the stage occupies */
+  }
+
+  .within-c .wc-dial__stick {
+    height: 100svh;
+    display: grid;
+    place-items: center;
+  }
+
+  .within-c .wc-dial__stick {
+    grid-auto-rows: min-content;
+    align-content: center;
+    gap: 1.6rem;
+  }
+
+  .within-c .wc-fig {
+    --d: var(--wc-d);
+    z-index: 1;
+    justify-self: center;
+  }
+
+  .within-c .wc-cap {
+    z-index: 1;
+  }
+
+  /* `--d` lives on .wc-fig, which is a sibling, so the gates carry their own copy. */
+  .within-c .wc-gates {
+    --d: var(--wc-d);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    z-index: 3;
+  }
+
+  /* On the rim, at the centre of the quadrant each gate opens. 0.3536 is cos 45° halved:
+     the point where the diagonal meets the circle. */
+  .within-c .wc-gate {
+    position: absolute;
+    translate: -50% -50%;
+    padding: 0.5rem 0.95rem;
+  }
+
+  .within-c .wc-gate[data-corner='ne'] {
+    left: calc(var(--d, 0px) * 0.3536);
+    top: calc(var(--d, 0px) * -0.3536);
+  }
+  .within-c .wc-gate[data-corner='se'] {
+    left: calc(var(--d, 0px) * 0.3536);
+    top: calc(var(--d, 0px) * 0.3536);
+  }
+  .within-c .wc-gate[data-corner='sw'] {
+    left: calc(var(--d, 0px) * -0.3536);
+    top: calc(var(--d, 0px) * 0.3536);
+  }
+  .within-c .wc-gate[data-corner='nw'] {
+    left: calc(var(--d, 0px) * -0.3536);
+    top: calc(var(--d, 0px) * -0.3536);
+  }
+
+  /* The panels are a second sticky box laid exactly over the first, so the corners stay
+     with the figure for the whole of the track. Only the corners take pointer events, so
+     the gates in the middle are never covered. */
+  .within-c .wc-panels {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    margin-top: -100svh;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .within-c .wc-panel[hidden] {
+    display: none;
+  }
+
+  .within-c .wc-panel {
+    position: absolute;
+    pointer-events: auto;
+    /* held to the figure's edge rather than the page's, so the set always reads as
+       belonging to the quadrant that opened it — and so 2560px does not fling it into the
+       far corner of the room. */
+    --wc-gap: clamp(1.2rem, 2.6vw, 2.6rem);
+    width: min(
+      clamp(15rem, 30vw, 27rem),
+      calc(50vw - var(--wc-d) * 0.5 - var(--wc-gap) - var(--wc-rail))
+    );
+    animation: wc-arrive 0.7s var(--wc-ease) both;
+  }
+
+  .within-c .wc-panel__fig {
+    display: none; /* the wide layout has one disc, and it turns */
+  }
+
+  .within-c .wc-panel[data-corner='ne'] {
+    left: calc(50% + var(--wc-d) * 0.5 + var(--wc-gap));
+    top: clamp(5.5rem, 13vh, 8.5rem);
+  }
+  .within-c .wc-panel[data-corner='se'] {
+    left: calc(50% + var(--wc-d) * 0.5 + var(--wc-gap));
+    bottom: clamp(2.5rem, 7vh, 5rem);
+  }
+  .within-c .wc-panel[data-corner='sw'] {
+    right: calc(50% + var(--wc-d) * 0.5 + var(--wc-gap));
+    bottom: clamp(2.5rem, 7vh, 5rem);
+    text-align: right;
+  }
+  .within-c .wc-panel[data-corner='nw'] {
+    right: calc(50% + var(--wc-d) * 0.5 + var(--wc-gap));
+    top: clamp(5.5rem, 13vh, 8.5rem);
+    text-align: right;
+  }
+
+  /* the rule beside the number is a spoke: on every corner it points back at the hub */
+  .within-c .wc-panel[data-corner='ne'] .wc-panel__head,
+  .within-c .wc-panel[data-corner='se'] .wc-panel__head {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+
+  .within-c .wc-panel[data-corner='sw'] .wc-panel__head,
+  .within-c .wc-panel[data-corner='nw'] .wc-panel__head {
+    justify-content: flex-end;
+  }
+
+  @keyframes wc-arrive {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+}
+
+/* ── 03 · THE FIGURE SET DOWN ──────────────────────────────────────────────────────────
+   No selection, no state, no turning: after four screens of choosing one quadrant at a
+   time, everything here is open at once. The geometry survives as arcs, not boxes.        */
+
+.within-c .wc-init {
+  position: relative;
+  background: var(--ground);
+  padding-bottom: clamp(4rem, 10vh, 8rem);
+}
+
+.within-c .wc-set {
+  background: var(--ground-deep);
+  overflow: hidden;
+}
+
+.within-c .wc-set__arc {
+  height: clamp(9rem, 30vh, 22rem);
+  overflow: hidden;
+  border-radius: 50% 50% 0 0 / clamp(4rem, 13vw, 12rem) clamp(4rem, 13vw, 12rem) 0 0;
+  background: #100c0a;
+}
+
+.within-c .wc-set__arc img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 62%;
+}
+
+.within-c .wc-init__head {
+  max-width: 96rem;
+  margin-inline: auto;
+  padding: clamp(3rem, 8vh, 5.5rem) var(--wc-rail) clamp(1.5rem, 4vh, 2.5rem);
+  display: grid;
+  gap: clamp(0.8rem, 2vw, 2.5rem);
+}
+
+@media (min-width: 900px) {
+  .within-c .wc-init__head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+  }
+}
+
+.within-c .wc-init__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 1.2rem + 3.2vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+.within-c .wc-init__lead {
+  margin: 0;
+  max-width: 38ch;
+  font-size: clamp(1rem, 0.95rem + 0.26vw, 1.14rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ── the two programmes ─────────────────────────────────────────────────────────────── */
+
+.within-c .wc-progs,
+.within-c .wc-offers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 96rem;
+  margin-inline: auto;
+}
+
+.within-c .wc-prog {
+  position: relative;
+  padding: clamp(3rem, 6vh, 4.4rem) var(--wc-rail) clamp(2rem, 4vh, 3rem);
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 3.5rem);
+}
+
+@media (min-width: 900px) {
+  .within-c .wc-prog {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* Every entry opens on a shallow dome — a segment of a circle so large that a hairline of
+   it crosses the whole page. It is the same figure, set down and opened out, and it is why
+   nothing in this section is divided by a straight rule. */
+.within-c .wc-prog__arc {
+  position: absolute;
+  left: var(--wc-rail);
+  right: var(--wc-rail);
+  top: 0;
+  height: clamp(1.4rem, 3vw, 2.6rem);
+  border: 1px solid var(--clay);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  pointer-events: none;
+}
+
+.within-c .wc-prog__h {
+  margin: 0 0 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 1.05rem + 1.35vw, 2.15rem);
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  max-width: 18ch;
+}
+
+.within-c .wc-prog__line {
+  margin: 0 0 0.6rem;
+  max-width: 42ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.58;
+  color: var(--ink-soft);
+}
+
+.within-c .wc-prog__note {
+  margin-top: 1.3rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--clay);
+  max-width: 40ch;
+}
+
+.within-c .wc-prog__note p {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.within-c .wc-prog__lead {
+  margin: 0 0 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #265e5b;
+}
+
+.within-c .wc-reg--paper .wc-reg__i {
+  color: var(--ink);
+}
+
+@media (min-width: 620px) {
+  .within-c .wc-reg--paper {
+    columns: 2;
+    column-gap: 2rem;
+  }
+  .within-c .wc-reg--paper .wc-reg__i {
+    break-inside: avoid;
+  }
+}
+
+/* ── the two offerings ──────────────────────────────────────────────────────────────── */
+
+.within-c .wc-offers {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding: clamp(2.5rem, 6vh, 4rem) var(--wc-rail);
+  margin-top: clamp(1.5rem, 4vh, 3rem);
+  background: var(--ground-warm);
+  border-top: 1px solid var(--wc-hair-ink);
+  /* the two that are prose only arrive on their own shallow dome, so the one change of
+     ground in this section is still a curve rather than a box */
+  border-radius: 50% 50% 0 0 / clamp(2rem, 5vw, 5rem) clamp(2rem, 5vw, 5rem) 0 0;
+  padding-top: clamp(3.5rem, 8vh, 6rem);
+}
+
+@media (min-width: 860px) {
+  .within-c .wc-offers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.within-c .wc-offer {
+  display: grid;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+@media (min-width: 480px) {
+  .within-c .wc-offer {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .within-c .wc-offer--pranava {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.within-c .wc-offer__disc {
+  margin: 0;
+  width: clamp(5.5rem, 16vw, 8.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--wc-hair-ink);
+}
+
+.within-c .wc-offer__disc img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 38%;
+}
+
+.within-c .wc-offer__tag {
+  margin: 0 0 0.5rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #6b3a22; /* 6.1:1 on the warm ground */
+}
+
+.within-c .wc-offer__tag::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--clay);
+  transform: translateY(-4px);
+  flex: none;
+}
+
+.within-c .wc-offer__h {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.5rem, 1.15rem + 1.6vw, 2.3rem);
+  line-height: 1.08;
+}
+
+.within-c .wc-offer__line {
+  margin: 0 0 0.6rem;
+  max-width: 44ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
+  line-height: 1.58;
+  color: var(--ink-soft);
+}
+
+/* ── 04 · NEXT ─────────────────────────────────────────────────────────────────────── */
+
+.within-c .wc-next {
+  max-width: 96rem;
+  margin-inline: auto;
+  padding: 0 var(--wc-rail) clamp(3rem, 8vh, 6rem);
+}
+
+.within-c .wc-next__in {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: clamp(1.5rem, 4vh, 2.5rem);
+  border-top: 1px solid var(--wc-hair-ink);
+}
+
+.within-c .wc-next__lbl {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.within-c .wc-next__a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.8em;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.05rem + 1.3vw, 2.1rem);
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--clay);
+  padding-bottom: 0.12em;
+}
+
+.within-c .wc-next__a svg {
+  color: var(--wc-clay-deep);
+  transform: translateY(-0.1em);
+}
+
+.within-c .wc-next :focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  box-shadow: none;
+}
+
+/* ── NO JAVASCRIPT ─────────────────────────────────────────────────────────────────────
+   `js` is put on <html> by an inline script before first paint, so this branch is only ever
+   taken by a browser with scripting switched off. There, a gate is a control that leads
+   nowhere — the codebase's own rule — so the gates go, and the four sets come back into
+   normal flow. Every word of the page is still present and still readable; what is lost is
+   the turning, which was never the only way to reach anything.                            */
+
+html:not(.js) .within-c .wc-gates {
+  display: none;
+}
+
+@media (max-width: 999px) {
+  /* the compass exists to report which set you are in. With nothing reporting, and each set
+     already carrying its own disc, it is furniture. */
+  html:not(.js) .within-c .wc-dial__stick {
+    display: none;
+  }
+}
+
+@media (min-width: 1000px) {
+  html:not(.js) .within-c .wc-dial__track {
+    height: auto;
+  }
+  html:not(.js) .within-c .wc-dial__stick {
+    position: relative;
+    height: auto;
+    padding: clamp(3rem, 8vh, 6rem) 0 clamp(2rem, 5vh, 4rem);
+  }
+  html:not(.js) .within-c .wc-panels {
+    position: static;
+    margin-top: 0;
+    height: auto;
+    display: grid;
+    gap: clamp(2.5rem, 6vh, 4.5rem);
+    padding: 0 var(--wc-rail) clamp(3rem, 8vh, 6rem);
+    max-width: 96rem;
+    margin-inline: auto;
+  }
+  html:not(.js) .within-c .wc-panel[data-corner] {
+    position: static;
+    width: auto;
+    max-width: 46rem;
+    animation: none;
+    text-align: left;
+  }
+  html:not(.js) .within-c .wc-panel[data-corner] .wc-panel__head {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  html:not(.js) .within-c .wc-panel[data-corner] .wc-reg__i {
+    flex-direction: row;
+    padding-left: calc(var(--i) * 6px);
+    padding-right: 0;
+  }
+}
+
+/* ── MOTION OFF ────────────────────────────────────────────────────────────────────────
+   The figure still turns — it simply arrives rather than travels. Every one of the four
+   sets stays reachable by scroll, by pointer and by keyboard, because none of them was
+   ever reachable only through motion.                                                    */
+
+@media (prefers-reduced-motion: reduce) {
+  .within-c .wc-fig__light,
+  .within-c .wc-fig__rim,
+  .within-c .wc-fig__img,
+  .within-c .wc-gate {
+    transition: none !important;
+  }
+  .within-c .wc-panel {
+    animation: none !important;
+  }
+}
