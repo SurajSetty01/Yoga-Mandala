@@ -144,11 +144,11 @@ const ROUNDS: Round[] = [
   {
     id: 'quote',
     title: 'The closing quotation — three fills',
-    blurb: 'Shared by all three: the marks are inline (tight before the first letter, tight after the last), two lines, centred. Only the fill differs. Fraunces is pushed to the top of its weight axis with SOFT at 100, because thin strokes cannot hold a photograph — that is why the reference works and a lighter setting turns to mud.',
+    blurb: 'Shared by all three: the marks are inline (tight before the first letter, tight after the last), two lines, centred, and set larger than before. Only the fill differs. Fraunces is pushed to the top of its weight axis with SOFT at 100 — thin strokes cannot hold a photograph, which is why the reference works and a lighter setting turns to mud. The frame is the Samskrithi Sadhana panel: four people in conversation, which is what “we learn together” means, and it was chosen over four alternatives because faces and saris stay legible at letter scale where a room of mats becomes texture.',
     concepts: [
-      { k: 'a', title: 'A · “Yoga” only', line: 'One word carries the picture', stat: 'quietest' },
-      { k: 'b', title: 'B · the whole quotation', line: 'Every word is a window', stat: 'boldest · saturation 0.487' },
-      { k: 'c', title: 'C · “Yoga” and “together.”', line: 'The two words that hold the sentence up', stat: 'bracketed' },
+      { k: 'a', title: 'A · “Yoga” only', line: 'One word carries the picture', stat: 'quietest · but the filled word reads lighter than the ink' },
+      { k: 'b', title: 'B · the whole quotation', line: 'Every word is a window', stat: 'one object · 7.20:1, saturation 0.432' },
+      { k: 'c', title: 'C · “Yoga” and “together.”', line: 'The two words that hold the sentence up', stat: 'bracketed · same weight conflict as A' },
     ],
     rows: [
       {

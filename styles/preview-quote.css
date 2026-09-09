@@ -32,7 +32,7 @@
   font-optical-sizing: auto;
   /* Two lines is the client's instruction, so the size is bounded by the LONGER line
      fitting the measure rather than chosen for its own sake. */
-  font-size: clamp(2.1rem, 0.4rem + 6.1vw, 7.6rem);
+  font-size: clamp(2.35rem, 0.4rem + 7.0vw, 8.9rem);
   font-weight: 700;
   font-variation-settings: 'opsz' 144, 'wght' 700, 'SOFT' 100, 'WONK' 0;
   line-height: 1.02;
@@ -73,9 +73,9 @@
    filled word rather than each word repeating the frame from its own left edge. */
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .qv__w--fill {
-    background-image: url('/media/stills/p13-img_0544-deep-2560.webp');
+    background-image: url('/media/stills/ss-dsc07143-deep-2560.webp');
     background-size: cover;
-    background-position: 42% 74%;
+    background-position: 50% 52%;
     background-repeat: no-repeat;
     /* the fill is painted across the LINE box, not each word's own box */
     background-attachment: scroll;
@@ -85,7 +85,7 @@
   }
   @media (max-width: 860px) {
     .qv__w--fill {
-      background-image: url('/media/stills/p13-img_0544-deep-1920.webp');
+      background-image: url('/media/stills/ss-dsc07143-deep-1920.webp');
     }
   }
 }
