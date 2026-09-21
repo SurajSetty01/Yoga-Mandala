@@ -104,28 +104,24 @@
 .hl-top {
   padding-top: clamp(7.5rem, 15vw, 12rem);
 }
-.hl-kicker {
-  margin: 0 0 clamp(1.4rem, 2.6vw, 2rem);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font: 600 11.5px/1 var(--font-text);
-  letter-spacing: 0.19em;
-  text-transform: uppercase;
-  color: var(--teal-deep);
-}
-.hl-kicker__rule {
-  flex: none;
-  width: 30px;
-  height: 1px;
-  background: var(--clay-deep);
-}
+/* The <h1> is the navigation's own label at label scale, wearing the same rule
+   the register mark wears. An <h1> is a rank, not a font-size; the sentence
+   under it is the thing worth reading at size. */
 .hl-h1 {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
   font: 600 11.5px/1 var(--font-text);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink);
+}
+.hl-h1__rule {
+  flex: none;
+  width: 30px;
+  height: 1px;
+  background: var(--clay-deep);
 }
 .hl-lede {
   margin: clamp(1.2rem, 2.4vw, 1.9rem) 0 0;
@@ -142,10 +138,18 @@
 
 /* ══ 01 · FOUR NAMES REACHING FOR A NAME THEY HAVE NOT JOINED YET ═════════ */
 .hl-say {
-  margin: 0 0 clamp(3.4rem, 7vw, 6rem);
+  margin: 0 0 0.9rem;
   max-width: 46ch;
   font: 400 var(--hl-read) / 1.62 var(--font-text);
   color: var(--ink-soft);
+}
+/* The client's sentence, and the only future tense on the page. */
+.hl-promise {
+  margin: 0 0 clamp(3.4rem, 7vw, 6rem);
+  max-width: 46ch;
+  font: 400 var(--hl-read) / 1.62 var(--font-text);
+  font-style: italic;
+  color: var(--ink);
 }
 
 .hl-diagram {
@@ -199,12 +203,6 @@
   line-height: 1.06;
   letter-spacing: -0.026em;
   color: var(--ink);
-}
-.hl-note {
-  margin: clamp(0.8rem, 1.6vw, 1.15rem) auto 0;
-  max-width: 40ch;
-  font: 400 var(--hl-small) / 1.6 var(--font-text);
-  color: var(--ink-soft);
 }
 
 /* ══ 02 · THE CAVEAT, AND THEN THE LINK ═══════════════════════════════════ */
@@ -377,10 +375,6 @@
   .hl-svasthya {
     margin-top: 0.5rem;
     margin-left: 1.6rem;
-  }
-  .hl-note {
-    margin-left: 1.6rem;
-    margin-right: 0;
   }
 }
 

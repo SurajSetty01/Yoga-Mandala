@@ -137,3 +137,22 @@ Blocked facts: no postal address, no email addresses. Both must render as nothin
 5. Heal, Insights, Events — designed placeholders, per the brief.
 6. Enquire — rewrite of the existing page.
 7. Full visual review of all seven, then refine until no section reads as generic.
+
+---
+
+## Refinement pass — found during the build, to do once every page has landed
+
+1. **Add a 480w derivative and wire it into every `srcSet`.** Measured on `/practice/` at
+   390×844 DPR2: images displayed at **129 CSS px are served at 960w** — 3.7× oversized —
+   because 960 is the smallest derivative that exists, so `srcset` has nothing smaller to
+   choose. 1,289 KB of photographs on a phone for one page. The widths are hardcoded per page
+   in each `frames.ts`, so this is one cross-cutting change: encode 480w for the 83 `pr-`
+   stills, add it to `pranava-stills.json`, then add `480` to the widths arrays.
+2. **Re-probe every dark-ground contrast pair if the Praṇava palette is ever re-applied.**
+   `--ground-deep` would move from #1C1714 (16.66 with cream) to #12201A (15.79), about a 5%
+   drop on every pair measured against it.
+3. **`founder.action` ("Meet Pranav") renders nothing** — there is no such page. Either build
+   one or drop the button.
+4. **The hero on `/about/` is a 1.32× upscale at 2531**, because the new library is
+   portrait-only above 1620px. Needs either a wide frame from the client or a composition
+   that does not want one.

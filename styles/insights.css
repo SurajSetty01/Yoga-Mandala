@@ -1,1 +1,418 @@
-/* insights */
+/* insights — owned solely by /insights/. No other file may declare these selectors. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA — INSIGHTS.  Three sections, and the page is a reading.
+
+   —    deep    the masthead, and one plain sentence about what is not here
+   01   paper   three paragraphs, each read at two distances at once
+   02   warm    two seats with nobody on them, and the way to be told
+
+   THE MECHANIC lives in .in-passage. One paragraph of the client's prose, set
+   at reading size, with the clause that carries the thought set in the display
+   face at a little over twice that — INLINE, in the same paragraph, wrapping
+   with it. The paragraph swells where the point is and drops back around it.
+
+   HOW THE MIXED LEADING IS KEPT SAFE, because this is the one thing that can
+   go wrong here: each inline box contributes its own half-leading and the line
+   box takes the maximum, so the quiet spans carry line-height 1.62 (their own
+   comfortable reading leading) and the lit span carries 1.1. A line of quiet
+   text alone is 1.62em tall; a line containing any of the lit clause is
+   1.1 × its own size, which is always the larger. Lines therefore never
+   collide, and the quiet text never inherits the display face's tight leading.
+   The paragraph's own strut is set to the quiet size for the same reason.
+
+   NO SCRIPT RUNS ON THIS PAGE. The folio is `position: sticky`, which is
+   layout rather than animation, so prefers-reduced-motion changes nothing
+   here except the two hover transitions declared at the bottom of this file.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.in {
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  --in-read: clamp(1rem, 0.95rem + 0.42vw, 1.22rem);
+  --in-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  --in-pad: clamp(4rem, 9vw, 8rem);
+  --in-max: 78rem;
+
+  --in-hair: rgba(36, 29, 24, 0.14);
+  --in-hair-onDeep: rgba(251, 247, 242, 0.22);
+}
+
+.in-s {
+  position: relative;
+  padding-block: var(--in-pad);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+.in-s--deep {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+}
+.in-s--warm {
+  background: var(--ground-warm);
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED. `max-width` alone caps the column and
+   pins it left — invisible at 1440, hundreds of px off-axis at 2531, and it
+   shipped on this site once. Everything on this page goes through this class. */
+.in-rail {
+  max-width: calc(var(--in-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* the global focus ring is cream in a dark halo — right on the deep masthead,
+   invisible on paper, so it inverts on the two light sections */
+.in-s:not(.in-s--deep) :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark ──────────────────────────────────────────────────── */
+.in-mark {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.4rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.in-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.in-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: rgba(193, 97, 60, 0.55);
+}
+/* on the reversed ground teal is 2.44:1 and clay 4.2:1 — neither may carry an
+   11.5px label, so the mark goes cream and the accent becomes a sand rule */
+.in-mark--dark {
+  color: var(--ink-onPic-2);
+}
+.in-mark--dark .in-mark__n {
+  color: var(--ink-onPic);
+}
+.in-mark--dark .in-mark__rule {
+  background: var(--sand);
+}
+
+/* ══ — · THE MASTHEAD ═════════════════════════════════════════════════════ */
+.in-top {
+  padding-top: clamp(7.5rem, 15vw, 12rem);
+}
+.in-h1 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-onPic);
+}
+.in-h1__rule {
+  flex: none;
+  width: 30px;
+  height: 1px;
+  background: var(--sand);
+}
+.in-lede {
+  margin: clamp(1.2rem, 2.4vw, 1.9rem) 0 0;
+  max-width: 17ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.05rem, 1rem + 4.5vw, 5rem);
+  line-height: 1.04;
+  letter-spacing: -0.028em;
+  color: var(--ink-onPic);
+  text-wrap: balance;
+}
+
+/* The standing notice. A sand rule above it, the fact on one line, and the
+   consequence beneath — so it reads as a notice rather than as an apology. */
+.in-notice {
+  margin-top: clamp(2.6rem, 5vw, 4rem);
+  padding-top: clamp(1.2rem, 2.2vw, 1.7rem);
+  border-top: 1px solid var(--in-hair-onDeep);
+  max-width: 54ch;
+}
+.in-notice__now {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 0.95rem + 0.95vw, 1.85rem);
+  line-height: 1.24;
+  letter-spacing: -0.018em;
+  color: var(--ink-onPic);
+}
+.in-notice__then {
+  margin: 0;
+  font: 400 var(--in-read) / 1.62 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.in-intent {
+  margin: clamp(2.2rem, 4vw, 3.2rem) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.85rem;
+}
+.in-intent__k {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.in-intent__v {
+  font: 400 var(--in-small) / 1.5 var(--font-text);
+  font-style: italic;
+  color: var(--ink-onPic);
+}
+
+/* ══ 01 · THREE PARAGRAPHS, READ AT TWO DISTANCES AT ONCE ═════════════════ */
+.in-read__set {
+  display: grid;
+  gap: clamp(3.6rem, 8vw, 7rem);
+}
+.in-piece {
+  display: grid;
+  grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+  gap: clamp(1.4rem, 3.5vw, 3.6rem);
+  align-items: start;
+  padding-top: clamp(1.4rem, 2.4vw, 2rem);
+  border-top: 1px solid var(--in-hair);
+}
+
+/* The folio — the running head of a printed page. It is sticky inside its own
+   article, so the source of the passage you are reading stays beside you and
+   is replaced by the next when you leave it. `top` clears the navigation pill,
+   which is fixed and 48–58px tall depending on viewport. */
+.in-folio {
+  position: sticky;
+  top: clamp(5.5rem, 8vw, 7rem);
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+}
+.in-folio__n {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.in-folio__k {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.in-folio__a {
+  font: 500 var(--in-small) / 1.4 var(--font-text);
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(193, 97, 60, 0.55);
+  text-decoration-thickness: 1px;
+}
+.in-folio__a:hover {
+  text-decoration-color: var(--clay-deep);
+}
+
+/* THE PARAGRAPH. Its own strut is the quiet size and the quiet leading; see the
+   header of this file for why the two inline line-heights are what they are. */
+.in-passage {
+  margin: 0;
+  max-width: 30ch;
+  font: 400 var(--in-read) / 1.62 var(--font-text);
+  color: var(--ink);
+  /* a display clause hyphenating mid-word would look like a fault, not a choice */
+  hyphens: none;
+}
+.in-passage__q {
+  /* the quiet voice: the client's own sentence, continuing */
+  color: var(--ink-soft);
+  line-height: 1.62;
+}
+.in-passage__lit {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.68rem, 1.05rem + 2.15vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+}
+
+/* ══ 02 · TWO SEATS, AND THE WAY TO BE TOLD ═══════════════════════════════ */
+.in-told__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+.in-fig {
+  margin: 0;
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+}
+/* The frame's largest derivative is 1620, so the plate is capped: at 52vw of a
+   2531 viewport that is 1316 CSS px, which the 1620 file still covers at 1×
+   and misses at 2× by a factor the source cannot supply. Never full-bleed. */
+.in-fig img {
+  width: 100%;
+  max-width: 60rem;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 3px;
+  background: var(--ground);
+}
+.in-told__col {
+  min-width: 0;
+}
+.in-told__lead {
+  margin: 0 0 1rem;
+  max-width: 26ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 0.95rem + 1.6vw, 2.3rem);
+  line-height: 1.16;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.in-told__body {
+  margin: 0 0 1.8rem;
+  max-width: 44ch;
+  font: 400 var(--in-read) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* the one route out. --clay-deep is 5.98:1 with cream; --clay is 3.90:1 and
+   may never carry text. */
+.in-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: clamp(0.85rem, 1.6vw, 1.1rem) clamp(1.2rem, 2.2vw, 1.7rem);
+  border-radius: 4px;
+  background: var(--clay-deep);
+  color: var(--ink-onDark);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: clamp(1.05rem, 0.9rem + 0.55vw, 1.4rem);
+  letter-spacing: -0.015em;
+}
+.in-cta:hover,
+.in-cta:active {
+  background: var(--clay-press);
+}
+.in-cta__arw {
+  flex: none;
+  transition: transform 0.35s var(--ease);
+}
+.in-cta:hover .in-cta__arw,
+.in-cta:focus-visible .in-cta__arw {
+  transform: translateX(4px);
+}
+
+.in-told__msg {
+  margin: 1.2rem 0 0;
+  display: grid;
+  gap: 0.3rem;
+  max-width: 44ch;
+}
+.in-told__msgK {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.in-told__msgV {
+  font: 400 var(--in-small) / 1.55 var(--font-text);
+  font-style: italic;
+  color: var(--ink);
+}
+.in-told__alt {
+  margin: 1.5rem 0 0;
+  max-width: 44ch;
+  font: 400 var(--in-small) / 1.65 var(--font-text);
+  color: var(--ink-soft);
+}
+.in-ilink {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(193, 97, 60, 0.55);
+  text-decoration-thickness: 1px;
+}
+.in-ilink:hover {
+  text-decoration-color: var(--clay-deep);
+}
+
+/* ── narrow ─────────────────────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  .in-piece {
+    grid-template-columns: 1fr;
+    gap: clamp(1rem, 2.5vw, 1.6rem);
+  }
+  /* stacked, the folio sits above its passage and has nothing to stay beside,
+     so it stops being sticky — a sticky element in a single column is just a
+     thing that overlaps what follows it */
+  .in-folio {
+    position: static;
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .in-passage {
+    max-width: 34ch;
+  }
+}
+@media (max-width: 899px) {
+  .in-told__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(1.8rem, 5vw, 2.6rem);
+  }
+  .in-fig img {
+    max-width: none;
+  }
+}
+@media (max-width: 519px) {
+  .in-passage {
+    max-width: none;
+  }
+  .in-cta {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .in-cta__arw {
+    transition: none;
+  }
+}

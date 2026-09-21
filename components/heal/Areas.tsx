@@ -18,14 +18,15 @@ import { Mark } from './parts';
  *
  * THE GEOMETRY, which is measured rather than eyeballed. viewBox 0 0 1200 200; stems begin
  * at x = 150 / 450 / 750 / 1050, the centres of the four quarters, and aim at J = (600,
- * 186). Each stops 34 units short of J along its own line, so all four ends lie on a circle
- * of radius 34 about the joint and the gap is equal for all four rather than merely looking
- * it:
+ * 186). Each stops 48 units short of J along its own line, so all four ends lie on a circle
+ * of radius 48 about the joint and the gap is equal for all four rather than merely looking
+ * it — 48 against a joint of radius 10 leaves 38 units of nothing, which is what makes the
+ * unmade join read as deliberate rather than as a rendering slip:
  *
- *     from x=150   ends (568.6, 173.0)    line length 486.9
- *     from x=450   ends (578.7, 159.5)    line length 238.9
- *     from x=750   ends (621.3, 159.5)    line length 238.9
- *     from x=1050  ends (631.4, 173.0)    line length 486.9
+ *     from x=150   ends (555.6, 167.7)    line length 486.9
+ *     from x=450   ends (569.9, 148.6)    line length 238.9
+ *     from x=750   ends (630.1, 148.6)    line length 238.9
+ *     from x=1050  ends (644.4, 167.7)    line length 486.9
  *
  * `preserveAspectRatio="none"` lets the drawing take the rail's width at a fixed height,
  * and `vector-effect="non-scaling-stroke"` keeps every stroke a true hairline under that
@@ -59,6 +60,10 @@ export function Areas() {
           Four areas are named. Nothing beyond the names has been written yet, so nothing
           beyond the names is shown here.
         </p>
+        {/* The client's own sentence about the join, placed BEFORE the drawing so that the
+            drawing can end on the name by itself. Printed under the name it merely repeats
+            it; printed above, it is the promise the drawing then shows unkept. */}
+        <p className="hl-promise">{heal.note}</p>
 
         <div className="hl-diagram">
           <ul className="hl-areas">
@@ -83,10 +88,10 @@ export function Areas() {
               strokeWidth="1"
               vectorEffect="non-scaling-stroke"
             >
-              <path d="M150 0 L568.6 173.0" vectorEffect="non-scaling-stroke" />
-              <path d="M450 0 L578.7 159.5" vectorEffect="non-scaling-stroke" />
-              <path d="M750 0 L621.3 159.5" vectorEffect="non-scaling-stroke" />
-              <path d="M1050 0 L631.4 173.0" vectorEffect="non-scaling-stroke" />
+              <path d="M150 0 L555.6 167.7" vectorEffect="non-scaling-stroke" />
+              <path d="M450 0 L569.9 148.6" vectorEffect="non-scaling-stroke" />
+              <path d="M750 0 L630.1 148.6" vectorEffect="non-scaling-stroke" />
+              <path d="M1050 0 L644.4 167.7" vectorEffect="non-scaling-stroke" />
             </g>
             {/* The joint, open. Drawn as an ellipse in user units so the horizontal squash
                 of preserveAspectRatio="none" renders it as a circle — see the header. */}
@@ -110,7 +115,6 @@ export function Areas() {
           </div>
 
           <p className="hl-svasthya">{heal.svasthya}</p>
-          <p className="hl-note">{heal.note}</p>
         </div>
       </div>
     </section>
