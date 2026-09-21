@@ -186,7 +186,21 @@
   color: var(--ink-onPic);
 }
 
-/* ══ 01 · THREE PARAGRAPHS, READ AT TWO DISTANCES AT ONCE ═════════════════ */
+/* ══ 01 · THREE PARAGRAPHS, READ AT TWO DISTANCES AT ONCE ═════════════════
+   The bottom padding is deliberately deeper than the top. The last thing in
+   this section is a 3.1rem display clause, and at the narrow end the shared
+   section padding left it 64px above the seam — not enough air under a line
+   that size, and close enough to the seam that the fixed navigation pill sat
+   on it when the page was scrolled to bring the next section up. */
+.in-read {
+  padding-bottom: clamp(7rem, 11vw, 9rem);
+  /* The reading section takes a NARROWER rail than the rest of the page — a
+     text block inside a page, which is what a book does. Without it the folio
+     and the 36rem measure sit together in the left half of a 78rem rail and
+     the reading is 190px left of the page's axis at 2531; at 58rem the block's
+     own centre lands 28px from the viewport centre at 2531 and 31px at 1440. */
+  --in-max: 58rem;
+}
 .in-read__set {
   display: grid;
   gap: clamp(3.6rem, 8vw, 7rem);
@@ -239,9 +253,15 @@
 
 /* THE PARAGRAPH. Its own strut is the quiet size and the quiet leading; see the
    header of this file for why the two inline line-heights are what they are. */
+/* The measure is in rem, not ch. `ch` is computed against the paragraph's own
+   font-size, which here is the QUIET size, so a ch-based measure sets the
+   display clause to about 15 characters a line and the passage runs five lines
+   deep in a column 355px wide at 1440. 36rem is 576px: 47 characters of the
+   quiet voice and about 24 of the display one, which is the balance the
+   mechanic needs. */
 .in-passage {
   margin: 0;
-  max-width: 30ch;
+  max-width: 36rem;
   font: 400 var(--in-read) / 1.62 var(--font-text);
   color: var(--ink);
   /* a display clause hyphenating mid-word would look like a fault, not a choice */
@@ -286,6 +306,26 @@
   border-radius: 3px;
   background: var(--ground);
 }
+/* Provenance, in the site's caption voice. The global `.cap` cannot be reused:
+   it is the hero's own object, `position: absolute` and `display: none` until
+   motion is off. */
+.in-cap {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  font: 400 11px/1.4 var(--font-text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.in-cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--clay-deep);
+  transform: translateY(-4px);
+}
 .in-told__col {
   min-width: 0;
 }
@@ -308,26 +348,30 @@
   color: var(--ink-soft);
 }
 
-/* the one route out. --clay-deep is 5.98:1 with cream; --clay is 3.90:1 and
-   may never carry text. */
+/* The route out is a LINE, not a plate. The Heal page ends on a filled clay
+   plate and the Events page on a ruled ledger row; three held-back pages that
+   all ended on the same button would be three versions of one page. Ink on
+   paper is 11.51:1 and the clay rule under it is ornament, never text. */
+.in-told__go {
+  margin: 1.8rem 0 0;
+}
 .in-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: clamp(0.85rem, 1.6vw, 1.1rem) clamp(1.2rem, 2.2vw, 1.7rem);
-  border-radius: 4px;
-  background: var(--clay-deep);
-  color: var(--ink-onDark);
+  gap: 0.8rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--clay-deep);
+  color: var(--ink);
   text-decoration: none;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-weight: 500;
-  font-size: clamp(1.05rem, 0.9rem + 0.55vw, 1.4rem);
-  letter-spacing: -0.015em;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 0.95rem + 1.5vw, 2.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
 }
-.in-cta:hover,
-.in-cta:active {
-  background: var(--clay-press);
+.in-cta:hover {
+  border-bottom-color: var(--ink);
 }
 .in-cta__arw {
   flex: none;
@@ -335,28 +379,10 @@
 }
 .in-cta:hover .in-cta__arw,
 .in-cta:focus-visible .in-cta__arw {
-  transform: translateX(4px);
-}
-
-.in-told__msg {
-  margin: 1.2rem 0 0;
-  display: grid;
-  gap: 0.3rem;
-  max-width: 44ch;
-}
-.in-told__msgK {
-  font: 600 11.5px/1.35 var(--font-text);
-  letter-spacing: 0.19em;
-  text-transform: uppercase;
-  color: var(--teal-deep);
-}
-.in-told__msgV {
-  font: 400 var(--in-small) / 1.55 var(--font-text);
-  font-style: italic;
-  color: var(--ink);
+  transform: translateX(5px);
 }
 .in-told__alt {
-  margin: 1.5rem 0 0;
+  margin: 1.8rem 0 0;
   max-width: 44ch;
   font: 400 var(--in-small) / 1.65 var(--font-text);
   color: var(--ink-soft);
@@ -389,7 +415,7 @@
     gap: 0.75rem;
   }
   .in-passage {
-    max-width: 34ch;
+    max-width: 34rem;
   }
 }
 @media (max-width: 899px) {
@@ -404,10 +430,6 @@
 @media (max-width: 519px) {
   .in-passage {
     max-width: none;
-  }
-  .in-cta {
-    width: 100%;
-    justify-content: space-between;
   }
 }
 

@@ -1,1 +1,496 @@
-/* events */
+/* events — owned solely by /events/. No other file may declare these selectors. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA — EVENTS.  Three sections, and the page is a record.
+
+   —    paper   the answer first, and the strip begins directly under it
+   01   deep    the record as an exposed strip, with one frame still blank
+   02   warm    one line in the schedule, and the line is "ask"
+
+   THE MECHANIC is .ev-reel / .ev-track / .ev-cell: six photographs butted
+   along one band between two rebates — a number above each, what it shows
+   below each — and a seventh place that is blank paper. You leaf along it and
+   you arrive at the empty frame, which is where the next event is not yet.
+
+   NO SCRIPT RUNS ON THIS PAGE. The band is a native horizontal scroller, so it
+   behaves the same with JavaScript off, under prefers-reduced-motion and on a
+   touch screen. Below 760px it becomes a vertical stack, because a region that
+   can only be read sideways is a reflow problem on a phone.
+
+   CELL GEOMETRY. Every landscape frame in this collection is 1620 × 1080 on
+   disk (measured, not read out of the manifest, whose w/h are pre-rotation),
+   so the cell is 3:2. Height clamp(190px, 30vh, 340px) → width 285–510px →
+   track 2019–3594px across 7 cells and six 4px gaps. The strip always
+   overflows its own scroller and never the document.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ev {
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  --ev-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --ev-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  --ev-pad: clamp(4rem, 9vw, 8rem);
+  --ev-max: 80rem;
+
+  /* the strip's own measurements */
+  --ev-h: clamp(190px, 30vh, 340px);
+  --ev-gap: 4px;
+  --ev-rebate-top: 24px;
+  --ev-rebate-bot: 38px;
+
+  --ev-hair: rgba(36, 29, 24, 0.14);
+  --ev-hair-onDeep: rgba(251, 247, 242, 0.24);
+}
+
+.ev-s {
+  position: relative;
+  padding-block: var(--ev-pad);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+.ev-s--deep {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+}
+.ev-s--warm {
+  background: var(--ground-warm);
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED. `max-width` alone caps the column and
+   then pins it left — invisible at 1440, hundreds of px off-axis at 2531, and
+   it shipped on this site once. The strip is the one thing that deliberately
+   does NOT go through this class: it is full-bleed and runs off both edges,
+   which is what a strip does. */
+.ev-rail {
+  max-width: calc(var(--ev-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.ev-s:not(.ev-s--deep) :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark ──────────────────────────────────────────────────── */
+.ev-mark {
+  margin: 0 0 clamp(1.3rem, 2.6vw, 2rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.ev-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.ev-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: rgba(193, 97, 60, 0.55);
+}
+/* teal is 2.44:1 and clay 4.2:1 on the reversed ground — neither may carry an
+   11.5px label, so the mark goes cream and the accent becomes a sand rule */
+.ev-mark--dark {
+  color: var(--ink-onPic-2);
+}
+.ev-mark--dark .ev-mark__n {
+  color: var(--ink-onPic);
+}
+.ev-mark--dark .ev-mark__rule {
+  background: var(--sand);
+}
+
+/* ══ — · THE ANSWER FIRST ═════════════════════════════════════════════════
+   The masthead's bottom padding is collapsed so the dark strip starts
+   immediately under the line and the two read as one object. */
+.ev-top {
+  padding-top: clamp(7.5rem, 15vw, 12rem);
+  padding-bottom: clamp(2.6rem, 5vw, 4rem);
+}
+.ev-h1 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.ev-h1__rule {
+  flex: none;
+  width: 30px;
+  height: 1px;
+  background: var(--clay-deep);
+}
+.ev-lede {
+  margin: clamp(1.2rem, 2.4vw, 1.9rem) 0 0;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.05rem + 4.6vw, 5.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.ev-top__foot {
+  margin-top: clamp(2rem, 4vw, 3.2rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  gap: clamp(1.2rem, 3vw, 3rem);
+  align-items: start;
+}
+.ev-top__say {
+  margin: 0;
+  max-width: 52ch;
+  font: 400 var(--ev-read) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+.ev-top__note {
+  margin: 0;
+  max-width: 34ch;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ev-hair);
+  font: 400 var(--ev-small) / 1.55 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ══ 01 · THE EXPOSED STRIP ═══════════════════════════════════════════════ */
+.ev-strip {
+  padding-top: clamp(3rem, 6vw, 5rem);
+}
+.ev-strip__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem 2rem;
+  margin-bottom: clamp(1.6rem, 3vw, 2.4rem);
+}
+.ev-strip__hint {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.ev-strip__lead {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 0.95rem + 1.25vw, 2.1rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+
+/* The band. Full-bleed, and the only scroller on the site. `scroll-padding`
+   keeps the first and last cells clear of the rail once snapped. */
+/* THE STRIP STARTS ON THE PAGE'S AXIS AND RUNS OFF THE RIGHT.
+   `padding-inline: var(--rail)` alone puts the first frame against the viewport
+   edge, which at 2531 is 558px left of every word on the page — the strip reads
+   as unmoored. This expression resolves to the rail's own CONTENT left edge at
+   every width: `(100% - var(--ev-max)) / 2` is the rail's outer offset once the
+   measure is capped, and `var(--rail)` wins below that. Measured: 21.6px at 320,
+   37.8px at 900, 80px at 1440 and 625.5px at 2531 — the same x as the register
+   mark above it in all four. */
+.ev-reel {
+  --ev-lead: max(var(--rail), calc((100% - var(--ev-max)) / 2));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--ev-lead);
+  padding-inline: var(--ev-lead);
+  padding-block: 2px;
+  /* a thin, quiet scrollbar; Firefox and Chromium both honour one of these */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(251, 247, 242, 0.34) transparent;
+}
+.ev-reel::-webkit-scrollbar {
+  height: 8px;
+}
+.ev-reel::-webkit-scrollbar-thumb {
+  background: rgba(251, 247, 242, 0.34);
+  border-radius: 99px;
+}
+.ev-reel::-webkit-scrollbar-track {
+  background: rgba(251, 247, 242, 0.08);
+  border-radius: 99px;
+}
+
+.ev-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--ev-gap);
+  width: max-content;
+}
+
+/* One frame, between its two rebates. The rebate heights are FIXED so that the
+   numbers across the strip sit on one line and the captions on another, which
+   is what makes seven separate cells read as one continuous strip. */
+.ev-cell {
+  flex: none;
+  width: calc(var(--ev-h) * 1.5);
+  display: grid;
+  grid-template-rows: var(--ev-rebate-top) var(--ev-h) var(--ev-rebate-bot);
+  scroll-snap-align: start;
+  background: rgba(251, 247, 242, 0.05);
+}
+.ev-cell__n {
+  display: flex;
+  align-items: center;
+  padding-inline: 0.55rem;
+  border-bottom: 1px solid var(--ev-hair-onDeep);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--sand);
+}
+.ev-cell__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #14100e;
+}
+.ev-cell__cap {
+  display: flex;
+  align-items: center;
+  padding: 0 0.55rem;
+  border-top: 1px solid var(--ev-hair-onDeep);
+  font: 400 10.5px/1.35 var(--font-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  /* cream at 0.90 on the warm black inside the rebate — 14.9:1 measured */
+  color: var(--ink-onPic-2);
+}
+
+/* The seventh place. Paper on the dark band: the frame that was never exposed. */
+.ev-cell--blank .ev-blank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+  background: var(--ground);
+  /* the hairline says it is a frame and not a hole in the strip */
+  box-shadow: inset 0 0 0 1px rgba(36, 29, 24, 0.12);
+}
+.ev-blank__p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 0.85rem + 0.8vw, 1.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-align: center;
+}
+.ev-cell--blank .ev-cell__cap {
+  color: var(--sand);
+}
+
+.ev-strip__prov {
+  margin: clamp(1.4rem, 2.6vw, 2rem) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.8rem;
+}
+.ev-strip__provK {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.ev-strip__provV {
+  font: 400 var(--ev-small) / 1.4 var(--font-text);
+  color: var(--ink-onPic);
+}
+
+/* ══ 02 · ONE LINE IN THE SCHEDULE ════════════════════════════════════════ */
+.ev-route__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 4vw, 3.6rem);
+  align-items: start;
+  margin-bottom: clamp(2.4rem, 5vw, 3.8rem);
+}
+.ev-route__lead {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 0.95rem + 1.7vw, 2.4rem);
+  line-height: 1.16;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.ev-route__body {
+  margin: 0;
+  max-width: 46ch;
+  font: 400 var(--ev-read) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* THE ROUTE, AS A LINE IN A LEDGER. Deliberately not the Heal page's filled
+   plate and not the Insights page's inline link — three held-back pages that
+   all end on the same button would be three versions of one page. */
+.ev-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: clamp(1rem, 3vw, 2.5rem);
+  row-gap: 0.35rem;
+  padding-block: clamp(1.1rem, 2.2vw, 1.6rem);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  text-decoration: none;
+  color: var(--ink);
+}
+.ev-row__label {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.026em;
+}
+.ev-row__msg {
+  grid-column: 1;
+  grid-row: 2;
+  font: 400 var(--ev-small) / 1.5 var(--font-text);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.ev-row__arw {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  flex: none;
+  transition: transform 0.35s var(--ease);
+}
+.ev-row:hover,
+.ev-row:focus-visible {
+  background: rgba(193, 97, 60, 0.09);
+}
+.ev-row:hover .ev-row__arw,
+.ev-row:focus-visible .ev-row__arw {
+  transform: translateX(6px);
+}
+.ev-route__alt {
+  margin: 1.4rem 0 0;
+  max-width: 46ch;
+  font: 400 var(--ev-small) / 1.6 var(--font-text);
+  color: var(--ink-soft);
+}
+.ev-ilink {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(193, 97, 60, 0.55);
+  text-decoration-thickness: 1px;
+}
+.ev-ilink:hover {
+  text-decoration-color: var(--clay-deep);
+}
+
+/* ── narrow ─────────────────────────────────────────────────────────────── */
+@media (max-width: 899px) {
+  .ev-top__foot,
+  .ev-route__grid {
+    grid-template-columns: 1fr;
+  }
+  .ev-top__note {
+    max-width: 46ch;
+  }
+}
+
+/*
+  Below 760 the strip stops being a strip. A region that can only be read by
+  scrolling it sideways is a reflow problem on a phone, and the same six frames
+  read perfectly well as a column — the rebates stay, so it is still a record.
+*/
+@media (max-width: 759px) {
+  /* nothing to leaf along once it is a column */
+  .ev-strip__hint {
+    display: none;
+  }
+  /* BOTH axes, not just x: when one axis is not `visible` the other computes to
+     `auto`, so `overflow-x: visible; overflow-y: hidden` would leave the band a
+     scroller with nothing in it to scroll. */
+  .ev-reel {
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-inline: var(--rail);
+  }
+  .ev-track {
+    flex-direction: column;
+    width: auto;
+    gap: clamp(1.6rem, 5vw, 2.4rem);
+  }
+  .ev-cell {
+    width: 100%;
+    grid-template-rows: var(--ev-rebate-top) auto var(--ev-rebate-bot);
+  }
+  .ev-cell__img {
+    aspect-ratio: 3 / 2;
+    height: auto;
+  }
+  .ev-cell--blank .ev-blank {
+    aspect-ratio: 3 / 2;
+    height: auto;
+  }
+}
+
+@media (max-width: 519px) {
+  .ev-row {
+    grid-template-columns: 1fr;
+  }
+  .ev-row__arw {
+    grid-column: 1;
+    grid-row: 3;
+    align-self: start;
+    margin-top: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ev-row__arw {
+    transition: none;
+  }
+  /* a snap point is a scroll behaviour, not an animation, but a reader who has
+     asked for less movement should not have the page correcting their scroll */
+  .ev-reel {
+    scroll-snap-type: none;
+  }
+}

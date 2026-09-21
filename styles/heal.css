@@ -172,7 +172,11 @@
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 400;
-  font-size: clamp(0.95rem, 0.48rem + 1.05vw, 1.5rem);
+  /* The four names are the only content this section has, so they are set as
+     large as the narrowest of the four equal columns will take. Measured at the
+     breakpoint, which is the hard case: at 760 a column is 174px and the widest
+     of the four, "Women's Wellness", sets to 130px at 17px. */
+  font-size: clamp(0.95rem, 0.4rem + 1.4vw, 2rem);
   line-height: 1.2;
   letter-spacing: -0.012em;
   color: var(--ink);
@@ -351,30 +355,37 @@
   .hl-wire-n {
     display: block;
     position: relative;
-    height: 6.1rem;
+    height: 4.6rem;
   }
-  /* the spine, continuing out of the list and stopping */
+  /* the spine, continuing out of the list and then stopping: 2.2rem of line
+     and 2.4rem of nothing */
   .hl-wire-n__spine {
     position: absolute;
     left: 0;
     top: 0;
     width: 1px;
-    height: 2.4rem;
+    height: 2.2rem;
     background: var(--clay-deep);
   }
-  /* the joint, open, 3.1rem of nothing above it */
-  .hl-wire-n__ring {
+  /* The joint, open, sitting on the spine's own axis at the name's cap line —
+     and with NO feeder, where all four areas above have one. The absence is
+     the drawing: four things are connected to the spine and this one is not. */
+  .hl-svasthya {
+    position: relative;
+    margin-top: 0;
+    margin-left: 1.6rem;
+  }
+  .hl-svasthya::before {
+    content: '';
     position: absolute;
-    left: -5px;
-    top: 5.5rem;
+    left: -1.6rem;
+    top: 0.52em;
     width: 11px;
     height: 11px;
+    margin-left: -5px;
+    margin-top: -5.5px;
     border: 1px solid var(--clay-deep);
     border-radius: 50%;
-  }
-  .hl-svasthya {
-    margin-top: 0.5rem;
-    margin-left: 1.6rem;
   }
 }
 

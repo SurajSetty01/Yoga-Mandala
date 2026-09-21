@@ -137,7 +137,7 @@ export const FORMS: Array<{ label: string; frame: Frame; w: number; h: number }>
        and an empty red floor. */
     frame: f(
       'pr-pbh-img_5616',
-      [960, 1920],
+      [480, 960, 1920],
       1920,
       2560,
       '46% 52%',
@@ -213,7 +213,7 @@ export const FORMS: Array<{ label: string; frame: Frame; w: number; h: number }>
    tall window in a wide sheet of paper rather than a soft enlargement. */
 export const PATH = f(
   'pr-ttc-dsc_0364',
-  [960],
+  [480, 960],
   960,
   1440,
   '50% 46%',

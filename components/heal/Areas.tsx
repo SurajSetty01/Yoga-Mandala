@@ -107,11 +107,14 @@ export function Areas() {
             />
           </svg>
 
-          {/* The narrow drawing: one spine down the left with four feeders into it, and the
-              spine stops short of the name. Borders only, so it cannot distort. */}
+          {/* The narrow drawing. Below 760px the list's own left border is the spine and
+              each item's ::before is a feeder into it; this is the stub of spine that runs
+              on past the last name and stops. The joint itself is drawn on the Svasthya
+              name, level with it and — unlike all four areas above — with no feeder into
+              the spine at all, which is the whole point. Borders cannot distort, so the
+              narrow variant has no aspect-ratio problem. */}
           <div className="hl-wire-n" aria-hidden="true">
             <span className="hl-wire-n__spine" />
-            <span className="hl-wire-n__ring" />
           </div>
 
           <p className="hl-svasthya">{heal.svasthya}</p>

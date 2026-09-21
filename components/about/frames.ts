@@ -38,7 +38,7 @@ export const frames = F({
   inversion: {
     id: 'p13-img_0610',
     kind: 'still',
-    w: [960, 1920],
+    w: [480, 960, 1920],
     alt: "Teacher guiding a student's legs during a chair-supported inversion in a studio",
     pos: '50% 44%',
   },
@@ -53,7 +53,7 @@ export const frames = F({
   raised: {
     id: 'ss-ven0092',
     kind: 'still',
-    w: [960],
+    w: [480, 960],
     alt: 'Wide view of a group practising with arms raised under a high steel roof',
     pos: '50% 60%',
   },
@@ -64,14 +64,14 @@ export type FrameKey = keyof typeof frames;
 /** the biggest derivative that exists for a still, so a crop has pixels to spend */
 export function src(f: Frame, want = 960): string {
   if (f.kind === 'poster') return `/media/posters/${f.id}.jpg`;
-  const widths = f.w ?? [960];
+  const widths = f.w ?? [480, 960];
   const pick = widths.filter((w) => w >= want)[0] ?? widths[widths.length - 1];
   return `/media/stills/${f.id}-${pick}.webp`;
 }
 
 export function srcSet(f: Frame): string | undefined {
   if (f.kind === 'poster') return undefined;
-  const widths = f.w ?? [960];
+  const widths = f.w ?? [480, 960];
   if (widths.length < 2) return undefined;
   return widths.map((w) => `/media/stills/${f.id}-${w}.webp ${w}w`).join(', ');
 }

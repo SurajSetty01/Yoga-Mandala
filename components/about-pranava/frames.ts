@@ -77,7 +77,7 @@ export const FRAMES = {
      is 46svh tall rather than a full screen. */
   heroRoom: stills(
     'ss-dsc07127',
-    [960, 1920],
+    [480, 960, 1920],
     '50% 54%',
     'A teacher sits cross-legged on a mat with palms joined, leading a group seated in a semicircle around him; the Praṇava roundel, a colour wheel and a wall of charts hang on the wall behind.',
     '46% 58%',
@@ -87,7 +87,7 @@ export const FRAMES = {
      practise" without a caption. It opens from a crop you cannot place. */
   practiceLine: stills(
     'p13-img_0513',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     '50% 62%',
     'A line of about ten students holding downward-facing dog on mats laid in rows across a studio floor.',
     '54% 66%',
@@ -98,7 +98,7 @@ export const FRAMES = {
      photograph, and the photograph is a hand held above a back. */
   hand: stills(
     'ss-dsc07118',
-    [960, 1920],
+    [480, 960, 1920],
     '52% 46%',
     "A teacher leans over a student in a plank position and holds a hand just above the student's back, without touching it.",
     '55% 42%',
@@ -114,19 +114,19 @@ export const FRAMES = {
      vertical lever at all and the frame has to be right by composition. */
   doorLearn: stills(
     'p13-img_0620',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     '50% 58%',
     'A group sits on mats facing the front of a studio, one participant back on her heels in the foreground.',
   ),
   doorPractice: stills(
     'pr-pbh-img_5560',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     '50% 40%',
     'A line of practitioners folding forward from standing with both hands resting on the backs of folding chairs, receding down a hall.',
   ),
   doorHeal: stills(
     'p13-img_0610',
-    [960, 1920],
+    [480, 960, 1920],
     '54% 44%',
     'A teacher supports a student who is upside down over two folding chairs against a rope wall, steadying her legs with one hand.',
   ),
@@ -138,7 +138,7 @@ export const FRAMES = {
      chin on her hand: reflection, which is the door's own word. */
   doorInsights: stills(
     'pr-ttc-dsc_0364',
-    [960],
+    [480, 960],
     '50% 52%',
     'A paved path running away between tall slender trees and planted beds, with a single figure at the far end under a green canopy.',
   ),
@@ -192,7 +192,7 @@ export const FRAMES = {
   /* 07 · Yoga Mandala, the one initiative this site can actually open. */
   mandalaHall: stills(
     'ss-ven0139',
-    [960],
+    [480, 960],
     '50% 54%',
     'Students seated in forward bends across a wide open hall, with white chairs along the wall behind them.',
   ),
@@ -200,14 +200,14 @@ export const FRAMES = {
   /* 08 · the two routes out. Learning is a room listening; practice is a room working. */
   routeLearn: stills(
     'p13-img_0617',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     '50% 58%',
     'A wide view of a studio: participants seated on coloured mats facing the front, a rope wall along the left and red ceiling slings overhead.',
     '46% 60%',
   ),
   routePractice: stills(
     'p13-img_0516',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     '46% 52%',
     'Students standing on their mats in a row across the studio with arms stretched overhead and palms together.',
     '40% 55%',

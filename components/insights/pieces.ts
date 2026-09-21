@@ -48,13 +48,13 @@ function mark(src: string, clause: string, from: string, href: string): Passage 
   const at = src.indexOf(clause);
   if (at === -1) {
     throw new Error(
-      `insights/passages.ts: the clause "${clause.slice(0, 48)}…" is not in the client's sentence. ` +
+      `insights/pieces.ts: the clause "${clause.slice(0, 48)}…" is not in the client's sentence. ` +
         `content/pranava.ts has changed; re-read it and re-choose the clause rather than editing the sentence.`,
     );
   }
   if (src.indexOf(clause, at + 1) !== -1) {
     throw new Error(
-      `insights/passages.ts: the clause "${clause.slice(0, 48)}…" appears twice; it cannot be located.`,
+      `insights/pieces.ts: the clause "${clause.slice(0, 48)}…" appears twice; it cannot be located.`,
     );
   }
   return { lead: src.slice(0, at), lit: clause, tail: src.slice(at + clause.length), from, href };

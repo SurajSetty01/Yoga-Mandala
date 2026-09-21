@@ -92,7 +92,7 @@ export const FRAMES = {
      archive is — 36 of 83 stills and 15 of 16 clips. */
   rowFold: still(
     'pr-pbh-img_5615',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     P,
     '42% 55%',
     'Four people in a line folding forward with their hands on the backs of folding chairs',
@@ -100,7 +100,7 @@ export const FRAMES = {
   ),
   rowLong: still(
     'pr-pbh-img_5412',
-    [960, 1920],
+    [480, 960, 1920],
     P,
     '48% 55%',
     'A long row of people in supported shoulderstand seen low along a hall floor',
@@ -139,7 +139,7 @@ export const FRAMES = {
      being upscaled. */
   rowHeld: still(
     'pr-pbh-img_5808',
-    [960, 1920, 2560],
+    [480, 960, 1920, 2560],
     P,
     '50% 62%',
     'Three women lying in a row with knees open, belts around their feet and bolsters under their heads',

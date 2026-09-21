@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Mark, tellHref, TELL_MESSAGE } from './parts';
+import { Mark, tellHref } from './parts';
 
 /**
  * 02 · THE ONE PHOTOGRAPH ON THE PAGE, AND THE WAY TO BE TOLD.
@@ -49,7 +49,9 @@ export function Told() {
               decoding="async"
               style={{ objectPosition: FIGURE.focal }}
             />
-            <figcaption className="cap">{FIGURE.caption}</figcaption>
+            {/* NOT the global `.cap` — that one is the hero's own object and is
+                `position: absolute; display: none` until motion is off. */}
+            <figcaption className="in-cap">{FIGURE.caption}</figcaption>
           </figure>
 
           <div className="in-told__col">
@@ -58,32 +60,34 @@ export function Told() {
             </p>
             <p className="in-told__body">
               If you would like to know when Praṇava starts publishing, send a message and
-              it will be on the record. The link opens WhatsApp with the sentence already
-              written — you read it, change it and send it yourself.
+              it will be on the record. The link opens WhatsApp with “Please let me know
+              when writing is published on Insights” already typed — you read it, change
+              it and send it yourself.
             </p>
 
-            <a className="in-cta" href={tellHref} rel="noopener">
-              Ask to be told
-              <svg
-                className="in-cta__arw"
-                width="18"
-                height="10"
-                viewBox="0 0 18 10"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path
-                  d="M0 5h16M12 1l4 4-4 4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                />
-              </svg>
-            </a>
-
-            <p className="in-told__msg">
-              <span className="in-told__msgK">It opens with</span>
-              <span className="in-told__msgV">“{TELL_MESSAGE}”</span>
+            {/* A quiet underlined line, NOT a filled plate. The Heal page ends on a clay
+                plate and the Events page on a ruled ledger row; three held-back pages
+                that all finished with the same button would be three versions of one
+                page. This one is a reading page and its route reads like a sentence. */}
+            <p className="in-told__go">
+              <a className="in-cta" href={tellHref} rel="noopener">
+                Ask to be told
+                <svg
+                  className="in-cta__arw"
+                  width="18"
+                  height="10"
+                  viewBox="0 0 18 10"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M0 5h16M12 1l4 4-4 4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                  />
+                </svg>
+              </a>
             </p>
 
             <p className="in-told__alt">

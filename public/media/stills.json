@@ -16,6 +16,7 @@
   "activity": "asana-practice",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -39,6 +40,7 @@
   "activity": "asana-practice",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -62,6 +64,7 @@
   "activity": "asana-practice",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -85,6 +88,7 @@
   "activity": "lecture-discussion",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -108,6 +112,7 @@
   "activity": "lecture-discussion",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -131,6 +136,7 @@
   "activity": "lecture-discussion",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -154,6 +160,7 @@
   "activity": "asana-practice",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -177,6 +184,7 @@
   "activity": "asana-practice",
   "setting": "indoor-shala",
   "widths": [
+   480,
    960,
    1920,
    2560
@@ -200,6 +208,7 @@
   "activity": "dance-performance",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -221,6 +230,7 @@
   "activity": "dance-performance",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -242,6 +252,7 @@
   "activity": "panel",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -263,6 +274,7 @@
   "activity": "venue-detail",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -284,6 +296,7 @@
   "activity": "asana-practice",
   "setting": "other",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -305,6 +318,7 @@
   "activity": "asana-practice",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -326,6 +340,7 @@
   "activity": "asana-practice",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -347,6 +362,7 @@
   "activity": "asana-practice",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -369,6 +385,7 @@
   "activity": "asana-practice",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -391,6 +408,7 @@
   "activity": "dance-performance",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -413,6 +431,7 @@
   "activity": "dance-performance",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -435,6 +454,7 @@
   "activity": "dance-performance",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -457,6 +477,7 @@
   "activity": "dance-performance",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -479,6 +500,7 @@
   "activity": "dance-performance",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -501,6 +523,7 @@
   "activity": "dance-performance",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -523,6 +546,7 @@
   "activity": "teaching-adjustment",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -545,6 +569,7 @@
   "activity": "lecture-discussion",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -567,6 +592,7 @@
   "activity": "panel",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -589,6 +615,7 @@
   "activity": "panel",
   "setting": "stage",
   "widths": [
+   480,
    960,
    1920
   ],
@@ -611,6 +638,7 @@
   "activity": "artwork",
   "setting": "outdoor-courtyard",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -632,6 +660,7 @@
   "activity": "artwork",
   "setting": "gallery",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -653,6 +682,7 @@
   "activity": "artwork",
   "setting": "gallery",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -674,6 +704,7 @@
   "activity": "venue-detail",
   "setting": "gallery",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960
@@ -695,6 +726,7 @@
   "activity": "venue-detail",
   "setting": "cafe",
   "widths": [
+   480,
    960
   ],
   "maxWidth": 960

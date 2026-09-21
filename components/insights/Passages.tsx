@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Mark } from './parts';
-import { PASSAGES } from './passages';
+import { PASSAGES } from './pieces';
 
 /**
  * 01 · THREE PARAGRAPHS, EACH READ AT TWO DISTANCES AT ONCE.
@@ -26,7 +26,7 @@ import { PASSAGES } from './passages';
  *
  * `lead`, `lit` and `tail` are slices of one string taken by `indexOf` at build time, so
  * the three spans concatenate back to the client's sentence character for character. See
- * components/insights/passages.ts.
+ * components/insights/pieces.ts.
  */
 export function Passages() {
   return (
