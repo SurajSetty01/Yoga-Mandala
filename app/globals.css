@@ -792,6 +792,9 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/about-pranava.css";
 @import "../styles/learn.css";
 @import "../styles/practice.css";
+@import "../styles/heal.css";
+@import "../styles/insights.css";
+@import "../styles/events.css";
 @import "../styles/footer.css";
 
 /* ── Tournament preview concepts ───────────────────────────────────────
@@ -870,3 +873,4 @@ html.is-static .frame { transform: scale(1.02); }
   font-size: 0.82em !important;
   opacity: 0.78;
 }
+

@@ -272,6 +272,32 @@ export function initHeroChoreography(): () => void {
   );
   document.querySelectorAll('[data-r]').forEach((el) => io.observe(el));
 
+  /* ── deferred background fills ──────────────────────────────────
+     A CSS background-image is fetched the moment its element enters the render
+     tree, however far down the page that is. Two image-filled type treatments
+     sit 4 and 13 screens down and were costing 876 KB on first paint. Their
+     urls now live in a --fill custom property, which is inert until referenced,
+     and this adds `.bg-in` 600px ahead of the section so the picture is ready
+     before it is seen. A separate observer from the reveal above because it has
+     to fire much earlier: revealing late is a nicety, arriving late with the
+     fill means the word paints empty.
+     Without JavaScript neither class is ever added and the stylesheet applies
+     the fill directly, so the treatment degrades to "always on", not "lost". */
+  const fills = document.querySelectorAll('.ab-prem__mega, .ab-quote__w--fill');
+  if (fills.length) {
+    const bio = new IntersectionObserver(
+      (es) => {
+        for (const e of es)
+          if (e.isIntersecting) {
+            e.target.classList.add('bg-in');
+            bio.unobserve(e.target);
+          }
+      },
+      { rootMargin: '600px 0px' }
+    );
+    fills.forEach((el) => bio.observe(el));
+  }
+
   /* ── boot / re-boot ─────────────────────────────────────────────── */
   function apply() {
     reduce = mqReduce.matches;

@@ -1,0 +1,408 @@
+/* heal — owned solely by /heal/. No other file may declare these selectors. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA — HEAL.  Three sections, and the page's whole subject is a gap.
+
+   —    paper   the client's own line for this area, at the size of the page
+   01   warm    four names reaching for a name they have not joined yet
+   02   paper   the caveat before the link, and the link
+
+   THE PAGE NEVER GOES DARK and carries NO PHOTOGRAPH and NO JAVASCRIPT. All
+   three are consequences of what it holds, not stylistic choices — see
+   components/heal/NOTES.md. There is nothing here to reduce under
+   prefers-reduced-motion, which is why this file declares no animation, no
+   transition on anything that moves, and no reveal.
+
+   Continuity with the rest of the site is the tokens, the type scale and the
+   register mark. Novelty is that the only drawn object on any Praṇava page
+   lives here.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hl {
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  /* Three steps, far apart. The page has one voice, one aside and one whisper;
+     the two shouts (the lede and the Svasthya name) are solved in their own
+     sections and do not come from the scale. */
+  --hl-mid: clamp(1.06rem, 0.97rem + 0.75vw, 1.5rem);
+  --hl-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --hl-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  --hl-pad: clamp(4rem, 9vw, 8rem);
+  --hl-max: 76rem;
+
+  --hl-hair: rgba(193, 97, 60, 0.55);
+  --hl-hair-soft: rgba(36, 29, 24, 0.13);
+}
+
+.hl-s {
+  position: relative;
+  padding-block: var(--hl-pad);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+.hl-s--warm {
+  background: var(--ground-warm);
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED.
+   `max-width` on its own caps the column and then pins it to the left edge:
+   invisible at 1440 and hundreds of px off-axis at 2531. DESIGN-SYSTEM §8, and
+   it shipped on this site once. Every capped block on this page goes through
+   this class — masthead, drawing and enquiry all sit on one axis. */
+.hl-rail {
+  max-width: calc(var(--hl-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* On paper the global cream-ring focus is invisible, so it inverts. (0,3,0)
+   beats the global (0,1,0). */
+.hl-s :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark ────────────────────────────────────────────────────
+   The home page's section-02 object, kept to the letter so the whole site has
+   one voice for "where am I". */
+.hl-mark {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.4rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.hl-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  /* 600, not 400: at 13px a 400-weight Fraunces numeral loses enough stroke to
+     antialiasing that the measured p5 drops half a point below 4.5. */
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.hl-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--hl-hair);
+}
+
+/* ══ — · THE STANDING NOTICE ══════════════════════════════════════════════
+   The client's own line for this area is the largest type on the page. The
+   <h1> is the navigation's label at label scale: a rank, not a font-size. */
+.hl-top {
+  padding-top: clamp(7.5rem, 15vw, 12rem);
+}
+.hl-kicker {
+  margin: 0 0 clamp(1.4rem, 2.6vw, 2rem);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.hl-kicker__rule {
+  flex: none;
+  width: 30px;
+  height: 1px;
+  background: var(--clay-deep);
+}
+.hl-h1 {
+  margin: 0;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.hl-lede {
+  margin: clamp(1.2rem, 2.4vw, 1.9rem) 0 0;
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.05rem + 4.6vw, 5.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* ══ 01 · FOUR NAMES REACHING FOR A NAME THEY HAVE NOT JOINED YET ═════════ */
+.hl-say {
+  margin: 0 0 clamp(3.4rem, 7vw, 6rem);
+  max-width: 46ch;
+  font: 400 var(--hl-read) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+
+.hl-diagram {
+  position: relative;
+  /* the drawing is centred on the rail, and so is everything hanging off it */
+  text-align: center;
+}
+
+/* The four names. A row of four equal terms — NOT four cards, tiles or links.
+   An area with no description is not a thing you can click into, and a box
+   round a name is the commonest way of implying it has contents. */
+.hl-areas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.hl-areas__i {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(0.95rem, 0.48rem + 1.05vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  text-wrap: balance;
+  padding-inline: 0.4rem;
+}
+
+/* The drawing. 6:1 by construction — see the header of components/heal/Areas.tsx
+   for why the viewBox's aspect and this height are one decision. */
+.hl-wire {
+  display: block;
+  width: 100%;
+  height: clamp(110px, 13vw, 200px);
+  margin-top: clamp(0.9rem, 1.8vw, 1.6rem);
+  color: var(--clay-deep);
+  overflow: visible;
+}
+.hl-wire-n {
+  display: none;
+}
+
+.hl-svasthya {
+  margin: clamp(1rem, 2vw, 1.5rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 0.9rem + 3vw, 3.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.026em;
+  color: var(--ink);
+}
+.hl-note {
+  margin: clamp(0.8rem, 1.6vw, 1.15rem) auto 0;
+  max-width: 40ch;
+  font: 400 var(--hl-small) / 1.6 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ══ 02 · THE CAVEAT, AND THEN THE LINK ═══════════════════════════════════ */
+.hl-ask__lead {
+  margin: 0 0 clamp(2.6rem, 5vw, 4.2rem);
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 0.9rem + 1.9vw, 2.5rem);
+  line-height: 1.16;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.hl-ask__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+.hl-ask__col {
+  min-width: 0;
+}
+.hl-ask__care {
+  margin: 0 0 1.1rem;
+  max-width: 42ch;
+  font: 400 var(--hl-read) / 1.64 var(--font-text);
+  color: var(--ink-soft);
+}
+.hl-ask__care:last-child {
+  margin-bottom: 0;
+}
+
+/* The one route. Its ground is --clay-deep, measured at 5.98:1 with cream, and
+   never --clay, which is 3.90:1 and may not carry text. */
+.hl-cta {
+  display: inline-grid;
+  gap: 0.45rem;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1.3rem, 2.4vw, 1.9rem);
+  border-radius: 4px;
+  background: var(--clay-deep);
+  color: var(--ink-onDark);
+  text-decoration: none;
+  max-width: 100%;
+}
+.hl-cta:hover,
+.hl-cta:active {
+  background: var(--clay-press);
+}
+.hl-cta__intent {
+  font: 500 var(--hl-small) / 1.3 var(--font-text);
+  letter-spacing: 0.01em;
+  color: rgba(251, 247, 242, 0.88);
+}
+.hl-cta__go {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.6rem);
+  letter-spacing: -0.015em;
+}
+.hl-cta__arw {
+  flex: none;
+  transition: transform 0.35s var(--ease);
+}
+.hl-cta:hover .hl-cta__arw,
+.hl-cta:focus-visible .hl-cta__arw {
+  transform: translateX(4px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hl-cta__arw {
+    transition: none;
+  }
+}
+
+.hl-ask__msg {
+  margin: 1.2rem 0 0;
+  display: grid;
+  gap: 0.3rem;
+  max-width: 44ch;
+}
+.hl-ask__msgK {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.hl-ask__msgV {
+  font: 400 var(--hl-read) / 1.55 var(--font-text);
+  font-style: italic;
+  color: var(--ink);
+}
+.hl-ask__alt {
+  margin: 1.4rem 0 0;
+  max-width: 44ch;
+  font: 400 var(--hl-small) / 1.6 var(--font-text);
+  color: var(--ink-soft);
+}
+.hl-ilink {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--hl-hair);
+  text-decoration-thickness: 1px;
+}
+.hl-ilink:hover {
+  text-decoration-color: var(--clay-deep);
+}
+
+/* ── the narrow drawing ───────────────────────────────────────────────────
+   Below 760px the four names stack and the same idea is drawn with borders:
+   one spine down the left, four feeders into it, the spine running on past
+   the last name and then stopping, a measured gap, and the open joint. Borders
+   cannot distort, so there is no aspect-ratio problem here at all. */
+@media (max-width: 759px) {
+  .hl-diagram {
+    text-align: left;
+  }
+  .hl-areas {
+    grid-template-columns: 1fr;
+    gap: clamp(0.85rem, 3vw, 1.3rem);
+    border-left: 1px solid var(--clay-deep);
+    padding: 0.2rem 0 0.2rem 1.6rem;
+  }
+  .hl-areas__i {
+    position: relative;
+    padding-inline: 0;
+    font-size: clamp(1.25rem, 0.9rem + 1.8vw, 1.9rem);
+  }
+  .hl-areas__i::before {
+    content: '';
+    position: absolute;
+    left: -1.6rem;
+    top: 0.62em;
+    width: 1.05rem;
+    height: 1px;
+    background: var(--clay-deep);
+  }
+  .hl-wire {
+    display: none;
+  }
+  .hl-wire-n {
+    display: block;
+    position: relative;
+    height: 6.1rem;
+  }
+  /* the spine, continuing out of the list and stopping */
+  .hl-wire-n__spine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 2.4rem;
+    background: var(--clay-deep);
+  }
+  /* the joint, open, 3.1rem of nothing above it */
+  .hl-wire-n__ring {
+    position: absolute;
+    left: -5px;
+    top: 5.5rem;
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--clay-deep);
+    border-radius: 50%;
+  }
+  .hl-svasthya {
+    margin-top: 0.5rem;
+    margin-left: 1.6rem;
+  }
+  .hl-note {
+    margin-left: 1.6rem;
+    margin-right: 0;
+  }
+}
+
+/* ── the two-column enquiry becomes one ─────────────────────────────────── */
+@media (max-width: 899px) {
+  .hl-ask__grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2rem, 6vw, 3rem);
+  }
+  .hl-cta {
+    width: 100%;
+  }
+}
+
+/* At 2531 the rail is capped and centred; the lede's own measure would let it
+   run to 21ch of a 5.2rem face, which is wider than the rail is tall. Nothing
+   to do but let it be — it is the largest object on the page on purpose. */
+@media (max-width: 479px) {
+  .hl-lede {
+    max-width: 16ch;
+  }
+  .hl-cta__go {
+    gap: 0.5rem;
+  }
+}

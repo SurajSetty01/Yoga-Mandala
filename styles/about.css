@@ -234,9 +234,10 @@
 }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .ab-prem__mega {
-    background-image:
+    --fill:
       linear-gradient(rgba(251, 247, 242, 0.5), rgba(251, 247, 242, 0.5)),
       url("/media/stills/p13-img_0615-1920.webp");
+    background-image: var(--fill);
     background-size: cover;
     background-position: 50% 62%;
     background-repeat: no-repeat;
@@ -246,7 +247,7 @@
   }
   @media (max-width: 860px) {
     .ab-prem__mega {
-      background-image:
+      --fill:
         linear-gradient(rgba(251, 247, 242, 0.5), rgba(251, 247, 242, 0.5)),
         url("/media/stills/p13-img_0615-960.webp");
     }
@@ -700,7 +701,8 @@
 }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .ab-quote__w--fill {
-    background-image: url("/media/stills/ss-dsc07143-deep-2560.webp");
+    --fill: url("/media/stills/ss-dsc07143-deep-2560.webp");
+    background-image: var(--fill);
     background-size: cover;
     background-position: 50% 52%;
     background-repeat: no-repeat;
@@ -710,7 +712,7 @@
   }
   @media (max-width: 860px) {
     .ab-quote__w--fill {
-      background-image: url("/media/stills/ss-dsc07143-deep-1920.webp");
+      --fill: url("/media/stills/ss-dsc07143-deep-1920.webp");
     }
   }
 }
@@ -827,3 +829,19 @@
     transition: none !important;
   }
 }
+
+/* ── DEFERRED FILLS ──────────────────────────────────────────────────────────
+   A CSS background-image is NOT lazy: the browser fetches it as soon as the
+   element is in the render tree, wherever that element sits on the page. These
+   two fills live 4 and 13 screens down and were costing 876 KB on the home
+   page's FIRST PAINT — 469 KB for the word `vast` and 407 KB for the quote.
+
+   The url therefore lives in a custom property, which is inert until something
+   references it, and `.bg-in` is added by an observer 600px before the section
+   arrives. Without JavaScript the fill applies immediately, so the treatment is
+   never lost — only deferred.
+   ────────────────────────────────────────────────────────────────────────── */
+.js .ab-prem__mega,
+.js .ab-quote__w--fill { background-image: none; }
+.js .ab-prem__mega.bg-in,
+.js .ab-quote__w--fill.bg-in { background-image: var(--fill); }

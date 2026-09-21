@@ -69,7 +69,7 @@ export function Hero() {
 
         <div className="pc-hero__foot">
           <p className="pc-hero__lead">{about.values[0].body}</p>
-          <Cap dark>Three rows of one shape. The centre window is moving.</Cap>
+          <Cap dark>One shape, repeated down a hall, three times over.</Cap>
         </div>
       </div>
     </section>

@@ -35,11 +35,17 @@ import { FORMS, INTENTION } from './sentences';
  * than any other and the biggest is never upscaled: capped at 84rem, a 1620px source is
  * exact at 1440 and still unstretched at 2531.
  */
+/*
+ * The captions say what is in the frame and nothing more. An earlier set read "The way
+ * out", "What stands at the end of it" and "not moving" — narration, and the last of the
+ * three is not even something a photograph can show. The ORDER carries the journey; the
+ * captions only have to be true.
+ */
 const RUN: Array<{ f: Frame; cap: string }> = [
-  { f: FRAMES.path, cap: 'The way out.' },
-  { f: FRAMES.pavilion, cap: 'What stands at the end of it.' },
-  { f: FRAMES.sitting, cap: 'Sitting, on grass, among trees.' },
-  { f: FRAMES.banyan, cap: 'One person, under the banyan, not moving.' },
+  { f: FRAMES.path, cap: 'A path between the trees.' },
+  { f: FRAMES.pavilion, cap: 'A pavilion at the end of a paved approach.' },
+  { f: FRAMES.sitting, cap: 'Sitting on the grass, among the trees.' },
+  { f: FRAMES.banyan, cap: 'One person under the banyan, alone.' },
 ];
 
 /** 0.42 → 1.0 of the section's measure, so each frame holds the reader longer than the last. */

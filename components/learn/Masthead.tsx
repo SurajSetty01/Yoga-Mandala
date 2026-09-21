@@ -20,6 +20,10 @@ import { Says, Shot } from './parts';
  * 1.58x upscale on a 2560 monitor. A window in a sheet of paper wants to be capped; a hero
  * does not. The cap is 1620px — `--ln-max` — with `margin-inline: auto` beside it.
  *
+ * The masthead frame is NOT `eager`. See the comment on `Shot` in parts.tsx: an eager image
+ * here is fetched by every other page on the site through the header's route prefetch, and
+ * it costs this page nothing to leave it lazy because it is inside the viewport anyway.
+ *
  * The opening is driven by scroll through a single custom property, `--o`, written by the
  * page's one client island. Without JavaScript, or under `prefers-reduced-motion`, `--o` is
  * 1 from the first paint: the window is simply open and the masthead is one screen tall.
@@ -66,7 +70,6 @@ export function Masthead() {
                 <Shot
                   className="ln-mh__img"
                   frame={HERO}
-                  eager
                   sizes="(max-width: 1620px) 100vw, 1620px"
                 />
               </div>

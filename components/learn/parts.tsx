@@ -53,14 +53,12 @@ export function Mark({
 export function Shot({
   frame,
   sizes,
-  eager = false,
   className,
   alt,
   style,
 }: {
   frame: Frame;
   sizes: string;
-  eager?: boolean;
   className?: string;
   /** override the frame's own description — `""` only for a repeat of one described above */
   alt?: string;
@@ -75,9 +73,25 @@ export function Shot({
       width={frame.w}
       height={frame.h}
       alt={alt ?? frame.alt}
-      loading={eager ? 'eager' : 'lazy'}
-      decoding={eager ? 'sync' : 'async'}
-      {...(eager ? { fetchPriority: 'high' as const } : {})}
+      /*
+       * EVERY image on this page is `lazy`, INCLUDING THE MASTHEAD, and that is a
+       * measurement rather than an oversight.
+       *
+       * The header prefetches all eight routes. In the static export those prefetches
+       * pull each route's HTML, and an image marked `loading="eager"` in one of those
+       * documents is then fetched by every OTHER page on the site. Measured on the
+       * production build served out of `out/`: with the masthead frame eager, the fold of
+       * /yoga-mandala/within/ — a page that has nothing to do with this one — was 3,108 KB;
+       * with it lazy it is 2,849 KB. 259 KB of /learn/ was being posted to every reader of
+       * every other page.
+       *
+       * The cost on the page that owns the frame is nil: an image inside the viewport is
+       * fetched during the initial load whatever its `loading` value, and the masthead
+       * frame still completes at 258 ms on the production build. `fetchPriority="high"`
+       * was tried and made no difference to either number.
+       */
+      loading="lazy"
+      decoding="async"
       style={
         {
           '--op': frame.pos,
