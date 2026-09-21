@@ -1,19 +1,22 @@
 /* ═══════════════════════════════════════════════════════════════════════
    PAGE 4 — CONNECT WITH US
 
-   The design problem: two of the three channels the client's own document
-   lists were never supplied. There is no address, no general email and no
-   collaborations email. There is one live human channel.
+   Rewritten for Praṇava-wide enquiries, Sep 2026. The composition is the one
+   the client approved; the routes through it are new.
+
+   The design problem, unchanged and now wider: there is no address and no
+   email at all — emailGeneral, emailProgrammes and emailCollaborations are
+   all null. There is one live channel.
 
    So this page is not a form and a rack of slots. It is one open line given
-   the strongest ground on the site, with the number set at display scale and
-   a person's name above it. An empty slot is never drawn — see
-   components/contact/ChannelList.tsx.
+   the strongest ground on the site, with the number set at display scale. An
+   empty slot is never drawn — see components/contact/ChannelList.tsx.
 
-   Beneath it the eight subjects are not a list either. They are eight arched
-   photographic openings cut down the paper — four sizes, tilted, overlapping,
-   two of them running off the rail — and social is two more doorways cut into
-   a dark wall. Band 01 is contained and rectangular, type beside a picture;
+   Beneath it the six enquiry routes are not a list either. They are six
+   arched photographic openings cut down the paper — four sizes, tilted,
+   overlapping, two of them running off the rail, each one a link that opens
+   the line with its own subject — and social is two more doorways cut into a
+   dark wall. Band 01 is contained and rectangular, type beside a picture;
    everything below it is the inverse, with the type set into the pictures.
 
    Nothing is reachable only through motion: the reveal and the two-lane depth
@@ -35,7 +38,7 @@
      that floats above them */
   --cx-max: 1200px;
   /* the colonnade's own measure: the wall is wider than the nav pill, because
-     eight overlapping doorways need room to be a wall rather than a column */
+     overlapping doorways need room to be a wall rather than a column */
   --cx-wide: 88rem;
   background: var(--ground);
 }
@@ -167,13 +170,16 @@
 }
 .cx-card__who {
   margin: 0.6rem 0 0;
-  /* THE TEXT FACE, NOT THE DISPLAY ONE, AND NOT A STYLE CHOICE.
-     Fraunces as loaded here mis-sets U+012B: "Praṇav Śāstrī" renders with the
-     macron detached and floating to the right of the i, at any size. Inter, and
-     every system fallback, set it correctly. The number below carries the display
-     face, which is the right hierarchy anyway — the number is the point.
-     The real fix is subsets: ['latin', 'latin-ext'] on the Fraunces loader in
-     app/layout.tsx, which this page does not own. */
+  /* THE TEXT FACE, NOT THE DISPLAY ONE. The number below carries the display
+     face, which is the right hierarchy — the number is the point of the page.
+
+     It is also the safe face for a Sanskrit diacritic. Fraunces as loaded here
+     mis-sets U+012B: "Praṇav Śāstrī" renders with the macron detached and
+     floating to the right of the i, at any size. Inter and every system
+     fallback set it correctly, which is why .cx-note — the one place that name
+     still appears — is on the text face too. The real fix is
+     subsets: ['latin', 'latin-ext'] on the Fraunces loader in app/layout.tsx,
+     which this page does not own. */
   font-family: var(--font-text);
   font-size: clamp(1.22rem, 1.02rem + 0.8vw, 1.55rem);
   font-weight: 500;
@@ -382,24 +388,33 @@
 }
 
 /* ── BAND 02 · THE COLONNADE ────────────────────────────────────────────
-   Paper, and no list at all. Eight arched openings cut down the page at
-   four sizes, tilted, overlapping, two of them running off the rail, with
-   each subject a nameplate set into the picture it belongs to. A doorway
-   is the shape of "we are open to".
+   Paper, and no list at all. Arched openings cut down the page at four
+   sizes, tilted, overlapping, two of them running off the rail, with each
+   subject a nameplate set into the picture it belongs to. A doorway is the
+   shape of "we are open to".
+
+   SIX, not eight. Eight was Yoga Mandala's list of collaboration subjects.
+   Praṇava takes six kinds of enquiry — see components/contact/routes.ts —
+   and each doorway is now a LINK that opens the one channel with its own
+   subject already written into the message. The composition is parametric
+   (--w / --x / --y / --r / --ar per doorway), so the count is a number of
+   placements, not a rebuild: 01–05 are the promoted preview's values
+   unchanged, and 06 is the preview's 08 — the doorway that bleeds off the
+   right rail — moved up to close the wall.
 
    Placement lives here rather than in inline styles so a breakpoint can
    redefine every doorway's size, offset, overlap and tilt outright.
 
-   `overflow-x: clip` is what lets 05 and 08 leave the paper without giving
+   `overflow-x: clip` is what lets 05 and 06 leave the paper without giving
    the document a horizontal scrollbar at any width, 320 to 2560.        */
-.cx-collab {
+.cx-routes {
   position: relative;
   overflow-x: clip;
   background: var(--ground);
   color: var(--ink);
   padding-block: clamp(3rem, 8svh, 5.5rem) clamp(3.5rem, 9svh, 6rem);
 }
-.cx-collab__head {
+.cx-routes__head {
   width: 100%;
   max-width: var(--cx-wide);
   margin: 0 auto clamp(2.6rem, 7svh, 4.5rem);
@@ -457,22 +472,37 @@
   padding-inline: var(--rail);
 }
 
+/* THE DOORWAY IS A LINK NOW. It opens WhatsApp with its own subject written
+   into the message — the honest substitute for the enquiry form the site has
+   no backend for. An <a>, so it needs display, its own arch radius (the
+   global focus rule sets border-radius: 3px, which a bare .cx-arch would tie
+   with and lose to; .cx-routes .cx-arch outranks it) and no underline. */
+.cx-routes .cx-arch,
+.cx-routes .cx-arch:focus-visible {
+  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
+}
 .cx-arch {
   position: relative;
+  display: block;
   margin: 0;
   width: var(--w);
   margin-left: var(--x);
   margin-top: var(--y);
   transform: translate3d(0, var(--py, 0px), 0) rotate(var(--r));
+  color: inherit;
+  text-decoration: none;
 }
 .cx-arch__cut {
   position: relative;
+  /* a <figure> now, and figures carry a UA margin of 1em 40px */
+  margin: 0;
   aspect-ratio: var(--ar);
   overflow: hidden;
   /* a doorway: a full arch on top, all but square at the threshold */
   border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
   background: var(--ground-warm);
   box-shadow: 0 26px 64px rgba(36, 29, 24, 0.17);
+  transition: box-shadow 0.45s var(--ease);
 }
 .cx-arch__cut img {
   position: absolute;
@@ -480,6 +510,18 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+/* The door opens a little. The scale is on the IMAGE inside the clip, never
+   on .cx-arch — which carries both the tilt and the depth pass's --py and
+   would lose them. */
+.cx-arch:hover .cx-arch__cut img,
+.cx-arch:focus-visible .cx-arch__cut img {
+  transform: scale(1.035);
+}
+.cx-arch:hover .cx-arch__cut,
+.cx-arch:focus-visible .cx-arch__cut {
+  box-shadow: 0 30px 72px rgba(36, 29, 24, 0.26);
 }
 /* Depth: the far lane sits back behind a thin veil of the paper's own colour.
    Painted, never animated — rule 4 forbids filter in a scroll handler. */
@@ -500,10 +542,12 @@
    because a fixed-geometry scrim cannot guarantee a ratio over an arbitrary
    crop at an arbitrary viewport. 0.34 measured 3.91:1 over this same hall's
    skylight; 0.74 measured 8.6:1. Its contrast is a constant, so it holds on
-   all eight photographs at all seven widths (design/DESIGN-SYSTEM.md §1).
+   every photograph at all seven widths (design/DESIGN-SYSTEM.md §1).
 
    Two rows, because the plate carries two different kinds of fact: what the
-   community will talk about, and where the photograph was actually taken.  */
+   reader came for, and where the photograph was actually taken. The third
+   column is the arrow — the doorway is a link, and an arrow on the plate is
+   the per-item affordance the section's one explanatory line cannot be.    */
 .cx-arch__plate {
   position: absolute;
   z-index: 2;
@@ -511,7 +555,7 @@
   bottom: 5%;
   max-width: 88%;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   column-gap: 0.7rem;
   row-gap: 0.32rem;
   align-items: baseline;
@@ -521,6 +565,23 @@
   border: 1px solid rgba(251, 247, 242, 0.18);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+  transition: background-color 0.4s var(--ease);
+}
+/* 0.86 over the same crops measures higher than the 0.74 the plate is
+   specified at, so deepening on hover cannot cost contrast. */
+.cx-arch:hover .cx-arch__plate,
+.cx-arch:focus-visible .cx-arch__plate {
+  background: rgba(var(--shade), 0.86);
+}
+.cx-arch__go {
+  grid-column: 3;
+  align-self: center;
+  display: inline-flex;
+  color: var(--ink-onPic);
+}
+.cx-arch:hover .cx-arch__go .cx-cta__arw,
+.cx-arch:focus-visible .cx-arch__go .cx-cta__arw {
+  transform: translateX(3px);
 }
 .cx-arch__n {
   grid-column: 1;
@@ -571,14 +632,25 @@
 }
 
 /* ── the one action ─────────────────────────────────────────────────────
-   `links.emailCollaborations` is null and renders as nothing. The button
-   carries the client's own words and the line beside it names where writing
-   to them actually goes — see components/contact/Collaborations.tsx.     */
+   All three of emailGeneral / emailProgrammes / emailCollaborations are
+   null and render as nothing. The button carries the client's own words and
+   the line beside it names where writing to them actually goes — see
+   components/contact/Routes.tsx. This is the line for the enquiry that is
+   none of the six, so nothing is written into it.                        */
 .cx-act {
   width: 100%;
   max-width: var(--cx-wide);
   margin: clamp(3rem, 9svh, 5.5rem) auto 0;
   padding-inline: var(--rail);
+  /* a column of two rows, not one wrapping row: the note has a reading measure,
+     and a flex item whose max-width caps its hypothetical size does not force a
+     line break — it just sits beside the button, which is what it did. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+}
+.cx-act__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -589,6 +661,15 @@
   font: 500 0.85rem/1.5 var(--font-text);
   letter-spacing: 0.02em;
   color: var(--ink-soft);
+}
+/* Yoga Mandala's own contact detail, on its own row — the client asked for
+   it to be kept within its own section rather than merged into Praṇava's. */
+.cx-note {
+  margin: 0;
+  max-width: 58ch;
+  font: 400 0.85rem/1.62 var(--font-text);
+  color: var(--ink-soft);
+  text-wrap: pretty;
 }
 
 /* ── BAND 03 · TWO MORE DOORWAYS ────────────────────────────────────────
@@ -701,7 +782,7 @@
    which is right on a photograph and on both dark bands; on paper it
    inverts, exactly as .within already does. The dark social band keeps the
    global ring — except its cream doorways, handled above.               */
-.cx-collab :focus-visible {
+.cx-routes :focus-visible {
   outline-color: #241d18;
   box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
 }
@@ -750,12 +831,12 @@
 
    The phone overlaps are deliberately shallower than the wide ones. At 430px the
    doorways are nearly the full column, so a wide-viewport overlap put doorway 05
-   across 04's nameplate and 08 across 07's — measured on screenshots, not
-   guessed. A label that a later doorway can cover is a label that is not there. */
+   across 04's nameplate and the last one across 05's — measured on screenshots,
+   not guessed. A label a later doorway can cover is a label that is not there. */
 .cx-arch[data-lane='near'] { z-index: 2; }
 .cx-arch[data-lane='far']  { z-index: 1; }
 
-/* ── the eight placements · phone ────────────────────────────────────────── */
+/* ── the six placements · phone ──────────────────────────────────────────── */
 .cx-arch:nth-child(1)  { --w: 86%; --x: 0%;   --y: 0;     --r: -1deg;   --ar: 0.80; }
 .cx-arch:nth-child(2)  { --w: 62%; --x: 36%;  --y: -9%;   --r: 1.4deg;  --ar: 0.72; }
 .cx-arch:nth-child(3)  { --w: 74%; --x: 2%;   --y: -6%;   --r: 0.8deg;  --ar: 0.84; }
@@ -763,11 +844,14 @@
 .cx-arch:nth-child(5)  { --w: 92%; --x: -8%;  --y: -6%;   --r: 0.6deg;  --ar: 0.94; }
 /* 05 runs off the left rail, so its nameplate moves in far enough to stay on the paper. */
 .cx-arch:nth-child(5) .cx-arch__plate { left: 16%; }
-.cx-arch:nth-child(6)  { --w: 60%; --x: 38%;  --y: -11%;  --r: -0.9deg; --ar: 0.72; }
-.cx-arch:nth-child(7)  { --w: 56%; --x: 4%;   --y: -5%;   --r: 1.2deg;  --ar: 0.68; }
-.cx-arch:nth-child(8)  { --w: 88%; --x: 12%;  --y: -8%;   --r: -0.7deg; --ar: 0.90; }
+/* 06 is the promoted preview's 08 — same width, ratio and tilt, same bleed off
+   the right rail. Its overlap is shallower than the preview's because at 390px
+   05 is nearly the full column and a deeper pull put 06 across 05's nameplate.
+   Measured on screenshots, not guessed: a label a later doorway can cover is a
+   label that is not there. */
+.cx-arch:nth-child(6)  { --w: 88%; --x: 12%;  --y: -3%;   --r: -0.7deg; --ar: 0.90; }
 
-/* ── the eight placements · wide ─────────────────────────────────────────── */
+/* ── the six placements · wide ───────────────────────────────────────────── */
 @media (min-width: 60rem) {
   .cx-arch:nth-child(1)  { --w: 44%; --x: 0%;   --y: 0;    --r: -1.2deg; --ar: 0.95; }
   .cx-arch:nth-child(2)  { --w: 30%; --x: 60%;  --y: -12%; --r: 1.6deg;  --ar: 0.78; }
@@ -775,9 +859,11 @@
   .cx-arch:nth-child(4)  { --w: 27%; --x: 66%;  --y: -16%; --r: -1.5deg; --ar: 0.80; }
   .cx-arch:nth-child(5)  { --w: 50%; --x: -8%;  --y: -6%;  --r: 0.7deg;  --ar: 1.00; }
   .cx-arch:nth-child(5) .cx-arch__plate { left: 22%; }
-  .cx-arch:nth-child(6)  { --w: 31%; --x: 62%;  --y: -20%; --r: -1deg;   --ar: 0.80; }
-  .cx-arch:nth-child(7)  { --w: 26%; --x: 14%;  --y: -2%;  --r: 1.4deg;  --ar: 0.74; }
-  .cx-arch:nth-child(8)  { --w: 48%; --x: 56%;  --y: -14%; --r: -0.8deg; --ar: 0.95; }
+  /* 06 rises alongside 05 instead of below it: 05 spans -8→42% and 06 spans
+     56→104%, so they interlock vertically without either covering the other's
+     nameplate, and the wall still ends on a full-strength opening that leaves
+     the paper. */
+  .cx-arch:nth-child(6)  { --w: 48%; --x: 56%;  --y: -30%; --r: -0.8deg; --ar: 0.95; }
 
   .cx-arch__plate {
     padding: 0.6rem 1rem 0.66rem;
@@ -816,6 +902,26 @@
   }
 }
 
+/* THE SAME RULE, ONE SIZE DOWN. The date fits the phone layout from 640px, but
+   the WIDE layout starts again at 960px with two doorways at 27% and 30% of the
+   measure — narrower in pixels than the 58% phone doorway they replace — so the
+   provenance wraps there and the plate goes to four lines. Between the two
+   breakpoints only those two doorways drop the date; the event itself never
+   does, and every other doorway keeps both. Measured on screenshots at 1024 and
+   1280, not guessed.
+
+   This is the case the reverted container query was for: the doorways come at
+   four sizes, so a viewport rule can only ever approximate a per-plate one.
+   `container-type: inline-size` on the plate collapsed every plate to ~50px and
+   was reverted; putting it on .cx-arch__cut instead is untried and is the right
+   next attempt. Two nth-child selectors are not worth a layout regression. */
+@media (min-width: 60rem) and (max-width: 80rem) {
+  .cx-arch:nth-child(2) .cx-arch__on,
+  .cx-arch:nth-child(4) .cx-arch__on {
+    display: none;
+  }
+}
+
 /* ── reveal · opt-in, and it hides nothing the browser already painted ────
    The start state exists only once components/contact/Depth.tsx has added
    `is-live`, and the approved hero above carries no [data-br] at all.    */
@@ -844,10 +950,20 @@
   .cx-cta__arw,
   .cx-copy__b::after,
   .cx-door,
-  .cx-door .cx-cta__arw {
+  .cx-door .cx-cta__arw,
+  .cx-arch__cut,
+  .cx-arch__cut img,
+  .cx-arch__plate {
     transition: none;
   }
   .cx-door:hover {
+    transform: none;
+  }
+  /* the doorway still answers to hover and focus — it just does not move */
+  .cx-arch:hover .cx-arch__cut img,
+  .cx-arch:focus-visible .cx-arch__cut img,
+  .cx-arch:hover .cx-arch__go .cx-cta__arw,
+  .cx-arch:focus-visible .cx-arch__go .cx-cta__arw {
     transform: none;
   }
   .cx.is-live [data-br] > * {

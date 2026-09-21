@@ -789,6 +789,7 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/within.css";
 @import "../styles/join.css";
 @import "../styles/contact.css";
+@import "../styles/about-pranava.css";
 @import "../styles/footer.css";
 
 /* ── Tournament preview concepts ───────────────────────────────────────

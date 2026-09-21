@@ -7,9 +7,19 @@ import { Arrow } from './ChannelList';
  *
  * The colonnade ends and the wall goes dark. Two openings of the same arch are cut into it
  * and lit from the far side — same shape, no photograph in them, because what is through
- * them is not ours. Yoga Mandala is an initiative under Pranava Seva Trust and keeps no
- * accounts of its own; that is the reason these handles read the way they do, so it is
- * stated as the heading rather than tucked underneath as a disclaimer.
+ * them is not this page's.
+ *
+ * WHOSE ACCOUNTS THESE ARE, corrected. This band used to read "<site.name> is an initiative
+ * under <site.trust>", which was written when `site.name` was Yoga Mandala. After the
+ * conversion `site.name` is "Praṇava", and the sentence became a claim about Praṇava that
+ * no client document makes: the About document says Praṇava Seva Trust "works towards
+ * supporting the Yoga community", and names YOGA MANDALA — not Praṇava — as "one such
+ * community initiative under Praṇava Seva Trust". So the heading now says only what is
+ * sourced: the Trust is who keeps the accounts, and Yoga Mandala is the initiative that
+ * keeps none of its own. That is the client's own message, in design/CONTENT.md:
+ *
+ *   "We don't have exclusive Social for Yoga Mandala, as this is now an initiative under
+ *    Pranava Seva Trust, you can add the socials for the same."
  *
  * Both links leave the site, so both carry target and rel. The Instagram handle is derived
  * from the URL so the label and the destination cannot drift apart, and the client's
@@ -23,10 +33,10 @@ export function Social() {
       <div className="cx-social__in">
         <p className="cx-eyebrow cx-eyebrow--dark">{contact.social.heading}</p>
         <h2 className="cx-social__h" id="cx-social-h">
-          {site.name} is an initiative under {site.trust}.
+          {site.trust} keeps the accounts.
         </h2>
         <p className="cx-social__say">
-          It keeps no accounts of its own. These are the Trust&rsquo;s.
+          Yoga Mandala is a community initiative under the Trust and keeps none of its own.
         </p>
 
         <ul className="cx-soc">
@@ -46,6 +56,9 @@ export function Social() {
             </a>
           </li>
           <li>
+            {/* The same open line the whole page routes to, restated at the foot of it.
+                `links.emailGeneral`, `links.emailProgrammes` and `links.emailCollaborations`
+                are all null and render as nothing — there is no third doorway. */}
             <a
               className="cx-door"
               href={links.whatsapp}
@@ -53,7 +66,7 @@ export function Social() {
               rel="noopener noreferrer"
             >
               <span className="cx-door__k">WhatsApp</span>
-              <span className="cx-door__v">The community</span>
+              <span className="cx-door__v">{links.whatsappDisplay}</span>
               <span className="cx-door__go">
                 Open
                 <Arrow />
