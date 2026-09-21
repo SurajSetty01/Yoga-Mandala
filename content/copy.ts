@@ -283,3 +283,10 @@ export const footer = {
   rise: 'Together, We Rise.',
   better: 'Yoga is better together.',
 } as const;
+
+/**
+ * Pranava content lives in its own module: it comes from different documents and is checked
+ * against them. Re-exported here so tools/check-copy-fidelity.mts, which walks this module,
+ * verifies it too.
+ */
+export * as pranava from "./pranava";

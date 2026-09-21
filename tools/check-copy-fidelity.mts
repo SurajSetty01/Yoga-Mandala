@@ -18,7 +18,34 @@ import { execSync } from 'node:child_process';
 import * as copy from '../content/copy.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const DOCX = path.join(ROOT, 'Context', 'Website Pages Data.docx');
+/**
+ * Three source documents now, not one. Praṇava's content lives in the two documents added
+ * 21 Sep 2026; Yoga Mandala's remains in the original. A sentence is valid if it appears
+ * verbatim in ANY of them — the pages draw from different briefs, and requiring a single
+ * source would force either a false failure or a weakened check.
+ */
+const DOCX = [
+  path.join(ROOT, 'Context', 'Website Pages Data.docx'),
+  path.join(ROOT, 'Context', 'new', 'Pranava Website.docx'),
+  path.join(ROOT, 'Context', 'new', 'Pranava About Page.docx'),
+];
+
+/**
+ * The Blueprint is a PDF and is the master specification — the visitor journeys, the
+ * programme names and the page requirements are quoted from it, so it has to be a source
+ * too. Extracted at check time rather than kept as a stale text copy beside it.
+ */
+const PDF = [path.join(ROOT, 'Context', 'Pranava Website Blueprint.pdf')];
+
+function extractPdf(file: string): string {
+  // pypdf is present in this environment; its text layer keeps the double spacing the PDF
+  // was authored with, which norm() collapses anyway.
+  return execSync(
+    `python -c "import sys,pypdf;sys.stdout.reconfigure(encoding='utf-8');` +
+      `print(chr(10).join((p.extract_text() or '') for p in pypdf.PdfReader(sys.argv[1]).pages))" "${file}"`,
+    { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, env: { ...process.env, PYTHONIOENCODING: 'utf-8' } },
+  );
+}
 
 function extractDocx(file: string): string {
   // A .docx is a zip; word/document.xml holds the body. Paragraph tags become newlines so
@@ -51,7 +78,10 @@ function walk(node: unknown, at: string, out: Array<{ at: string; text: string }
 const found: Array<{ at: string; text: string }> = [];
 walk(copy, '', found);
 
-const source = norm(extractDocx(DOCX));
+const source = [
+  ...DOCX.map((f) => norm(extractDocx(f))),
+  ...PDF.map((f) => norm(extractPdf(f))),
+].join(' ');
 
 /**
  * `action` and `title` fields are the section labels a designer writes onto a button or a
@@ -64,7 +94,9 @@ const EXEMPT = /(^|\.)(action|title)$/;
 const checked = found.filter((f) => f.text.split(' ').length >= 4 && !EXEMPT.test(f.at));
 const missing = checked.filter((f) => !source.includes(norm(f.text)));
 
-console.log(`checked ${checked.length} client sentences against Context/Website Pages Data.docx`);
+console.log(
+  `checked ${checked.length} client sentences against ${DOCX.length + PDF.length} source documents`,
+);
 if (missing.length === 0) {
   console.log('PASS — every sentence is verbatim from the client document.');
 } else {
