@@ -31,7 +31,7 @@ export default function JoinPage() {
         <Community />
         <Doors />
       </main>
-      <SiteFooter />
+      <SiteFooter ym />
       <JoinMotion />
     </>
   );

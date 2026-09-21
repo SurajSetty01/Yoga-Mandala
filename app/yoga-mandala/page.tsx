@@ -124,7 +124,7 @@ export default function YogaMandalaPage() {
           <Guiding />
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter ym />
     </>
   );
 }

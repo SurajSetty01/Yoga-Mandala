@@ -30,7 +30,16 @@ import { links, nav, site } from '@/content/site';
  * the `#top` fragment, which browsers resolve to the document top even on a page with no
  * element of that id, so it is safe on every route.
  */
-export function SiteFooter() {
+/**
+ * `ym` — the Yoga Mandala envoi.
+ *
+ * "Together, We Rise." and "Yoga is better together." are YOGA MANDALA's closing lines, from
+ * Yoga Mandala's document. They were closing every Praṇava page, which put a community's
+ * voice under an institution's About page and made the two indistinguishable at the exact
+ * point the brief is most anxious about them being confused. They now appear only on
+ * /yoga-mandala/*, which is the only place they are true.
+ */
+export function SiteFooter({ ym = false }: { ym?: boolean } = {}) {
   const igHandle = `@${links.instagram.replace(/\/+$/, '').split('/').pop()}`;
 
   return (
@@ -87,10 +96,12 @@ export function SiteFooter() {
         </div>
 
         {/* The envoi. The client's two closing lines, with room around them. */}
-        <div className="ft__envoi">
-          <p className="ft__rise">{footer.ym.rise}</p>
-          <p className="ft__better">{footer.ym.better}</p>
-        </div>
+        {ym ? (
+          <div className="ft__envoi">
+            <p className="ft__rise">{footer.ym.rise}</p>
+            <p className="ft__better">{footer.ym.better}</p>
+          </div>
+        ) : null}
 
         <div className="ft__base">
           <p className="ft__trust">

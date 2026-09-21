@@ -35,7 +35,7 @@ import { SiteFooter } from '@/components/SiteFooter';
  *
  * <SiteNav light /> because this page has no hero and the pill takes its paper treatment
  * from the first pixel rather than waiting for a choreography that never runs here;
- * <SiteFooter /> because the last section hands over to it on the same dark ground.
+ * <SiteFooter ym /> because the last section hands over to it on the same dark ground.
  */
 export const metadata = {
   title: 'What Happens Within',
@@ -72,7 +72,7 @@ export default function WithinPage() {
           </nav>
         ) : null}
       </main>
-      <SiteFooter />
+      <SiteFooter ym />
 
       <WithinMotion />
     </>
