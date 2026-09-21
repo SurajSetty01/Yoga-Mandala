@@ -26,7 +26,11 @@
    here except the two hover transitions declared at the bottom of this file.
    ══════════════════════════════════════════════════════════════════════════ */
 
-.in {
+/* `.ins`, NOT `.in`: `.in` is the sitewide reveal class that the shared
+   IntersectionObserver adds to every [data-r] element. Claiming it as a page namespace
+   meant this block's `display: block` won over every revealed flex and grid container on
+   every page — 25 of them on /about/ alone, which is how the founder byline lost its gap. */
+.ins {
   position: relative;
   z-index: 1;
   display: block;

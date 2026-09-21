@@ -56,7 +56,7 @@ export default function InsightsPage() {
   return (
     <>
       <SiteNav />
-      <main className="in" id="top">
+      <main className="ins" id="top">
         <Masthead />
         <Passages />
         <Told />
