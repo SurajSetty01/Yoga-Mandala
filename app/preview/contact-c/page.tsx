@@ -105,7 +105,7 @@ export default function PreviewContactC() {
             <p className="cc-brow cc-brow--b">{contact.social.heading}</p>
             <h2 className="cc-run cc-run--b" id="cc-social-h">
               <span className="cc-run__lead" data-cr="">
-                {site.name} is an initiative under {site.parentOrg}, so the accounts are the
+                {site.name} is an initiative under {site.trust}, so the accounts are the
                 Trust&rsquo;s:
               </span>{' '}
               <span className="cc-i" data-cr="">

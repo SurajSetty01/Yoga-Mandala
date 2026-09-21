@@ -88,7 +88,7 @@ export function SiteFooter() {
 
         <div className="ft__base">
           <p className="ft__trust">
-            {site.name} is an initiative under {site.parentOrg}.
+            {site.name} is an initiative under {site.trust}.
           </p>
           <a className="ft__top" href="#top">
             To the top

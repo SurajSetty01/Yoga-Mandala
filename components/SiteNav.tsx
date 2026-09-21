@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { nav, links } from '@/content/site';
+import { nav, site } from '@/content/site';
 
 /**
  * The navigation pill.
@@ -48,7 +48,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
     <>
       <header className={`pill${light ? ' is-light' : ''}`} id="pill">
         <Link className="pill__mark" href="/">
-          Yoga&nbsp;Mandala
+          {site.wordmark}
         </Link>
         <nav className="pill__nav" aria-label="Primary">
           <ul className="pill__links">
@@ -59,41 +59,16 @@ export function SiteNav({ light = false }: { light?: boolean }) {
             ))}
           </ul>
           {/*
-            Labelled "WhatsApp", not "Join".
-            The nav already carries a Join item — the client's own /join/ page — and having
-            both meant two things called Join that went to different places, one of them not
-            even a page. This button leaves the site, so it names its destination instead.
-            The word is doing the work here: nothing else in the nav is a proper noun, so it
-            reads as the one outbound action without needing a verb.
+            "Enquire", per the brief's navigation line, and it points at Contact rather than
+            straight out to WhatsApp. The brief is explicit that "the current WhatsApp button
+            can move into Contact/Enquire" — Praṇava takes enquiries about eight things now,
+            not one community, so the button opens the page that can route them instead of
+            dropping every visitor into one person's chat. It therefore no longer leaves the
+            site, and carries no outbound arrow.
           */}
-          <a
-            className="pill__cta"
-            href={links.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            WhatsApp
-            <svg
-              className="pill__ext"
-              width="9"
-              height="9"
-              viewBox="0 0 9 9"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="M1.6 7.4 7.4 1.6M3.1 1.6h4.3v4.3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            {/* The visible label already names the destination, so this only has to say what
-                the arrow means: that the link leaves the site. */}
-            <span className="sr"> (opens in a new tab)</span>
-          </a>
+          <Link className="pill__cta" href="/contact/">
+            Enquire
+          </Link>
           <button
             ref={btnRef}
             className="pill__menu"
@@ -118,15 +93,11 @@ export function SiteNav({ light = false }: { light?: boolean }) {
               {n.full}
             </Link>
           ))}
-          <a
-            className="sheet__cta"
-            href={links.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setOpen(false)}
-          >
-            Join the WhatsApp community
-          </a>
+          {/* The sheet's action matches the bar's: one destination that can route an
+              enquiry, rather than two different ideas of what the primary action is. */}
+          <Link className="sheet__cta" href="/contact/" onClick={() => setOpen(false)}>
+            Enquire
+          </Link>
         </nav>
       </div>
     </>

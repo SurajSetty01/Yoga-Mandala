@@ -81,7 +81,7 @@ export function Doors() {
       </article>
 
       <div className="jn-close">
-        <p>{taglines.guiding}</p>
+        <p>{taglines.ymGuiding}</p>
       </div>
     </section>
   );

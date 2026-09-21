@@ -6,7 +6,7 @@ import { Pillars } from '@/components/preview/within-b/Pillars';
 import { Share } from '@/components/preview/within-b/Share';
 import { Initiatives } from '@/components/preview/within-b/Initiatives';
 import { WithinBMotion } from '@/components/preview/within-b/WithinBMotion';
-import { nav } from '@/content/site';
+import { ymNav } from '@/content/site';
 
 /**
  * TOURNAMENT PREVIEW — What Happens Within, concept B:
@@ -44,7 +44,7 @@ export const metadata = {
   description: 'Tournament preview: the four ideas shown happening rather than listed.',
 };
 
-const NEXT = nav.find((n) => n.href === '/join/');
+const NEXT = ymNav.find((n) => n.href === '/yoga-mandala/join/');
 
 export default function WithinBPreview() {
   return (

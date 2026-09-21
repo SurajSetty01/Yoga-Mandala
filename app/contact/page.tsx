@@ -5,7 +5,7 @@ import { Collaborations } from '@/components/contact/Collaborations';
 import { Depth } from '@/components/contact/Depth';
 import { Social } from '@/components/contact/Social';
 import { contact } from '@/content/copy';
-import { contactPerson, links, site } from '@/content/site';
+import { yogaMandalaContact as contactPerson, links, site } from '@/content/site';
 
 /**
  * PAGE 4 — Connect With Us.

@@ -3,7 +3,7 @@ import { SiteNav } from '@/components/SiteNav';
 import { WithinCMasthead } from '@/components/preview/within-c/Masthead';
 import { WithinCFigure } from '@/components/preview/within-c/Figure';
 import { WithinCInitiatives } from '@/components/preview/within-c/Initiatives';
-import { nav } from '@/content/site';
+import { ymNav } from '@/content/site';
 
 /**
  * TOURNAMENT PREVIEW — What Happens Within, concept C.
@@ -21,7 +21,7 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-const NEXT = nav.find((n) => n.href === '/join/');
+const NEXT = ymNav.find((n) => n.href === '/yoga-mandala/join/');
 
 export default function WithinConceptCPage() {
   return (

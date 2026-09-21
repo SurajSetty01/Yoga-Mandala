@@ -5,7 +5,7 @@ import { Pillars } from '@/components/within/Pillars';
 import { Share } from '@/components/within/Share';
 import { Initiatives } from '@/components/within/Initiatives';
 import { WithinMotion } from '@/components/within/WithinMotion';
-import { nav } from '@/content/site';
+import { ymNav } from '@/content/site';
 import { SiteFooter } from '@/components/SiteFooter';
 
 /**
@@ -43,7 +43,7 @@ export const metadata = {
     'Yoga Mandala is built around four simple ideas: Connect, Learn, Collaborate and Share — and a growing set of community initiatives.',
 };
 
-const NEXT = nav.find((n) => n.href === '/join/');
+const NEXT = ymNav.find((n) => n.href === '/yoga-mandala/join/');
 
 export default function WithinPage() {
   return (

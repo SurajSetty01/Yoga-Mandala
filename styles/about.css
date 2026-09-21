@@ -75,8 +75,15 @@
    centring, because section 02's head and the hero's type both do, and at
    2560 a centred column would step ~470px away from the left edge the two
    sections above it share. */
+/* THE PAGE MEASURE — and it must be CENTRED.
+   Without `margin-inline: auto` this caps its width and then sits hard against the left
+   edge, so on any viewport wider than the cap every section using it drifts left of centre.
+   It is invisible at 1440, where the rail is still full width; at 2531 the quote sat 462px
+   left of the viewport's centre. Four sections share this container, so the bug was the
+   whole page's, not one section's. */
 .ab-rail {
   max-width: calc(var(--ab-max) + 2 * var(--rail));
+  margin-inline: auto;
   padding-inline: var(--rail);
 }
 /* Compositions that are objects rather than a measure — the hand of plates —
@@ -145,8 +152,13 @@
 /* Concept B's markup carries no inner rail: it relied on its own section rule for the page
    gutter. `.ab-sec` here sets padding-block only, because every other section on this page
    holds its content in an `.ab-rail`. So the gutter is restored on the section itself. */
+/* The 100rem band is CENTRED by padding rather than by margins on its children: the
+   composition inside is deliberately asymmetric (the definition ranged left, the closing
+   aside pushed right), and centring each child individually would flatten that. Centring the
+   band keeps every internal relationship and only moves the whole block onto the page's axis.
+   Below 100rem the max() falls back to the ordinary gutter. */
 .ab-prem {
-  padding-inline: var(--rail);
+  padding-inline: max(var(--rail), calc((100% - var(--b-max)) / 2));
   --b-mega: clamp(2.6rem, 1.2rem + 6.2vw, 7.4rem);
   --b-mid:  clamp(1.05rem, 0.96rem + 0.9vw, 1.62rem);
   --b-read: clamp(0.97rem, 0.93rem + 0.36vw, 1.18rem);

@@ -113,7 +113,7 @@ export default function PreviewContactB() {
           <div className="cb-social__in">
             <p className="cb-brow cb-brow--dark">{contact.social.heading}</p>
             <h2 className="cb-social__h" id="cb-social-h">
-              {site.name} is an initiative under {site.parentOrg}.
+              {site.name} is an initiative under {site.trust}.
             </h2>
             <p className="cb-social__say">
               It keeps no accounts of its own. These are the Trust&rsquo;s.

@@ -23,7 +23,7 @@ export function Social() {
       <div className="cx-social__in">
         <p className="cx-eyebrow cx-eyebrow--dark">{contact.social.heading}</p>
         <h2 className="cx-social__h" id="cx-social-h">
-          {site.name} is an initiative under {site.parentOrg}.
+          {site.name} is an initiative under {site.trust}.
         </h2>
         <p className="cx-social__say">
           It keeps no accounts of its own. These are the Trust&rsquo;s.

@@ -61,7 +61,7 @@ export default function PreviewContactA() {
                 Two lines out, and they are not ours.
               </h2>
               <p className="ca-out__say">
-                {site.name} is an initiative under {site.parentOrg}. It keeps no accounts of
+                {site.name} is an initiative under {site.trust}. It keeps no accounts of
                 its own, so these are the Trust&rsquo;s.
               </p>
             </div>
