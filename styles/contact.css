@@ -844,6 +844,24 @@
 .cx-arch:nth-child(5)  { --w: 92%; --x: -8%;  --y: -6%;   --r: 0.6deg;  --ar: 0.94; }
 /* 05 runs off the left rail, so its nameplate moves in far enough to stay on the paper. */
 .cx-arch:nth-child(5) .cx-arch__plate { left: 16%; }
+
+/* TWO PLATES LIFT OFF THE THRESHOLD, and this is a fix, not a preference.
+   Measured with document.elementFromPoint across 320→2560, sampling every
+   nameplate: at the phone placements the doorway that follows 02 and the one
+   that follows 04 are drawn OVER the bottom of their plates — 03's picture
+   covered 02's subject, number and provenance outright at 768, and 05's plate
+   covered 04's number at 390. A label a later doorway can cover is a label
+   that is not there, and this was true of the promoted preview too; it went
+   unseen because the probe's scroll positions were 04 and 07.
+
+   The overlaps themselves are the composition and they are untouched. The two
+   plates move up inside their own pictures instead, the way 05's already moves
+   sideways. The offsets are percentages of each doorway's own height, and the
+   occluder's top edge is a fixed percentage of the wall's width, so one value
+   clears it at every width in the range rather than at the one it was tuned on.
+   Re-measured after the change: clear at 320, 390, 430, 620, 768, 820, 960. */
+.cx-arch:nth-child(2) .cx-arch__plate { bottom: 22%; }
+.cx-arch:nth-child(4) .cx-arch__plate { bottom: 24%; }
 /* 06 is the promoted preview's 08 — same width, ratio and tilt, same bleed off
    the right rail. Its overlap is shallower than the preview's because at 390px
    05 is nearly the full column and a deeper pull put 06 across 05's nameplate.
@@ -859,6 +877,10 @@
   .cx-arch:nth-child(4)  { --w: 27%; --x: 66%;  --y: -16%; --r: -1.5deg; --ar: 0.80; }
   .cx-arch:nth-child(5)  { --w: 50%; --x: -8%;  --y: -6%;  --r: 0.7deg;  --ar: 1.00; }
   .cx-arch:nth-child(5) .cx-arch__plate { left: 22%; }
+  /* the wide wall has no plate that a later doorway can reach, so both plates
+     go back to the threshold where every other one sits */
+  .cx-arch:nth-child(2) .cx-arch__plate,
+  .cx-arch:nth-child(4) .cx-arch__plate { bottom: 5%; }
   /* 06 rises alongside 05 instead of below it: 05 spans -8→42% and 06 spans
      56→104%, so they interlock vertically without either covering the other's
      nameplate, and the wall still ends on a full-strength opening that leaves

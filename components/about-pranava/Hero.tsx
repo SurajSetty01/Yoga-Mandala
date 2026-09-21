@@ -23,10 +23,12 @@ import { FRAMES, Shot } from './parts';
  * font-size.
  */
 export function Hero() {
+  /* the three offsets, as a percentage of each pane image's own height so the picture
+     covers its pane at every band height — see the note in styles/about-pranava.css. */
   const panes = [
-    { i: 0, off: -58 },
-    { i: 1, off: 34 },
-    { i: 2, off: -22 },
+    { i: 0, off: -12 },
+    { i: 1, off: 7 },
+    { i: 2, off: -4.5 },
   ];
 
   return (

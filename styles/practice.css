@@ -1,0 +1,790 @@
+/* practice — owned solely by /practice/. No other file may declare these selectors. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA — THE PRACTICE PAGE.  Seven sections, seven mechanics.
+
+   hero   deep   three windows onto one practice; the middle one is moving
+   01     paper  one word said again and again, larger each time, cut at both ends
+   02     warm   the room set out again, running off both edges of the screen
+   03     deep   the client's sentence with its grammar whispered
+   04     paper  two rules that breathe on a clock, not on the reader
+   05     deep   four frames, each bigger than the last, so the reading slows
+   06     warm   the page comes back to the window it opened with
+
+   Grounds never repeat across a seam:
+     deep · paper · warm · deep · paper · deep · warm
+   and the footer's dark is the page's ending.
+
+   THE SUBJECT IS DURATION AND RETURN and the stylesheet carries it in three
+   places rather than one: a column that is cut at both ends, a frieze that is
+   cut at both edges, and a run of frames that get wider until the reader is
+   moving at a quarter of the speed they came in at.
+
+   Every scroll-linked value arrives as ONE custom property written by
+   components/practice/PracticeMotion.tsx inside a single rAF, and every one
+   has a FINISHED default here — so the page with no JavaScript, and the page
+   under prefers-reduced-motion, is the completed state and not a start state.
+   The two animations that are NOT scroll-linked (the hero's opening and §04's
+   breath) are CSS keyframes, so their start state is in the first paint and
+   the global `* { animation: none }` under reduced motion leaves both at rest.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.pc {
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  /* The type scale. Four steps, far apart, so a reader always knows which
+     register they are in. The shouts — the h1, Prayatna, Prāṇāyāma, the six
+     terms — are each solved in their own section and do not come from here. */
+  --pc-big: clamp(1.55rem, 1.02rem + 2.4vw, 3.1rem);
+  --pc-mid: clamp(1.08rem, 0.98rem + 0.9vw, 1.6rem);
+  --pc-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --pc-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  --pc-pad: clamp(4.4rem, 10vw, 9rem);
+  --pc-max: 92rem;
+
+  /* ornament hairlines. Clay is 3.90:1 and may never carry text; at these
+     alphas it is exactly what DESIGN-SYSTEM §1 reserves it for. */
+  --pc-hair: rgba(193, 97, 60, 0.5);
+  --pc-hair-soft: rgba(36, 29, 24, 0.14);
+  --pc-hair-onDeep: rgba(251, 247, 242, 0.22);
+}
+
+.pc-s {
+  position: relative;
+  padding-block: var(--pc-pad);
+  background: var(--ground);
+  color: var(--ink);
+  /* only x is clipped: the frieze and the hero row run off both edges */
+  overflow-x: clip;
+}
+.pc-s--deep {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+}
+.pc-s--warm {
+  background: var(--ground-warm);
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED.
+   `max-width` without `margin-inline: auto` caps the column and then pins it
+   to the left edge — invisible at 1440 and 462px off-axis at 2531. That
+   shipped once on this site. Every capped block on this page goes through
+   this class or sets `margin-inline: auto` itself. */
+.pc-rail {
+  max-width: calc(var(--pc-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.pc figure {
+  margin: 0;
+}
+
+/* EVERY picture on this page carries both of its crops as custom properties
+   and the stylesheet chooses between them here, because a portrait viewport
+   crops a landscape frame hard enough to lose the subject — which this site
+   has already shipped once (DESIGN-SYSTEM §1). */
+.pc img,
+.pc video {
+  object-position: var(--op, 50% 50%);
+}
+@media (max-width: 719px) {
+  .pc img,
+  .pc video {
+    object-position: var(--op-n, var(--op, 50% 50%));
+  }
+}
+
+/* Focus: the global treatment is a cream ring in a dark halo, which is right
+   on the reversed sections and invisible on paper. (0,3,0) beats (0,1,0). */
+.pc-s:not(.pc-s--deep) :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark ───────────────────────────────────────────────────
+   The object the home page's section 02 introduced and /about/ kept, held to
+   the letter so the whole site has one voice for "where am I". On the
+   reversed grounds teal is 2.44:1 and clay 4.2:1 — neither can carry an
+   11.5px label — so the mark goes cream and the accent becomes a sand rule,
+   which is the one thing sand is allowed to be. */
+.pc-eyebrow {
+  margin: 0 0 clamp(1.5rem, 3.2vw, 2.5rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.pc-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--clay-deep);
+}
+.pc-eyebrow--dark {
+  color: var(--ink-onPic-2);
+}
+.pc-eyebrow--dark .pc-eyebrow__n {
+  color: var(--ink-onPic);
+}
+.pc-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the wall label under a picture ─────────────────────────────────────── */
+.pc-cap {
+  margin: 0.85rem 0 0;
+  max-width: 44ch;
+  font: 400 var(--pc-small) / 1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+.pc-cap--dark {
+  color: var(--ink-onPic-2);
+}
+
+/* ── the honest mark ────────────────────────────────────────────────────
+   Three of these on the page, in the three places a description does not
+   exist. Its shape is constant on purpose: on a page about repetition, the
+   same object recurring at each unanswered question is the right form for it
+   as well as the truthful one. */
+.pc-ask {
+  margin: clamp(1.1rem, 2.4vw, 1.8rem) 0 0;
+  max-width: 42ch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+  font: 400 var(--pc-read) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+.pc-ask--dark {
+  color: var(--ink-onPic-2);
+}
+.pc-ask__note {
+  display: block;
+  padding-top: clamp(0.8rem, 1.8vw, 1.15rem);
+  border-top: 1px solid var(--pc-hair);
+  width: 100%;
+}
+.pc-ask--dark .pc-ask__note {
+  border-top-color: var(--sand);
+}
+.pc-ask__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font: 600 var(--pc-read) / 1.3 var(--font-text);
+  text-decoration: none;
+  color: var(--clay-deep);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+.pc-ask--dark .pc-ask__link {
+  color: var(--ink-onPic);
+}
+.pc-ask__arw {
+  flex: none;
+  transition: transform 0.3s var(--ease);
+}
+.pc-ask__link:hover .pc-ask__arw,
+.pc-ask__link:focus-visible .pc-ask__arw {
+  transform: translateX(3px);
+}
+
+/* ── the reveal this page owns ──────────────────────────────────────────
+   Opt-in through `.is-live` so a reader whose JavaScript never arrives keeps
+   every word that is already painted. */
+.pc.is-live [data-pc] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+.pc.is-live [data-pc='fade'],
+.pc.is-live [data-pc='strip'] {
+  transform: none;
+}
+.pc.is-live [data-pc].in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.85s var(--ease),
+    transform 1.05s var(--ease);
+  transition-delay: var(--pc-d, 0ms);
+}
+
+/* ── one silent loop over its own poster ────────────────────────────────
+   The <img> is never removed and the <video> carries no `poster`; the video
+   only becomes visible once PracticeMotion has proved it is playing, so a
+   stall, an eviction or a blocked autoplay leaves a photograph on screen. */
+.pc-loop {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pc-loop picture,
+.pc-loop img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.pc-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.pc-vid.is-live {
+  opacity: 1;
+}
+
+/* ══ HERO ═════════════════════════════════════════════════════════════════
+   THREE WINDOWS ONTO THE SAME PRACTICE, AND THE MIDDLE ONE IS STILL GOING.
+
+   Each aperture opens from 0.62 of its width to full, the moving one first
+   and its neighbours a beat behind; the picture inside carries the exact
+   inverse scale, so what widens is the OPENING and not the photograph. It is
+   a CSS load animation rather than a JavaScript reveal because a reveal has
+   to be switched on after hydration, which would land the start state after
+   the browser has already painted the finished one.
+
+   The type is never on the picture. The home page's hero owns type-inside-a-
+   moving-photograph; on the reversed ground this section's contrast is a
+   constant (16.66:1) rather than a bet on where the daylight falls.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-hero {
+  padding-block: clamp(6.6rem, 13svh, 10rem) clamp(3rem, 6vw, 5rem);
+}
+.pc-hero__in {
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 2.2rem);
+}
+.pc-hero__intent {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic);
+}
+.pc-hero__intent::before {
+  content: '';
+  flex: none;
+  width: 26px;
+  height: 1px;
+  background: var(--sand);
+}
+.pc-hero__h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(3rem, 1.4rem + 6.4vw, 7rem);
+  line-height: 0.96;
+  letter-spacing: -0.026em;
+  color: var(--ink-onPic);
+}
+.pc-hero__lead {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: var(--pc-mid);
+  line-height: 1.34;
+  color: var(--ink-onPic);
+}
+.pc-hero__foot .pc-cap {
+  margin-top: 1rem;
+}
+
+/* the three windows */
+.pc-hero__row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(7px, 1.1vw, 18px);
+}
+.pc-win {
+  position: relative;
+  overflow: clip;
+  height: var(--pc-winh, clamp(240px, 44svh, 520px));
+  background: rgba(251, 247, 242, 0.06);
+  transform: scaleX(1);
+  animation: pc-open 1.15s var(--ease) var(--pc-d, 0ms) both;
+}
+.pc-win > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: pc-open-in 1.15s var(--ease) var(--pc-d, 0ms) both;
+}
+.pc-win img,
+.pc-win video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@keyframes pc-open {
+  from {
+    transform: scaleX(0.62);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* the exact inverse of the above, so the picture is never squeezed */
+@keyframes pc-open-in {
+  from {
+    transform: scaleX(1.6129);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (min-width: 1100px) {
+  .pc-hero__in {
+    grid-template-columns: minmax(19rem, 27rem) minmax(0, 1fr);
+    grid-template-areas:
+      'intent row'
+      'h1     row'
+      'foot   row';
+    grid-template-rows: auto auto 1fr;
+    align-items: start;
+    column-gap: clamp(2.4rem, 5vw, 5.5rem);
+    row-gap: clamp(1.2rem, 2.4vw, 2rem);
+  }
+  .pc-hero__intent {
+    grid-area: intent;
+  }
+  .pc-hero__h1 {
+    grid-area: h1;
+  }
+  .pc-hero__foot {
+    grid-area: foot;
+    align-self: end;
+  }
+  .pc-hero__row {
+    grid-area: row;
+    --pc-winh: clamp(300px, 62svh, 640px);
+  }
+}
+
+/* Below 720 the row goes edge to edge and the seams become hairlines: three
+   110px windows inside the rail would be postage stamps, and the triptych is
+   the mechanic. */
+@media (max-width: 719px) {
+  .pc-hero__row {
+    width: 100vw;
+    margin-inline: calc(-1 * var(--rail));
+    gap: 1px;
+    --pc-winh: clamp(260px, 42svh, 400px);
+  }
+}
+
+/* ══ 01 · ONGOING SĀDHANA ═════════════════════════════════════════════════
+   ONE WORD SAID AGAIN AND AGAIN, A LITTLE LARGER EACH TIME, CUT AT BOTH ENDS.
+
+   The column is taller than its well at every viewport between 320 and 2560 —
+   that is checked arithmetic, not a hope — so it is always cut by the top and
+   the bottom edge, which is the whole claim of the word "ongoing" made
+   without a number, a date or a duration.
+
+   NO FADE AT THE CUT. A gradient mask would have put pale type on paper at
+   exactly the place the contrast probe samples. A hard edge is both honest
+   and measurable: every word in the column is full ink, 13.4:1.
+
+   THE FACE IS INTER. Sādhana carries ā and Fraunces has no precomposed ā —
+   the browser decomposes it, Fraunces' mark positioning fails and the macron
+   is dropped. DESIGN-SYSTEM §1 recorded this for the client's name.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-sad__grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+/*
+   THE WELL IS SIZED IN `em` OF THE COLUMN'S OWN BASE, AND THAT IS ARITHMETIC RATHER
+   THAN TASTE. The cut has to fall in the MIDDLE of a word at both ends or the column
+   reads as a list that happens to start high — which is the one thing it must not say.
+   With fifteen settings at line-height 1.12 and a 5.8% step, the column is 23.62em of
+   its base tall and the cumulative top of line k is 1.12(k + 0.029k(k-1))em. At a well
+   of 11.4em the overflow is 6.11em each side: the top edge lands inside line 5 (4.87 →
+   6.25) and the bottom edge inside line 12 (15.89 → 17.73). Both are mid-glyph at
+   every viewport from 320 to 2560, because the whole system scales with one value.
+*/
+.pc-sad__well {
+  position: relative;
+  font-size: clamp(1.15rem, 0.9rem + 1.1vw, 1.9rem);
+  height: 11.4em;
+  overflow: hidden;
+}
+.pc-sad__col {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* the drift has a finished default of zero: with no JavaScript the column
+     is simply there, cut at both ends, and nothing is missing. */
+  /* the drift can never expose an end: the overflow is 6.11em a side and the
+     throw is at most 2em, so half a word is always missing top and bottom. */
+  transform: translate3d(0, calc(-50% + var(--pc-lift, 0) * -1 * var(--pc-throw)), 0);
+  --pc-throw: 4em;
+  will-change: transform;
+}
+.pc-sad__w {
+  display: block;
+  font-family: var(--font-text);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  /* fifteen steps of 5.8%: the last setting is 1.81x the first. Nothing
+     sudden, everything cumulative. `em` of the well, so the column and its
+     frame are one system and the cut above stays where the arithmetic put it. */
+  font-size: calc(1em * (1 + var(--i) * 0.058));
+}
+.pc-sad__say {
+  max-width: 38rem;
+}
+.pc-sad__lead {
+  margin: 0 0 clamp(1rem, 2.2vw, 1.5rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--pc-big);
+  line-height: 1.16;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+.pc-sad__body {
+  margin: 0;
+  max-width: 40ch;
+  font: 400 var(--pc-read) / 1.68 var(--font-text);
+  color: var(--ink-soft);
+}
+@media (min-width: 900px) {
+  .pc-sad__grid {
+    grid-template-columns: minmax(14rem, 26rem) minmax(0, 40rem);
+  }
+}
+
+/* ══ 02 · REGULAR PRACTICE ════════════════════════════════════════════════
+   THE ROOM, SET OUT AGAIN, RUNNING OFF BOTH EDGES OF THE SCREEN.
+
+   Three photographs of a practice room prepared and empty, laid twice along a
+   strip that is wider than any viewport and cut by both screen edges. There is
+   no timetable in the client's material and none is invented here: what is
+   regular is the room being made ready, which is the one thing the archive
+   actually documents.
+
+   The track starts pulled left so that neither end is ever in shot, and the
+   sideways drift has a finished default of zero.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-reg__lead {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--pc-big);
+  line-height: 1.16;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+.pc-reg__strip {
+  margin-block: clamp(2.2rem, 5vw, 3.8rem);
+  overflow: hidden;
+}
+.pc-reg__track {
+  display: flex;
+  width: max-content;
+  gap: clamp(10px, 1.6vw, 26px);
+  margin-left: calc(-1 * clamp(70px, 11vw, 240px));
+  transform: translate3d(calc(var(--pc-run, 0) * -9%), 0, 0);
+  will-change: transform;
+}
+.pc-reg__tile {
+  flex: 0 0 auto;
+  width: clamp(230px, 32vw, 30rem);
+  aspect-ratio: 3 / 2;
+}
+.pc-reg__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ══ 03 · PRAYATNA AND RELATED OFFERINGS ══════════════════════════════════
+   THE CLIENT'S SENTENCE WITH ITS GRAMMAR WHISPERED AND ITS PRACTICE AT SIZE.
+
+   The six terms are set in Inter and not in Fraunces, and that is correctness
+   rather than taste: "regular Sādhana" and "Prāṇāyāma" carry ā and ṇ, which
+   Fraunces mis-sets. Setting all six in the text face keeps one voice across
+   the line; the grammar between them is Fraunces italic at a whisper, which
+   is the inverse of the usual arrangement and is the point.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-pra__top {
+  display: grid;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: end;
+}
+.pc-pra__word {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 1.5rem + 4.4vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: -0.024em;
+  color: var(--ink-onPic);
+}
+.pc-pra__fig img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: clamp(320px, 46svh, 520px);
+  object-fit: cover;
+}
+.pc-pra__door {
+  margin: clamp(3rem, 7vw, 6.5rem) 0 0;
+  max-width: 68rem;
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 0.8rem + 3vw, 3.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+.pc-pra__term {
+  display: inline;
+}
+.pc-pra__grammar {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 0.42em;
+  letter-spacing: 0;
+  color: var(--ink-onPic-2);
+}
+@media (min-width: 900px) {
+  .pc-pra__top {
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, 24rem);
+  }
+}
+
+/* ══ 04 · PRĀṆĀYĀMA ═══════════════════════════════════════════════════════
+   THE ONE PLACE ON THIS SITE THAT MOVES WHILE THE READER IS STILL.
+
+   Two clay rules draw apart and come back together on a ten-second cycle
+   driven by a clock and by nothing else. Only `transform` is animated. Under
+   prefers-reduced-motion the global `* { animation: none }` stops them where
+   they sit and the section is a wide still frame of leaves between two rules
+   — which says the same thing.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-brea__stage {
+  position: relative;
+  padding-block: clamp(30px, 5vw, 70px);
+  --pc-breath: clamp(9px, 2.1vw, 28px);
+}
+.pc-brea__rule {
+  position: absolute;
+  inset-inline: 0;
+  height: 1px;
+  background: var(--clay);
+}
+.pc-brea__rule--top {
+  top: clamp(12px, 2.4vw, 36px);
+  animation: pc-breathe-up 10s ease-in-out infinite;
+}
+.pc-brea__rule--btm {
+  bottom: clamp(12px, 2.4vw, 36px);
+  animation: pc-breathe-down 10s ease-in-out infinite;
+}
+@keyframes pc-breathe-up {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(calc(-1 * var(--pc-breath)));
+  }
+}
+@keyframes pc-breathe-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--pc-breath));
+  }
+}
+.pc-brea__ap {
+  overflow: hidden;
+}
+.pc-brea__ap .pc-loop {
+  height: clamp(148px, 26svh, 300px);
+}
+.pc-brea__foot {
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 3rem);
+  align-items: start;
+  margin-top: clamp(1.6rem, 3.4vw, 2.6rem);
+}
+.pc-brea__word {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(2rem, 1rem + 4vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.pc-brea__say .pc-ask {
+  margin-top: 0;
+}
+@media (min-width: 900px) {
+  .pc-brea__foot {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 34rem);
+  }
+}
+
+/* ══ 05 · RETREATS AND IMMERSIONS ═════════════════════════════════════════
+   FOUR FRAMES, EACH BIGGER THAN THE LAST, SO THE READING SLOWS.
+
+   Duration with the only measure this page is allowed: the reader's own
+   scroll. The first frame passes in a moment; the last holds the screen. No
+   number is stated because no client document states one.
+
+   Width rather than crop — every frame keeps the 3:2 of its source, so the
+   largest is capped at 84rem and a 1620px original is exact at 1440 and
+   unstretched at 2531.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-ret__lead {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--pc-mid);
+  line-height: 1.45;
+  color: var(--ink-onPic);
+}
+.pc-ret__run {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2.4rem, 5vw, 5rem);
+  margin-block: clamp(2.8rem, 6vw, 5rem);
+  padding-inline: var(--rail);
+}
+.pc-ret__step {
+  width: calc(var(--w) * min(84rem, 88vw));
+  max-width: 100%;
+}
+.pc-ret__step img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+.pc-ret__end {
+  margin: 0;
+  max-width: 30ch;
+  margin-inline: auto;
+  text-align: center;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--pc-big);
+  line-height: 1.2;
+  letter-spacing: -0.014em;
+  color: var(--ink-onPic);
+}
+/* On a phone a 0.42 ramp makes the first frame 144px wide. The ramp is
+   compressed instead of abandoned: the frames still grow, by 26% rather than
+   by 138%, and the section still slows down. */
+@media (max-width: 719px) {
+  .pc-ret__step {
+    width: calc((0.55 + 0.45 * var(--w)) * 100%);
+  }
+}
+
+/* ══ 06 · SCHEDULE AND ENQUIRY ════════════════════════════════════════════
+   THE PAGE COMES BACK TO THE WINDOW IT OPENED WITH.
+
+   Same clip, same URL, same cache entry — so the closing argument of a page
+   about return costs the reader nothing.
+   ══════════════════════════════════════════════════════════════════════════ */
+.pc-enq__in {
+  display: grid;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+}
+.pc-enq__loop {
+  aspect-ratio: 3 / 4;
+}
+.pc-enq__lead {
+  margin: 0;
+  max-width: 40ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--pc-mid);
+  line-height: 1.42;
+  color: var(--ink);
+}
+.pc-enq__more {
+  margin: clamp(1.4rem, 3vw, 2.2rem) 0 0;
+}
+.pc-enq__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font: 500 var(--pc-read) / 1.3 var(--font-text);
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--pc-hair);
+  padding-bottom: 2px;
+}
+.pc-enq__arw {
+  flex: none;
+  transition: transform 0.3s var(--ease);
+}
+.pc-enq__link:hover .pc-enq__arw,
+.pc-enq__link:focus-visible .pc-enq__arw {
+  transform: translateX(3px);
+}
+@media (min-width: 860px) {
+  .pc-enq__in {
+    grid-template-columns: minmax(11rem, 19rem) minmax(0, 42rem);
+    column-gap: clamp(2.5rem, 6vw, 6rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-ask__arw,
+  .pc-enq__arw,
+  .pc-vid {
+    transition: none;
+  }
+}

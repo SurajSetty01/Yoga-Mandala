@@ -95,14 +95,19 @@ export type Route = {
  *
  * So the plate names the event and not a date, and `on` is null for them.
  *
- * ONLY THE PRABODHA TTC FRAMES ARE USED. "Prabodha" is one of the five programme names in
- * Blueprint §4.3 — it is the client's own word and a caption can say it. "Prabhava" appears
- * in NO client document: not the Blueprint, not Pranava Website.docx, not Pranava About
- * Page.docx (searched all three). It is a folder label from the media drop, and captioning a
- * photograph with an event this project cannot name is the failure the plate exists to
- * prevent. The Prabhava frames are the higher-resolution ones — 3024×4032 against the TTC's
- * 1620×1080 — and they are still not used. Ask the client what Prabhava is and they become
- * available; until then, resolution does not outrank provenance.
+ * ONLY THE PRABODHA TTC FRAMES ARE USED, and that is a content decision rather than a
+ * picture-editing one. "Prabodha" is one of the five programme names in Blueprint §4.3 — the
+ * client's own word, which a caption can say. "Prabhava" appears in NO client document: not
+ * the Blueprint, not Pranava Website.docx, not Pranava About Page.docx (all three searched).
+ * It is a folder label from the media drop, and captioning a photograph with an event this
+ * project cannot name is the failure the plate exists to prevent.
+ *
+ * That costs something and the cost is known. The Prabhava frames are the better material:
+ * 27 of the archive's 36 portrait frames, 3024×4032 native, several with a 2560 derivative,
+ * against Prabodha's 1620×1080 landscape and 1080×1620 portrait. Doorways 02 and 04 take the
+ * two Prabodha PORTRAIT frames instead, which is where the shape actually matters — they are
+ * the narrowest openings on the wall. Ask the client what Prabhava is and the rest of the
+ * archive opens up; until then provenance outranks resolution.
  */
 const PRABODHA = { at: 'Prabodha TTC', on: null };
 const SAMSKRITHI = { at: 'Samskrithi Sadhana', on: '29 June 2025' };
@@ -139,11 +144,16 @@ const SUBJECTS: Array<Omit<Route, 'href'>> = [
     n: '02',
     label: J.practice.intent,
     message: `${hello} My enquiry is about ongoing practice.`,
-    id: 'pr-ttc-dsc_0569',
-    alt: 'Five practitioners in downward-facing dog on mats in a receding line, low sunlight across a red floor',
+    /* PORTRAIT, on purpose. This is the narrowest doorway on the wall (30% of the measure at
+       --ar 0.78) and a 3:2 landscape loses a third of its width to that crop. The archive has
+       36 portrait frames; this is the one the audit calls "the most atmospheric single-figure
+       frame" — a still seated figure under a banyan, nobody else in shot. Its only derivative
+       is 960×1440, which still covers this doorway at 2× (422 CSS px × 2 = 844). */
+    id: 'pr-ttc-dsc_0326',
+    alt: 'A man sitting cross-legged with his hands in his lap on a stone slab at the foot of a huge banyan tree',
     event: PRABODHA,
-    focal: [0.45, 0.6],
-    srcs: [{ suffix: 960, w: 960 }, { suffix: 1620, w: 1620 }],
+    focal: [0.42, 0.68],
+    srcs: [{ suffix: 960, w: 960 }],
   },
   {
     /* A programme is a prepared place. The only frame on the wall with nobody in it, and the
@@ -165,11 +175,14 @@ const SUBJECTS: Array<Omit<Route, 'href'>> = [
     n: '04',
     label: J.heal.intent,
     message: `${hello} My enquiry is about health-oriented guidance.`,
-    id: 'pr-ttc-dsc_0262_1',
-    alt: 'Four practitioners lying back over bolsters with their legs resting on chair seats',
+    /* PORTRAIT again, and for the same reason: doorway 04 is 27% at --ar 0.80. The audit's
+       own note on this frame is "a rare portrait-format frame of the inversion row, useful
+       for a tall slot". 960×1440 covers 348 CSS px at 2×. */
+    id: 'pr-ttc-dsc_0254_1',
+    alt: 'Three people in supported shoulderstand over chairs against a white wall',
     event: PRABODHA,
-    focal: [0.5, 0.65],
-    srcs: [{ suffix: 960, w: 960 }, { suffix: 1620, w: 1620 }],
+    focal: [0.5, 0.6],
+    srcs: [{ suffix: 960, w: 960 }],
   },
   {
     n: '05',

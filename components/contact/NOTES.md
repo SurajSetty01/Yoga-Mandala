@@ -61,7 +61,8 @@ The composition is parametric — `--w / --x / --y / --r / --ar` per doorway —
 a number of placements, not a rebuild. **Placements 01–05 are the preview's own values,
 unchanged, both breakpoints**, including the arch radius, the near/far lane assignment, the
 far lane's `rgba(251,247,242,0.17)` veil, the two z-indexes, the nameplate material and the
-`left: 16% / 22%` nudge on doorway 05. **Doorway 06 is the preview's 08** — same width,
+`left: 16% / 22%` nudge on doorway 05. (Two plates — not two doorways — were nudged upward
+inside their own pictures to stop a later doorway covering them; see Measurements.) **Doorway 06 is the preview's 08** — same width,
 ratio and tilt, and the same bleed off the right rail — with only its `--y` re-tuned, twice
 and by measurement:
 
@@ -86,12 +87,12 @@ site is non-null, so nothing else can be linked to.
 
 | # | Plate | Label is | Message sent | Frame | Provenance |
 |---|---|---|---|---|---|
-| 01 | I want structured education | Blueprint §3, verbatim | "…about structured learning." | `ss-dsc07118` | Samskrithi Sadhana · 29 June 2025 |
-| 02 | I want consistent Sādhana | Blueprint §3, verbatim | "…about ongoing practice." | `ss-dsc07126` | Samskrithi Sadhana · 29 June 2025 |
-| 03 | I want to ask about a programme | ours | "…about a programme." | `p13-img_0617` | Pranava Workshop · 13 April 2025 |
-| 04 | I want health-oriented guidance | Blueprint §3, verbatim | "…about health-oriented guidance." | `ss-dsc07120` | Samskrithi Sadhana · 29 June 2025 |
-| 05 | I want to collaborate | ours | "…about a collaboration." | `ss-dsc07137` | Samskrithi Sadhana · 29 June 2025 |
-| 06 | I want to join the community | ours | "…about the Yoga Mandala community." | `ss-ven0096` | Samskrithi Sadhana · 29 June 2025 |
+| 01 | I want structured education | Blueprint §3, verbatim | "…about structured learning." | `pr-ttc-dsc_0284_1` — a study circle, notebooks open | Prabodha TTC |
+| 02 | I want consistent Sādhana | Blueprint §3, verbatim | "…about ongoing practice." | `pr-ttc-dsc_0326` — one figure seated under a banyan | Prabodha TTC |
+| 03 | I want to ask about a programme | ours | "…about a programme." | `pr-ttc-dsc_0188_1` — a room prepared, nobody in it | Prabodha TTC |
+| 04 | I want health-oriented guidance | Blueprint §3, verbatim | "…about health-oriented guidance." | `pr-ttc-dsc_0254_1` — supported inversions over chairs | Prabodha TTC |
+| 05 | I want to collaborate | ours | "…about a collaboration." | `pr-ttc-dsc_0049` — five people talking in a loose circle | Prabodha TTC |
+| 06 | I want to join the community | ours | "…about the Yoga Mandala community." | `ss-ven0096` — a hall full of people | Samskrithi Sadhana · 29 June 2025 |
 
 The message is a first line the sender reads, edits and sends themselves; WhatsApp shows it
 in the compose box before anything is sent. 01–05 open "Hello Praṇava."; **06 does not** —
@@ -123,6 +124,7 @@ the tilt and the depth pass's `--py` and would lose them.
 | `site.url` | `null` | No canonical, no OG URL (`layout.tsx` guards it). |
 | `pranava.programmes[].blurb` | `null` ×5 | **Nothing.** No programme names or descriptions appear on this page at all. |
 | Blueprint §6 FAQs | not supplied | **Nothing.** Writing plausible ones would be inventing the client's answers. |
+| `event.on` for the Prabodha frames | `null` | **Nothing** — the plate names the event and stops, rather than printing a dangling separator. No audit dates the new collections. |
 
 No mailto, no `#`, no "coming soon", no greyed-out row, no invented mailbox. `ChannelList`
 builds its rows from a filtered array, so the day an address arrives the card grows a second
@@ -216,51 +218,57 @@ Nothing above needs the composition to change. The wall is the router either way
 
 ## Photography
 
-Every frame is still a Yoga Mandala workshop or a Samskrithi Sadhana frame. Every photograph
-carries its provenance on the plate, in the caption system `components/within/frames.ts`
-uses: collections from `Context/Media/_audit/tagged.json`, dates from
-`Context/Media/README.md`. No venue and no city, because the audit states none.
+**Five of the six frames are Praṇava's own now.** `public/media/pranava-stills.json` landed
+during this work — 83 `pr-` stills with audited alt text, focal points and source paths —
+and doorways 01–05 were swapped from Yoga Mandala workshop stills to the **Prabodha
+teacher-training archive**: a study circle with notebooks open, a single figure seated under
+a banyan, a room prepared for a programme with nobody in it, supported inversions over
+chairs, and five people talking in a loose circle. Blueprint §8.4 asks for "real Pranava
+teaching and practice environments… learning, observation, correction, study, books, props,
+discussions and community", and these are that; the Samskrithi frames were a different
+community's gathering, however good they are.
 
-**Why not the Praṇava library.** It was checked at the start of the work and again at the
-end. By the end, 83 `pr-` ids (`pr-pbh-*` from Prabhava Photos, `pr-ttc-*` from Prabodha TTC
-Photos) had appeared as derivatives under `public/media/stills/` — but
-**`public/media/pranava-stills.json` had not**, and the encode was visibly still running.
-Three things made a swap unsafe rather than merely early:
+**Doorway 06 keeps a Yoga Mandala frame, deliberately.** It is the one route that is not
+Praṇava's own, so it keeps a Samskrithi Sadhana photograph and a Samskrithi Sadhana caption.
+The distinction is visible on the plates: five read `— PRABODHA TTC` and one reads
+`— SAMSKRITHI SADHANA · 29 JUNE 2025`.
 
-1. **The ids are not stable yet.** `Context/new/_audit/vision/PBH-01.json` describes
-   `pr-pbh-6cfd4e56_69c7_4534_a3dc_eef913`; the file on disk is `pr-pbh-img_5362-960.webp`.
-   The vision sheet and the encoder are not yet naming the same frame the same way.
-2. **There is no provenance for the new collections.** `Context/Media/README.md` dates the
-   three old ones; `_inventory.json` and `_audit/encoded-stills.json` carry no date field
-   for the new ones at all. "Prabodha TTC" is at least a name this project can source —
-   Prabodha is one of the Blueprint's five programme names — but "Prabhava" is a folder
-   label whose meaning is nowhere in the client's material. Captioning a photograph with an
-   event this project cannot name is the exact failure the plate exists to prevent.
-3. The page is **live and shared** while the encode is running. Pointing six `<img>` at
-   files another agent is still writing is how a page ships with 404s in it.
+**Why not the Prabhava frames, which are the better material.** The archive has two new
+collections. "Prabodha" is one of the five programme names in Blueprint §4.3 — the client's
+own word, which a caption can say. **"Prabhava" appears in no client document**: not the
+Blueprint, not `Pranava Website.docx`, not `Pranava About Page.docx`, all three searched. It
+is a folder label from the media drop, and captioning a photograph with an event this
+project cannot name is the failure the plate exists to prevent.
 
-So the swap is left as a data change, which is all it is.
+The cost is known and it is real: 27 of the archive's 36 portrait frames are Prabhava, at
+3024×4032 native with several 2560 derivatives, against Prabodha's 1620×1080 landscape and
+1080×1620 portrait. **Ask the client what Prabhava is and the better half of the archive
+opens up.** Until then provenance outranks resolution.
 
-Swapping any row's `id` / `alt` / `event` / `focal` / `srcs` in `routes.ts` for a `pr-` frame
-is a data change and nothing else — no component and no CSS reads the id. **Doorways 01, 03
-and 04 are the ones a real Praṇava teaching frame would improve most**: a teacher correcting
-a student, a course in session, and one-to-one attention are exactly what the Praṇava brief
-§10 asks new photography to show.
+**Portrait where the shape actually matters.** Doorways 02 and 04 are the narrowest openings
+on the wall (30% and 27% of the measure, `--ar` 0.78 and 0.80), where a 3:2 landscape loses a
+third of its width to the crop. Both take Prabodha's own portrait frames — the audit's note
+on `pr-ttc-dsc_0254_1` is literally "a rare portrait-format frame of the inversion row,
+useful for a tall slot". Their single 960×1440 derivative still covers those doorways at 2×
+(422 and 348 CSS px). The wide doorways keep landscape frames because the subject matters
+more there and `--ar` 0.88–1.00 crops a 3:2 gently.
 
-Two measured traps, both still live:
+**Resolution ceiling, stated rather than hidden.** Prabodha caps at 1620 —
+`design/PRANAVA-BUILD.md` records the same ceiling for the TTC archive ("good to ~1600 wide,
+never a 2560 full-bleed"). Doorways 01, 03 and 05 upscale by about 1.2× on a 2× display and
+are exact on a 1× one. That is better than the preview shipped: it put 720×1280 portrait
+crops on doorways of the same size.
 
-- **The DSC derivatives are 2:3 portrait crops** (960×1440, 1920×2880) even though
-  `stills.json` records the landscape original at 7008×4672. The `w` descriptors in
-  `srcs` are the measured file widths, not the manifest's.
-- **`ss-ven0096` has only one derivative**, 960×540. It is on the smallest doorway for that
-  reason. On a 2× display that doorway upscales slightly; every other frame has 1920 or
-  2560 and does not.
+**The hero photograph was not changed.** `ss-dsc07144` has the Praṇava roundel in the frame,
+its caption is the one approved copy on the page, and `.cx-fig img`'s two `object-position`
+values were hand-measured against that specific crop ("what a phone gets is the man with the
+microphone and the one listening to him"). Swapping it is a separate, re-measured job.
 
-`focal` on doorway 05 is pulled to `0.18` — further left than the manifest's `0.35` and
-further than the preview's `0.28` — because at 50% of the wall the crop is wide enough to
-centre an air cooler, which is the exact failure `design/DESIGN-SYSTEM.md` records.
-
----
+**Every caption still names the event the frame was taken at**, in the caption system
+`components/within/frames.ts` uses. Collections come from the manifest's own `source` path
+for the `pr-` frames and from `Context/Media/_audit/tagged.json` for doorway 06; the date
+comes from `Context/Media/README.md`, which covers the older collections only. No venue and
+no city, because no audit states one.
 
 ## Measurements
 
@@ -277,13 +285,17 @@ Dev server, Chromium via Playwright, one browser at a time.
   anywhere on the page is the clay CTA at **5.98:1** and the teal `.cx-openTo` line at
   **6.95:1**, both inherited and both clear.
 
-  Run the probes one at a time. Three overlapping matrices were briefly live during this
-  work because killing the wrapper shell does not kill the `node tools/contrast-probe.mjs`
-  it already spawned; the log interleaved and three Chromiums sat in memory at once on a
-  machine that has OOM-killed itself here. Check for stray `contrast-probe` processes before
-  trusting a run, and prefer one viewport per invocation.
-- **Screenshots read, not just taken**, at 320×568, 390×844, 768×1024, 1024×768, 1280×720,
-  1440×900 and 2531×1140, at the head, three doorways, the action row and the social band.
+  **Run the probes one viewport per invocation.** Three overlapping matrices were briefly
+  live during this work, because killing the wrapper shell does not kill the
+  `node tools/contrast-probe.mjs` it has already spawned: the log interleaved, three
+  Chromiums sat in memory at once on a machine that has OOM-killed itself here, and the
+  readings were worthless. Check for stray `contrast-probe` processes before trusting a run.
+  A run taken while the media encoder is rewriting a `.webp`, or while `next dev` shows
+  "Compiling", is worthless for the same reason — the probe diffs two screenshots and both
+  must be of the same page.
+- **Screenshots read, not just taken**, at 320×568, 390×844, 768×1024, 960×900, 1024×768,
+  1280×720, 1440×900 and 2531×1140 — the head, every doorway, the action row, the social
+  band, a focused doorway and a focused social tile.
   A full-page capture is **not** a usable check on this page: `fullPage` stitches while
   scrolling, and `Depth.tsx` is writing `--py` from the scroll position as it goes, so the
   far lane rides up to ~230px out of register against the near lane and the plates appear
@@ -291,6 +303,21 @@ Dev server, Chromium via Playwright, one browser at a time.
 - **No horizontal overflow** at 320, 360, 390, 430, 560, 620, 768, 820, 960, 1024, 1180,
   1280, 1440, 1600, 1920, 2560: `scrollWidth === clientWidth` at every one, after scrolling
   the whole page. Doorways 05 and 06 leave the paper inside `overflow-x: clip`.
+- **Every nameplate checked for occlusion at 17 widths, 320 → 2560,** and two were being
+  covered. At the phone placements doorway 03's picture sat over the whole of 02's plate
+  from about 620px up, and 05's plate covered 04's number at 390px. Both are inherited from
+  the promoted preview and both went unseen, because the previous probe scrolled to
+  doorways 04 and 07 and never looked at 02. It is also what the one contrast FAIL in this
+  whole exercise turned out to be — "Prabodha TTC" reading 2.70:1 at 768×1024 was the probe
+  correctly measuring cream text against a photograph, because the plate behind it had been
+  painted over. Fixed by lifting those two plates inside their own pictures
+  (`bottom: 22%` / `24%`, phone breakpoint only), which leaves every doorway placement and
+  every overlap exactly as approved. Re-measured after the fix: clear everywhere, and the
+  768 FAIL is gone.
+
+  A caution for whoever checks this next: `document.elementFromPoint` **over-reports** here.
+  Chromium hit-tests the arch's un-rounded box, so a neighbour's clipped-away corner reads
+  as an occluder where nothing is painted. Judge it on screenshots, or on the probe.
 - **`prefers-reduced-motion: reduce`:** `Depth.tsx` returns before attaching anything, `.cx`
   never gets `is-live`, no `--py` is ever written, each doorway's transform is its tilt
   alone, and the doorway's hover scale and arrow nudge are cancelled — hover and focus still
@@ -310,8 +337,15 @@ Dev server, Chromium via Playwright, one browser at a time.
   that ring was invisible once and it stays fixed. Screenshots of a focused doorway and a
   focused social tile are in evidence.
 - Exactly **one `<h1>`** ("Connect With Us"); three `<h2>`. **Seven `<img>`, all with real
-  alt**, verbatim from `public/media/stills.json`. **Every external link** carries
-  `target="_blank" rel="noopener noreferrer"` (0 exceptions found).
+  alt**, verbatim from `public/media/pranava-stills.json` and `public/media/stills.json`.
+  **Every external link** carries `target="_blank" rel="noopener noreferrer"` — 0 of 44
+  anchors missing it, checked on the built page, not the source.
+- **Grepped the rendered output, dev and built**, for the three things that have gone wrong
+  on this project before: **zero** email addresses, **zero** `mailto:`, **one** city
+  (`SAMSKRITHI SADHANA · BENGALURU`, the hero's provenance caption, already approved), and
+  **zero** numbers describing the institution. The only digits on the page are the ledger
+  marker, the six doorway numbers, the phone number and one photograph date.
+- All ten image paths in the built page exist in `out/`.
 - `npx tsc --noEmit`, `npx next build`, `npx eslint .` and `npm run check:copy` all pass.
 
 ---
@@ -342,11 +376,18 @@ Sanskrit diacritic in the display face should check it renders before trusting i
 **No `tel:` link.** The client called this a WhatsApp number, so it is offered as WhatsApp.
 Turning it into a voice-call link would be an assumption about how they want to be reached.
 
-**Two open questions for the client**, both older than this rewrite and both still unanswered
-in `design/CONTENT.md`: whether `@thepranavshastri` — which reads as a personal handle — is
-genuinely the Trust's intended account, and whether "Praṇav Śāstrī" and "Pranav Murthy" are
-the same person. Nothing here assumes either answer.
+**Three open questions for the client.** Two are older than this rewrite and still
+unanswered in `design/CONTENT.md`: whether `@thepranavshastri` — which reads as a personal
+handle — is genuinely the Trust's intended account, and whether "Praṇav Śāstrī" and "Pranav
+Murthy" are the same person. The third is new and it is blocking real material: **what is
+"Prabhava"?** It is the name of a 343-image collection in the media drop, it is the source of
+27 of the archive's 36 portrait frames at 3024×4032, and it appears in none of the three
+client documents. Until it can be named, nothing from it can be captioned. Nothing here
+assumes any of the three answers.
 
-**The sitewide footer** is documented in `components/SiteFooter.tsx` and `styles/footer.css`.
-It still identifies Yoga Mandala rather than Praṇava; that is not this page's file and is
-not changed here.
+**The sitewide footer carries the same claim this page just corrected**, and it is not this
+page's file. `components/SiteFooter.tsx` line 91 renders
+`{site.name} is an initiative under {site.trust}` — which now reads "Praṇava is an
+initiative under Praṇava Seva Trust", a statement about Praṇava that no client document
+makes. The footer also still brands as Yoga Mandala, which `Pranava Website.docx` §3 asks to
+be replaced. Both belong to whoever owns the shell.

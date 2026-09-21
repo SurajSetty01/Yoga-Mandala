@@ -276,12 +276,31 @@ export const contact = {
 
 /* ── FOOTER ──────────────────────────────────────────────────────────────── */
 
+/**
+ * The footer is Praṇava's now.
+ *
+ * `rise` and `better` are YOGA MANDALA's closing lines and stay with Yoga Mandala — putting
+ * "Together, We Rise." under an institutional About page would be borrowing a community's
+ * voice for an institution that is not that community. They are kept here because
+ * /yoga-mandala/* still uses them.
+ *
+ * The parent credit was "{site.name} is an initiative under {site.trust}", which after the
+ * rename rendered as "Praṇava is an initiative under Praṇava Seva Trust" — circular, and
+ * asserted by no document. What the documents DO say, twice, is that YOGA MANDALA is a
+ * community initiative under the Trust. That is the sentence that is true.
+ */
 export const footer = {
-  name: 'Yoga Mandala',
-  descriptor: 'A Community of Yoga Teachers',
-  register: 'Connect · Learn · Collaborate · Grow',
-  rise: 'Together, We Rise.',
-  better: 'Yoga is better together.',
+  name: 'Praṇava',
+  descriptor: 'Center for Indian Culture & Yogic Studies',
+  /* An ARRAY, not a joined string: the four words are the client's and the separator is
+     ours, so joining them here would create a sentence no document contains and the copy
+     check would be right to flag it. The component joins them for display. */
+  register: ['Learn', 'Practice', 'Heal', 'Insights'],
+  ym: {
+    name: 'Yoga Mandala',
+    rise: 'Together, We Rise.',
+    better: 'Yoga is better together.',
+  },
 } as const;
 
 /**

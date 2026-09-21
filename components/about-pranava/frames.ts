@@ -105,18 +105,24 @@ export const FRAMES = {
   ),
 
   /* 04 · the four doors. One photograph per quadrant, each the plainest available picture
-     of what that door actually is. */
+     of what that door actually is.
+
+     A QUADRANT ONLY EVER SHOWS A QUARTER, so each frame is chosen for what falls in ITS
+     quarter, not for the whole picture: Learn is the top-left, Practice the top-right,
+     Heal the bottom-right and Insights the bottom-left. `object-position` can only slide
+     a frame along its LONG axis inside a square crop, so a landscape source has no
+     vertical lever at all and the frame has to be right by composition. */
   doorLearn: stills(
     'p13-img_0620',
     [960, 1920, 2560],
-    '50% 46%',
-    'A participant sits back on her heels on a mat in the foreground while the rest of the group sits facing the front of the room.',
+    '50% 58%',
+    'A group sits on mats facing the front of a studio, one participant back on her heels in the foreground.',
   ),
   doorPractice: stills(
-    'ss-ven0096',
-    [960],
-    '50% 56%',
-    'Two rows of practitioners fold forward over their mats down the length of a daylit hall.',
+    'pr-pbh-img_5560',
+    [960, 1920, 2560],
+    '50% 40%',
+    'A line of practitioners folding forward from standing with both hands resting on the backs of folding chairs, receding down a hall.',
   ),
   doorHeal: stills(
     'p13-img_0610',
@@ -124,25 +130,35 @@ export const FRAMES = {
     '54% 44%',
     'A teacher supports a student who is upside down over two folding chairs against a rope wall, steadying her legs with one hand.',
   ),
-  /* cropped low on purpose: the quadrant shows the DESK — the clock, the brass lamp and the
-     small gramophone — and not the painted portrait above it, which is an exhibited work by
-     someone this site cannot name and would read as a guru if it were the subject. */
+  /* CHANGED once the Praṇava library landed. It replaces a museum desk holding a clock and
+     a gramophone, which was standing in for "study" because nothing better existed in the
+     old archive — the audit records that there are no books or texts anywhere in 1,211
+     frames, so people with notebooks on their laps is as close to study as this archive
+     gets. The bottom-left quarter, which is the one this door shows, is the woman with her
+     chin on her hand: reflection, which is the door's own word. */
   doorInsights: stills(
-    'ss-ven0027',
+    'pr-ttc-dsc_0364',
     [960],
-    '50% 86%',
-    'A wooden writing desk holding a mantel clock, a brass lamp and a small gramophone, in front of a dark curtain.',
+    '50% 52%',
+    'A paved path running away between tall slender trees and planted beds, with a single figure at the far end under a green canopy.',
   ),
 
-  /* 05 · founder. Teaching, with the students in the frame — not a portrait. The brief asks
-     for exactly this and the larger Praṇava library that would have supplied a better one
-     had not been encoded when this page was built. */
-  founderRoom: stills(
-    'ss-dsc07137',
-    [960, 1920],
-    '38% 46%',
-    'A barefoot teacher in a pale blue kurta sits on a low stool talking, with listeners seated on the floor along the right of the frame.',
-    '44% 48%',
+  /* 05 · founder. CHANGED after the media audit landed: not one teacher with a group, but a
+     circle of four in conversation with NOBODY at the front of it.
+
+     The audit is explicit that no frame in 1,211 anywhere in the archive identifies a
+     person, so no photograph on this page may be read as a portrait of the founder. A
+     single teacher seated before listeners, printed beside his biography, would be read as
+     exactly that however neutral its alt text. A discussion circle cannot be, and it is
+     also the literal picture of the sentence the section is built around: the role of a
+     teacher is not to create dependence. It carries a visible caption saying what it
+     shows. */
+  founderCircle: stills(
+    'pr-ttc-dsc_0049',
+    [960, 1620],
+    '50% 52%',
+    'Four people sit in a loose circle on folding chairs, talking, with notes and phones in their hands and green shade netting behind them.',
+    '54% 52%',
   ),
 
   /* 06 · faculty. Four different people teaching, in four different rooms, at four

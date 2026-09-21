@@ -11,10 +11,16 @@ import { links, nav, site } from '@/content/site';
  * so they are the largest type in the footer — not a legal strip with a tagline squeezed in
  * beside a copyright.
  *
- * Three facts and no more. The register is Connect · Learn · Collaborate · GROW — the
- * tagline, which is NOT page 2's four pillars (those end on Share). The parent credit is
- * stated as what the organisation is, because it is: Yoga Mandala is an initiative under
- * Pranava Seva Trust, which is also why the Instagram account below is a Praṇava one.
+ * Three facts and no more. The register is Praṇava's four doors — Learn · Practice · Heal ·
+ * Insights — not Yoga Mandala's Connect · Learn · Collaborate · Grow, which belongs to the
+ * community and not to the institution.
+ *
+ * THE PARENT CREDIT. This line read "{site.name} is an initiative under {site.trust}", which
+ * after the rename rendered as "Praṇava is an initiative under Praṇava Seva Trust" —
+ * circular, and asserted by no document. The client's documents say, twice and plainly, that
+ * YOGA MANDALA is a community initiative under the Trust; they never say it of Praṇava. The
+ * line now states only what is sourced, which is also why the Instagram account is a
+ * Praṇava one rather than a Yoga Mandala one.
  *
  * What is NOT here, and must not be added until the client supplies it: an address, a city,
  * a country, an email, a founding year, a copyright year, a member count. `site.address`
@@ -35,7 +41,7 @@ export function SiteFooter() {
             <p className="ft__name">{footer.name}</p>
             <p className="ft__desc">{footer.descriptor}</p>
             {/* The tagline verbatim, set as a register rather than a sentence. */}
-            <p className="ft__reg">{footer.register}</p>
+            <p className="ft__reg">{footer.register.join(' · ')}</p>
           </div>
 
           <nav className="ft__col" aria-label="Footer">
@@ -82,13 +88,13 @@ export function SiteFooter() {
 
         {/* The envoi. The client's two closing lines, with room around them. */}
         <div className="ft__envoi">
-          <p className="ft__rise">{footer.rise}</p>
-          <p className="ft__better">{footer.better}</p>
+          <p className="ft__rise">{footer.ym.rise}</p>
+          <p className="ft__better">{footer.ym.better}</p>
         </div>
 
         <div className="ft__base">
           <p className="ft__trust">
-            {site.name} is an initiative under {site.trust}.
+            {footer.ym.name} is a community initiative under {site.trust}.
           </p>
           <a className="ft__top" href="#top">
             To the top

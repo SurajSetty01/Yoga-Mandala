@@ -36,8 +36,16 @@ export function Founder() {
         </p>
 
         <div className="apr-founder__lower">
+          {/* CAPTIONED FOR WHAT IT SHOWS, NOT WHO. The media audit is explicit that no frame
+              in the archive identifies any person, so nothing here may be read as a portrait
+              of the founder. A single teacher printed beside a biography would be read as
+              exactly that whatever the alt text said; a circle with nobody at the front of
+              it cannot be, and it is also the picture of the sentence above. */}
           <figure className="apr-founder__fig" data-ap="fade">
-            <Shot frame={FRAMES.founderRoom} sizes="(max-width: 899px) 100vw, 40vw" />
+            <Shot frame={FRAMES.founderCircle} sizes="(max-width: 899px) 100vw, 40vw" />
+            <figcaption className="apr-founder__cap">
+              A discussion circle, with no one at the front of the room.
+            </figcaption>
           </figure>
           <div className="apr-founder__bio" data-ap="up" style={{ ['--apr-d' as string]: '110ms' }}>
             {about.founder.body.map((p) => (

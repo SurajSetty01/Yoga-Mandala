@@ -120,12 +120,37 @@ write is an invention like any other.
 
 ## The media
 
-**`public/media/pranava-stills.json` and `pranava-clips.json` did not exist at any point
-while this page was built** — checked at the start, checked again before every frame was
-chosen, and checked once more at the end. The page is built entirely from the 32-still /
-21-clip archive already in `public/media/`, which the client has confirmed is Praṇava's own
-material. The two places the brief names as wanting the larger library are the hero and the
-founder, and both are noted below as candidates for a swap.
+`public/media/pranava-stills.json` (83 stills, `pr-` ids) and `pranava-clips.json` **landed
+after the page was already built**, and three things changed on the strength of it. They are
+recorded here in full because two of them are content-integrity decisions rather than
+design ones.
+
+1. **The founder photograph was replaced.** See §06 below — the audit is explicit that
+   nothing in 1,211 frames identifies any person, so no photograph on this page may be read
+   as a portrait of the founder.
+2. **The Insights door was replaced.** It had been a museum desk with a clock and a
+   gramophone, standing in for "study" because nothing better existed. The audit records
+   that **there is not a book or a written text anywhere in the archive**, so the door that
+   the client describes as "writing, reflection, study and exploration" has nothing literal
+   to be photographed with; it is now a path running away between trees with one figure at
+   the far end, which is the only contemplative non-figure frame in either library and the
+   honest answer to a door that is not yet a practice.
+3. **The Practice door moved to the new library** (`pr-pbh-img_5560`), which gave it a
+   2560-wide portrait where it had had a 960-wide landscape.
+
+**The hero did NOT move, and that is a measurement.** The brief asked to prefer the new
+library for the hero; the new library cannot serve it. Every `pr-pbh-*` still is portrait,
+and the landscape `pr-ttc-*` frames stop at 1620 — the one 2560-wide landscape in the set
+(`pr-pbh-img_5433`) has a child standing in the group. A wide full-bleed band has to come
+from the old archive, and `ss-dsc07127` at 1920 is both the widest usable frame and the only
+picture in either library with Praṇava's own roundel on the wall.
+
+`pr-ttc-dsc_0284_1` (the study circle with open notebooks — the clearest "people studying"
+frame in either archive) was fitted and rejected for a dial quadrant for a geometric reason
+worth recording: `object-fit: cover` in a **square** box can only slide a source along its
+long axis, so a landscape frame has no vertical lever at all and always shows its own top
+half in the two upper quarters. In that frame the top half is pavilion roof and trees. Three
+of the four quadrants are therefore portrait sources, where the lever exists.
 
 **Two things the manifest gets wrong**, both found by measuring the files rather than
 reading the JSON:
@@ -160,6 +185,23 @@ mistake with.
 client has supplied no faculty names, and "Praṇav teaching" is a claim this agent cannot
 verify from a file. Every description says what is happening, which is also what a reader
 who cannot see the picture actually needs.
+
+### §06's photograph, and why it changed
+
+The section originally carried `ss-dsc07137` — one teacher on a stool with listeners seated
+around him — with a deliberately neutral alt text that named nobody. The media audit's
+finding made that insufficient rather than wrong: a single teacher, printed beside a
+biography of the founder, **is read as a portrait of the founder** whatever the alt text
+says, and the archive cannot support that identification. It is the same class of error as
+the invented "700+ teachers", one step quieter.
+
+It is now `pr-ttc-dsc_0049` — four people in a loose circle of folding chairs, talking, with
+notes and phones in their hands and **nobody at the front of the room**. A circle cannot be
+read as a portrait of anyone, and it is the literal picture of the sentence the whole section
+is built around: *the role of a teacher is not to create dependence*. It carries a visible
+caption in the site's caption object — "A discussion circle, with no one at the front of the
+room." — so the page states what the photograph shows rather than leaving a reader to assume
+who is in it.
 
 ### The hero frame
 
@@ -242,9 +284,19 @@ frame hard and this site has already shipped a hero with the teacher out of shot
   a third would be the template repeating itself, and it would be megabytes for it.
 - **`p13-img_0617` as the hero.** It is the home page's section 06 photograph, and the
   roundel frame says something this one cannot.
-- **`ss-ven0027` cropped on its portrait.** The Insights quadrant is cropped low, to the
-  desk, the clock and the small gramophone: the painting above them is an exhibited work by
-  someone this site cannot name, and at quadrant scale it would read as a guru portrait.
+- **`ss-ven0027` for the Insights quadrant, at any crop.** It is a museum desk with a clock
+  and a gramophone under a painted portrait of an elderly man — an exhibited work by someone
+  this site cannot name, which at quadrant scale reads as a guru portrait however low it is
+  cropped. It survived one round as the least-bad stand-in for "study" and was dropped the
+  moment the Praṇava library offered anything better.
+- **`pr-ttc-dsc_0326`, the banyan meditation.** A beautiful frame, and a single man looking
+  straight down the lens. On a page with a founder section that is exactly the photograph
+  that gets captioned by the reader rather than by us.
+- **`pr-pbh-img_5405` for the Heal door.** A white coat in the frame reads as clinical
+  practice, and Praṇava Svasthya's services have no descriptions yet. `p13-img_0610` — a
+  teacher steadying a student over two chairs — is supported practice without the claim.
+- **`pr-pbh-img_5433` anywhere.** It is the one 2560-wide landscape in the new library and
+  its own quality note records a child standing with the adults.
 - **A full-bleed beam with its type free-floating in the left half.** It measured 90px off
   the page's axis at 2531. The beam still bleeds; its words now travel inside a real
   `.apr-rail` and the photograph is absolutely positioned over the right of it.
@@ -343,13 +395,13 @@ on the path — it shells out to it to read the `.docx` sources, and PowerShell 
 
 ## Left for whoever picks this up
 
-1. **`public/media/pranava-stills.json` never appeared.** When it does, the hero
-   (`ss-dsc07127`) and the founder frame (`ss-dsc07137`) are the two the brief names, and both
-   are one line each in `frames.ts`. A `pr-` frame of Praṇav teaching with students visible
-   would improve both, and a hero frame with a 2560 derivative would let the hero band grow
-   past 44svh.
-2. **The founder photograph is not identified as the founder** and must not be until someone
-   can confirm who is in `ss-dsc07137`. The alt text says what is happening, not who.
+1. **The hero still wants a wide, high-resolution frame.** Neither library has one better
+   than `ss-dsc07127` at 1920. If a 2560-wide landscape of a Praṇava room is ever encoded,
+   the hero band can grow past 44svh and the 1.32× upscale at 2531 goes away. It is one line
+   in `frames.ts`.
+2. **No photograph on this page is identified as any person**, and none may be until the
+   archive records who is in a frame. Every alt text and the one visible caption say what is
+   happening, not who.
 3. **`about.founder.action` is unrendered** and stays in the content file for whoever builds
    the founder page.
 4. **Faculty is ready for real people.** The field is the honest state of *no roster*; the
