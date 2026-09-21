@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { nav, site } from '@/content/site';
+import { nav, ymNav, site } from '@/content/site';
 
 /**
  * The navigation pill.
@@ -52,11 +52,32 @@ export function SiteNav({ light = false }: { light?: boolean }) {
         </Link>
         <nav className="pill__nav" aria-label="Primary">
           <ul className="pill__links">
-            {nav.map((n) => (
-              <li key={n.href}>
-                <Link href={n.href}>{n.label}</Link>
-              </li>
-            ))}
+            {nav.map((n) =>
+              'sub' in n && n.sub ? (
+                /*
+                  The one item with pages beneath it. The submenu opens on hover AND on
+                  focus-within, so it is reachable by keyboard without a click handler; the
+                  parent stays a real link, so Yoga Mandala's own landing page is never
+                  unreachable just because a pointer never hovered. `aria-haspopup` is
+                  deliberately absent — this is a set of links, not a menu widget, and
+                  claiming otherwise makes screen readers announce controls that do not exist.
+                */
+                <li key={n.href} className="pill__has">
+                  <Link href={n.href}>{n.label}</Link>
+                  <ul className="pill__sub">
+                    {ymNav.slice(1).map((s) => (
+                      <li key={s.href}>
+                        <Link href={s.href}>{s.label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li key={n.href}>
+                  <Link href={n.href}>{n.label}</Link>
+                </li>
+              ),
+            )}
           </ul>
           {/*
             "Enquire", per the brief's navigation line, and it points at Contact rather than
@@ -89,9 +110,24 @@ export function SiteNav({ light = false }: { light?: boolean }) {
       <div className="sheet" id="sheet" ref={sheetRef} hidden={!open}>
         <nav className="sheet__nav" aria-label="Menu">
           {nav.map((n) => (
-            <Link key={n.href} href={n.href} onClick={() => setOpen(false)}>
-              {n.full}
-            </Link>
+            <div key={n.href} className="sheet__group">
+              <Link href={n.href} onClick={() => setOpen(false)}>
+                {n.full}
+              </Link>
+              {/* no hover on a phone, so the section's pages are simply listed under it */}
+              {'sub' in n && n.sub
+                ? ymNav.slice(1).map((s) => (
+                    <Link
+                      key={s.href}
+                      className="sheet__subLink"
+                      href={s.href}
+                      onClick={() => setOpen(false)}
+                    >
+                      {s.label}
+                    </Link>
+                  ))
+                : null}
+            </div>
           ))}
           {/* The sheet's action matches the bar's: one destination that can route an
               enquiry, rather than two different ideas of what the primary action is. */}

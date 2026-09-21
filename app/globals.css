@@ -30,28 +30,20 @@
    ============================================================ */
 
 
+/* The Pranava palette was applied here and reverted at the client request - not
+   discarded, only not in force. The measured values, so they need not be re-derived:
+     --forest      #22452F  cream on it 10.04
+     --forest-mid  #2A5C42  7.27
+     --forest-deep #1B3B2A  11.54
+     --brass       #8A6B1F  4.68 on cream - clears SMALL text, unlike clay 3.90
+     --sandstone   #E4D5BD  ink on it 11.51
+     --ground-deep #12201A  15.79 (the warm black below is 16.66)
+   Re-applying is this block plus a pass over anything that names clay. */
 :root {
-  /* ─────────────────────────────────────────────────────────────────────────
-     PRAṆAVA. Every value below is MEASURED, not picked by eye — the ratio in
-     each comment is against the ground named beside it.
-
-     The brief asks for "deep forest green as the main colour, warm sandstone /
-     muted brass as supporting, warm light background". It also asks for
-     Cormorant Garamond. That one line is deliberately NOT followed: the
-     image-filled letterform treatments only hold a photograph because Fraunces
-     reaches wght 700 with SOFT 100, and Cormorant stays hairline-fine at
-     display size. Substitution and reasoning recorded in design/BRIEF.md.
-     ───────────────────────────────────────────────────────────────────────── */
-
   /* grounds — warm, but they are a MAT for pictures, never the subject */
   --ground:      #FBF7F2;
   --ground-warm: #F2E9DE;
-  --sandstone:   #E4D5BD;   /* ink on it 11.51 — a GROUND, never a text colour */
-  /* The reversed plate is now a green-black rather than a warm black, so the
-     dark sections belong to the same family as the brand. 15.79 with cream,
-     against the old warm black's 16.66: every previously measured pair on this
-     ground drops about 5%, which is why they are all re-probed. */
-  --ground-deep: #12201A;
+  --ground-deep: #1C1714;   /* the reversed ground, warm black not grey */
 
   /* inks */
   --ink:         #241D18;
@@ -59,22 +51,9 @@
   --ink-onDark:  #FBF7F2;
   --ink-onDark-soft: rgba(251, 247, 242, 0.72);
 
-  /* PRAṆAVA's voice */
-  --forest:      #22452F;   /* 10.04 with cream — carries text either way round */
-  --forest-mid:  #2A5C42;   /* 7.27 — hover and secondary grounds              */
-  --forest-deep: #1B3B2A;   /* 11.54 — pressed                                  */
-  --brass:       #8A6B1F;   /* 4.68 on cream: passes for SMALL text, unlike the
-                               clay it replaces, so the accent can carry a label
-                               and not only a hairline.                         */
-
-  /* YOGA MANDALA keeps the terracotta it was designed in. It is a community
-     initiative UNDER the Trust, not a Praṇava programme, and letting it hold
-     its own accent inside its own section is what makes that legible. */
-  --clay:        #C1613C;   /* 3.90 on cream — hairline only, never text       */
-  --clay-deep:   #9C4526;   /* 5.98 — the ground its CTA actually stands on    */
-  --clay-press:  #7A3319;
-  --teal:        #2C6E6B;
-  --teal-deep:   #265E5B;
+  /* the two voices, both pulled off the photographs */
+  --teal:        #2C6E6B;   /* rope rails, the blue kurta in shade */
+  --clay:        #C1613C;   /* the shala floor, the red slings     */
 
   --rule:        rgba(36, 29, 24, 0.14);
   --rule-onDark: rgba(251, 247, 242, 0.22);
@@ -298,9 +277,9 @@ body { overflow-x: clip; }
   display: inline-flex; align-items: center; gap: 0.45em;
   font: 600 13px/1 var(--font-text); text-decoration: none;
   padding: 0.72rem 1.25rem; border-radius: 999px;
-  /* Praṇava's green, not Yoga Mandala's terracotta. #22452F carries cream at 10.04:1,
-     where the clay it replaces managed 5.98 — the button gained headroom, not lost it. */
-  background: var(--forest); color: #FBF7F2;
+  /* the CTA ground: 5.98:1 with cream. */
+
+  background: var(--clay-deep); color: #FBF7F2;
   white-space: nowrap;
   transition: background 0.3s var(--ease);
 }
@@ -844,3 +823,47 @@ html.is-static .frame { transform: scale(1.02); }
   letter-spacing: -0.03em; margin: 0 0 0.4em; text-transform: capitalize;
 }
 .skel__p { margin: 0; color: var(--ink-soft); font-size: 1.05rem; }
+
+/* ── the one submenu ─────────────────────────────────────────────────────────
+   Yoga Mandala is a section with its own pages, so the bar opens them instead
+   of hiding them. Opens on hover AND focus-within: keyboard users get the same
+   affordance without a click handler, and the parent stays a real link so the
+   landing page is reachable whether or not anything ever hovered. */
+.pill__has { position: relative; }
+.pill__sub {
+  position: absolute; top: calc(100% + 0.55rem); left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  margin: 0; padding: 0.4rem; list-style: none;
+  display: grid; gap: 0.1rem; min-width: max-content;
+  background: var(--ground);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px -12px rgba(28, 23, 20, 0.3);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease), visibility 0.22s;
+}
+/* the gap between bar and panel would otherwise break the hover on the way down */
+.pill__has::after {
+  content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 0.7rem;
+}
+.pill__has:hover .pill__sub,
+.pill__has:focus-within .pill__sub {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.pill__sub a {
+  display: block; padding: 0.5rem 0.85rem; border-radius: 9px;
+  font: 500 13px/1 var(--font-text); color: var(--ink); text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s var(--ease);
+}
+.pill__sub a:hover, .pill__sub a:focus-visible { background: var(--ground-warm); }
+@media (prefers-reduced-motion: reduce) { .pill__sub { transition: none; } }
+
+/* the sheet has no hover, so the section's pages are simply listed beneath it */
+.sheet__group { display: contents; }
+.sheet__subLink {
+  padding-left: 1.5rem !important;
+  font-size: 0.82em !important;
+  opacity: 0.78;
+}

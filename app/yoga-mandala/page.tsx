@@ -9,10 +9,15 @@ import { within } from '@/content/copy';
 import { SiteFooter } from '@/components/SiteFooter';
 
 /**
- * PAGE 1 — About Yoga Mandala. The client's own page order; `/` is the About page.
+ * YOGA MANDALA — the section landing page.
+ *
+ * This is the page that used to be the whole site's front door. The brief moves it here
+ * intact: "Move this content into the Yoga Mandala section" for the About and Members
+ * sections, and "create landing page using existing content" for this route. Nothing about
+ * the composition changed — only its address and what sits above it in the navigation.
  */
 export const metadata = {
-  title: 'About Yoga Mandala',
+  title: 'Yoga Mandala',
   description:
     'Yoga Mandala is a community of Yoga teachers and serious practitioners coming together to connect, learn, collaborate and grow.',
 };
@@ -44,7 +49,7 @@ const PILLAR_FRAMES = [
   },
 ];
 
-export default function AboutPage() {
+export default function YogaMandalaPage() {
   return (
     <>
       <SiteNav />

@@ -99,7 +99,9 @@ export const nav = [
   { href: '/practice/', label: 'Practice', full: 'Practice' },
   { href: '/heal/', label: 'Heal', full: 'Heal', soon: true },
   { href: '/insights/', label: 'Insights', full: 'Insights', soon: true },
-  { href: '/yoga-mandala/', label: 'Yoga Mandala', full: 'Yoga Mandala' },
+  /* Yoga Mandala carries its own pages beneath it, so the bar opens them rather than
+     hiding them: hovering (or focusing, or tapping) reveals the section's own routes. */
+  { href: '/yoga-mandala/', label: 'Yoga Mandala', full: 'Yoga Mandala', sub: true },
   { href: '/events/', label: 'Events', full: 'Events' },
   { href: '/contact/', label: 'Contact', full: 'Contact' },
 ] as const;
