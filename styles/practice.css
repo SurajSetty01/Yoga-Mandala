@@ -421,35 +421,51 @@
   align-items: center;
 }
 /*
-   THE WELL IS SIZED IN `em` OF THE COLUMN'S OWN BASE, AND THAT IS ARITHMETIC RATHER
-   THAN TASTE. The cut has to fall in the MIDDLE of a word at both ends or the column
-   reads as a list that happens to start high — which is the one thing it must not say.
-   With fifteen settings at line-height 1.12 and a 5.8% step, the column is 23.62em of
-   its base tall and the cumulative top of line k is 1.12(k + 0.029k(k-1))em. At a well
-   of 11.4em the overflow is 6.11em each side: the top edge lands inside line 5 (4.87 →
-   6.25) and the bottom edge inside line 12 (15.89 → 17.73). Both are mid-glyph at
-   every viewport from 320 to 2560, because the whole system scales with one value.
+   THE WELL AND THE COLUMN'S OFFSET ARE BOTH SOLVED, NOT CHOSEN, and this is the
+   arithmetic because it is the difference between "ongoing" and "a list that happens
+   to start high". A word cut cleanly below its baseline looks WHOLE — Sādhana has no
+   descender — so a cut that lands between two lines says the column ends there. The
+   first cut of this did exactly that at the bottom edge and it was visible in the
+   rendered pixels.
+
+   Fifteen settings, line-height 1.12, a 5.8% step: line k is 1.12(1 + 0.058k)em of
+   the base tall and the top of line k is at c(k) = 1.12(k + 0.029k(k-1))em. The ink of
+   a line sits between 17.6% and 82.5% of its box — Inter's ascent is 0.969em and its
+   descent 0.242em, so at line-height 1.12 the half-leading is -0.0455em, the baseline
+   is 0.9235em down the box and the cap top 0.1965em down it.
+
+   Aim both edges at the MIDDLE of a line:
+     top     c(4)  + 0.5h(4)  =  4.870 + 0.690 =  5.560em
+     bottom  c(12) + 0.5h(12) = 17.727 + 0.950 = 18.677em
+   so the well is 13.12em tall and the column is pulled up 5.56em. It is NOT centred:
+   centring leaves the bottom cut wherever the size ramp happens to put it. Every
+   number scales with one font-size, so the cut is mid-glyph at 320 and at 2560 alike.
 */
 .pc-sad__well {
   position: relative;
   font-size: clamp(1.15rem, 0.9rem + 1.1vw, 1.9rem);
-  height: 11.4em;
+  height: 13.12em;
   overflow: hidden;
 }
 .pc-sad__col {
   position: absolute;
   inset-inline: 0;
-  top: 50%;
+  top: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  /* the drift has a finished default of zero: with no JavaScript the column
-     is simply there, cut at both ends, and nothing is missing. */
-  /* the drift can never expose an end: the overflow is 6.11em a side and the
-     throw is at most 2em, so half a word is always missing top and bottom. */
-  transform: translate3d(0, calc(-50% + var(--pc-lift, 0) * -1 * var(--pc-throw)), 0);
-  --pc-throw: 4em;
+  /* The drift has a finished default of zero: with no JavaScript the column is
+     simply there, cut at both ends, and nothing is missing.
+
+     THE THROW IS CAPPED BY THE SAME ARITHMETIC AS THE WELL. The ink of a line
+     reaches about 0.45em either side of the point the two cuts are aimed at, so
+     a drift of +-0.45em keeps BOTH edges inside a glyph at every scroll
+     position; anything larger would occasionally park a cut in the gap between
+     two words and hand the column a tidy-looking end. Slow is also the right
+     speed for the subject. */
+  transform: translate3d(0, calc(-5.56em + var(--pc-lift, 0) * -1 * var(--pc-throw)), 0);
+  --pc-throw: 0.9em;
   will-change: transform;
 }
 .pc-sad__w {
@@ -526,7 +542,7 @@
 }
 .pc-reg__tile {
   flex: 0 0 auto;
-  width: clamp(230px, 32vw, 30rem);
+  width: clamp(268px, 32vw, 30rem);
   aspect-ratio: 3 / 2;
 }
 .pc-reg__tile img {
@@ -562,7 +578,7 @@
 .pc-pra__fig img {
   width: 100%;
   aspect-ratio: 3 / 4;
-  max-height: clamp(320px, 46svh, 520px);
+  max-height: clamp(300px, 40svh, 470px);
   object-fit: cover;
 }
 .pc-pra__door {
@@ -776,7 +792,7 @@
 }
 @media (min-width: 860px) {
   .pc-enq__in {
-    grid-template-columns: minmax(11rem, 19rem) minmax(0, 42rem);
+    grid-template-columns: minmax(11rem, 21rem) minmax(0, 50rem);
     column-gap: clamp(2.5rem, 6vw, 6rem);
   }
 }

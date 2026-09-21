@@ -481,8 +481,14 @@
   width: 100%;
   padding-block: clamp(1.8rem, 3.6vw, 3.2rem);
 }
+/* 46%, and the 4 points it gives up to the photograph's 52% edge are the whole point:
+   at 1024 a `max-width: 44ch` on the paragraph put its last two words UNDERNEATH the
+   picture — invisible to the contrast probe, because a glyph hidden behind an image is
+   identical in the painted and unpainted screenshots and is never sampled. The type
+   column is bounded by the photograph now, not by a reading measure that knows nothing
+   about where the photograph starts. Clearance: 58px at 1024, 82px at 1440, 110px at 2531. */
 .apr-app__beamType > * {
-  max-width: min(46rem, 50%);
+  max-width: min(46rem, 46%);
 }
 .apr-app__beamType .apr-app__n {
   color: var(--sand);
@@ -492,7 +498,6 @@
   font-size: var(--apr-read);
   line-height: 1.66;
   color: var(--ink-onPic-2);
-  max-width: 44ch;
 }
 .apr-app__beamFig {
   position: absolute;

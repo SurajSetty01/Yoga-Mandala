@@ -313,21 +313,27 @@ frame hard and this site has already shipped a hero with the teacher out of shot
 
 ### Contrast — glyph-accurate, on rendered pixels
 
-**`node tools/contrast-probe.mjs http://localhost:3000/about/ --width W --height H
---scroll-to <section>` for all eleven sections at all seven viewports — 77 runs, 0 FAIL.**
+Everything below is measured against the **production `out/` build** served statically, not
+against `next dev` — see the artefact table for why that matters.
+
+**`node tools/contrast-probe.mjs <url> --width W --height H --scroll-to <section>` for all
+eleven sections at all seven viewports — 77 runs, 154 sampled text runs, 0 FAIL.**
 
 Because that tool samples one scroll position per run, the same glyph-mask algorithm was
-also walked down the **whole document** at 0.7-viewport steps at each of the seven sizes:
+also walked down the **whole document** at 0.7-viewport steps at each size, which is what
+actually covers a 15,000px page:
 
 ```
-320×568    192 runs — 0 FAIL      1280×720    200 runs — 0 FAIL
-390×844    191 runs — 0 FAIL      1440×900    189 runs — 0 FAIL
-768×1024   184 runs — 0 FAIL      2560×1440   199 runs — 0 FAIL
-1024×768   200 runs — 0 FAIL
+320×568    204 runs — 0 FAIL      1280×720    204 runs — 0 FAIL
+390×844    206 runs — 0 FAIL      1440×900    190 runs — 0 FAIL
+768×1024   210 runs — 0 FAIL      2531×1140   211 runs — 0 FAIL
+900×800    216 runs — 0 FAIL      2560×1440   200 runs — 0 FAIL
+1024×768   222 runs — 0 FAIL
 ```
 
 Tightest run anywhere on the page: **4.69:1** at 320×568 — the 13px Fraunces `--clay-deep`
-numeral on `--ground-warm` in the stair, which needs 4.5.
+numeral on `--ground-warm` in the stair, which needs 4.5. Every other size bottoms out
+between 4.98 and 5.31.
 
 That numeral is the one thing the sweep changed. At `font-weight: 400` it measured **4.57:1**
 at 320 and 1024 while the identical colour pair in the register mark measured 5.31:1. The
@@ -340,8 +346,8 @@ recorded because the next person will hit them:
 
 | where | what it looked like | what it was |
 |---|---|---|
-| 320×568, faculty paragraph | 1.22:1, cream on cream | the paragraph's top lines were under the **navigation pill**. The tool skips an element only when an overlay covers >25% of it; at 27% coverage it passes the filter and the pixels under the pill are sampled |
-| 768×1024, stair numeral | 1.86:1 | the **Next dev-tools badge** in the bottom-left corner. It is a `nextjs-portal` custom element whose own box is not `position: fixed`, so the overlay filter never sees it |
+| 320×568, faculty paragraph | 1.22:1, cream on cream | the paragraph's top lines were under the **navigation pill**. The tool skips an element only when an overlay covers more than 25% of it; just under that threshold it passes the filter and the pixels beneath the pill are sampled anyway |
+| 768×1024, stair numeral | 1.86:1 | the **Next dev-tools badge** in the bottom-left corner. It is a `nextjs-portal` custom element whose own box is not `position: fixed`, so the overlay filter never sees it. It does not exist in the production build, which is why everything above is measured there |
 | 1024×768, register numeral | 2.92:1 | the same badge |
 
 The sweep above excludes overlay **pixels** from the sample rather than dropping the whole
@@ -354,18 +360,49 @@ photograph is either on the reversed ground or, in the two closing routes, on th
 pill's own material: `rgba(var(--shade), 0.74)` + a `rgba(251,247,242,0.18)` hairline +
 `backdrop-filter: blur(14px)`, which is 8.6:1 by construction over any crop at any viewport.
 
+### The one thing the contrast probe cannot see, and how it was found
+
+At 1024×768 the Transmission paragraph's last two words ran **underneath** the beam's
+photograph. The probe reported 0 FAIL on that section at every size, and correctly: a glyph
+hidden behind an image is identical in the painted and the unpainted screenshot, so the diff
+finds nothing there and the pixels are never sampled. It was found by looking at the render.
+
+The cause was a reading measure that knew nothing about the picture — `max-width: 44ch` on
+the paragraph against a photograph pinned at `left: 52%`. The type column is now bounded by
+the photograph (`min(46rem, 46%)` of the rail's own content width), which clears it by 58px
+at 1024, 82px at 1440 and 110px at 2531.
+
 ### Structure
 
-At 320, 390, 520, 768, 900, 1024, 1280, 1440, 2531 and 2560:
+At 320, 360, 390, 519, 520, 768, 899, 900, 1024, 1280, 1440, 2531 and 2560 — the four
+breakpoint boundaries deliberately sampled on both sides:
 
-- `document.documentElement.scrollWidth === innerWidth` — **maximum horizontal overflow 0px**,
-  re-sampled at every screenshot position down the page.
-- Exactly **one `<h1>`** ("About Pranava").
-- **17 images, every one with an `alt` attribute.** Ten carry a description; seven carry
-  `alt=""` and are correct that way: the hero's three panes are slices of one photograph
-  which the `role="img"` container describes once, and the wheel's four quadrants are inside
-  an `aria-hidden` decorative wheel whose four doors are real links with real text.
-- **0 console errors and 0 failed requests.**
+- `scrollWidth === clientWidth` — **maximum horizontal overflow 0px**, re-sampled every
+  half-viewport all the way down the page at every one of those widths.
+- Exactly **one `<h1>`** ("About Pranava") and **ten `<h2>`** — the ten register marks, so
+  the outline is a table of contents rather than a jump from h1 to h3.
+- **17 images, every one with an `alt` attribute** (`noAltAttr = 0`). Ten carry a
+  description; seven carry `alt=""` and are correct that way: the hero's three panes are
+  slices of one photograph which the `role="img"` container describes once, and the wheel's
+  four quadrants are inside an `aria-hidden` decorative wheel whose four doors are real
+  links with real text.
+- **Seven focusable elements in `<main>`** — the four doors, the Yoga Mandala link and the
+  two routes — and every one of them was focused in turn and its computed outline read
+  back: the four on the reversed ground get the cream ring in a dark halo
+  (`solid 2px rgb(251,247,242)` + `rgba(16,12,10,0.92) 0 0 0 4px`), the three on paper get
+  the inverted ink ring in a cream halo. No `outline: none` anywhere.
+- **0 console errors.** The only failed requests are `net::ERR_ABORTED` on Next's own
+  `<Link>` prefetches and two 404s for `/yoga-mandala/within/` and `/yoga-mandala/join/`
+  RSC payloads — **identical on `/`**, so both are site-wide and pre-existing, not this
+  page's. `tools/fix-export-prefetch.mjs` writes flat-path copies for single-segment routes
+  and does not handle the two-segment ones; that file is not in this agent's remit.
+
+### JavaScript disabled
+
+Rendered with scripting off, the static HTML still contains every sentence of the client's
+copy, all four door names and links, all four value words with their diacritics, the
+Transmission paragraph, the eighth stair tread and the Yoga Mandala sentence — checked by
+string, nothing missing. Nothing on this page is painted by JavaScript.
 
 ### Centring at 2531
 
@@ -378,17 +415,27 @@ quotation, the faculty field and the beam's type all sit on that same axis.
 
 ### Reduced motion
 
-`prefers-reduced-motion: reduce` renders the page **complete and static** at every size: the
-island attaches nothing, observes nothing and returns, `.is-live` is never added, and every
-one of the four scroll-linked properties keeps the finished default the stylesheet gives it.
-Nothing on the page is reachable only through motion — the four door names, the four door
-sentences and the four links are all in the static HTML, and so is every word of the client's
-copy.
+`prefers-reduced-motion: reduce` renders the page **complete and static**. Read back off the
+live render at 390×844 and 1440×900:
+
+```
+is-live         false      the island attaches nothing, observes nothing and returns
+--apr-close     1          the hero's three horizons already closed into one room
+--apr-zoom      1          the plate already stepped back to the whole room
+--apr-drift     0          the four teachers at rest
+--apr-part      0          both roads square in their frames
+data-lit        none       the wheel unturned, all four quarters lit
+hidden reveals  0          nothing below opacity 0.99
+```
+
+Nothing is reachable only through motion — 6,710 characters of text, the four door names,
+the four door sentences, the four links and all four value words are in the static HTML.
 
 ### Toolchain
 
-`npx tsc --noEmit`, `npx eslint .`, `npx next build` and `npm run check:copy` (138 client
-sentences, verbatim) all pass. `npm run check:copy` must be run from a shell that has `unzip`
+`npx tsc --noEmit`, `npx eslint .`, `npx next build` and `npm run check:copy` (137 client
+sentences across four source documents, all verbatim) all pass, and `npx eslint .` is clean
+across the whole repository, not just these files. `npm run check:copy` must be run from a shell that has `unzip`
 on the path — it shells out to it to read the `.docx` sources, and PowerShell does not.
 
 ---
