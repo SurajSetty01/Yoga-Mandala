@@ -34,3 +34,6 @@ Thumbs.db
 
 # Curated web derivatives ARE the site's assets — keep them tracked.
 !/public/media/
+
+# editor workspace file
+YogaMandala.code-workspace
