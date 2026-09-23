@@ -11,7 +11,7 @@ has not supplied.
 
 | # | section | the mechanic, as an event | ground |
 |---|---------|---------------------------|--------|
-| — | Hero | **One room, cut into three, whose horizons close into one as you descend.** Three panes carry thirds of a single photograph at three different vertical offsets, with a sand seam on each cut; the offsets resolve to zero and the seams fade, and the room becomes continuous | deep |
+| — | Hero | **A window in the hall, and the two views through it move apart.** One room photographed twice on one afternoon: the whole hall full bleed, and a tall window onto the same hall standing in front of it, bleeding off the bottom of the viewport, with the sentence threaded between the two planes. The window's frame never moves; what moves is what you see through each plane - the hall's picture sinks 6% of its own height as the window's climbs 6.5% of its own - and one hairline crosses the seam in front of both so the shear has something to break against | deep |
 | 01 | Introduction | **Five lines opening like a fan.** The shortest line is the claim and is set largest on the narrowest measure; each line after it is wider and quieter, and the warm paper they are printed on is clipped to the shape the type makes | paper |
 | 02 | What Praṇava is | **An enlargement you cannot place, stepping back into its room.** The plate opens at 2.4× on a patch of floor and two pairs of hands and pulls back until the same frame is ten people doing one thing | deep |
 | 03 | Our approach | **Three columns standing, and a fourth lying across their feet.** Tradition, Practice and Inquiry are three ideas on three clay risers; Transmission is not an idea but the thing that carries them between two people, so it is a reversed beam laid over the columns' feet — and the only one of the four given a photograph | paper |
@@ -138,12 +138,97 @@ design ones.
 3. **The Practice door moved to the new library** (`pr-pbh-img_5560`), which gave it a
    2560-wide portrait where it had had a 960-wide landscape.
 
-**The hero did NOT move, and that is a measurement.** The brief asked to prefer the new
-library for the hero; the new library cannot serve it. Every `pr-pbh-*` still is portrait,
-and the landscape `pr-ttc-*` frames stop at 1620 — the one 2560-wide landscape in the set
-(`pr-pbh-img_5433`) has a child standing in the group. A wide full-bleed band has to come
-from the old archive, and `ss-dsc07127` at 1920 is both the widest usable frame and the only
-picture in either library with Praṇava's own roundel on the wall.
+## The hero, and what each round of it cost
+
+The hero has been built three times. Every version is recorded because each one exists
+because of something that could be MEASURED about the one before it, and the measurements
+are the only part of this worth keeping.
+
+**One venue, which is the load-bearing decision.** Version two put two PBH studio frames
+(orange tungsten, near-plane mean L 135) in front of a TTC hall (green daylight, mean
+L 37-46). The nearest plane was therefore by far the brightest thing on the page, which
+inverts depth: the frames read as bright rectangles laid on a dark photograph rather than
+as objects standing in a room. Both hero frames now come from the same hall on the same
+afternoon - the same red oxide floor, the same white wall, the same rope anchors visible in
+both - and the composite reads as one place.
+
+**The second inversion was in FOCUS, and it was invisible until it was measured.**
+`sizes` describes the width a browser should fetch, and the obvious value to write is the
+aperture's own width. That is wrong for a PORTRAIT aperture holding a LANDSCAPE source:
+`object-fit: cover` scales such a source by HEIGHT, so a 374x783 window needed a 1362px-wide
+source and `sizes="26vw"` asked for 480w - a 2.84x upscale at 1440, 2.42x at 1024. The
+frontmost, unveiled, drop-shadowed plane was the blurriest thing on screen: Laplacian sigma
+4.39 against the hall's 20.36 three hundred pixels to its left. Two fixes, together: the
+window's frame is now PORTRAIT (`pr-ttc-dsc_0479`), so cover scales it by height against a
+source that is already tall, and `sizes` states the RENDERED width rather than the
+aperture's. Fetched and measured:
+
+```
+        needs   fetched   sigma win / hall
+  320    252      480w      30.2 / 27.8   1.09x
+  390    307      480w      35.3 / 25.6   1.38x
+  768    401      480w      19.9 /  6.0   3.34x
+ 1024    536      960w      16.8 / 22.8   0.74x
+ 1440    628      960w      14.7 / 13.2   1.12x
+ 1920    754      960w      12.6 / 13.9   0.90x
+ 2531    796      960w       9.8 / 12.8   0.76x
+```
+
+The 960 derivative of this frame is 699x1050, so 2531 and above run a 1.1-1.5x upscale;
+everything from 320 to 1920 is native or downscaled.
+
+**The mechanic has to be arithmetic, not a description.** Version two's two windows were
+meant to part: +5.2vw and -4.8vw, described in the source as "10vw of relative travel
+against 144px of overlap at 1440". 10vw AT 1440 IS 144px, so the gap it promised resolved
+to exactly zero there and to a negative number at every width below. Travel is now a
+percentage of each IMAGE's own height, which is proportional at every viewport by
+construction. Measured relative separation, scroll 0 to `--apr-open` 1:
+
+```
+  320   93px     1024  106px     1920  149px
+  390  105px     1280   99px     2531  157px
+  768  131px     1440  124px     2560  200px
+```
+
+**A shear with nothing to break against is just parallax.** Two pictures moving at
+different rates across a seam cannot be perceived as a shear unless something continuous
+crosses that seam. `__datum` is that: one hairline in front of BOTH planes, running from the
+end of the measure across the window's left edge to the window's right edge. It was first
+drawn at the window's top edge, which is where a lintel belongs - and it left the viewport
+after 117px of scroll, by which point the shear had moved 12px. It now sits at 52% of the
+room, where it is still on screen at 87% of the travel.
+
+**A veil that is over-solved is not safe, it is just dark.** Version two measured 9.66:1 on
+type that needs 3.0, and the background behind the words measured stdev 1.3 at 1440 against
+the home page's 69. The veil is now a flat 0.40 panel on a 0.06 base. Stdev of the left 60px
+beside the words: 56.2 at 320, 48.8 at 390, 47.4 at 768, 42.2 at 1024, 28.1 at 1280, 19.0 at
+1440, 17.5 at 1920, 16.2 at 2531. Worst single pixel under any glyph across the seven
+standard viewports: 4.51:1 where 3.0 is needed, 4.86:1 where 4.5 is needed.
+
+One honest caveat: the LEFT 60px of `pr-ttc-dsc_0046_1` is plain wall between about 34% and
+70% of the frame's height, and a 360px sample taken from the TOP of the type block lands
+entirely inside it and measures ~3. The wall is a true fact about the room; the figures, the
+mats, the rope anchors and the floor are all in the same column above and below it. The
+numbers above are the full height of the type block, which is what the words stand on.
+
+**The hero's type is set from its own scale, and the pill was the price.** It was taking the
+page's body-lead clamp and landing at 54.3px at 1440 - smaller than section 10 of the same
+page (55.2px). It is now 34px at 390, 61.8px at 1024, 80.0px at 1440, 101px at 1920 and a
+110.4px cap from 2126 up, with `opsz` pinned to 144 rather than left to resolve to ~53, and
+the label/heading and heading/paragraph gaps inverted (22px above, 46px below at 1440).
+
+That size increase created a defect the small type never had: the navigation pill is FIXED
+at y 22-85, and an 80px display line was guillotined through its cap-height for 384px of
+scroll. The type's opacity is now driven by `--apr-open`, so the sentence is gone before it
+arrives. Measured overlap against the opacity at that moment - 1440: 26px@0, 63px@0, 63px@0
+at scroll 300/400/600; 1024: 60px@0, 63px@0, 0px@0; 2531: 0px@0.22, 21px@0, 63px@0. Every
+overlap coincides with opacity 0.
+
+**The window's edge is set by its LEFT side, not by a width.** A 3:2 hall shown full width
+puts its five figures at fixed fractions of the frame, so a width-driven window landed at
+about 70% at every viewport - which is the edge of the third figure at 1440 and, at 1024,
+25px from the third woman's face. `left: 72.8%` is source 71%, the middle of the only clean
+gap in the row, and it holds at every width by construction.
 
 `pr-ttc-dsc_0284_1` (the study circle with open notebooks — the clearest "people studying"
 frame in either archive) was fitted and rejected for a dial quadrant for a geometric reason
@@ -159,8 +244,9 @@ reading the JSON:
    4032×3024 (landscape) and the encoded derivative is 960×1280 (**portrait**). Every ratio
    in `frames.ts` is the one the browser actually sees.
 2. `ss-dsc07127` and `p13-img_0610` are encoded, committed and tracked but **absent from the
-   manifest**, so they carry no alt text there. Both are used here and both are described in
-   full in `frames.ts`.
+   manifest**, so they carry no alt text there. `p13-img_0610` is used here and is described
+   in full in `frames.ts`; `ss-dsc07127` is the frame the old hero ran on and is no longer
+   used on this page.
 
 Derivative widths are not uniform and that decided several placements:
 

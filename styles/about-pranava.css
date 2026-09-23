@@ -3,7 +3,7 @@
 /* ══════════════════════════════════════════════════════════════════════════
    PRAṆAVA — THE ABOUT PAGE.  Eleven sections, eleven mechanics.
 
-   hero   deep   one room cut into three, whose horizons close into one
+   hero   deep   a window in the hall, and the two views through it move apart
    01     paper  five lines opening like a fan on a widening wedge of paper
    02     deep   an enlargement you cannot place, stepping back into its room
    03     paper  three columns standing, and a fourth lying across their feet
@@ -168,21 +168,301 @@
 }
 
 /* ══ HERO ═════════════════════════════════════════════════════════════════
-   ONE ROOM, CUT INTO THREE, THAT CLOSES INTO ONE AS YOU DESCEND.
+   A WINDOW IN THE HALL, AND THE TWO VIEWS THROUGH IT MOVE APART.
 
-   The three panes carry thirds of a single photograph — the only frame in the
-   archive with Praṇava's own roundel physically on the wall. At rest their
-   horizons are out of register and a sand seam marks each cut; by the time the
-   hero has passed they have closed and the room is continuous. The type never
-   goes onto the picture: the home page's hero already owns type-on-photograph,
-   and putting it on the deep ground instead makes this section's contrast a
-   constant rather than a crop-dependent gamble.
+   One room photographed twice on one afternoon: the whole hall full bleed
+   (z0), and a tall window onto the same hall standing in front of it on the
+   right, bleeding off the bottom of the viewport (z3). The sentence is
+   threaded between them — in front of the hall, behind the window — standing
+   on `__shade` (z1), which is the words' own ground (z2 is the words). One
+   hairline, `__datum` (z4), lies across the seam in front of BOTH planes: the
+   shear is unreadable without something continuous to break against.
+
+   THE EVENT. The window's FRAME never moves. What moves is what you see
+   through each plane: `--apr-open` 0 → 1 sinks the hall's picture 6% of its
+   own height and climbs the window's picture 6.5% of its own, in opposite
+   directions, so the two views of one room slide apart. Both images are 116%
+   of their aperture, so the 8% slack at each edge is larger than the travel
+   and no edge can ever be exposed. Transform only. Measured separation runs
+   from 55px at 320 to 195px at 2560 — see NOTES.md.
+
+   Expressing the travel as a percentage of each IMAGE's height rather than in
+   vw is the fix for the defect that killed the previous mechanic: that one
+   moved two elements 10vw apart against an overlap that was also 10vw wide at
+   1440, so the gap it promised resolved to exactly zero there and to a
+   negative number at every width below it. A percentage of the moving thing's
+   own size is proportional at every viewport by construction. Measured
+   separation: 93px at 320, 105 at 390, 131 at 768, 106 at 1024, 99 at 1280,
+   124 at 1440, 149 at 1920, 157 at 2531, 200 at 2560.
+
+   THE DEFAULT IS 0 AND THAT IS THE COMPOSED STATE. Everywhere else on this
+   page the stylesheet default is the END of the range, so a reader with no
+   JavaScript gets the resolved composition. A hero has no "after": scroll 0 is
+   what every reader sees and what the section is composed for, so that is what
+   no-JavaScript and reduced-motion are given.
+
+   CONTRAST. `__shade` is a flat panel, not a gradient tuned until it passes —
+   the failure DESIGN-SYSTEM §1 records, where 1440 and 2560 pass and 1024×768
+   does not. Its stops are written off `--apr-col`, the same number that caps
+   the sentence's measure, so the ground is always wider than the words on it.
    ══════════════════════════════════════════════════════════════════════════ */
 .apr-hero {
-  padding-block: clamp(6.4rem, 12svh, 9.5rem) clamp(3rem, 6vw, 5.5rem);
+  /* the veil's ink, mixed from the page's deep ground (#12201A, a green-black)
+     rather than from `--shade`'s warm black — otherwise the hall reads as a
+     grey rectangle pasted onto a green page and the seam into §01 shows. */
+  --apr-veil: 13, 26, 20;
+
+  /* THE HERO HAS ITS OWN MEASURE, WIDER THAN THE PAGE'S 92rem. At 2531 the
+     display line is 110px and needs ~1160px of measure for a five-line rag;
+     inside 92rem there is not room for that AND a 26vw window without the two
+     colliding. Capped and centred — `margin-inline: auto` is on `__type`, and
+     `--apr-gut` is the same arithmetic for the absolutely positioned window.
+     A cap without centring is invisible at 1440 and 462px wrong at 2531; that
+     shipped on this site once. */
+  --apr-room: min(118rem, 94vw);
+  --apr-gut: max(var(--rail), calc((100% - var(--apr-room)) / 2));
+
+  /* ONE NUMBER FOR THE SENTENCE'S MEASURE AND THE SHADE'S STRONG REGION, so
+     the ground cannot be narrower than the words. Tracks the display size:
+     348px at 390 (34px type), 768 at 1440 (80px), 1152 at 2531 (110px) —
+     about 21 characters a line throughout. */
+  --apr-col: clamp(18rem, 12rem + 40vw, 72rem);
+
+  --apr-open: 0;
+  position: relative;
+  padding-block: 0;
+  overflow: clip;
+  background: var(--ground-deep);
 }
-.apr-hero__label {
-  margin: 0 0 clamp(1.5rem, 3vw, 2.4rem);
+
+.apr-hero__room {
+  position: relative;
+  display: grid;
+  align-content: end;
+  /* EXACTLY the viewport, floored for short phones and NOT capped. A cap is
+     what stopped the window bleeding: at 2531×1140 a 60rem hero ended 180px
+     above the fold, so the frame that was meant to run off the bottom of the
+     screen stopped in the middle of it and read as a flush crop. */
+  min-height: max(36rem, 100svh);
+  padding-block: clamp(6rem, 14svh, 10rem) clamp(2rem, 4.6svh, 3.4rem);
+}
+
+/* ── 0 · the hall ──────────────────────────────────────────────────────────
+   NO SCALE AT REST. The previous build held a 12% push-in at scroll 0, which
+   is the state a reduced-motion reader, a no-JavaScript reader and every
+   reader's first second all get — so the softest frame was the one shown
+   longest, and at 2531 it was a 1.75× upscale of a 1620 source. Rest is 1.0
+   and the only softness left is `cover` itself. */
+.apr-hero__hall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+}
+/* oversized by 16%: the slack is 8% of the container at each edge and the
+   travel is 6% of the IMAGE, which is 6.96% of the container — so no edge can
+   be exposed at any viewport, and the margin is arithmetic rather than luck. */
+.apr-hero__hall img {
+  position: absolute;
+  inset: -8% 0;
+  width: 100%;
+  height: 116%;
+  object-fit: cover;
+  transform: translate3d(0, calc(var(--apr-open) * 6%), 0);
+}
+/* THE VEIL IS LIGHT. The build before this one measured 9.66:1 where the large
+   type needs 3.0 — four stops of headroom bought by making the hall illegible
+   as a hall. This one targets the low teens on the flat panel and leaves the
+   right-hand half of the photograph nearly open. */
+.apr-hero__hall::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    /* a vignette: it seats the window as a lit object in a room, darkens the
+       floor into the paper section below instead of cutting to it, and stops
+       the open side of the hall burning out at the top right. */
+    radial-gradient(
+      114% 106% at 40% 48%,
+      rgba(var(--apr-veil), 0) 32%,
+      rgba(var(--apr-veil), 0.4) 100%
+    ),
+    /* a ground for the fixed nav pill at every crop */
+    linear-gradient(
+      to bottom,
+      rgba(var(--apr-veil), 0.28) 0,
+      rgba(var(--apr-veil), 0.02) 20%,
+      rgba(var(--apr-veil), 0.02) 100%
+    ),
+    /* the strip of hall the window leaves against the right edge is the open
+       side of the room, and above about 1900 it is 321px of blown terrace -
+       measured relative luminance 0.245 against the window's 0.118, the
+       brightest thing on the page. Running the window flush to the viewport
+       edge instead would force its aspect past 0.5 at 2531, which brings the
+       folding chair in the source's bottom-left corner back into the crop, the
+       exact thing the frame was changed to remove. The strip is held down here
+       instead. */
+    linear-gradient(
+      to left,
+      rgba(var(--apr-veil), 0.54) 0,
+      rgba(var(--apr-veil), 0.16) 7%,
+      rgba(var(--apr-veil), 0) 13%
+    ),
+    rgba(var(--apr-veil), 0.06);
+}
+
+/* ── 1 · the ground the words stand on ────────────────────────────────────
+   Flat until 2rem past where the measure ends, then falling away. The soft
+   right edge is what stops it reading as a card standing in the room. */
+.apr-hero__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to right,
+      rgba(var(--apr-veil), 0.4) 0,
+      rgba(var(--apr-veil), 0.38) calc(var(--apr-gut) + var(--apr-col) + 2rem),
+      rgba(var(--apr-veil), 0.14) calc(var(--apr-gut) + var(--apr-col) + 13vw),
+      rgba(var(--apr-veil), 0) calc(var(--apr-gut) + var(--apr-col) + 26vw)
+    ),
+    /* and a floor shadow, so the sentence sits ON something rather than in a
+       vertical stripe that ends in mid-air */
+    linear-gradient(
+      to bottom,
+      rgba(var(--apr-veil), 0) 24%,
+      rgba(var(--apr-veil), 0.34) 100%
+    );
+}
+
+/* ── 3 · the window ───────────────────────────────────────────────────────
+   Bottom 0 against a hero that is exactly 100svh, so at scroll 0 its lower
+   edge IS the bottom of the screen and the frame runs off the page. */
+.apr-hero__win {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+
+  /* THE SEAM IS SET BY ITS LEFT EDGE, NOT BY A WIDTH. A 3:2 hall shown at full
+     width puts its five figures at fixed fractions of the frame, and a
+     width-driven window landed at about 70% at every viewport - which is the
+     edge of the third figure at 1440 and, at 1024, 25px from the third woman's
+     face. 72.8% of the rendered frame is source 71%, the middle of the only
+     clean gap between the third figure and the fourth. Driving the edge rather
+     than the width keeps it in that gap at every width by construction. */
+  left: 72.8%;
+  right: var(--apr-gut);
+  width: auto;
+  top: clamp(5rem, 13svh, 10rem);
+
+  /* A TRUE BLEED, NOT A FLUSH EDGE. `bottom: 0` against a hero that is exactly
+     100svh put the window's lower edge precisely on the section seam: identical
+     pixels at scroll 0, but the moment you scrolled you could see it had ENDED
+     there rather than run off the page. It now overshoots and is cut by the
+     hero's own clip. */
+  bottom: calc(-1 * clamp(1.2rem, 3.4svh, 2.6rem));
+  overflow: clip;
+  background: rgb(var(--apr-veil));
+  /* a window is a hole in a wall and a hole has a lip. Static — the rule is
+     about animating box-shadow, not having one. */
+  box-shadow:
+    0 2px 12px rgba(6, 14, 10, 0.4),
+    0 30px 70px -22px rgba(6, 14, 10, 0.72);
+}
+/* 16% oversize: 8% slack at each edge against 6.5% travel of the image, which
+   is 7.54% of the container. Below 900px this rises to 28% - see the narrow
+   block - because there the travel was 94% of the slack and had nowhere left to
+   go, which put the motion under the threshold of being seen at all. */
+.apr-hero__win img {
+  position: absolute;
+  /* TOP-BIASED, NOT CENTRED. A centred 16% overhang threw away 8% of the frame
+     at each end, and at the top of this frame is the suspended student's head
+     - cut off entirely at 2531. Biasing the overhang downward keeps her head
+     and spends the slack on the floor instead, which is also the end the
+     viewport cuts anyway. The travel is upward, so it only ever increases the
+     margin at the top. */
+  inset: -3% 0 auto;
+  width: 100%;
+  height: 116%;
+  object-fit: cover;
+  transform: translate3d(0, calc(var(--apr-open) * -6.5%), 0);
+}
+/* ── THE DATUM ───────────────────────────────────────────
+   One hairline at the window's top edge, carried right across the room in
+   FRONT of both planes (z4, above the window's z3). It is the registration mark
+   the shear is measured against: the hall's picture sinks beneath it while the
+   window's climbs beneath it, and a straight edge lying across both is what
+   turns "two pictures moving at different rates" into a visible break. It is
+   also, literally, the window's lintel continued into the wall. Sand, which
+   DESIGN-SYSTEM §1 permits for a rule and forbids for text. */
+.apr-hero__datum {
+  position: absolute;
+  z-index: 4;
+  /* IT RUNS FROM THE END OF THE MEASURE, NOT FROM THE GUTTER, and it sits
+     halfway down the room rather than at the window's head. Both are forced.
+     At the window's top edge it left the viewport after 117px of scroll, by
+     which point `--apr-open` had moved 0.10 and the shear was 12px - the datum
+     was gone before there was anything for it to measure. Halfway down it is
+     still on screen at 87% of the travel. And it cannot start at the gutter,
+     because a hairline drawn across the room at that height would cross the
+     display line itself. */
+  left: calc(var(--apr-gut) + var(--apr-col) + 1.6rem);
+  right: var(--apr-gut);
+  top: 52%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(246, 217, 193, 0) 0,
+    rgba(246, 217, 193, 0.72) 22%,
+    rgba(246, 217, 193, 0.72) 100%
+  );
+}
+
+/* a cream hairline down the left edge: the window and the hall are the same
+   white wall and without it the join is a smudge, not an edge. Ornament. */
+.apr-hero__win::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 1;
+  width: 1px;
+  background: rgba(251, 247, 242, 0.32);
+}
+
+/* ── 2 · the words ────────────────────────────────────────────────────── */
+.apr-hero__type {
+  /* THE WORDS CLEAR THE NAV PILL BEFORE THEY REACH IT. The pill is fixed at
+     y 22-85 and the display line is now 80px, so the sentence was being
+     guillotined through its cap-height for 384px of scroll - a regression
+     caused by the size increase, not by the pill. Opacity is clamped to 0-1 by
+     the engine, so this expression alone holds 1 until `--apr-open` reaches
+     `--apr-fade0` and reaches 0 by `--apr-fade1`; at 1440 first contact is at
+     open 0.378 and the fade is finished by 0.40. The home hero lifts its type
+     away for the same reason; this one only dissolves, because it must not
+     move INTO the pill on the way out. */
+  --apr-fade0: 0.2;
+  --apr-fade1: 0.44;
+  opacity: calc((var(--apr-fade1) - var(--apr-open)) / (var(--apr-fade1) - var(--apr-fade0)));
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: calc(var(--apr-room) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* the label, and a rule that runs out of it across the room and disappears
+   behind the window. The rule is the only thing in this hero that is allowed
+   to be occluded — no glyph ever is — and it is there to say, in one stroke,
+   which plane is in front of which. */
+.apr-hero__mark {
+  /* THE GAPS ARE INVERTED FROM THE PREVIOUS BUILD, which set 53.6px between
+     the label and its heading and 34.1px between the heading and its
+     paragraph — so the label floated 1.57× further from the thing it names
+     than the thing that continues it. A label belongs to its heading. */
+  margin: 0 0 clamp(0.9rem, 1.6vw, 1.4rem);
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -191,81 +471,61 @@
   text-transform: uppercase;
   color: var(--ink-onPic);
 }
-.apr-hero__label::before {
+.apr-hero__mark::before {
   content: '';
   flex: none;
   width: 26px;
   height: 1px;
   background: var(--sand);
 }
+/* the label's own rule. It used to fade to nothing across its length, which at
+   2531 meant it died 105px short of the window and the one stated depth cue
+   failed at the widest size. It now holds at a third of sand's strength all the
+   way to the type block's right edge - which is the window's right edge - and
+   so passes BEHIND the window, where the datum above passes in front of it. */
+.apr-hero__mark::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 0;
+  background: linear-gradient(
+    to right,
+    var(--sand) 0,
+    rgba(246, 217, 193, 0.34) 46%,
+    rgba(246, 217, 193, 0.34) 100%
+  );
+}
+
+/* THE HERO'S OWN SCALE, NOT THE PAGE'S.
+   The previous build set this line from the body-lead clamp and landed at
+   54.3px at 1440 — smaller than the Closing section on the same page (55.2px)
+   and two thirds of the home page's hero (81.6px). A hero that is outshouted
+   by section 10 of its own page is not a hero. This curve is 34px at 390,
+   61.8px at 1024, 80px at 1440, 101px at 1920 and its 110px cap from 2126 up.
+
+   `font-optical-sizing: auto` resolves opsz to about 53 at these sizes, which
+   is a reading cut: open apertures, generous sidebearings, a face built to
+   survive small. Pinned to 144 — the display cut — the same line sets
+   materially narrower and better fitted, with the contrast Fraunces has at
+   size. This is the one place on the page big enough to want it. */
 .apr-hero__line {
   margin: 0;
+  max-width: var(--apr-col);
   font-family: var(--font-display);
-  font-optical-sizing: auto;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 144;
   font-weight: 400;
-  font-size: clamp(1.8rem, 1.02rem + 3.2vw, 4.2rem);
-  line-height: 1.08;
-  letter-spacing: -0.016em;
-  max-width: 27ch;
+  font-size: clamp(2rem, 1.06rem + 4.38vw, 6.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.021em;
   color: var(--ink-onPic);
 }
 
-.apr-hero__room {
-  --apr-close: 1; /* closed is the finished state, and therefore the default */
-  position: relative;
-  display: flex;
-  margin-block: clamp(2.2rem, 5vw, 4.2rem);
-  height: clamp(14rem, 44svh, 33rem);
-  overflow: hidden;
-  background: #100c0a;
-}
-.apr.is-live .apr-hero__room {
-  --apr-close: 0;
-}
-.apr-hero__pane {
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-}
-/* THE OFFSET IS A PERCENTAGE, NOT A PIXEL COUNT, and that is arithmetic rather than taste.
-   A translateY in % resolves against the image's own height, so the worst offset here is
-   12% of 136% = 0.163 of the band, against 0.18 of slack above and below — the picture
-   covers the pane at EVERY band height. Written in pixels it did not: 58px of travel needs
-   a band 446px tall to stay covered, and the band is 250px at 320x568, which opens a sliver
-   of bare ground under the left third of the hero on a phone. */
-.apr-hero__pane img {
-  position: absolute;
-  left: calc(-100% * var(--i));
-  top: -18%;
-  width: 300%;
-  height: 136%;
-  max-width: none;
-  object-fit: cover;
-  /* the offsets resolve to zero as the hero passes; transform only */
-  transform: translateY(calc((1 - var(--apr-close)) * var(--off) * 1%));
-}
-.apr-hero__seam {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--sand);
-  box-shadow: 0 0 0 1px rgba(16, 12, 10, 0.55);
-  opacity: calc(1 - var(--apr-close));
-  pointer-events: none;
-}
-.apr-hero__seam--1 {
-  left: calc(100% / 3);
-}
-.apr-hero__seam--2 {
-  left: calc(200% / 3);
-}
 .apr-hero__support {
-  margin: 0 0 0 auto;
-  max-width: 46ch;
+  margin: clamp(1.7rem, 3.4vw, 2.9rem) 0 0;
+  max-width: min(var(--apr-col), 46ch);
   font-size: var(--apr-read);
-  line-height: 1.66;
+  line-height: 1.68;
   color: var(--ink-onPic-2);
 }
 
@@ -1197,8 +1457,73 @@
   .apr {
     --apr-pad: clamp(3.4rem, 9vw, 5.5rem);
   }
-  .apr-hero__support {
-    margin-left: 0;
+  /* NARROW: THE WORDS GO ABOVE THE WINDOW, NOT BESIDE IT.
+     Under 900px a 46vw window and a measure of display type cannot share a
+     line, so the sentence takes the upper half of the room and the window
+     stands under it at the right, still bleeding off the bottom AND off the
+     right edge. The hall runs behind both, and `posNarrow` slides its crop
+     because a portrait band takes only a third of a 3:2 frame's width. */
+  .apr-hero {
+    --apr-room: 100%;
+    /* the words are above the window here, not beside it, so the measure is
+       the page's, not half the viewport */
+    --apr-col: min(100%, 34rem);
+    /* the type is at the TOP of the room here, so it passes under the pill from
+       the first pixel of scroll and cannot be faded on the desktop schedule. It
+       leaves the viewport on its own at about open 0.95; the fade runs just
+       ahead of that. */
+    --apr-fade0: 0.56;
+    --apr-fade1: 0.94;
+  }
+  /* the datum belongs to the window, and here the window is in flow BELOW the
+     words, so there is no line to carry across the room. */
+  .apr-hero__datum {
+    display: none;
+  }
+  /* 28%, not 16%: at 390 the window's travel was 27.2px inside 28.8px of slack,
+     94% of it, and the motion was under the threshold of being noticed. */
+  .apr-hero__win img {
+    inset: -3% 0 auto;
+    height: 128%;
+    transform: translate3d(0, calc(var(--apr-open) * -10%), 0);
+  }
+  /* TWO ROWS, NOT AN ABSOLUTE OFFSET. The window was positioned off the
+     bottom edge here and at 320x568 it climbed over the last three lines of
+     the supporting paragraph: any absolute offset is a bet that the type above
+     it will not grow, and type always grows. In flow the window cannot reach
+     the words, whatever the type does; `space-between` keeps it on the bottom
+     edge so it still runs off the page, and if the two together are taller
+     than the viewport the room grows and the window bleeds below the fold —
+     which is the same thing a reader sees. */
+  .apr-hero__room {
+    grid-template-rows: auto auto;
+    align-content: space-between;
+    min-height: max(34rem, 100svh);
+    padding-block: clamp(5.5rem, 13svh, 7.5rem) 0;
+  }
+  .apr-hero__win {
+    position: relative;
+    grid-row: 2;
+    justify-self: end;
+    inset: auto;
+    width: min(66vw, 21rem);
+    height: auto;
+    aspect-ratio: 5 / 7;
+    /* off the right edge as well as the bottom: a window you are standing
+       beside, not a card centred in a column */
+    margin-right: calc(-1 * clamp(0.6rem, 4vw, 2.6rem));
+    margin-top: clamp(1.6rem, 5vw, 2.6rem);
+  }
+  /* the shade becomes a horizon: the words are in the TOP half here, so the
+     ground they stand on has to be the top of the room. */
+  .apr-hero__shade {
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--apr-veil), 0.62) 0,
+      rgba(var(--apr-veil), 0.58) 50%,
+      rgba(var(--apr-veil), 0.2) 72%,
+      rgba(var(--apr-veil), 0.3) 100%
+    );
   }
   .apr-what__places {
     grid-template-columns: minmax(0, 1fr);
@@ -1337,8 +1662,10 @@
   .apr.is-live [data-ap].in {
     transition: none;
   }
-  .apr.is-live .apr-hero__room {
-    --apr-close: 1;
+  /* the hero's default is already its composed state, so this only has to stop
+     the island writing over it if the preference is turned on mid-session. */
+  .apr-hero {
+    --apr-open: 0 !important;
   }
   .apr-what__stage {
     --apr-zoom: 1;

@@ -19,7 +19,7 @@ import { Closing } from '@/components/about-pranava/Closing';
  * nothing here retypes a client sentence, and nothing invents a fact the client has not
  * supplied. See components/about-pranava/NOTES.md.
  *
- *   hero  one room cut into three, whose horizons close into one          deep
+ *   hero  a window in the hall, and the two views through it move apart    deep
  *   01    five lines opening like a fan on a widening wedge of paper      paper
  *   02    an enlargement you cannot place, stepping back into its room    deep
  *   03    three columns standing, and a fourth lying across their feet    paper

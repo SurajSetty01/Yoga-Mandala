@@ -6,9 +6,9 @@
  *  · its `w`/`h` are the pre-rotation camera values, so `p13-img_0615` is listed as
  *    4032x3024 (landscape) while the encoded derivative is 960x1280 (portrait). Ratios here
  *    are the ones the browser will actually see.
- *  · `ss-dsc07127` and `p13-img_0610` are encoded and committed but absent from the
- *    manifest, so they carry no alt text there. Both are used here and both are described
- *    below in full.
+ *  · `p13-img_0610` is encoded and committed but absent from the manifest, so it carries no
+ *    alt text there. It is used here and is described below in full. (`ss-dsc07127` is the
+ *    other such file; the hero used to run on it and no longer does.)
  *
  * DERIVATIVE WIDTHS ARE NOT UNIFORM and that decided several placements:
  *    2560  p13-img_0513 0516 0614 0615 0617 0620 0621
@@ -70,17 +70,89 @@ export function srcSet(f: Frame): string | undefined {
 }
 
 export const FRAMES = {
-  /* 01 · hero. The only frame in the archive with Praṇava's own emblem physically in the
-     room — the roundel on the wall behind the group. That is why it is the hero of
-     Praṇava's About page and not one of the wider, higher-resolution halls: the picture
-     says whose room this is. 1920 is its largest derivative, which is why the band it fills
-     is 46svh tall rather than a full screen. */
-  heroRoom: stills(
-    'ss-dsc07127',
-    [480, 960, 1920],
+  /* 01 · HERO. TWO FRAMES, ONE ROOM, ONE AFTERNOON.
+
+     Both hero frames come from the SAME hall on the same day — the red oxide floor, the
+     white walls, the corrugated roof with its rope anchors, the green outside. That is not
+     a nicety. The build before this one put two PBH studio frames (orange tungsten, mean
+     L 135) in front of a TTC hall (green daylight, mean L 37–46), which made the nearest
+     plane by far the brightest and inverted the depth: they read as two bright rectangles
+     laid on a dark photograph, never as one room. One venue fixes that at the source.
+
+     Chosen by rendering every TTC candidate at the aperture ratio and object-position it
+     would actually be shown at, then looking. What that ruled out:
+       · `pr-ttc-dsc_0188_1` / `_0185_1` — the prepared row and the empty hall. Both are
+         better GROUNDS than anything else in the set, and both were rejected because the
+         largest thing in this hero would then be folding chairs and bolsters. That is the
+         mistake this page is being rebuilt to undo, in a nicer register.
+       · `pr-ttc-dsc_0569` — its left half is plain wall. Measured on the render, the band
+         the words stand on came out at stdev 4; the home page's equivalent region is 69.
+         A flat ground is not a room, however good the photograph is elsewhere in it.
+       · `pr-ttc-dsc_0191` / `_0278_1` — everybody identifiable, mostly backs to camera.
+       · the PBH studio entirely, for the venue reason above.
+
+     A 3:2 SOURCE IN A BAND WIDER THAN 3:2 HAS NO HORIZONTAL LEVER. `object-fit: cover`
+     crops the axis that is in surplus, and at every desktop width this band is wider than
+     1.5, so the whole width of the frame is always on screen and only `pos`'s Y does
+     anything. The horizontal composition of the hero IS the horizontal composition of the
+     source, and the frames below were picked on that basis rather than tuned afterwards.
+     Below 900px the band turns portrait and the lever reappears, which is what `posNarrow`
+     is for. */
+
+  /* far · the hall. Five practitioners standing in one shape with their arms raised,
+     stepping back down the room. Upright, which is what a hero with a display sentence in
+     it needs — a floor full of horizontal bodies fights a headline, a row of vertical ones
+     supports it.
+
+     ONE FACE IN THIS FRAME IS IDENTIFIABLE AND THAT IS STATED HERE BECAUSE IT IS TRUE.
+     The nearest practitioner renders about 90px head-to-chin at 1440 and is recognisable.
+     An earlier draft of this file claimed her face was turned away; it is not, and a frame
+     defended by a claim the pixels contradict is a frame nobody has looked at. She is kept
+     because this is a photograph of a CLASS — five people in one shape, nobody at the front
+     of it, nobody named here or anywhere on this page. What §06 refuses is a single figure
+     printed beside a biography, which would be read as a portrait however neutral its alt
+     text; a documentary frame of a group is not that, and §02, §07 and §08 of this page
+     already publish identifiable faces on the same basis.
+
+     1620 is the largest derivative of every TTC frame, so above 1620 CSS px this is
+     upscaled — 1.56× at 2531. The alternative was `pr-pbh-img_5433` at 2560, from the other
+     venue, and one room is worth more than sharpness in a ground that is veiled anyway. */
+  heroHall: stills(
+    'pr-ttc-dsc_0046_1',
+    [480, 960, 1620],
     '50% 54%',
-    'A teacher sits cross-legged on a mat with palms joined, leading a group seated in a semicircle around him; the Praṇava roundel, a colour wheel and a wall of charts hang on the wall behind.',
-    '46% 58%',
+    'Five practitioners stand in one raised-arm pose on mats spread down an open-sided hall, rope anchors hanging from the roof beams and green trees beyond the open side.',
+    '62% 56%',
+  ),
+
+  /* near · the window. A teacher takes the weight of a student suspended in the rope
+     while two others steady her: four people, one act, hands visibly working. It is the
+     only frame in the TTC hall that is literally the third word of the sentence the hero
+     carries, and the only one whose subject is a TALL COLUMN of bodies from the roof beam
+     to the floor — which is what a tall aperture wants.
+
+     IT REPLACED `pr-ttc-dsc_0500`, the rope inversion, for three measured reasons. The
+     subject was wrong: the most dramatic frame in the set and the least like "study,
+     practice and transmission" — an inverted face in shadow, a bare midriff, folding
+     chairs. The chair could not be cropped out at any aperture ratio, because it is beside
+     her in the source. And it is LANDSCAPE: in a portrait aperture `object-fit: cover`
+     scales a 3:2 source by HEIGHT, so a 374px-wide window needed a 1362px-wide source and
+     `sizes="26vw"` was fetching 480w — a 2.84× upscale that made the frontmost, unveiled,
+     drop-shadowed plane the blurriest thing on the page (Laplacian sigma 4.39 against the
+     hall's 20.36). This frame is PORTRAIT, so cover scales it by height against a source
+     that is already tall: the same window needs 626px and 960 exists.
+
+     `pos` is 70%, not 50%: the source's bottom-left corner holds two folding chairs, and
+     at 70% they fall outside the aperture at every ratio up to about 0.45. That is also
+     why the window's width is set from its LEFT EDGE rather than capped — see the note in
+     styles/about-pranava.css. Quality 3 rather than 4 in the manifest, which is a judgment
+     about the whole frame; the column this crop takes is sharp. */
+  heroHands: stills(
+    'pr-ttc-dsc_0479',
+    [480, 960],
+    '70% 50%',
+    'A teacher takes the weight of a student suspended head-up in a rope hanging from the roof beam while two other practitioners steady her, in a hall with a red floor and green shade netting along the open side.',
+    '72% 50%',
   ),
 
   /* 02 · what is Praṇava. Ten people doing one thing: the frame answers "a place to

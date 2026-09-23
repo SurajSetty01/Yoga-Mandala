@@ -15,7 +15,7 @@ import { useEffect } from 'react';
  *   2. writes FOUR scroll-linked custom properties, all of which have a finished default
  *      in the stylesheet, so the page never depends on this file to be complete:
  *
- *        --apr-close  hero      0 → 1   three horizons closing into one room
+ *        --apr-open   hero      0 → 1   two windows parting over a veiled hall
  *        --apr-zoom   §02       0 → 1   an enlargement stepping back into its room
  *        --apr-drift  §07      -.5 → .5 four teachers at four depths
  *        --apr-part   §10       0 → 1   two roads pulling apart
@@ -65,7 +65,7 @@ export function AboutMotion() {
     );
 
     /* ── 2. the four properties, and the one attribute ─────────────────── */
-    const room = root.querySelector<HTMLElement>('.apr-hero__room');
+    const hero = root.querySelector<HTMLElement>('.apr-hero');
     const stage = root.querySelector<HTMLElement>('.apr-what__stage');
     const wheel = root.querySelector<HTMLElement>('.apr-dial__wheel');
     const doors = root.querySelector<HTMLElement>('.apr-dial__doors');
@@ -87,17 +87,17 @@ export function AboutMotion() {
     let bDoors: Box = { top: 0, h: 1 };
     let bField: Box = { top: 0, h: 1 };
     let bRoutes: Box = { top: 0, h: 1 };
-    let heroClose = 1;
+    let heroOpen = 1;
 
     function measure() {
       bStage = box(stage);
       bDoors = box(doors);
       bField = box(field);
       bRoutes = box(routes);
-      /* the hero's three horizons close over a little over half a screen of scroll:
+      /* the hero's two windows part over a little more than half a screen of scroll:
          far enough that it reads as a move, short enough that a reader who scrolls once
-         has already seen it finish. */
-      heroClose = Math.max(1, innerHeight * 0.58);
+         has already seen the teacher behind them come out. */
+      heroOpen = Math.max(1, innerHeight * 0.62);
     }
 
     let lit = -1;
@@ -108,7 +108,7 @@ export function AboutMotion() {
       const vh = innerHeight || 1;
       const mid = y + vh / 2;
 
-      if (room) room.style.setProperty('--apr-close', ease(clamp(y / heroClose, 0, 1)).toFixed(4));
+      if (hero) hero.style.setProperty('--apr-open', ease(clamp(y / heroOpen, 0, 1)).toFixed(4));
 
       if (stage) {
         /* 0 as the plate enters from below, 1 by the time its middle has reached the
@@ -175,7 +175,7 @@ export function AboutMotion() {
       removeEventListener('resize', onResize);
       removeEventListener('load', onResize);
       root.classList.remove('is-live');
-      room?.style.removeProperty('--apr-close');
+      hero?.style.removeProperty('--apr-open');
       stage?.style.removeProperty('--apr-zoom');
       field?.style.removeProperty('--apr-drift');
       routes?.style.removeProperty('--apr-part');
