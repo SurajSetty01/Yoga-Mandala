@@ -1,0 +1,606 @@
+/* preview-appr-a — owned solely by /preview/appr-a/. Every selector is `.aa-`.
+   NEVER a bare two-letter class: `.in` is the sitewide reveal class and one
+   concept claiming it flattened every flex container on every page. This file
+   declares nothing outside the `.aa-` namespace. */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · §03 OUR APPROACH and §04 HOW WE TEACH — concept A.
+
+   The pair is designed as a pair. Its two halves share nothing but the tokens.
+
+   §03  THE VIEWFINDER STEPS BACK.
+        One photograph of the hall, shown four times, each time from further
+        away, and each larger view carries a hairline rectangle marking exactly
+        what the previous one showed. Tradition is the foundation under one
+        body — a bolster, a block, a hand on the floor; Practice is that body
+        entire, over its chair; Inquiry is the whole row it belongs to; and
+        Transmission is not a fourth crop at all. The sheet of paper runs out
+        and the photograph is there whole, edge to edge, the room the other
+        three were fragments of. The client's note — "the fourth changes what
+        the other three are for" — is the mechanic, not a caption on it.
+
+        NOTHING HERE IS CROPPED BY THE VIEWPORT. Each view's aperture carries
+        the aspect ratio of its own authored crop, so the four pictures are
+        pixel-identical in content at 320 and at 2560. The defect being fixed
+        on the live page is a photograph sliced by a section edge into a band
+        with a hand in it; this section cannot produce that at any width.
+
+   §04  ONE SENTENCE THAT OPENS OUT.
+        A different logic entirely, because eight short phrases are not four
+        paragraphs and "learning happens over time" is a claim about duration.
+        The eight practices are set as ONE run of display type — the client's
+        own colon after "encourages students to:" makes them grammatically one
+        sentence — and each phrase is larger than the one before it and
+        followed by more space. The run therefore starts dense and ends slow:
+        the last phrase, which says learning continues beyond a single course,
+        is the largest thing in the section and has no full stop after it.
+        Then a long silence, and the closing sentence, small and firm, is the
+        only thing in §04 set at reading size.
+
+        No photograph. §03 is entirely photographic and ends on a full-bleed
+        frame; §04 answers it on the reversed ground in type alone. A section
+        that could be swapped with its neighbour has failed (DESIGN-SYSTEM §5),
+        and these two cannot be swapped: one is a picture pulling back through
+        space, the other is a sentence slowing down through time.
+
+   Grounds across the pair: paper · photograph · deep. No seam repeats.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.aa {
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  /* The page measure, and the stage the windows bleed to. This frame has no
+     2560 derivative — 1620 is the largest on disk — so the cap is what keeps
+     the tightest view sharp: its crop is 34% of the file, which is 551 native
+     pixels, and above 1500px its aperture is 38% of the stage. Capped at
+     112rem the stage is 1792 at 2531, so that aperture is 681px and the crop
+     is upscaled 1.24x. It is the only upscale in the section at any width. */
+  --aa-max: 112rem;
+  --aa-pad: clamp(4.4rem, 10vw, 9rem);
+
+  --aa-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --aa-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  --aa-hair: rgba(193, 97, 60, 0.55);
+  --aa-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.aa-s {
+  position: relative;
+  padding-block: var(--aa-pad);
+  overflow-x: clip;
+}
+
+/* the page's one <h1>. The route owns neither the hero that carries it on the
+   real page nor a title of its own, so it is present and not painted. */
+.aa-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* A CAPPED CONTAINER IS ALSO CENTRED. `max-width` on its own caps the column
+   and pins it left — invisible at 1440 and 462px wrong at 2531. This shipped
+   once on this site; every capped block here goes through this class. */
+.aa-rail {
+  max-width: calc(var(--aa-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* the register mark, kept to the letter of the one the rest of the site uses */
+.aa-eyebrow {
+  margin: 0 0 clamp(1.5rem, 3.2vw, 2.5rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.aa-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.aa-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
+}
+.aa-eyebrow--dark {
+  color: var(--ink-onDark-soft);
+}
+.aa-eyebrow--dark .aa-eyebrow__n {
+  color: var(--ink-onDark);
+}
+.aa-eyebrow--dark .aa-eyebrow__rule {
+  background: var(--sand);
+}
+
+/* Focus. The global treatment is a cream ring in a dark halo, which is right
+   on the reversed ground and invisible on paper. (0,3,0) beats it. */
+.aa-s:not(.aa-teach) :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* the reveal this route owns, opt-in through `.is-live`, which the island adds
+   only after its first frame. A reader with no JavaScript, and a reader under
+   prefers-reduced-motion, never meets a start state at all: the finished page
+   is what the CSS below describes without this class. */
+.aa.is-live [data-aa] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+.aa.is-live [data-aa='fade'] {
+  transform: none;
+}
+.aa.is-live [data-aa].aa-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.85s var(--aa-ease),
+    transform 1.05s var(--aa-ease);
+  transition-delay: var(--aa-d, 0ms);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   §03 · THE VIEWFINDER STEPS BACK
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.aa-app {
+  background: var(--ground);
+  color: var(--ink);
+  padding-bottom: clamp(2.2rem, 4.5vw, 4rem);
+}
+
+.aa-app__lead {
+  margin: 0 0 clamp(2.4rem, 5vw, 4rem);
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.1rem + 4vw, 4.4rem);
+  line-height: 1.07;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+/* THE SHEET. The paper is the sheet; the windows are the holes cut in it.
+   It is capped and centred, and the windows bleed to ITS left edge — which is
+   the viewport's left edge at every width up to 112rem. */
+.aa-app__sheet {
+  max-width: var(--aa-max);
+  margin-inline: auto;
+  display: grid;
+  row-gap: clamp(2.6rem, 5vw, 4.4rem);
+}
+
+/* one view: an aperture on the left, its name and paragraph on the paper beside it */
+.aa-view {
+  display: grid;
+  align-items: end;
+  column-gap: clamp(1.4rem, 3vw, 3rem);
+  grid-template-columns: var(--aa-w) minmax(0, 1fr);
+}
+.aa-view--1 { --aa-w: 34%; }
+.aa-view--2 { --aa-w: 48%; }
+.aa-view--3 { --aa-w: 63%; }
+
+/* THE APERTURE.
+   Its aspect ratio is its CROP's aspect ratio, so `cover` never has anything
+   left to crop and the viewport can never take a bite out of the subject.
+   The image inside is sized to the whole photograph and offset so that exactly
+   the authored rectangle shows:
+       img width  = aperture width  / cropW      left = -cropX / cropW
+       img height = aperture height / cropH      top  = -cropY / cropH
+   Percentages on `left` resolve against the aperture's width and on `top`
+   against its height, which is what makes those four lines exact. */
+.aa-win {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--aa-ar);
+  background: var(--ground-warm);
+}
+.aa-win__img {
+  position: absolute;
+  max-width: none; /* body sets img{max-width:100%}, which would undo the sizing */
+  width: calc(100% / var(--aa-cw));
+  height: calc(100% / var(--aa-ch));
+  left: calc(-100% * var(--aa-cx) / var(--aa-cw));
+  top: calc(-100% * var(--aa-cy) / var(--aa-ch));
+  object-fit: cover;
+}
+
+/* THE VIEWFINDER. A hairline rectangle marking what the PREVIOUS view showed,
+   drawn in the larger view it is now inside. It is the whole argument of the
+   section in one ornament: you were here, and there is more of it than that.
+   Clay is 3.90:1 and may never carry text; a 1px rule is precisely what
+   DESIGN-SYSTEM §1 reserves it for. */
+.aa-win__mark {
+  position: absolute;
+  left: calc(var(--aa-mx) * 1%);
+  top: calc(var(--aa-my) * 1%);
+  width: calc(var(--aa-mw) * 1%);
+  height: calc(var(--aa-mh) * 1%);
+  /* a cream hairline between two dark ones, so the rectangle reads on the
+     white wall, on the red floor and on the green netting alike. A single
+     line in any one colour disappears over one of the three. */
+  border: 1px solid rgba(251, 247, 242, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(16, 12, 10, 0.5),
+    inset 0 0 0 1px rgba(16, 12, 10, 0.38);
+  pointer-events: none;
+}
+/* two corner brackets, which is what makes it read as a crop mark rather than
+   as a box drawn on the photograph */
+.aa-win__mark::before,
+.aa-win__mark::after {
+  content: '';
+  position: absolute;
+  width: clamp(10px, 1.4vw, 18px);
+  height: clamp(10px, 1.4vw, 18px);
+  border: 0 solid rgba(251, 247, 242, 0.92);
+  filter: drop-shadow(0 0 1px rgba(16, 12, 10, 0.7));
+}
+.aa-win__mark::before {
+  left: -5px;
+  top: -5px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.aa-win__mark::after {
+  right: -5px;
+  bottom: -5px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+
+.aa-view__text {
+  padding-bottom: clamp(0.2rem, 1vw, 0.8rem);
+  padding-right: var(--rail);
+}
+.aa-view__name {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 0.95rem + 1.9vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  color: var(--forest);
+}
+.aa-view__body {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--aa-read);
+  line-height: 1.66;
+  color: var(--ink-soft);
+}
+/* the distance travelled back from the previous view, stated plainly. It is a
+   fact about the picture, not an invented one. */
+.aa-view__note {
+  margin: 0.9rem 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.55em;
+  font: 500 11px/1.4 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.aa-view__note::before {
+  content: '';
+  flex: none;
+  width: 16px;
+  height: 1px;
+  background: var(--aa-hair);
+  transform: translateY(-3px);
+}
+
+/* ── the fourth. The paper runs out. ─────────────────────────────────────── */
+
+/* The fourth view is the widest thing in the section — it has to be, or the reveal is a
+   step DOWN from Inquiry's aperture. It shares the sheet's own cap, so above 112rem it
+   lines up exactly with the windows above it and is plainly larger than all of them; below
+   that it is full-bleed. At 2531 it stands 1195px tall against a 1140 viewport, which is
+   the one place the reader has to move a little to see all of it. */
+.aa-app__whole {
+  position: relative;
+  margin-top: clamp(3rem, 6vw, 5.5rem);
+  width: min(100%, var(--aa-max));
+  margin-inline: auto;
+}
+.aa-whole__fig {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 3 / 2; /* the photograph's own ratio: 1620 x 1080. Never cropped. */
+  overflow: hidden;
+  background: var(--ground-deep);
+}
+.aa-whole__img {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Transmission's plate. A GROUND, not a gradient: a tint over a photograph is
+   a contrast trap whose ratio changes with every viewport (DESIGN-SYSTEM §1),
+   so this owns an opaque one. It covers the left of the frame — the mats and
+   the green netting — and leaves the row of practitioners, which is the
+   subject, entirely visible. */
+.aa-whole__plate {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: min(42%, 30rem);
+  padding: clamp(1.4rem, 2.4vw, 2.2rem) clamp(1.4rem, 2.4vw, 2.2rem)
+    clamp(1.4rem, 2.4vw, 2.2rem) max(var(--rail), clamp(1.4rem, 2.4vw, 2.2rem));
+  background: rgba(14, 26, 21, 0.94);
+  -webkit-backdrop-filter: blur(16px) saturate(0.85);
+  backdrop-filter: blur(16px) saturate(0.85);
+  color: var(--ink-onDark);
+  border-top: 1px solid rgba(251, 247, 242, 0.2);
+  border-right: 1px solid rgba(251, 247, 242, 0.2);
+}
+.aa-whole__n {
+  display: block;
+  margin-bottom: 0.4rem;
+  font: 500 11px/1.4 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.aa-whole__name {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 1rem + 2vw, 2.8rem);
+  line-height: 1.06;
+  letter-spacing: -0.012em;
+  color: var(--ink-onDark);
+}
+.aa-whole__body {
+  margin: 0;
+  font-size: var(--aa-small);
+  line-height: 1.62;
+  color: rgba(251, 247, 242, 0.88);
+}
+
+/* the caption that says what the whole photograph is. Provenance, not a claim. */
+.aa-whole__cap {
+  margin: 0.85rem auto 0;
+  max-width: calc(var(--aa-max) + 2 * var(--rail));
+  padding-inline: var(--rail);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font: 500 11px/1.5 var(--font-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.aa-whole__cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--brass);
+  transform: translateY(-4px);
+}
+
+/* ── §03 responsive ──────────────────────────────────────────────────────── */
+
+/* Above the sheet's cap the composition stops growing with the viewport, so the apertures
+   open a little further instead of leaving a third of the page as gutter. The cost is
+   measured: at 1792 the tightest crop is 34% of a 1620px file — 551 native pixels — asked
+   to fill 681, which is 1.24x. That is the only upscale anywhere in this section. */
+@media (min-width: 1500px) {
+  .aa-view--1 { --aa-w: 38%; }
+  .aa-view--2 { --aa-w: 54%; }
+  .aa-view--3 { --aa-w: 70%; }
+  .aa-view__body { max-width: 46ch; }
+}
+
+/* the middle band: the widest aperture leaves too little paper for a measure */
+@media (max-width: 1180px) {
+  .aa-view--1 { --aa-w: 36%; }
+  .aa-view--2 { --aa-w: 46%; }
+  .aa-view--3 { --aa-w: 55%; }
+  .aa-view__body { max-width: 40ch; }
+}
+
+/* Portrait and small landscape: the aperture takes the full sheet and the
+   words stand under it. The crops do not change — only how much room they are
+   given — so the pull-back reads exactly as it does at 1440. */
+@media (max-width: 860px) {
+  .aa-view {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(1.1rem, 3vw, 1.6rem);
+  }
+  .aa-view--1 { --aa-w: 100%; }
+  .aa-view--2 { --aa-w: 100%; }
+  .aa-view--3 { --aa-w: 100%; }
+  /* each aperture still steps out, now by inset from the right rather than by
+     width: view 1 keeps a margin of paper, view 3 reaches the far edge. */
+  .aa-win {
+    margin-right: var(--aa-inset, 0);
+  }
+  .aa-view--1 .aa-win { --aa-inset: 22%; }
+  .aa-view--2 .aa-win { --aa-inset: 11%; }
+  .aa-view--3 .aa-win { --aa-inset: 0; }
+  .aa-view__text {
+    padding-inline: var(--rail);
+  }
+  .aa-view__body { max-width: 46ch; }
+
+  .aa-whole__plate {
+    position: static;
+    width: 100%;
+    border-right: 0;
+    padding-inline: var(--rail);
+  }
+  .aa-app__whole {
+    background: var(--ground-deep);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   §04 · ONE SENTENCE THAT OPENS OUT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.aa-teach {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-block: clamp(5rem, 11vw, 10rem) clamp(6rem, 13vw, 12rem);
+}
+.aa-teach :focus-visible {
+  outline: 2px solid #fbf7f2;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(16, 12, 10, 0.92);
+}
+
+.aa-teach__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  column-gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+  margin-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+.aa-teach__lead {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1rem + 4.6vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--ink-onDark);
+}
+.aa-teach__open {
+  margin: 0;
+  max-width: 42ch;
+  font-size: var(--aa-read);
+  line-height: 1.66;
+  color: rgba(251, 247, 242, 0.84);
+}
+.aa-teach__prompt {
+  margin: 0 0 clamp(1.4rem, 3vw, 2.4rem);
+  font: 500 var(--aa-small) / 1.5 var(--font-text);
+  letter-spacing: 0.02em;
+  color: var(--sand);
+}
+
+/* THE RUN.
+   Eight phrases, one sentence. `display: inline` on each, so they flow as
+   prose and wrap as prose: this is a paragraph, not a list, and it has no
+   markers, no numbers and no rules. --aa-i counts 0..7 and drives the two
+   things that make it a claim about duration:
+     · size, from 1.00x to 2.02x, so the sentence gains weight as it goes;
+     · the space after each phrase, from 1.15em to 2.55em, so it slows down —
+       and because those are ems of a type size that is itself growing, the
+       measured gap between the last two phrases is about four times the gap
+       between the first two.
+   The block therefore begins dense and ends spacious, and the eighth phrase —
+   the one that says learning continues beyond a single course — is the
+   largest thing in the section and is followed by nothing at all.
+   Every phrase begins with a capital in the client's own copy, which is the
+   second signal that one has ended and the next begun. */
+.aa-run {
+  margin: 0;
+  max-width: min(100%, 66rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  /* 1.3, not 1.2: the line box is sized by the tallest inline box on the line, and with
+     eight different font sizes in one paragraph a tighter figure lets a large phrase's
+     descenders land on the ascenders of the line beneath it. That shipped here once. */
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  color: var(--ink-onDark);
+  --aa-run-base: clamp(1.28rem, 0.72rem + 2.2vw, 2.45rem);
+}
+/*
+ * THERE IS NO SEPARATOR MARK, AND THAT IS THE SECOND DECISION IN THIS SECTION.
+ *
+ * A drawn dot between the phrases was tried and removed. An inline-block is an atomic
+ * inline, and the line breaker is allowed to break on either side of one: at several widths
+ * the mark landed at the START of a line, which turns the run into a bulleted list — the one
+ * thing it must not look like. Making it a non-atomic inline instead gave a tall bar,
+ * because an empty inline box takes its height from the font and not from its padding. And a
+ * real character would be a glyph the contrast probe has to measure for a job it is not
+ * doing.
+ *
+ * So the space between the phrases IS the separator, and it is the same space that carries
+ * the section's claim: it starts at a little over three word-spaces and widens by a fifth of
+ * an em with every phrase, so by the eighth there is a visible gulf in front of it. One
+ * device, doing both jobs, and nothing to break in the wrong place.
+ */
+.aa-run__p {
+  font-size: calc(var(--aa-run-base) * (1 + var(--aa-i) * 0.145));
+  margin-right: calc(1.15em + var(--aa-i) * 0.2em);
+}
+/* the last phrase is the one the section is about: it is the biggest, it is
+   set in the italic the display face carries emphasis in, and there is no
+   stop after it because the client's sentence does not end. */
+.aa-run__p:last-child {
+  font-style: italic;
+  margin-right: 0;
+}
+
+/* THE SILENCE. The distance between the run and the closing sentence is the
+   only thing in the section that says how long "over time" is, so it is real
+   space and not a margin someone will tidy away. */
+.aa-teach__rest {
+  height: clamp(6rem, 22vw, 13rem);
+}
+
+.aa-teach__close {
+  margin: 0 0 0 auto;
+  max-width: 40ch;
+  padding-top: 1.3rem;
+  border-top: 1px solid rgba(251, 247, 242, 0.24);
+  font-size: var(--aa-read);
+  line-height: 1.68;
+  color: rgba(251, 247, 242, 0.86);
+}
+
+@media (max-width: 860px) {
+  .aa-teach__head {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: clamp(1.6rem, 5vw, 2.4rem);
+  }
+  .aa-teach__lead {
+    max-width: 11ch;
+  }
+  .aa-teach__close {
+    margin-left: 0;
+  }
+}
+
+/* ── the ground below, so the spacing of the pair reads true ─────────────── */
+.aa-ground {
+  background: var(--ground);
+  min-height: 46svh;
+}

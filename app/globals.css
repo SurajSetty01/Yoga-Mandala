@@ -59,9 +59,14 @@
   --forest:      #22452F;   /* 10.04 with cream — carries text either way round */
   --forest-mid:  #2A5C42;   /* 7.27 — hover and secondary grounds               */
   --forest-deep: #1B3B2A;   /* 11.54 — pressed                                  */
-  --brass:       #8A6B1F;   /* 4.68 on cream: clears SMALL text, unlike the clay
-                               it replaces, so the accent can carry a label and
-                               not only a hairline.                             */
+  /* #8A6B1F was derived against CREAM ONLY and shipped with a note claiming it
+     cleared small text. True on cream at 4.68 — but 4.16 on --ground-warm and
+     3.46 on --sandstone, both of which this site also uses as grounds, and both
+     of which fail the 4.5 bar for small text. A concept agent found five failing
+     numerals on warm and measured the replacement.
+     #705515 clears small text on ALL THREE: 6.56 cream, 5.83 warm, 4.85
+     sandstone. A token is only as good as its worst ground. */
+  --brass:       #705515;
 
   /* YOGA MANDALA keeps the terracotta it was designed in. It is a community
      initiative UNDER the Trust, not a Praṇava programme, and letting it hold
@@ -836,6 +841,9 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/preview-quote.css";
 @import "../styles/preview-intro-a.css";
 @import "../styles/preview-intro-b.css";
+@import "../styles/preview-appr-a.css";
+@import "../styles/preview-appr-c.css";
+@import "../styles/preview-appr-b.css";
 
 /* ── route skeletons ─────────────────────────────────────────────────────────
    Temporary. These exist so the navigation is real and clickable before the

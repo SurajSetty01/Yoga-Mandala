@@ -1,0 +1,532 @@
+/* preview-appr-c.css — owned solely by /preview/appr-c/. Every selector is `.ac-`. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · APPROACH + HOW WE TEACH — CONCEPT C.  THE TYPE IS THE STRUCTURE.
+
+   No panels, no cards, no numbered columns, and exactly ONE photograph across
+   the pair. The two sections are set as two leaves of one book, and the only
+   things that organise them are the things a printed page has always used:
+   a running head, a rule across the leaf, a head-word hung out into the
+   margin, a folio at the outer edge, a run-in list, a colophon.
+
+     §03  OUR APPROACH   warm   four terms hung into the margin, each standing
+                                under a rule that draws across the whole leaf
+     §04  HOW WE TEACH   paper  the prompt and its eight practices set as ONE
+                                block of display type, the list run in behind a
+                                colon and marked off by rubricated pilcrows
+
+   The pair is deliberately opposite: §03 SEPARATES (four entries, four rules,
+   maximum air, an asymmetric leaf hung off a left margin) and §04 COMPRESSES
+   (one solid block, no line breaks between items, a symmetric leaf centred on
+   one axis). Neither could be mistaken for the other at any width.
+
+   COLOUR IS A THREE-PART SYSTEM AND EVERY PART IS MEASURED:
+     · ink      #241D18  the client's prose            13.83 on warm, 15.58 on paper
+     · forest   #22452F  the client's own terms         8.92 on warm, 10.04 on paper
+     · brass    #8A6B1F  every MARK that is not a word  4.68 on paper
+   Brass is 4.16 on the warm ground, which clears large text but not a label, so
+   no brass glyph is ever set on warm — on §03 it is rules and leader dots only,
+   which are backgrounds, not type. Clay never appears: this is a Praṇava page
+   and the terracotta belongs to Yoga Mandala (DESIGN-SYSTEM §4).
+
+   EVERYTHING IS FINISHED WITHOUT JAVASCRIPT. The reveal start states are scoped
+   to `.ac.is-live`, a class only the motion island adds and which it never adds
+   under prefers-reduced-motion. No JS and reduced motion both get the completed
+   page, rules drawn, at full opacity.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ac {
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  /* THE LEAF. 96rem = 1536px, inside the plate's native 1620px so the one
+     photograph is never upscaled. A book's margins grow with the sheet; at 2531
+     this is a 1536px leaf with 497px of margin either side, and the rules cross
+     all 2531 of it. */
+  --ac-max: 96rem;
+  --ac-pad: clamp(4.6rem, 9vw, 8.5rem);
+  --ac-pad-top: clamp(7.5rem, 11vw, 10.5rem);
+
+  /* the gutter between a head-word and its argument */
+  --ac-gut: clamp(1.15rem, 2.6vw, 3.6rem);
+
+  /* THE HEAD-WORD, AND THE MARGIN IT HANGS IN.
+     Measured, not guessed: in Fraunces at -0.024em, "Transmission" — the widest
+     of the four — is 5.96em at 36px and 4.99em at 90px, because `opsz` narrows
+     the face as it grows. The hang is therefore the WORST case, 6.05em, and the
+     slack at large sizes falls on the OUTSIDE of a right-aligned word, where it
+     is margin and invisible. One formula, so all four columns line up even
+     though each entry is its own grid. */
+  --ac-word: clamp(2.25rem, 1.05rem + 3.6vw, 5.6rem);
+  --ac-hang: calc(var(--ac-word) * 6.05);
+  --ac-gloss: 40rem;
+
+  /* MARKS. Brass at two strengths and an ink hairline — none of these is type. */
+  --ac-mark: rgba(138, 107, 31, 0.58);
+  --ac-mark-soft: rgba(138, 107, 31, 0.3);
+  --ac-hair: rgba(36, 29, 24, 0.13);
+}
+
+.ac-sec {
+  position: relative;
+  padding-block: var(--ac-pad);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+.ac-sec--warm {
+  background: var(--ground-warm);
+}
+.ac-sec--first {
+  /* the navigation pill is fixed; the running head must clear it, not sit under it */
+  padding-block-start: var(--ac-pad-top);
+}
+
+/* Focus: the global treatment is a cream ring in a dark halo, which is invisible
+   on paper. (0,2,0) beats the global (0,1,0). */
+.ac :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── THE LEAF GRID ────────────────────────────────────────────────────────
+   Every block on the page is a full-width grid that centres its own text
+   column. Full-width rules are then a border or a pseudo-element on a
+   full-width box — no `100vw` anywhere, so there is no scrollbar overflow at
+   any viewport, and a capped column is centred by construction rather than by
+   remembering `margin-inline: auto` (which this site has shipped wrong once). */
+.ac-leaf {
+  display: grid;
+  grid-template-columns:
+    [leaf-start] minmax(var(--rail), 1fr)
+    [text-start] minmax(0, var(--ac-max))
+    [text-end] minmax(var(--rail), 1fr) [leaf-end];
+}
+.ac-leaf > * {
+  grid-column: text;
+  min-width: 0;
+}
+
+/* ── THE RUNNING HEAD ─────────────────────────────────────────────────────
+   The one object the two sections share, so the continuity is a book's
+   continuity: a folio mark, the section's title, and a dotted leader running
+   out to the edge of the leaf. It carries the section's only <h2>. */
+.ac-head {
+  margin-bottom: clamp(2.6rem, 5.5vw, 5rem);
+}
+.ac-head__in {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding-bottom: 0.72rem;
+  border-bottom: 1px solid var(--ac-mark);
+}
+.ac-head__folio {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--forest);
+}
+.ac-head__title {
+  margin: 0;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+  white-space: nowrap;
+}
+/* the leader. A background, never a glyph — so brass may carry it on either ground. */
+.ac-head__leader {
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  height: 3px;
+  align-self: center;
+  background-image: radial-gradient(circle at 1.5px 1.5px, var(--ac-mark) 1.4px, transparent 1.5px);
+  background-size: 7px 3px;
+  background-repeat: repeat-x;
+  transform-origin: left center;
+  transform: scaleX(var(--ac-lx, 1));
+  transition: transform 1.2s var(--ease) 0.1s;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   §03 · OUR APPROACH — four terms hung into the margin.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* THE LEAD SITS WHERE THE ARGUMENTS WILL SIT, not at the edge of the leaf, so
+   the whole left margin is empty when you arrive and the first head-word is the
+   first thing that ever drops into it. Its three clauses are the client's own
+   sentence, broken one clause to a line — typesetting, not editing. */
+.ac-lead {
+  margin: 0 0 clamp(2.8rem, 6vw, 5.5rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.55rem, 0.85rem + 2.8vw, 4rem);
+  line-height: 1.2;
+  letter-spacing: -0.016em;
+  color: var(--forest);
+  text-wrap: balance;
+}
+.ac-lead__line {
+  display: block;
+}
+
+.ac-entry {
+  position: relative;
+  padding-block: clamp(1.9rem, 3.4vw, 3.1rem);
+}
+/* THE RULE ACROSS THE LEAF. A pseudo-element rather than a border because it is
+   the section's one piece of motion: it draws left to right as you reach it,
+   under `transform` alone. Its finished state is the default, so with no
+   JavaScript all five rules are simply there. */
+.ac-entry::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: var(--ac-mark);
+  transform: scaleX(var(--ac-rx, 1));
+  transform-origin: left center;
+  transition: transform 1.05s var(--ease);
+  transition-delay: var(--ac-d, 0ms);
+}
+/* the closing rule under the fourth entry, so the four are ruled off top AND foot */
+.ac-entries__close {
+  position: relative;
+  height: 1px;
+  background: var(--ac-mark-soft);
+  transform: scaleX(var(--ac-rx, 1));
+  transform-origin: left center;
+  transition: transform 1.05s var(--ease) 0.1s;
+}
+
+.ac-entry__in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 0.5rem;
+}
+/* THE HEAD-WORD. Right-aligned to the text block's own left edge, so the four
+   hang out into the margin by four different amounts and the OUTSIDE edge of
+   the page is the ragged one — the exact inverse of stretching four words to a
+   single measure, which this site already does once on /about/. */
+.ac-entry__word {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--ac-word);
+  line-height: 1;
+  letter-spacing: -0.024em;
+  color: var(--forest);
+}
+.ac-entry__gloss {
+  margin: 0;
+  font-size: clamp(1rem, 0.92rem + 0.42vw, 1.42rem);
+  line-height: 1.66;
+  color: var(--ink);
+  max-width: var(--ac-gloss);
+  text-wrap: pretty;
+}
+/* the folio at the outer edge of the leaf. Marginal numbering, in the client's
+   own order — nothing here is a section number. */
+.ac-entry__folio {
+  display: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  color: var(--forest-mid);
+}
+
+@media (min-width: 760px) {
+  .ac-entry__in {
+    grid-template-columns: var(--ac-hang) minmax(0, 1fr);
+    column-gap: var(--ac-gut);
+    align-items: baseline;
+    row-gap: 0;
+  }
+  .ac-entry__word {
+    text-align: right;
+  }
+  /* the lead is indented to EXACTLY the argument column, so the margin is empty
+     when you arrive and the first head-word is the first thing in it */
+  .ac-lead {
+    margin-left: calc(var(--ac-hang) + var(--ac-gut));
+  }
+}
+
+/* At and above 1400 the leaf has a real outer margin and the folio appears in
+   it. Below that there is no room for a third column and the numerals would be
+   ornament crowding the argument, so they are simply not rendered. */
+@media (min-width: 1400px) {
+  .ac-entry__in {
+    grid-template-columns: var(--ac-hang) minmax(0, var(--ac-gloss)) minmax(0, 1fr);
+  }
+  .ac-entry__folio {
+    display: block;
+    justify-self: end;
+    padding-top: 0.35rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   §04 · HOW WE TEACH — one block, the list run in behind a colon.
+
+   A symmetric leaf: the lead, the plate, the argument and the colophon are all
+   centred on one axis, which is the visible opposite of §03 hanging everything
+   off a left margin. Nothing here is indented and nothing here is in a margin.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Every block on this leaf is centred inside the measure rather than hung off
+   its left edge — the visible opposite of §03. It is applied block by block, NOT
+   as `.ac-teach .ac-leaf > *`: an auto margin on a grid item overrides the
+   default `stretch`, so that shorthand shrink-wrapped the running head and
+   centred it, and §04's head stopped matching §03's. */
+
+.ac-teach__lead {
+  margin: 0 auto clamp(2.4rem, 4.5vw, 4rem);
+  /* fit-content, not a fixed measure: a centred box that is wider than its own
+     longest line leaves the words visibly off the axis everything else is on */
+  width: fit-content;
+  max-width: min(100%, 24ch);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.05rem, 1.1rem + 3.9vw, 5.2rem);
+  line-height: 1.06;
+  letter-spacing: -0.026em;
+  color: var(--forest);
+  text-wrap: balance;
+}
+
+/* ── THE ONE PHOTOGRAPH ───────────────────────────────────────────────────
+   The pair's only picture, and it is reproduced WHOLE: the figure carries the
+   frame's own 3:2 ratio, so nothing is cropped at any viewport. The client's
+   complaint about this section was an image "mostly cut off and barely
+   visible"; the answer here is one plate, uncropped, at its native 1620px, and
+   no other photograph anywhere in the two sections. */
+.ac-plate {
+  margin: 0 auto clamp(2.6rem, 5vw, 4.6rem);
+  max-width: 101.25rem;
+}
+.ac-plate__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1620 / 1080;
+  object-fit: cover;
+  object-position: 50% 55%;
+  background: var(--ground-warm);
+  clip-path: inset(0 0 var(--ac-wipe, 0%) 0);
+  transition: clip-path 1.15s var(--ease);
+}
+.ac-legend {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65em;
+  margin-top: 0.85rem;
+  font: 500 11px/1.5 var(--font-text);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.ac-legend::before {
+  content: '';
+  flex: none;
+  width: 20px;
+  height: 1px;
+  background: var(--ac-mark);
+  transform: translateY(-4px);
+}
+
+/* THE ARGUMENT — the opening sentence and the run-in block as one text.
+   Both live in a wrapper that carries the run block's own font metrics, so `ch`
+   here is the same `ch` there and the opening sentence begins on EXACTLY the
+   left edge of the block it introduces. Centred as a whole, like everything
+   else on this leaf; not centred one element at a time, which left the short
+   opening sentence floating between two much wider blocks. */
+.ac-arg {
+  margin-inline: auto;
+  font-family: var(--font-display);
+  font-size: clamp(1.42rem, 0.9rem + 1.9vw, 3.05rem);
+  max-width: min(76rem, 52ch);
+}
+
+.ac-teach__open {
+  margin: 0 0 clamp(2.2rem, 4vw, 3.4rem);
+  /* the measure is in EM, not REM: a rem cap gives 73 characters a line at 768
+     and 61 at 1440 for the same block. 31em is ~62 at every width. */
+  max-width: 31em;
+  font-size: clamp(1.05rem, 0.96rem + 0.42vw, 1.35rem);
+  line-height: 1.66;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ── THE RUN-IN BLOCK ─────────────────────────────────────────────────────
+   The client's prompt ends on a colon, so the eight practices are the rest of
+   that sentence and are set as the rest of that sentence: one continuous block
+   of display type with no line break between items, each new one opening on a
+   rubricated pilcrow instead. The prompt itself is the only italic in the
+   block, which is how a run-in head has always been marked.
+
+   Semantics survive the compression: the eight are a real <ol> with
+   role="list" (Safari drops list semantics when the marker is removed), each
+   <li> is display:inline, and every pilcrow is an aria-hidden span carrying a
+   NO-BREAK SPACE after it, so the mark can never be left stranded at the end
+   of a line — it always travels down with the phrase it opens. */
+.ac-run {
+  margin: 0 0 clamp(3rem, 6vw, 5.5rem);
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.42rem, 0.9rem + 1.9vw, 3.05rem);
+  line-height: 1.36;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.ac-run__prompt {
+  display: inline;
+  margin: 0;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.ac-run__items {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ac-run__item {
+  display: inline;
+}
+/* RUBRICATION. Brass is 4.68 on this paper, so the mark clears 4.5 at every
+   size the block reaches — it is the one place on the page where a MARK is a
+   glyph, and it was measured before it was used. */
+.ac-pil {
+  color: var(--brass);
+  font-style: normal;
+}
+
+/* ── THE COLOPHON ─────────────────────────────────────────────────────────
+   What teacher education actually is, set where a book puts the note about
+   what the book actually is: under a short centred rule, narrow, italic, and
+   the last thing on the leaf. WONK is Fraunces' own quirk axis and this is the
+   one line on the page that asks for it. */
+.ac-colo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.4rem, 2.6vw, 2.2rem);
+}
+.ac-colo__rule {
+  width: clamp(3.5rem, 8vw, 6.5rem);
+  height: 1px;
+  background: var(--ac-mark);
+  transform-origin: center;
+  transform: scaleX(var(--ac-rx, 1));
+  transition: transform 0.9s var(--ease);
+}
+.ac-colo__text {
+  margin: 0;
+  max-width: 25em;
+  text-align: center;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: 'WONK' 1;
+  font-size: clamp(1.05rem, 0.96rem + 0.42vw, 1.42rem);
+  line-height: 1.58;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* ground beneath the pair, so the foot spacing of §04 reads true rather than
+   ending on the edge of the viewport */
+.ac-tail {
+  height: 46svh;
+  min-height: 18rem;
+  background: var(--ground);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REVEALS. Start states exist only under `.ac.is-live`, which the island adds
+   after it has resolved anything already on screen and never adds under
+   prefers-reduced-motion. Transform and opacity only.
+   ══════════════════════════════════════════════════════════════════════════ */
+/* Only these two variants start hidden. A rule and the plate are revealed by
+   drawing and wiping, never by opacity, so they are listed separately. */
+.ac.is-live [data-ac='up'],
+.ac.is-live [data-ac='fade'] {
+  opacity: 0;
+  transition:
+    opacity 0.85s var(--ease),
+    transform 1s var(--ease);
+  transition-delay: var(--ac-d, 0ms);
+}
+.ac.is-live [data-ac='up'] {
+  transform: translateY(20px);
+}
+.ac.is-live [data-ac='up'].ac-on,
+.ac.is-live [data-ac='fade'].ac-on {
+  opacity: 1;
+  transform: none;
+}
+
+.ac.is-live .ac-entry,
+.ac.is-live .ac-entries__close,
+.ac.is-live .ac-colo__rule {
+  --ac-rx: 0;
+}
+.ac.is-live .ac-entry.ac-on,
+.ac.is-live .ac-entries__close.ac-on,
+.ac.is-live .ac-colo__rule.ac-on {
+  --ac-rx: 1;
+}
+.ac.is-live .ac-head__leader {
+  --ac-lx: 0;
+}
+.ac.is-live .ac-head.ac-on .ac-head__leader {
+  --ac-lx: 1;
+}
+.ac.is-live .ac-plate {
+  --ac-wipe: 100%;
+}
+.ac.is-live .ac-plate.ac-on {
+  --ac-wipe: 0%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ac [data-ac],
+  .ac .ac-entry,
+  .ac .ac-entries__close,
+  .ac .ac-colo__rule,
+  .ac .ac-head__leader,
+  .ac .ac-plate {
+    opacity: 1 !important;
+    transform: none !important;
+    --ac-rx: 1;
+    --ac-lx: 1;
+    --ac-wipe: 0%;
+    transition: none !important;
+  }
+  .ac .ac-entry::before,
+  .ac .ac-entries__close,
+  .ac .ac-colo__rule {
+    transform: scaleX(1) !important;
+  }
+  .ac .ac-plate__img {
+    clip-path: none !important;
+  }
+}

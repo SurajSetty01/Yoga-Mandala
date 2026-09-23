@@ -1,0 +1,650 @@
+/* preview-appr-b — owned solely by /preview/appr-b/. Every selector is namespaced `.ab-`.
+   NEVER a bare two-letter class: `.in` is the sitewide reveal class and claiming it once
+   flattened every flex container on every page. The reveal gate here is `.ab.is-live`
+   plus `[data-ab]`, and the revealed state is `.ab-on`. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · ABOUT — §03 and §04, concept B.  TIME IS THE SUBJECT OF BOTH,
+   AND IN BOTH IT IS CARRIED BY LAYOUT FIRST AND MOTION SECOND.
+
+   §03  deep   THE APERTURE OPENS.  Four moments of one occasion. The picture
+               beside each term is wider than the one above it — 26%, 44%, 66%
+               of the measure — and at Transmission it crosses the page,
+               bleeds off the left edge, stands taller than anything else in
+               either section, and is the only picture that moves. The lead
+               names three clauses and keeps a fourth line open beneath them.
+
+   §04  warm   THE RULED LEAF.  One regular ruling is the page's clock. The
+               eight practices are written on it at intervals that lengthen —
+               rows 1, 3, 5, 8, 11, 15, 20, 26 — so they arrive at eight
+               different rates for a reader descending at one speed. After the
+               eighth the ruling simply carries on: the closing sentence is
+               written on it, and blank lines run off the foot of the page.
+
+   Neither move is the other's: one OPENS (width, dark, photographic), one
+   MEASURES (interval, paper, written). Neither needs motion to exist —
+   under prefers-reduced-motion, with JavaScript off, or in a screenshot,
+   both are complete, because the argument is in the geometry.
+
+   Every animated property here is transform, opacity or clip-path on a
+   child that nothing observes. There is no scroll listener in this concept
+   at all: the reveals are IntersectionObserver + CSS transition, and the
+   only per-frame work on the page is the one <video>'s own decode.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ab {
+  position: relative;
+  z-index: 1;
+  display: block;
+  background: var(--ground);
+
+  /* four steps, far apart, so a reader always knows which register they are in */
+  --ab-big: clamp(1.72rem, 1.02rem + 3.1vw, 3.95rem);
+  --ab-mid: clamp(1.12rem, 0.99rem + 1.05vw, 1.78rem);
+  --ab-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --ab-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  --ab-pad: clamp(4.2rem, 9.5vw, 8.5rem);
+  --ab-max: 92rem;
+
+  /* ornament only. Clay is 3.90:1 and brass 4.68:1 — neither carries a label on
+     these grounds at these alphas, and neither is asked to. */
+  --ab-hair: rgba(36, 29, 24, 0.115);
+  --ab-hair-onDeep: rgba(251, 247, 242, 0.2);
+  --ab-brass: rgba(138, 107, 31, 0.55);
+  --ab-sand: rgba(246, 217, 193, 0.55);
+  /* MEASURED, TWICE, NOT CHOSEN. The site's --brass #8A6B1F is 4.68:1 on cream and clears
+     a small label there — but this pair sets its numerals on --ground-warm #F2E9DE, where
+     the same value is 4.16:1, a fail at 12.5px and 15px, and the probe found all five of
+     them. #7E6119 computes to 4.84:1 there and STILL measured 4.46:1 on rendered pixels at
+     320, because a 13.8px Fraunces numeral is mostly antialiased edge. This is the hue one
+     step further down: 5.83:1 computed, 5.4:1 measured, 6.56:1 on cream. Ornament
+     hairlines keep using --ab-brass above; anything that is TEXT uses this. */
+  --ab-brass-ink: #705515;
+}
+
+.ab-s {
+  position: relative;
+  padding-block: var(--ab-pad);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+.ab-s--deep {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+.ab-s--warm {
+  background: var(--ground-warm);
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED. `max-width` without `margin-inline: auto`
+   is invisible at 1440 and 462px wrong at 2531; that shipped on this site once. */
+.ab-rail {
+  max-width: calc(var(--ab-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* every photograph carries both crops; a portrait viewport crops a landscape
+   frame hard enough to lose the subject (DESIGN-SYSTEM §1) */
+.ab img,
+.ab video {
+  object-position: var(--ab-op, 50% 50%);
+}
+@media (max-width: 719px) {
+  .ab img,
+  .ab video {
+    object-position: var(--ab-op-n, var(--ab-op, 50% 50%));
+  }
+}
+
+/* focus: the global treatment is a cream ring in a dark halo, right on the
+   reversed plate and invisible on paper. (0,3,0) beats the global (0,1,0). */
+.ab-s:not(.ab-s--deep) :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark, the site's own object ─────────────────────────────
+   11.5px Inter, 0.19em, uppercase, with a Fraunces numeral. On the reversed
+   plate teal is 2.44:1 and clay 4.2:1 — neither carries an 11.5px label — so
+   the mark goes cream there and the accent becomes a sand rule, which is the
+   one thing sand is allowed to be. */
+.ab-eyebrow {
+  margin: 0 0 clamp(1.5rem, 3.2vw, 2.6rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.ab-eyebrow__n {
+  flex: none;
+  font: 400 12.5px/1 var(--font-display);
+  letter-spacing: 0.04em;
+  color: var(--ab-brass-ink);
+}
+.ab-eyebrow__rule {
+  flex: none;
+  width: clamp(1.6rem, 4vw, 3.4rem);
+  height: 1px;
+  background: var(--ab-brass);
+  transform: translateY(-3px);
+}
+.ab-eyebrow--onDeep {
+  color: var(--ink-onDark);
+}
+.ab-eyebrow--onDeep .ab-eyebrow__n {
+  color: var(--sand);
+}
+.ab-eyebrow--onDeep .ab-eyebrow__rule {
+  background: var(--ab-sand);
+}
+
+/* ── reveals ──────────────────────────────────────────────────────────────
+   Opt-in through `.is-live`, added by the island only after it has decided it
+   is allowed to run. A reader whose JavaScript never arrives keeps the whole
+   page, because nothing already painted is hidden by CSS that is not gated on
+   that class. Under prefers-reduced-motion the island returns without adding
+   it, so every start state below is inert. */
+.ab.is-live [data-ab] {
+  opacity: 0;
+}
+.ab.is-live [data-ab='up'] {
+  transform: translateY(22px);
+}
+.ab.is-live [data-ab].ab-on {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.85s var(--ease),
+    transform 1.05s var(--ease);
+  transition-delay: var(--ab-d, 0ms);
+}
+
+/* THE WIPE GOES ON THE CHILD, NEVER ON THE OBSERVED ELEMENT. Chromium computes
+   an IntersectionObserver's intersection rect AFTER clips, so an element
+   carrying a clip to zero reports ratio 0 and never fires — it stays invisible
+   forever. The figure is observed; its <img> is what is clipped. */
+.ab.is-live [data-ab='open'] > img {
+  clip-path: inset(0 0 0 100%);
+}
+.ab.is-live [data-ab='open'].ab-on > img {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.15s var(--ease);
+  transition-delay: var(--ab-d, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab [data-ab] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ab [data-ab='open'] > img {
+    clip-path: none !important;
+  }
+  .ab * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   §03 · OUR APPROACH — THE APERTURE OPENS.
+
+   Three pictures step leftward across the measure, each one wider than the
+   last, and the type column beside them never moves: the paragraphs keep one
+   left axis and one measure all the way down, which is what lets the pictures
+   be the only thing that changes. The void between text and picture is the
+   time not yet elapsed, and it is consumed as you descend.
+
+   Then Transmission. It is not a fourth step in the series — it crosses the
+   page, bleeds off the left edge that the other three never touch, stands
+   taller than anything in either section, and is the only moving image on the
+   route. The client's fourth paragraph says why: Yoga "has traditionally
+   moved through teacher, student, practice and lived experience", and a
+   still photograph of a hand on a back is the one thing that cannot say so.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ab-ap {
+  --ab-col: clamp(15.5rem, 24vw, 25rem);
+  --ab-gap: clamp(1.4rem, 3.6vw, 3.6rem);
+  /* On the About page §03 has ten sections above it. On THIS route it is the first thing
+     under a fixed navigation pill, and at 320 the section's own top padding clamps to
+     67px against a pill 71px deep — which put the register mark behind it. */
+  padding-top: calc(var(--ab-pad) + clamp(2.6rem, 6vw, 4rem));
+  padding-bottom: 0; /* item 04 bleeds to the section's own foot */
+}
+
+/* the lead. Three clauses on three lines, and a fourth line left open beneath
+   them — the client names three of the four, and the blank is the fourth's
+   place. It is a hairline and nothing else: no invented word stands in it. */
+.ab-ap__lead {
+  margin: 0 0 clamp(3rem, 7vw, 6rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 340;
+  font-size: var(--ab-big);
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  color: var(--ink-onDark);
+  max-width: 24ch;
+}
+.ab-ap__clause {
+  display: block;
+}
+.ab-ap__clause:nth-child(2) {
+  font-style: italic;
+  color: rgba(251, 247, 242, 0.93);
+}
+.ab-ap__open {
+  display: block;
+  width: clamp(4rem, 9vw, 7.5rem);
+  height: 1px;
+  margin-top: calc(0.58em * 1.16);
+  background: var(--ab-sand);
+}
+
+/* the three standing terms */
+.ab-ap__run {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ab-ap__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ab-gap);
+  padding-bottom: clamp(3.2rem, 7vw, 6.5rem);
+}
+.ab-ap__txt {
+  flex: 0 1 var(--ab-col);
+  min-width: 0;
+}
+.ab-ap__n {
+  display: block;
+  margin-bottom: 0.7rem;
+  font: 400 var(--ab-small) / 1 var(--font-display);
+  letter-spacing: 0.08em;
+  color: var(--sand);
+}
+.ab-ap__name {
+  margin: 0 0 0.62em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--ab-mid);
+  line-height: 1.12;
+  letter-spacing: -0.004em;
+  color: var(--ink-onDark);
+}
+.ab-ap__body {
+  margin: 0;
+  font-size: var(--ab-read);
+  line-height: 1.66;
+  color: rgba(251, 247, 242, 0.82);
+}
+
+/* the aperture. `--ab-w` is a percentage of the rail, so the three widths are
+   measured against one constant and the growth is a fact rather than a feel. */
+.ab-ap__fig {
+  flex: 0 0 auto;
+  width: var(--ab-w);
+  margin: 0 0 0 auto;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: rgba(251, 247, 242, 0.05);
+}
+.ab-ap__fig img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ab-ap__row:nth-child(1) .ab-ap__fig {
+  --ab-w: 26%;
+}
+.ab-ap__row:nth-child(2) .ab-ap__fig {
+  --ab-w: 44%;
+}
+.ab-ap__row:nth-child(3) .ab-ap__fig {
+  --ab-w: 66%;
+}
+
+/* ── 04 TRANSMISSION ──────────────────────────────────────────────────────
+   Full bleed, and the picture is the tall one. A 1080×1920 source in a wide
+   band is exactly the failure this section is replacing — "a thin band sliced
+   by the section edge, a hand on a back and nothing else" — so the frame here
+   stays portrait at every width and the type goes beside it, never on it. */
+.ab-ap__last {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+  align-items: stretch;
+  border-top: 1px solid var(--ab-hair-onDeep);
+}
+.ab-ap__stage {
+  position: relative;
+  margin: 0;
+  height: min(88svh, 820px);
+  overflow: hidden;
+  background: #0d1712;
+}
+.ab-ap__stage img,
+.ab-ap__stage video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The <video> carries NO poster attribute: a poster is fetched even when `src`
+   is never set, and three of them cost this site 948 KB on every device once
+   already. The <img> beneath IS the poster, and it is the whole picture for
+   every reader who never gets the clip — narrow viewports, reduced motion,
+   Save-Data, 2G/3G, or no JavaScript at all. */
+.ab-ap__vid {
+  opacity: 0;
+  transition: opacity 0.9s var(--ease-io);
+}
+.ab-ap__vid.ab-live {
+  opacity: 1;
+}
+
+.ab-ap__lastTxt {
+  align-self: center;
+  padding-block: clamp(3rem, 7vw, 6rem);
+  padding-inline: clamp(1.6rem, 4.6vw, 5rem) var(--rail);
+  max-width: 46rem;
+}
+.ab-ap__lastTxt .ab-ap__name {
+  font-size: clamp(1.5rem, 1.05rem + 2vw, 3.2rem);
+  margin-bottom: 0.5em;
+}
+.ab-ap__lastTxt .ab-ap__body {
+  font-size: clamp(1.02rem, 0.94rem + 0.58vw, 1.42rem);
+  color: rgba(251, 247, 242, 0.88);
+  max-width: 36ch;
+}
+
+/* THE CLIP IS 1080 PIXELS WIDE AND THAT IS THE CEILING. At 2531 a 44fr column is 1113px,
+   which upscales the source and softens the one moving frame in the pair; 40fr is 1012px
+   and stays inside it. The type grows into the space that gives back. */
+@media (min-width: 1700px) {
+  .ab-ap__last {
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+  }
+}
+
+@media (max-width: 899px) {
+  .ab-ap {
+    --ab-col: 100%;
+  }
+  .ab-ap__row {
+    display: block;
+  }
+  .ab-ap__fig {
+    margin-top: clamp(1.1rem, 3.5vw, 1.8rem);
+  }
+  .ab-ap__row:nth-child(1) .ab-ap__fig {
+    --ab-w: 62%;
+  }
+  .ab-ap__row:nth-child(2) .ab-ap__fig {
+    --ab-w: 80%;
+  }
+  .ab-ap__row:nth-child(3) .ab-ap__fig {
+    --ab-w: 100%;
+  }
+  .ab-ap__lead {
+    max-width: 18ch;
+  }
+  .ab-ap__last {
+    display: block;
+  }
+  .ab-ap__stage {
+    height: min(72svh, 560px);
+  }
+  .ab-ap__lastTxt {
+    padding-inline: var(--rail);
+    padding-block: clamp(2rem, 7vw, 3rem) 0;
+    max-width: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   §04 · HOW WE TEACH — THE RULED LEAF.
+
+   One ruling, evenly pitched, is the page's clock. It never changes rate.
+   What changes is how often anything is written on it: the eight practices
+   sit at rows 1, 3, 5, 8, 11, 15, 20 and 26, so the gaps run 2, 2, 3, 3, 4,
+   5, 6 and a reader descending at one speed meets them at eight different
+   rates. Nothing is labelled with a week or a month — the client has supplied
+   no timetable and none is invented here; the rhythm is the whole claim.
+
+   Then the ruling outlasts its entries. The closing sentence is written on
+   it, and the lines carry on blank past the last of them and off the foot of
+   the page. That is the section's argument, in the geometry, at rest:
+   teacher education "is not only about learning how to conduct a class".
+
+   Row positions are custom properties so a phrase that wraps on a phone never
+   lands on top of the next entry, and so the plate and the closing sentence
+   can move without any of the eight moving.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ab-te {
+  /* The ruling does not stop before the section does: no bottom padding, and the last
+     lines dissolve into the ground exactly at the seam. A rule cut by a section edge
+     reads as continuing; a rule that stops 200px short reads as having run out. */
+  padding-bottom: 0;
+
+  /* the ruling's pitch. Every line-height in this section is this value, so anything
+     written here — a wrapped phrase, the closing sentence — lands on a rule. */
+  --ab-line: 2.5rem;
+  --ab-gut: 3.1rem;
+  --ab-cgap: clamp(1.1rem, 2.6vw, 2.6rem);
+  --ab-rows: 42;
+  --ab-plate: 4;
+  --ab-plateSpan: 8;
+  --ab-close: 30;
+}
+
+.ab-te__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(1.6rem, 5vw, 5rem);
+  align-items: end;
+  margin-bottom: clamp(2.6rem, 6vw, 4.5rem);
+}
+.ab-te__lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 340;
+  font-size: var(--ab-big);
+  line-height: 1.1;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+  max-width: 13ch;
+}
+.ab-te__open {
+  margin: 0;
+  font-size: var(--ab-read);
+  line-height: 1.68;
+  color: var(--ink-soft);
+  max-width: 44ch;
+}
+.ab-te__prompt {
+  margin: 0 0 clamp(1rem, 2.4vw, 1.7rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.02rem, 0.96rem + 0.42vw, 1.26rem);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* THE LEAF. The ruling is a background, so it is exact, free and never a
+   thousand elements; the grid rows are the same pitch, so everything written
+   on the page lands on a line — including a phrase that wraps, whose second
+   line falls on the next rule exactly as it would on real ruled paper. */
+.ab-te__leaf {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 38%);
+  column-gap: var(--ab-cgap);
+  grid-auto-rows: var(--ab-line);
+  background-image:
+    linear-gradient(to bottom, rgba(242, 233, 222, 0) 88%, var(--ground-warm) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--ab-line) - 1px),
+      var(--ab-hair) calc(var(--ab-line) - 1px),
+      var(--ab-hair) var(--ab-line)
+    );
+}
+/* the margin gauge: one hairline down the leaf with a tick at each entry, and
+   it keeps going after the eighth. It fades where the ruling fades. */
+.ab-te__gauge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--ab-brass) 0, var(--ab-brass) 86%, rgba(138, 107, 31, 0) 100%);
+}
+
+/* The entries are a real <ol> — never `display: contents`, which has taken list semantics
+   away from assistive technology in shipping browsers. It is a nested grid on the SAME
+   pitch as the leaf and starting on the same line, so every entry lands on a rule. */
+.ab-te__entries {
+  grid-column: 1;
+  grid-row: 1 / 28;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-auto-rows: var(--ab-line);
+}
+.ab-te__entry {
+  grid-column: 1;
+  grid-row: var(--ab-r);
+  align-self: start;
+  display: flex;
+  align-items: flex-start;
+}
+.ab-te__n {
+  position: relative;
+  flex: 0 0 var(--ab-gut);
+  margin-right: var(--ab-cgap);
+  padding-left: 0.95rem;
+  font: 400 var(--ab-small) / var(--ab-line) var(--font-display);
+  letter-spacing: 0.06em;
+  color: var(--ab-brass-ink);
+  white-space: nowrap;
+}
+.ab-te__n::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(var(--ab-line) / 2);
+  width: 0.58rem;
+  height: 1px;
+  background: var(--ab-brass);
+}
+.ab-te__w {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.02rem, 0.9rem + 0.72vw, 1.42rem);
+  line-height: var(--ab-line);
+  letter-spacing: -0.002em;
+  color: var(--ink);
+}
+
+/* the plate, tipped in over the ruling — the one photograph in this section */
+.ab-te__plate {
+  grid-column: 2;
+  grid-row: var(--ab-plate) / span var(--ab-plateSpan);
+  margin: 0;
+  align-self: stretch;
+  overflow: hidden;
+  background: var(--sandstone);
+  box-shadow: 0 0 0 1px rgba(36, 29, 24, 0.1);
+}
+.ab-te__plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* the closing sentence is WRITTEN ON THE SAME LINES — one measure, one pitch, indented to
+   the axis the eight phrases share, so it reads as the next thing entered on the page
+   rather than as a conclusion set apart from it */
+.ab-te__close {
+  grid-column: 1;
+  grid-row: var(--ab-close);
+  align-self: start;
+  margin: 0;
+  padding-left: calc(var(--ab-gut) + var(--ab-cgap));
+  max-width: calc(47ch + var(--ab-gut) + var(--ab-cgap));
+  font-size: var(--ab-read);
+  line-height: var(--ab-line);
+  color: var(--ink);
+}
+.ab-te__tail {
+  grid-column: 1;
+  grid-row: var(--ab-rows);
+  height: var(--ab-line);
+}
+
+@media (max-width: 999px) {
+  .ab-te {
+    --ab-line: 2.2rem;
+    --ab-gut: 2.5rem;
+    --ab-rows: 50;
+    --ab-plate: 30;
+    --ab-plateSpan: 8;
+    --ab-close: 40;
+  }
+  .ab-te__head {
+    display: block;
+  }
+  .ab-te__lead {
+    max-width: 16ch;
+    margin-bottom: clamp(1.4rem, 4vw, 2.2rem);
+  }
+  .ab-te__leaf {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ab-te__plate {
+    grid-column: 1;
+  }
+}
+@media (max-width: 559px) {
+  .ab-te {
+    --ab-line: 2.05rem;
+    --ab-gut: 2.15rem;
+    --ab-rows: 58;
+    --ab-plate: 31;
+    --ab-plateSpan: 9;
+    --ab-close: 43;
+  }
+}
+
+/* ── the ground below, so the pair can be driven to its end ─────────────── */
+.ab-foot {
+  padding-block: clamp(6rem, 18vw, 16rem);
+  background: var(--ground);
+}
+.ab-foot__mark {
+  width: clamp(3rem, 8vw, 6rem);
+  height: 1px;
+  background: var(--ab-brass);
+}
