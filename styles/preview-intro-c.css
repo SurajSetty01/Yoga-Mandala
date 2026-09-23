@@ -1,0 +1,439 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   PREVIEW — ABOUT · 01 INTRODUCTION, CONCEPT C.
+   Owned solely by its agent. EVERY selector is namespaced `.ic-`, the root
+   element included: a bare two-letter class is the shape that took the site
+   down once, so there is no `.ic` here, only `.ic-page`.
+   (Never a bare two-letter class. `.in` is the sitewide reveal class, and
+   claiming it once flattened every flex container on every page.)
+
+   THE MECHANIC — A PILE OF PRINTS PARTS AND THE WORDS RUN DOWN THE GAP.
+
+   The section is a dark table carrying twelve prints from one teacher training.
+   In its start state the pile is SQUARED UP: every print at 0°, pushed in
+   toward the middle, slightly enlarged, overlapping its neighbours, the
+   channel closed to a seam. Then it RELAXES. Each print settles
+   back to the angle a hand left it at and the two banks draw apart, opening a
+   channel down the middle of the table, and the client's five sentences are
+   what is underneath.
+
+   That is why there is no right-hand side to be empty: there are two banks of
+   photographs and a channel between them. The composition cannot be divided
+   into a text half and a picture half at any width.
+
+   BELOW 1000px the channel turns ninety degrees — the same twelve prints in
+   five bands running off both edges, the sentences in the gaps between them,
+   the same squaring-up and the same relaxation. The DOM is identical; only
+   `.ic-run` changes from `display: contents` to a flex row.
+
+   THREE THINGS THAT ARE MEASURED, NOT CHOSEN:
+   · No type is ever set on a photograph. Every sentence stands on the table,
+     whose colour is a constant, so its contrast does not depend on the crop or
+     the viewport (DESIGN-SYSTEM §1). Cream on --ground-deep is ~15.8:1.
+   · The pencilled archive number sits on the print's PAPER margin, which is
+     also a flat known ground — --ink-soft on #FBF7F2 is 6.9:1. It is never on
+     the picture, where it would be a gradient problem.
+   · The whole drawing is expressed in `cqw` of one capped, centred container,
+     so it is the same drawing at 1000px and at 2560 rather than a layout that
+     spreads until it falls apart. `margin-inline: auto` on that cap is not
+     decoration: without it the pile is 462px off at 2531 (DESIGN-SYSTEM §8).
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.ic-page {
+  display: block;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+/* The page above and below. On the real page §01 arrives under the hero and is
+   followed by §02; here those are bands of the page's own ground, so the
+   section is entered rather than landed on and its spacing reads true. */
+.ic-above {
+  height: clamp(5rem, 15svh, 9.5rem);
+  background: var(--ground);
+}
+.ic-below {
+  height: clamp(14rem, 42svh, 26rem);
+  background: var(--ground);
+}
+
+.ic-sec {
+  position: relative;
+  background: var(--ground);
+  /* only x is clipped — prints run off both edges of the table on purpose, and
+     nothing may escape sideways between 320 and 2560. */
+  overflow-x: clip;
+}
+
+/* ── the register mark ────────────────────────────────────────────────────────
+   The same object as `.apr-eyebrow` on the live /about/: same size, same
+   tracking, same brass rule, same display numeral. It sits on the paper above
+   the table, because that is where the page's own section marks sit and it is
+   how a reader knows this dark band is §01 of that document. */
+.ic-lead {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding: clamp(2.2rem, 5vw, 4rem) var(--rail) clamp(1.7rem, 3.6vw, 2.8rem);
+}
+.ic-eyebrow {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.ic-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.ic-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
+}
+
+/* ── the table ────────────────────────────────────────────────────────────────
+   Full bleed, so the pile genuinely runs off both sides of the screen; the
+   drawing inside it is capped and centred. `clip` rather than `hidden` so this
+   never becomes a scroll container. */
+.ic-table {
+  --ic-drift: 0;
+  position: relative;
+  background: var(--ground-deep);
+  overflow: clip;
+  padding-block: clamp(2.2rem, 5vw, 4.4rem);
+}
+/* the two hairlines a plate has where it meets the paper above and below it */
+.ic-table::before,
+.ic-table::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(138, 107, 31, 0.5);
+}
+.ic-table::before { top: 0; }
+.ic-table::after { bottom: 0; }
+
+.ic-stageWrap {
+  /* 148rem, not 128: at 2531 a 2048 cap leaves a 240px margin of bare table on
+     each side and the pile stops running off the screen, which is half of what
+     makes it a pile. 2368 keeps the bleed and still caps the drawing. */
+  width: min(100%, 148rem);
+  margin-inline: auto;
+  container-type: inline-size;
+}
+.ic-stage {
+  position: relative;
+  /* the drawing's proportion, as a FLOOR rather than a lock: the prints are all
+     placed in cqw so they keep this shape, and if a sentence needs another line
+     at some width the table simply grows under it instead of overflowing. */
+  min-height: calc(100cqw / 1.45);
+  padding-block: 4.6cqw 4.5cqw;
+  /* the words sit in the middle of the table's depth as well as its width. Above
+     about 1900px the pile is taller than the five sentences need, and without
+     this they stack at the top and leave a third of the table bare beneath them. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ── one print ────────────────────────────────────────────────────────────────
+   `.ic-print` carries the placement and the depth drift; `.ic-print__p` is the
+   paper, and carries the opening. Two elements because the drift is written
+   every frame and the opening is a transition — on one element they would
+   fight. */
+.ic-run { display: contents; }
+
+.ic-print {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  z-index: var(--z, 1);
+  transform: translateY(calc(var(--dr, 0) * var(--ic-drift) * 9px));
+}
+.ic-print__p {
+  position: relative;
+  display: block;
+  /* the paper a print is cut on: a little at the sides and top, more at the
+     bottom, which is where a hand holds it and where anything gets written. */
+  padding: 0.55cqw 0.55cqw 0.7cqw;
+  background: #fbf7f2;
+  transform: rotate(var(--rot));
+  box-shadow:
+    0 1.4cqw 2.6cqw -1cqw rgba(0, 0, 0, 0.62),
+    0 0.2cqw 0.5cqw rgba(0, 0, 0, 0.38);
+  transition:
+    transform 1.15s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.ic-print--marked .ic-print__p { padding-bottom: 2.5cqw; }
+
+.ic-print__img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: var(--op, 50% 50%);
+  background: #1a2b23;
+}
+.ic-print--wide .ic-print__img { aspect-ratio: 3 / 2; }
+.ic-print--tall .ic-print__img { aspect-ratio: 2 / 3; }
+.ic-print--band .ic-print__img { aspect-ratio: 16 / 9; }
+
+/* the archive number pencilled in the margin. The client's own file number —
+   nothing dated, named or invented — and it is what makes the pile read as
+   evidence from one week rather than as decoration. */
+.ic-print__mark {
+  position: absolute;
+  left: 0.9cqw;
+  bottom: 0.55cqw;
+  font: 500 clamp(8px, 0.72cqw, 12px) / 1 var(--font-text);
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+}
+.ic-print__mark::before {
+  content: '';
+  display: inline-block;
+  width: 1.1cqw;
+  min-width: 8px;
+  height: 1px;
+  margin-right: 0.55cqw;
+  vertical-align: middle;
+  background: var(--brass);
+}
+
+/* ── the words in the channel ─────────────────────────────────────────────────
+   One measure, centred on the table, with each sentence taking the width it
+   wants inside it — so the channel's inner edge is ragged on both sides and
+   the reader's eye travels rather than running down a ruled column. */
+.ic-l {
+  position: relative;
+  z-index: 9;
+  width: min(31cqw, 44rem);
+  margin-inline: auto;
+  color: var(--ink-onDark);
+  text-wrap: pretty;
+}
+
+.ic-l--1 {
+  margin-block: 0 0;
+  /* display type takes a narrower measure than body text does, so the channel
+     is not one ruled column all the way down */
+  width: min(29cqw, 40rem);
+  font: 400 clamp(1.6rem, 2.82cqw, 3.4rem) / 1.14 var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 40, 'WONK' 0;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+.ic-l--2,
+.ic-l--3,
+.ic-l--4 {
+  font: 400 clamp(0.96rem, 1.31cqw, 1.35rem) / 1.62 var(--font-text);
+  color: var(--ink-onDark-soft);
+  letter-spacing: 0.002em;
+}
+.ic-l--2 { margin-block: 5cqw 0; }
+.ic-l--3 { margin-block: 4.4cqw 0; }
+.ic-l--4 { margin-block: 4.4cqw 0; }
+
+/* the fifth line is the one the section is FOR, so it comes back up to display
+   type — the same face as line 1, italic, at two thirds its size. The section
+   opens on a claim and closes on a belief, and they are the two things set in
+   Fraunces. */
+.ic-l--5 {
+  margin-block: 5.4cqw 0;
+  width: min(33cqw, 46rem);
+  font: italic 400 clamp(1.18rem, 1.86cqw, 2.25rem) / 1.38 var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 40, 'WONK' 0;
+  color: var(--ink-onDark);
+  letter-spacing: -0.004em;
+}
+/* the brass tick the rest of the page uses to mark a closing line */
+.ic-l--5::before {
+  content: '';
+  display: block;
+  width: 2.6cqw;
+  min-width: 26px;
+  height: 1px;
+  margin-bottom: 1.5cqw;
+  background: var(--brass);
+}
+
+/* ── THE OPENING ──────────────────────────────────────────────────────────────
+   The start state is scoped to `.js`, which the root layout sets before first
+   paint, so with JavaScript off the pile is simply already open and every word
+   is already there. Nothing in this section is reachable only through motion.
+
+   Squared up: every print at 0°, pushed in toward the middle by `--ic-shift`,
+   and 3.5% larger so the overlaps close and the channel shuts to a seam.
+
+   `--ic-shift` is declared on the table but written in `cqw`: an unregistered
+   custom property is substituted as a token stream and computed where it is
+   USED, which is the print — inside the stage's container. So it measures the
+   capped drawing, not the viewport, and the squeeze is the same fraction of the
+   pile at 1000px as at 2560. */
+.js .ic-table:not(.is-open) .ic-print__p {
+  transform: translateX(calc(var(--k) * var(--ic-shift))) rotate(0deg) scale(1.035);
+}
+.js .ic-table:not(.is-open) .ic-l {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.ic-l {
+  transition:
+    opacity 0.85s var(--ease),
+    transform 0.95s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.ic-table {
+  --ic-shift: clamp(3rem, 13cqw, 13.5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .ic-table:not(.is-open) .ic-print__p {
+    transform: rotate(var(--rot));
+  }
+  .js .ic-table:not(.is-open) .ic-l {
+    opacity: 1;
+    transform: none;
+  }
+  .ic-print,
+  .ic-print__p,
+  .ic-l {
+    transition: none !important;
+  }
+  .ic-print { transform: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE NARROW LAYOUT — the channel turned ninety degrees.
+
+   Under 1000px there is no room for two banks and a measure between them, so
+   the same twelve prints become five bands running off both edges of the table
+   and the sentences sit in the gaps the bands leave. Same pile, same squaring
+   up, same relaxation; the run is a flex row instead of `display: contents`.
+   ══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 999px) {
+  .ic-stage {
+    display: block;
+    min-height: 0;
+    padding-block: clamp(1.4rem, 5vw, 2.6rem) clamp(2rem, 7vw, 3.4rem);
+    padding-inline: var(--rail);
+  }
+
+  .ic-run {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    /* the band is wider than the table, so both ends of it run off the edge */
+    --ic-bleed: clamp(1.1rem, 5.5vw, 4rem);
+    width: calc(100% + 2 * var(--ic-bleed));
+    margin-inline: calc(-1 * var(--ic-bleed));
+  }
+
+  .ic-print {
+    position: static;
+    width: auto;
+    flex: 0 0 auto;
+    transform: translateY(calc(var(--dr, 0) * var(--ic-drift) * 6px));
+  }
+  /* a band of two, and a band of three. The portraits are given a narrower box
+     than the landscapes in both, or a single tall print would set the height of
+     the whole band and the section would run to four screens on a phone. */
+  .ic-run--2 > .ic-print { width: 57%; }
+  .ic-run--2 > .ic-print + .ic-print { width: 53%; }
+  .ic-run--3 > .ic-print { width: 45%; }
+  .ic-run--2 > .ic-print--tall { width: 39%; }
+  .ic-run--3 > .ic-print--tall { width: 33%; }
+  .ic-run > .ic-print + .ic-print { margin-left: -7%; }
+  .ic-run > .ic-print:nth-child(2) { margin-top: 7%; z-index: 8; }
+  .ic-run > .ic-print:nth-child(3) { margin-top: -3%; z-index: 6; }
+
+  .ic-print__p {
+    padding: 1.6% 1.6% 2%;
+    box-shadow:
+      0 14px 26px -10px rgba(0, 0, 0, 0.66),
+      0 2px 5px rgba(0, 0, 0, 0.4);
+  }
+  .ic-print__img { object-position: var(--op-n, var(--op, 50% 50%)); }
+
+  /* A BAND'S OUTER PRINTS RUN OFF THE TABLE, so their paper margin goes with them
+     and a filing note written there would be cut in half or covered by the print
+     lying over it. On the narrow layout the note is therefore carried only by a
+     band's MIDDLE print, which is always whole and always on top — and the wide
+     bottom margin goes with it, so no print is left with an empty hem. */
+  .ic-print--marked .ic-print__p { padding-bottom: 2%; }
+  .ic-print__mark { display: none; }
+  .ic-run > .ic-print:nth-child(2).ic-print--marked .ic-print__p { padding-bottom: 7%; }
+  .ic-run > .ic-print:nth-child(2) .ic-print__mark {
+    display: block;
+    left: 3%;
+    bottom: 1.8%;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+  }
+  .ic-run > .ic-print:nth-child(2) .ic-print__mark::before {
+    width: 12px;
+    min-width: 12px;
+    margin-right: 6px;
+  }
+
+  .ic-table { --ic-shift: clamp(1.6rem, 7vw, 3.4rem); }
+
+  .ic-l {
+    width: auto;
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+  .ic-l--1 {
+    margin-block: clamp(1.8rem, 6vw, 2.8rem) clamp(1.8rem, 6vw, 2.8rem);
+    font-size: clamp(1.55rem, 6.6vw, 2.5rem);
+  }
+  .ic-l--2,
+  .ic-l--3,
+  .ic-l--4 {
+    margin-block: clamp(1.5rem, 5vw, 2.4rem) clamp(1.5rem, 5vw, 2.4rem);
+    font-size: clamp(0.95rem, 3.85vw, 1.12rem);
+    line-height: 1.66;
+  }
+  .ic-l--5 {
+    width: auto;
+    margin-block: clamp(1.7rem, 5.5vw, 2.6rem) 0;
+    font-size: clamp(1.2rem, 4.9vw, 1.7rem);
+  }
+  .ic-l--5::before {
+    width: 26px;
+    margin-bottom: clamp(0.8rem, 3vw, 1.2rem);
+  }
+}
+
+/* The tablet band. Left alone, a 768-wide band of prints is 480px tall and the
+   sentences between them read as captions to it; capping the pile's measure puts
+   the two back in proportion without changing anything about how it is built. */
+@media (min-width: 640px) and (max-width: 999px) {
+  .ic-stage { padding-inline: max(var(--rail), calc((100% - 40rem) / 2)); }
+}
+
+/* the very narrow end. Nothing wraps — a band that breaks into two rows stops
+   being one handful of prints — the prints simply take a little more of the
+   band each and lean on each other harder. */
+@media (max-width: 439px) {
+  .ic-run--2 > .ic-print { width: 60%; }
+  .ic-run--2 > .ic-print + .ic-print { width: 56%; }
+  .ic-run--3 > .ic-print { width: 48%; }
+  .ic-run--2 > .ic-print--tall { width: 42%; }
+  .ic-run--3 > .ic-print--tall { width: 35%; }
+  .ic-run > .ic-print + .ic-print { margin-left: -9%; }
+}
