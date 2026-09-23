@@ -530,67 +530,302 @@
 }
 
 /* ══ 01 · INTRODUCTION ════════════════════════════════════════════════════
-   FIVE LINES OPENING LIKE A FAN.
+   THE ROOM IS BEHIND THE PAGE.
 
-   The client's five sentences, in the client's order. The first is the shortest
-   and it is the claim, so it is set largest on the narrowest measure; each line
-   after it is wider and quieter, and the warm paper they are printed on widens
-   with them. Nothing here is a photograph — the page has had one full-bleed
-   room already and is about to open another.
+   A sheet of paper is laid over one photograph of the hall, and the only way
+   the room is ever seen is through the slits the paragraph's own leading
+   leaves and past the ragged ends of its lines. The picture's top is where
+   sentence two begins, its bottom is where sentence five ends, its left is the
+   text's left, and its right edge is wherever each line happens to stop.
+   Delete the words and there is no photograph at all, only cream.
+
+   AND THE APERTURE IS THE COMPOSITION. The two display sentences run the full
+   width of the page; the three prose sentences hold a reading measure. The
+   difference is a wedge of room standing open down the right of the block,
+   pinched shut top and bottom by display lines that cross the whole page, its
+   left boundary a staircase cut by the rag — 213px wide at 1440, 608px at
+   2531. That is what makes the photograph resolve as a PLACE rather than a
+   texture, and it is what separates this from the home page's section 03,
+   where a picture is clipped INTO the letterforms: here the glyphs are opaque
+   ink on opaque paper and the picture survives in the space between them.
+
+   HOW IT IS BUILT, and why:
+     · each visual line's paper is the INLINE BACKGROUND of the text itself
+       (`box-decoration-break: clone`), so the paper hugs the rag for free, at
+       every viewport, with no measurement, no clip-path and no mask. An inline
+       background paints the font's content box, not the line box, so the
+       leading above and below each strip is a slit by construction — increase
+       `line-height` and the room opens.
+     · the photograph is CONTAINED BY THE TEXT: its box is the bounding box of
+       sentences 2-5, extended by half a slit top and bottom, and inset from
+       the page's right edge so the long lines run past it onto bare paper.
+     · the first sentence stands on bare paper. The room arrives at the exact
+       line where the copy widens from "a practice on the mat" to "a vast body
+       of knowledge", and is behind every line after it.
+
+   CONTRAST IS STRUCTURAL HERE, NOT TUNED. No glyph is ever on the photograph:
+   every word is ink on its own opaque paper strip, measured at 15.58:1 at all
+   seven viewports, and a re-wrap cannot change that. There is no scrim to
+   chase per viewport — which DESIGN-SYSTEM §1 records as whack-a-mole.
+
+   THE PICTURE IS MEASURED TOO. Composited, the room runs 8-199 in luminance
+   with a median of 82-101; paper is 248. Nothing in it comes within 49 of the
+   page, so a slit is never mistaken for paper, and nothing is a black smear.
+   Below 720 the frame is a NATIVE PORTRAIT still: the aperture there is an
+   aspect of 0.30-0.41, and a 3:2 landscape source into that keeps 20-27% of
+   its width where a 2:3 portrait source keeps 45-61%.
+
+   TWO PROPERTIES, both with a FINISHED default below, so the page with no
+   JavaScript and the page under prefers-reduced-motion are the composed
+   section rather than its start state:
+     --apr-intro-open  0 → 1  the five blocks draw apart, the room fades up.
+         It is flipped by the page's OWN reveal (`[data-ap]` → `.in`), with
+         what `.in` means redefined for this one block, so this section adds no
+         JavaScript of its own and no second island.
+     --apr-intro-y    -1 → 1  the room travels behind the page as it passes.
    ══════════════════════════════════════════════════════════════════════════ */
-.apr-intro__fan {
-  position: relative;
-  padding: clamp(1.8rem, 4vw, 3.4rem) 0 clamp(2rem, 4.5vw, 3.8rem);
+.apr-intro {
+  /* TWO widths, and the difference between them is the whole composition.
+     `--apr-intro-cap` is the PAGE: the width the display sentences run to, and
+     therefore the width of the photograph, because the photograph is only ever
+     as wide as the widest line. `--apr-intro-prose` is the READING MEASURE the
+     three prose sentences keep — never more than ~64 characters however wide
+     the screen gets. */
+  --apr-intro-cap: clamp(46rem, 62vw, 82rem);
+  --apr-intro-prose: min(100%, clamp(21rem, 46vw, 42rem));
+  /* the margin column at the widest viewports, and the gap beside it */
+  --apr-intro-mark: 11rem;
+  --apr-intro-mark-gap: clamp(2.5rem, 2.6vw, 4rem);
+
+  /* this section's own four voices. It does not use the page's type scale:
+     the claim and the belief have to reach the full width of the page for the
+     wedge to be bounded by sentences, and `--apr-big` tops out well short. */
+  --apr-intro-say: clamp(1.5rem, 0.82rem + 2.42vw, 4rem);
+  --apr-intro-turn: clamp(1.12rem, 0.82rem + 1.08vw, 2.2rem);
+  --apr-intro-read: clamp(1rem, 0.98rem + 0.32vw, 1.42rem);
+  --apr-intro-belief: clamp(1.24rem, 0.83rem + 1.48vw, 2.95rem);
+
+  /* the four gaps between the five sentences, widening as the block descends.
+     Close enough to the interline slits that the block reads as one ruled
+     field and not as four stacked pictures. */
+  --apr-intro-g1: clamp(1.5rem, 3.1vw, 2.3rem);
+  --apr-intro-g2: clamp(1rem, 2.1vw, 1.5rem);
+  --apr-intro-g3: clamp(1.1rem, 2.4vw, 1.7rem);
+  --apr-intro-g4: clamp(1.3rem, 2.9vw, 2.1rem);
+
+  /* the paper margin the words sit in, and therefore the overhang that keeps
+     the glyphs — not the paper — aligned to the rail */
+  --apr-intro-gut: 0.44em;
+
+  /* FINISHED DEFAULTS. The reveal only ever takes one away and gives it back. */
+  --apr-intro-open: 1;
+  --apr-intro-y: 0;
 }
-.apr-intro__fan::before {
+
+/* THE PAGE IS A PAGE: capped AND CENTRED. `max-width` without `margin-inline:
+   auto` reads correctly at 1440 and lands hundreds of px off axis at 2531 —
+   which has shipped on this site once. This is `.apr-rail`'s job everywhere
+   else on the page; this section needs its own because its cap is a measure
+   rather than the page width. The cap carries the gutter inside it. */
+.apr-intro__rail {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(var(--apr-intro-cap) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* THE NEGATIVE INLINE MARGIN IS EXACTLY THE STRIPS' OWN GUTTER, so the PAPER
+   overhangs the rail by 0.44em and the GLYPHS land on it. Aligning the paper
+   instead would push every word visibly right of the register mark above. */
+.apr-intro__page {
+  position: relative;
+  margin-inline: calc(-1 * var(--apr-intro-gut));
+}
+
+/* ── the room ─────────────────────────────────────────────────────────────
+   Absolutely positioned inside `__body`, which is the bounding box of
+   sentences 2-5 — so the photograph cannot extend past the text in any
+   direction. Inset by a negative half-slit top and bottom so the band above
+   sentence two and below sentence five matches the interline slits and the
+   block reads as one ruled field rather than as a picture with a caption. */
+.apr-intro__body {
+  position: relative;
+}
+.apr-intro__room {
+  --apr-intro-slit: 0.5rem;
+  --apr-intro-inset: 3.5%;
+  position: absolute;
+  z-index: 0;
+  /* NARROWER THAN THE PAGE, and that is what stops it being a rectangle: the
+     long lines run straight past its right edge onto bare paper, so the edge
+     only exists inside the slits and the picture ends in the rag, not a cut. */
+  inset: calc(-1 * var(--apr-intro-slit)) var(--apr-intro-inset)
+    calc(-1 * var(--apr-intro-slit)) 0;
+  overflow: hidden;
+  background: var(--forest-deep);
+  opacity: var(--apr-intro-open);
+  transition: opacity 1.15s var(--ease);
+}
+.apr-intro__room::after {
+  /* THE WASH IS FLAT, and that is a decision reversed after measuring. A
+     graded one was tried first; these two frames have opposite luminance
+     profiles — the landscape one is darkest in its top eighth (mean 70), the
+     portrait one brightest in its upper middle (163) — so any fixed-geometry
+     gradient is right for one and wrong for the other, which is the
+     whack-a-mole of DESIGN-SYSTEM §1 one layer down. The value is set by the
+     only thing it has to guarantee: that a slit can never be mistaken for the
+     page. No glyph is ever on it, so this is a picture decision, not a
+     contrast one. */
   content: '';
   position: absolute;
-  inset: 0 0 0 calc(-1 * clamp(0.9rem, 2.6vw, 2.6rem));
-  background: var(--ground-warm);
-  /* the sloping edge is measured off the five line widths below rather than
-     chosen: 31% at the top is just clear of line 1 and 86% at the foot is just
-     clear of line 5, so the paper is the shape the type makes. */
-  clip-path: polygon(0 0, 31% 0, 86% 100%, 0 100%);
-  z-index: 0;
+  inset: 0;
+  background: rgba(18, 32, 26, 0.26);
+  pointer-events: none;
 }
+.apr-intro__img {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  /* 116% of the aperture with 8% of slack at each edge, which is more than
+     twice the ±3.6% travel, so no edge can ever be exposed at any viewport.
+     `object-position` is NOT set here: `.apr img` already switches --op/--op-n
+     at 719 for the whole page, and that is the same breakpoint the <picture>
+     swaps its source on, so the frame and its crop change together. */
+  top: -8%;
+  height: 116%;
+  object-fit: cover;
+  transform: translate3d(0, calc(var(--apr-intro-y) * 3.6%), 0);
+  will-change: transform;
+}
+
+/* ── the type ─────────────────────────────────────────────────────────────
+   Every sentence is a <p> at its own measure, size and leading. Nothing is
+   centred, nothing is indented: the left edge of the block is the left edge of
+   the photograph, and the right edge of the photograph is where words stop. */
 .apr-intro__l {
   position: relative;
   z-index: 1;
-  margin: 0 0 clamp(1rem, 2.2vw, 1.9rem);
+  margin: 0;
   color: var(--ink);
+  max-width: var(--apr-intro-m, 100%);
+  transform: translate3d(
+    0,
+    calc((1 - var(--apr-intro-open)) * var(--apr-intro-i, 0) * -0.62rem),
+    0
+  );
+  transition: transform 1.05s var(--ease);
+  transition-delay: calc(var(--apr-intro-i, 0) * 45ms);
 }
-.apr-intro__l:last-child {
-  margin-bottom: 0;
+
+/* the paper each line is printed on. `clone` gives every wrapped fragment its
+   own paper, which is what makes the rag. */
+.apr-intro__t {
+  background: var(--ground);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.05em var(--apr-intro-gut) 0.09em;
 }
-.apr-intro__l--1 {
+
+/* 1 · the claim, on bare paper. No picture behind it yet. */
+.apr-intro__l--say {
+  --apr-intro-i: 0;
+  --apr-intro-m: 100%;
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-size: clamp(1.7rem, 1rem + 2.6vw, 3.4rem);
-  line-height: 1.08;
-  letter-spacing: -0.014em;
-  max-width: min(27%, 13ch);
+  font-weight: 500;
+  font-size: var(--apr-intro-say);
+  line-height: 1.2;
+  letter-spacing: -0.016em;
+  text-wrap: balance;
 }
-.apr-intro__l--2 {
-  font-size: clamp(1.12rem, 0.98rem + 0.9vw, 1.62rem);
-  line-height: 1.44;
-  max-width: min(44%, 40ch);
+
+/* 2 · the turn. One sentence, two voices, split at the client's own em dash —
+   the claim of vastness in display, the five things it contains in prose at a
+   leading wide enough to let the room through between them. */
+.apr-intro__l--turn {
+  --apr-intro-i: 1;
+  margin-top: var(--apr-intro-g1);
 }
-.apr-intro__l--3 {
-  font-size: clamp(1.04rem, 0.96rem + 0.55vw, 1.34rem);
-  line-height: 1.52;
-  max-width: min(57%, 52ch);
+.apr-intro__say {
+  display: block;
+  max-width: 100%;
+  /* balanced, because at 320 the client's em dash was landing alone on a line
+     of its own. Balancing puts words on both lines; characters are untouched. */
+  text-wrap: balance;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: var(--apr-intro-turn);
+  line-height: 1.5;
+  letter-spacing: -0.008em;
 }
-.apr-intro__l--4 {
-  font-size: clamp(0.99rem, 0.95rem + 0.32vw, 1.16rem);
-  line-height: 1.62;
-  max-width: min(68%, 62ch);
-  color: var(--ink-soft);
+.apr-intro__list {
+  display: block;
+  margin-top: 0.1rem;
+  max-width: var(--apr-intro-prose);
+  font-size: var(--apr-intro-read);
+  line-height: 2.05;
+  text-wrap: pretty;
 }
-.apr-intro__l--5 {
-  font-size: clamp(0.95rem, 0.92rem + 0.22vw, 1.08rem);
-  line-height: 1.68;
-  max-width: min(80%, 74ch);
-  color: var(--ink-soft);
+
+/* 3 · 4 · the prose. Both hold the reading measure, never the page width, and
+   the leading opens as the block descends — 2.05, 2.15, 2.25 — so the room
+   comes a little further in with every sentence, which is the passage's own
+   argument made in the typesetting. The distance between these lines' ends and
+   the page's edge is the wedge; its left boundary is their rag, which is why
+   the window has a staircase down one side and not a ruled edge. */
+.apr-intro__l--work {
+  --apr-intro-i: 2;
+  --apr-intro-m: var(--apr-intro-prose);
+  margin-top: var(--apr-intro-g2);
+  font-size: var(--apr-intro-read);
+  line-height: 2.15;
+  text-wrap: pretty;
+}
+.apr-intro__l--brings {
+  --apr-intro-i: 3;
+  --apr-intro-m: var(--apr-intro-prose);
+  margin-top: var(--apr-intro-g3);
+  font-size: var(--apr-intro-read);
+  line-height: 2.25;
+  text-wrap: pretty;
+}
+
+/* 5 · the belief, back in display and back to the full width of the page, so
+   it closes the wedge from underneath the way the turn closes it from above,
+   and the window is bounded by sentences rather than by a box. The second half
+   of the sentence — the client's own "but" — carries the italic, which is how
+   this typeface carries emphasis everywhere else on the site. */
+.apr-intro__l--belief {
+  --apr-intro-i: 4;
+  --apr-intro-m: 100%;
+  margin-top: var(--apr-intro-g4);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-size: var(--apr-intro-belief);
+  line-height: 1.86;
+  letter-spacing: -0.01em;
+}
+.apr-intro__em {
+  font-style: italic;
+}
+
+/* THE REVEAL IS THE PAGE'S OWN, WITH `.in` REDEFINED FOR THIS ONE BLOCK.
+   Everywhere else `[data-ap]` fades and rises; here a fade would make the
+   paper strips translucent over the photograph mid-transition, which is the
+   one thing this section's contrast depends on not happening. So the block
+   stays opaque and `.in` flips --apr-intro-open instead: the five sentences
+   draw apart and the room comes up through the slits that opening makes.
+   (0,4,0) and (0,5,0) against the generic rules' (0,3,0) and (0,4,0). */
+.apr.is-live .apr-intro__body[data-ap] {
+  opacity: 1;
+  transform: none;
+  --apr-intro-open: 0;
+}
+.apr.is-live .apr-intro__body[data-ap].in {
+  --apr-intro-open: 1;
 }
 
 /* ══ 02 · WHAT IS PRAṆAVA ═════════════════════════════════════════════════
@@ -1594,22 +1829,33 @@
 }
 
 @media (max-width: 719px) {
-  .apr-intro__fan::before {
-    /* a wedge needs width to read as one; below this it becomes a left riser */
-    clip-path: none;
-    inset: 0 auto 0 calc(-1 * clamp(0.9rem, 2.6vw, 2.6rem));
-    width: 3px;
-    background: var(--brass);
+  /* 01 · the wedge is gone below this width — the page and the prose are the
+     same width — so the slit is the only window left, and every leading opens
+     to give it something to be. The two display blocks are included: at 1.5
+     and 1.86 their slits measured 2px and 9px, which is a seam, not an
+     aperture. And the wash lightens, because the portrait frame is darker at
+     the bottom than the landscape one is anywhere; at 0.19 its white wall
+     composited to 233 against paper at 248, at 0.24 to 183. */
+  .apr-intro {
+    --apr-intro-prose: 100%;
   }
-  .apr-intro__l {
-    max-width: none;
+  .apr-intro__room::after {
+    background: rgba(18, 32, 26, 0.24);
   }
-  .apr-intro__l--1,
-  .apr-intro__l--2,
-  .apr-intro__l--3,
-  .apr-intro__l--4,
-  .apr-intro__l--5 {
-    max-width: none;
+  .apr-intro__say {
+    line-height: 1.78;
+  }
+  .apr-intro__list {
+    line-height: 2.2;
+  }
+  .apr-intro__l--work {
+    line-height: 2.3;
+  }
+  .apr-intro__l--brings {
+    line-height: 2.4;
+  }
+  .apr-intro__l--belief {
+    line-height: 2.05;
   }
   .apr-close__routes {
     grid-template-columns: minmax(0, 1fr);
@@ -1622,6 +1868,22 @@
   }
   .apr-dial__link {
     grid-template-columns: 2rem minmax(0, 1fr);
+  }
+}
+
+/* ══ 01 · INTRODUCTION, at the widest viewports ═══════════════════════════
+   The page keeps growing with the screen instead of stranding a column in the
+   middle of it: at 2531 the plate is 1326px of a 2531px field with a 608px
+   wedge of room standing open inside it, and the register mark on the rail to
+   its left turns the remaining margin into a margin rather than a gap.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1500px) {
+  /* The mark is NOT pulled down beside the first line here, and that was tried:
+     the plate's own paper strips are opaque and start at its left edge, so a
+     negative margin painted the section label out at 2531. It stays a clear
+     line above the plate, which is where the other nine marks are. */
+  .apr-intro__page {
+    margin-block-start: clamp(0.4rem, 0.8vw, 1rem);
   }
 }
 
@@ -1675,6 +1937,14 @@
   }
   .apr-close__routes {
     --apr-part: 0;
+  }
+  .apr-intro__body {
+    --apr-intro-open: 1 !important;
+    --apr-intro-y: 0 !important;
+  }
+  .apr-intro__l,
+  .apr-intro__room {
+    transition: none;
   }
   .apr-dial__arc {
     transition: none;

@@ -66,6 +66,9 @@ export function AboutMotion() {
 
     /* ── 2. the four properties, and the one attribute ─────────────────── */
     const hero = root.querySelector<HTMLElement>('.apr-hero');
+    /* §01 keeps its OPENING on the reveal above — `.in` on this block flips
+       --apr-intro-open in the stylesheet — and only its travel is written here. */
+    const intro = root.querySelector<HTMLElement>('.apr-intro__body');
     const stage = root.querySelector<HTMLElement>('.apr-what__stage');
     const wheel = root.querySelector<HTMLElement>('.apr-dial__wheel');
     const doors = root.querySelector<HTMLElement>('.apr-dial__doors');
@@ -83,6 +86,7 @@ export function AboutMotion() {
       return { top: r.top + scrollY, h: r.height || 1 };
     };
 
+    let bIntro: Box = { top: 0, h: 1 };
     let bStage: Box = { top: 0, h: 1 };
     let bDoors: Box = { top: 0, h: 1 };
     let bField: Box = { top: 0, h: 1 };
@@ -90,6 +94,7 @@ export function AboutMotion() {
     let heroOpen = 1;
 
     function measure() {
+      bIntro = box(intro);
       bStage = box(stage);
       bDoors = box(doors);
       bField = box(field);
@@ -109,6 +114,14 @@ export function AboutMotion() {
       const mid = y + vh / 2;
 
       if (hero) hero.style.setProperty('--apr-open', ease(clamp(y / heroOpen, 0, 1)).toFixed(4));
+
+      if (intro) {
+        /* -1 when the block's centre is a screen below the viewport's, +1 a screen above.
+           The image is 116% of its aperture with 8% of slack at each edge, which is more
+           than twice the 3.6% this drives, so no edge can ever be exposed. */
+        const p = (mid - (bIntro.top + bIntro.h / 2)) / (vh * 0.85 + bIntro.h * 0.5);
+        intro.style.setProperty('--apr-intro-y', clamp(p, -1, 1).toFixed(4));
+      }
 
       if (stage) {
         /* 0 as the plate enters from below, 1 by the time its middle has reached the
@@ -176,6 +189,7 @@ export function AboutMotion() {
       removeEventListener('load', onResize);
       root.classList.remove('is-live');
       hero?.style.removeProperty('--apr-open');
+      intro?.style.removeProperty('--apr-intro-y');
       stage?.style.removeProperty('--apr-zoom');
       field?.style.removeProperty('--apr-drift');
       routes?.style.removeProperty('--apr-part');

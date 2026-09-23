@@ -264,6 +264,45 @@ export const FRAMES = {
     '38% 44%',
   ),
 
+  /* 01 · INTRODUCTION. TWO FRAMES, ONE HALL, AND THE NARROW ONE IS A NATIVE PORTRAIT.
+
+     The aperture this section cuts is the shape of the passage, so it changes shape with
+     the viewport: at 1440 the page is 907 wide and the four sentences 644 tall, an aspect
+     of 1.17 that a 3:2 frame nearly fills; at 320 the same block is 291 by 771, an aspect
+     of 0.30. Feeding a 1.50 landscape source into THAT keeps 20% of its width and throws
+     the other 80% away, which is how an earlier draft turned a photograph into noise on a
+     phone. A 2:3 portrait source into the same aperture keeps 45%, and — because the
+     subject in it is vertical — the part that survives is the part that carries it.
+     Measured: 45% at 320 and 61% at 390, against 20% and 27% before.
+
+     Both are the same hall on the same day as the hero, and both are supported inversions
+     — one on chairs, one on the wall ropes — which is why a single honest `alt` covers
+     whichever one the browser fetches. An <img> has one alt and `<source>` cannot carry
+     its own; the alternative is two <img>s with one hidden, which downloads both.
+
+     WHY NOT A STANDING CLASS. `pr-ttc-dsc_0566` was the first choice and was rendered
+     behind these actual slits before it was dropped: it is five practitioners standing
+     with their arms raised in the open-sided hall, which is the hero's frame again one
+     screen later. Two near-identical compositions across a seam read as a repeat however
+     good each is. The inversions are the same room in a different act.
+
+     DERIVATIVES ARE NOT SYMMETRICAL AND WERE CHECKED ON DISK: the wide frame has
+     480/960/1620, the tall one only 480/960. Nothing here assumes 2560. */
+  introHall: stills(
+    'pr-ttc-dsc_0208_1',
+    [480, 960, 1620],
+    '46% 50%',
+    'Practitioners working in supported inversions on chairs and wall ropes in the training hall, under its roof beams and hanging ropes.',
+    '50% 46%',
+  ),
+  introRopes: stills(
+    'pr-ttc-dsc_0493',
+    [480, 960],
+    '50% 46%',
+    'Practitioners working in supported inversions on chairs and wall ropes in the training hall, under its roof beams and hanging ropes.',
+    '50% 46%',
+  ),
+
   /* 07 · Yoga Mandala, the one initiative this site can actually open. */
   mandalaHall: stills(
     'ss-ven0139',

@@ -20,7 +20,7 @@ import { Closing } from '@/components/about-pranava/Closing';
  * supplied. See components/about-pranava/NOTES.md.
  *
  *   hero  a window in the hall, and the two views through it move apart    deep
- *   01    five lines opening like a fan on a widening wedge of paper      paper
+ *   01    a page of paper over a room, seen only through its own leading  paper
  *   02    an enlargement you cannot place, stepping back into its room    deep
  *   03    three columns standing, and a fourth lying across their feet    paper
  *   04    a flight of stairs drawn in clay, one practice per tread        warm

@@ -19,6 +19,16 @@
    rag of the type is the right edge of the photograph. Remove the words and
    there is no picture at all, only cream.
 
+   AND THE APERTURE IS THE COMPOSITION. The two display sentences run the
+   full width of the page; the three prose sentences hold a reading measure.
+   The difference is a wedge of room standing open down the right of the block,
+   pinched shut top and bottom by display lines that cross the whole page, its
+   left boundary a staircase cut by the rag — 238px wide at 1440, 608px at
+   2531. That is what makes the photograph resolve as a PLACE rather than a
+   texture, and it is what separates this from the home page's section 03,
+   where a picture is clipped INTO the letterforms: here the glyphs are opaque
+   ink on opaque paper and the picture survives in the space between them.
+
    HOW IT IS BUILT, and why it is built this way:
 
      · each visual line's paper is the INLINE BACKGROUND of the text itself
@@ -35,6 +45,14 @@
      · the first sentence stands on bare paper. The room arrives at the exact
        line where the copy widens from "a practice on the mat" to "a vast
        body of knowledge", and it is behind every line after that.
+
+   THE PICTURE IS MEASURED, NOT ASSUMED. Composited, the room runs 8-199 in
+   luminance with a median of 82-101; paper is 248. Nothing in it comes within
+   49 of the page, so a slit is never mistaken for the paper, and nothing in it
+   is a black smear either. Below 720 the frame is a NATIVE PORTRAIT still:
+   the aperture there is an aspect of 0.32-0.43, and feeding a 3:2 landscape
+   source into that keeps 21-28% of its width, while a 2:3 portrait source
+   keeps 48-64% — and the part that survives is a vertical subject.
 
    CONTRAST IS FREE HERE, BY CONSTRUCTION. No glyph ever sits on the
    photograph: every word is ink on its own opaque paper strip (12.9:1), and
@@ -59,19 +77,26 @@
 
   --ia-pad: clamp(4.4rem, 10vw, 9rem);
 
-  /* The measure. 46rem is ~62 characters of the prose size and 52rem is ~73 at
-     the size the prose reaches past 1900 — the block grows with the viewport
-     without ever becoming a line nobody can track back. */
-  --ia-cap: clamp(46rem, 42vw, 52rem);
+  /* TWO widths, and the difference between them is the whole composition.
+     `--ia-cap` is the PAGE: the width the display sentences run to, and
+     therefore the width of the photograph, because the photograph is only ever
+     as wide as the widest line. `--ia-prose` is the READING MEASURE the three
+     prose sentences keep — never more than ~64 characters however wide the
+     screen gets. The gap between them is the window: a wedge of room standing
+     open beside the prose, pinched shut at the top and bottom by display lines
+     that cross the full page. That wedge is what makes the picture resolve as
+     a place instead of a texture, and it is cut by the type, not by a box. */
+  --ia-cap: clamp(46rem, 62vw, 82rem);
+  --ia-prose: min(100%, clamp(21rem, 46vw, 42rem));
   /* the margin column at the widest viewports, and the gap beside it */
   --ia-mark: 11rem;
   --ia-mark-gap: clamp(2.5rem, 2.6vw, 4rem);
 
   /* the type. Four voices: the claim, the turn, the prose, the belief. */
-  --ia-say: clamp(1.5rem, 1.06rem + 1.85vw, 3.15rem);
-  --ia-turn: clamp(1.12rem, 0.94rem + 0.76vw, 1.88rem);
+  --ia-say: clamp(1.5rem, 0.82rem + 2.42vw, 4rem);
+  --ia-turn: clamp(1.12rem, 0.82rem + 1.08vw, 2.2rem);
   --ia-read: clamp(1rem, 0.98rem + 0.32vw, 1.42rem);
-  --ia-belief: clamp(1.24rem, 1.02rem + 0.94vw, 2.24rem);
+  --ia-belief: clamp(1.24rem, 0.83rem + 1.48vw, 2.95rem);
 
   /* the paper margin the words sit in, and therefore the overhang that keeps
      the glyphs — not the paper — aligned to the rail */
@@ -185,7 +210,7 @@
 }
 .ia-room {
   --ia-slit: 0.5rem;
-  --ia-inset: 6.5%;
+  --ia-inset: 3.5%;
   position: absolute;
   z-index: 0;
   /* THE ROOM IS NARROWER THAN THE PAGE, and that is what stops it being a
@@ -203,21 +228,32 @@
   content: '';
   position: absolute;
   inset: 0;
-  /* A GRADUATED wash, not a flat one, and it is a picture decision rather than
-     a contrast one: no glyph is ever on the photograph. The audit records this
-     frame's own defect — "the exposure is a compromise between the shaded
-     interior and the bright lawn, so the outside is close to blowing" — so the
-     wash is heaviest across the blown foliage at the top and lightest over the
-     people and notebooks at the bottom, which is a photographer's graduated
-     filter rather than a scrim. It also guarantees the slits stay legible: the
-     paper is #FBF7F2 and the brightest washed pixel in the frame is far below
-     it at every viewport, so the effect can never wash out mid-block. */
-  background: linear-gradient(
-    rgba(18, 32, 26, 0.52),
-    rgba(18, 32, 26, 0.44) 40%,
-    rgba(18, 32, 26, 0.22)
-  );
+  /* THE WASH IS FLAT, and that is a decision reversed after measuring. The
+     first build graded it dark-at-the-top to hold down a blown lawn; these two
+     frames have opposite luminance profiles — the landscape one is darkest in
+     its top eighth (mean 70) and brightest through its middle and its sunlit
+     floor, the portrait one is brightest in its upper middle (163) and darkest
+     at the bottom (83) — so any fixed-geometry gradient is right for one of
+     them and wrong for the other. That is the whack-a-mole DESIGN-SYSTEM §1
+     warns about, one layer down. A flat multiply is correct for both.
+
+     The value is set by the only thing it has to guarantee: that a slit can
+     never be mistaken for the page. Paper is #FBF7F2, luminance 248. The
+     landscape frame's mean is 110 and it composites to 88; its blown
+     highlights, 255, composite to 195 — 53 below the paper and still plainly a
+     photograph. No glyph is ever on it, so this is the only job it has. */
+  background: rgba(18, 32, 26, 0.26);
   pointer-events: none;
+}
+@media (max-width: 719px) {
+  /* Phones get less than half the wash. The slits there are 12-16px of a
+     picture that has already lost most of its width to the crop, and the
+     deepening that reads as depth on a 900px window reads as a black smear in
+     a 14px one. Measured, not guessed: the brightest washed pixel is still far
+     under the paper's 251, so the slit never disappears into the page. */
+  .ia-room::after {
+    background: rgba(18, 32, 26, 0.24);
+  }
 }
 .ia-room__img {
   position: absolute;
@@ -276,8 +312,8 @@
   font-optical-sizing: auto;
   font-weight: 500;
   font-size: var(--ia-say);
-  line-height: 1.26;
-  letter-spacing: -0.014em;
+  line-height: 1.2;
+  letter-spacing: -0.016em;
   text-wrap: balance;
 }
 
@@ -291,7 +327,11 @@
 }
 .ia-turn__say {
   display: block;
-  max-width: 94%;
+  max-width: 100%;
+  /* balanced, because at 320 the client's em dash was landing alone on a line
+     of its own. Balancing the two lines puts words on both of them; the
+     characters are untouched. */
+  text-wrap: balance;
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 500;
@@ -302,39 +342,43 @@
 .ia-turn__list {
   display: block;
   margin-top: 0.1rem;
-  max-width: 100%;
+  max-width: var(--ia-prose);
   font-size: var(--ia-read);
   line-height: 2.05;
+  text-wrap: pretty;
 }
 
-/* 3 · 4 · the prose. The LEADING opens as the block descends — 2.05, 2.15,
-   2.25 — so the room comes a little further in with every sentence, which is
-   the passage's own argument made in the typesetting. The measures stay near
-   full on purpose: shortened to two-thirds they stopped producing a rag and
-   started producing a panel of photograph down the right-hand side, which is
-   the one composition this section exists to avoid. */
+/* 3 · 4 · the prose. Both hold `--ia-prose`, never the page width, and the
+   leading opens as the block descends — 2.05, 2.15, 2.25 — so the room comes a
+   little further in with every sentence, which is the passage's own argument
+   made in the typesetting. The distance between these lines' ends and the
+   page's edge is the wedge; its left boundary is their rag, which is why the
+   window has a staircase down one side and not a ruled edge. */
 .ia-l--work {
   --ia-i: 2;
-  --ia-m: 100%;
+  --ia-m: var(--ia-prose);
   margin-top: var(--ia-gap-2);
   font-size: var(--ia-read);
   line-height: 2.15;
+  text-wrap: pretty;
 }
 .ia-l--brings {
   --ia-i: 3;
-  --ia-m: 91%;
+  --ia-m: var(--ia-prose);
   margin-top: var(--ia-gap-3);
   font-size: var(--ia-read);
   line-height: 2.25;
+  text-wrap: pretty;
 }
 
-/* 5 · the belief, back in display and on the shortest measure of all, so the
-   block closes with more room in it than paper. The second half of the
+/* 5 · the belief, back in display and back to the full width of the page, so
+   it closes the wedge from underneath the way the turn closes it from above,
+   and the window is bounded by sentences rather than by a box. The second half of the
    sentence — the client's own "but" — carries the italic, which is how this
    typeface carries emphasis everywhere else on the site. */
 .ia-l--belief {
   --ia-i: 4;
-  --ia-m: 97%;
+  --ia-m: 100%;
   margin-top: var(--ia-gap-4);
   font-family: var(--font-display);
   font-optical-sizing: auto;
@@ -361,20 +405,27 @@
    91% measure is a word and a half of rag. The room comes through the leading
    instead, which is why the leading is not tightened here. */
 @media (max-width: 719px) {
-  .ia-l--work {
-    --ia-m: 100%;
+  .ia {
+    --ia-prose: 100%;
   }
-  .ia-l--brings {
-    --ia-m: 100%;
-  }
-  .ia-l--belief {
-    --ia-m: 96%;
-  }
+  /* and a wider leading everywhere, because the slit is the only window left
+     once the wedge has gone: 12px of picture reads as a line, 18px reads as a
+     room. The two display blocks are included — at 1.5 and 1.86 their slits
+     measured 2px and 9px, which is a seam, not an aperture. */
   .ia-turn__say {
-    max-width: 100%;
+    line-height: 1.78;
   }
   .ia-turn__list {
-    max-width: 100%;
+    line-height: 2.2;
+  }
+  .ia-l--belief {
+    line-height: 2.05;
+  }
+  .ia-l--work {
+    line-height: 2.3;
+  }
+  .ia-l--brings {
+    line-height: 2.4;
   }
 }
 

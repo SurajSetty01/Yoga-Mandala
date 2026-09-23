@@ -11,19 +11,15 @@ import { about } from '@/content/pranava';
  * the text's left, and its right edge is wherever each line happens to stop. Delete the
  * words and there is no photograph at all, only cream.
  *
- * THE FRAME. `pr-ttc-dsc_0284_1` — the discussion circle in the open pavilion, notebooks
- * open, one woman mid-sentence, daylight and trees beyond the columns. The vision audit
- * calls it "the clearest 'people studying' frame in the archive", and that is why it is
- * here rather than an asana frame: the passage opens by saying Yoga is *more than a
- * practice on the mat* and closes on *a relationship between study, practice and
- * experience*. The picture the sentences let through has to be people studying, or the
- * section illustrates the opposite of what it says.
- *
- * It also survives being seen in slits, which most frames do not. Read through horizontal
- * bands a photograph keeps only its large structure, and this one is built of bands —
- * bright trees across the top, the dark ring of seated people through the middle, warm
- * floor below — with the pavilion's columns running vertically through all of them, so the
- * eye carries the room across the paper from one slit to the next.
+ * THE APERTURE IS SHAPED BY THE TYPE, AND THAT IS NOW THE COMPOSITION rather than a
+ * by-product of it. The two display sentences run the full width of the page; the three
+ * prose sentences hold a reading measure of at most 42rem however wide the screen gets.
+ * The difference between those two widths is a wedge of room standing open down the
+ * right-hand side of the block — pinched shut at the top by "Yoga is a vast body of
+ * knowledge —" and at the bottom by the belief, both of which cross the whole page — and
+ * its left-hand boundary is a staircase, because it is the rag. That wedge is what lets
+ * the photograph resolve as a PLACE instead of a texture: at 1440 it is 238px wide and at
+ * 2531 it is 608px, which is a window rather than a gap between two lines.
  *
  * NOT A WORD IS ALTERED. Two sentences are sliced and set in two voices, at the client's
  * own punctuation: sentence two at its em dash, sentence five at its "but". Both slices
@@ -50,23 +46,57 @@ const but = belief.indexOf('but through');
 const beliefHead = belief.slice(0, but);
 const beliefTurn = belief.slice(but);
 
-/* The one photograph, and both of its crops. A portrait viewport crops a landscape frame
-   hard enough to lose the subject — this site has shipped a hero with the teacher out of
-   shot and an air cooler centre-frame for want of the second value (DESIGN-SYSTEM §1).
-   1620 is the largest derivative that exists for every TTC frame; nothing here assumes
-   2560, and the srcset names only the three widths on disk. */
+/* TWO FRAMES, ONE ROOM, ONE APPARATUS — and the narrow one is a NATIVE PORTRAIT.
+   The aperture this section cuts is the shape of the passage, so it changes shape with
+   the viewport: at 1440 the page is 893 wide and the four sentences 561 tall, an aspect
+   of 1.59 that a 3:2 frame fills almost exactly; at 320 the same block is 277 by 770, an
+   aspect of 0.36. Feeding a 1.50 landscape source into that keeps 24% of its width and
+   throws the other 76% away, which is how the first build turned a photograph into noise
+   on a phone. A 0.67 portrait source into the same aperture keeps 54%, and — because the
+   subject in it is vertical — the part that survives is the part that matters.
+
+   Both frames are the same hall on the same day: red oxide floor, white walls, rope
+   anchors in the roof. Both are supported inversions, one on chairs and one on the wall
+   ropes, which is why a single honest `alt` covers whichever one the browser fetches —
+   and only one is ever fetched, because this is `<picture>` and not two images with one
+   of them hidden.
+
+   Neither appears anywhere else on the site: `pr-ttc-dsc_0284_1` was spent twice already
+   (/learn/'s hero and /contact/ 01), and a section whose entire idea is ONE photograph
+   cannot spend a frame the site has spent twice. These two are checked against every
+   other component in the tree.
+
+   1620 (landscape) and 1080 (portrait) are the largest derivatives that exist for these
+   TTC frames; nothing here assumes 2560. */
 const ROOM = {
-  id: 'pr-ttc-dsc_0284_1',
-  widths: [480, 960, 1620],
-  alt: 'A discussion circle in an open pavilion with several people writing in notebooks as one speaks',
-  /* Chosen by rendering the crop behind the real slit pattern and looking at it,
-     not by trusting the manifest's focal point: at 50% the aperture is filled with
-     the empty floor and the trees, and the people the sentence is about are off to
-     the right. At 72% the seated row, the open notebooks and the woman speaking
-     are where the reader's eye already is. */
-  pos: '72% 58%',
-  posNarrow: '64% 58%',
+  /* WIDE — `pr-ttc-dsc_0566`. The open-sided hall with five practitioners standing, arms
+     raised, low sun raking across the red oxide floor and green fields through the open
+     side. Chosen by rendering four candidates behind these actual slits at 1440 and
+     looking: it is the only one that stays a PLACE from the first slit to the last,
+     because it is built in bands the block can cut across — corrugated roof and hanging
+     ropes at the top, white wall, standing bodies through the middle, lit floor beneath —
+     and because the wedge beside the prose lands on two whole figures and the trees
+     rather than on an anonymous patch. The audit calls its light the best in the archive.
+     TALL — `pr-ttc-dsc_0493`, the same hall: two practitioners hanging inverted from the
+     wall ropes with the roof beams and anchors above them. Vertical subject, vertical
+     apparatus, so the narrow crop keeps the part that carries the picture.
+     Derivatives are NOT symmetrical and were checked on disk, not assumed: the wide frame
+     has 480/960/1620, the tall one only 480/960. */
+  wide: { id: 'pr-ttc-dsc_0566', widths: [480, 960, 1620], pos: '44% 50%' },
+  tall: { id: 'pr-ttc-dsc_0493', widths: [480, 960], pos: '50% 46%' },
+  /* ONE alt for two photographs, and it is written to be true of whichever the browser
+     actually fetches — both are the same hall, both show a class at work under the same
+     roof beams and the same hanging ropes on the same floor. An <img> has one alt and
+     `<source>` cannot carry its own; the alternative is two <img>s with one hidden, which
+     downloads both. */
+  alt: 'A class at work in the training hall, under its roof beams and hanging ropes, on the red oxide floor',
 };
+const set = (f: { id: string; widths: number[] }) =>
+  f.widths.map((w) => `/media/stills/${f.id}-${w}.webp ${w}w`).join(', ');
+
+/* The page is capped at 82rem and the room is 97.5% of it; below 1100 the rail decides. */
+const SIZES =
+  '(min-width: 720px) min(62vw, 82rem), calc(100vw - 2 * clamp(1.35rem, 4.2vw, 4.25rem))';
 
 export function Introduction() {
   return (
@@ -87,17 +117,19 @@ export function Introduction() {
           {/* 2-5 · the body, and the exact extent of the photograph. */}
           <div className="ia-body">
             <div className="ia-room">
-              <img
-                className="ia-room__img"
-                src={`/media/stills/${ROOM.id}-1620.webp`}
-                srcSet={ROOM.widths.map((w) => `/media/stills/${ROOM.id}-${w}.webp ${w}w`).join(', ')}
-                /* the room is never wider than the page, and the page is capped at 68rem */
-                sizes="(min-width: 1100px) min(62vw, 68rem), calc(100vw - 2 * clamp(1.35rem, 4.2vw, 4.25rem))"
-                alt={ROOM.alt}
-                loading="lazy"
-                decoding="async"
-                style={{ '--ia-op': ROOM.pos, '--ia-op-n': ROOM.posNarrow } as CSSProperties}
-              />
+              <picture>
+                <source media="(max-width: 719px)" srcSet={set(ROOM.tall)} sizes={SIZES} />
+                <img
+                  className="ia-room__img"
+                  src={`/media/stills/${ROOM.wide.id}-1620.webp`}
+                  srcSet={set(ROOM.wide)}
+                  sizes={SIZES}
+                  alt={ROOM.alt}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ '--ia-op': ROOM.wide.pos, '--ia-op-n': ROOM.tall.pos } as CSSProperties}
+                />
+              </picture>
             </div>
 
             {/* One sentence, two voices, split at the client's own em dash. Each voice is a
