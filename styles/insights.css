@@ -85,7 +85,7 @@
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.19em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 .in-mark__n {
   flex: none;
@@ -94,7 +94,7 @@
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .in-mark__rule {
   flex: none;
@@ -235,13 +235,13 @@
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .in-folio__k {
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.19em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 .in-folio__a {
   font: 500 var(--in-small) / 1.4 var(--font-text);
@@ -252,7 +252,7 @@
   text-decoration-thickness: 1px;
 }
 .in-folio__a:hover {
-  text-decoration-color: var(--clay-deep);
+  text-decoration-color: var(--forest);
 }
 
 /* THE PARAGRAPH. Its own strut is the quiet size and the quiet leading; see the
@@ -327,7 +327,7 @@
   flex: none;
   width: 18px;
   height: 1px;
-  background: var(--clay-deep);
+  background: var(--forest);
   transform: translateY(-4px);
 }
 .in-told__col {
@@ -364,7 +364,7 @@
   align-items: center;
   gap: 0.8rem;
   padding-bottom: 0.35rem;
-  border-bottom: 2px solid var(--clay-deep);
+  border-bottom: 2px solid var(--forest);
   color: var(--ink);
   text-decoration: none;
   font-family: var(--font-display);
@@ -399,7 +399,7 @@
   text-decoration-thickness: 1px;
 }
 .in-ilink:hover {
-  text-decoration-color: var(--clay-deep);
+  text-decoration-color: var(--forest);
 }
 
 /* ── narrow ─────────────────────────────────────────────────────────────── */

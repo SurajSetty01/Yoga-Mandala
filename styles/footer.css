@@ -25,7 +25,7 @@
   z-index: 3;
   background: var(--ground-deep);
   color: var(--ink-onDark);
-  border-top: 1px solid var(--clay);
+  border-top: 1px solid var(--brass);
   padding: clamp(3.2rem, 7vw, 5rem) var(--rail) clamp(2.2rem, 4vw, 3rem);
 }
 .ft__in {

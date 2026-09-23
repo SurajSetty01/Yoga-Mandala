@@ -114,7 +114,7 @@
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.19em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 .apr-eyebrow__n {
   flex: none;
@@ -122,7 +122,7 @@
   font-optical-sizing: auto;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .apr-eyebrow--dark {
   color: var(--ink-onPic-2);
@@ -444,7 +444,7 @@
   font-optical-sizing: auto;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
   margin-bottom: 0.6rem;
 }
 .apr-app__name {
@@ -567,7 +567,7 @@
   font-weight: 600;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .apr-teach__w {
   font-family: var(--font-display);
@@ -670,7 +670,7 @@
   inset: -3.4%;
   border-radius: 50%;
   pointer-events: none;
-  background: conic-gradient(from -90deg, var(--clay) 0deg 90deg, transparent 90deg 360deg);
+  background: conic-gradient(from -90deg, var(--brass) 0deg 90deg, transparent 90deg 360deg);
   -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
   mask: radial-gradient(closest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
   transform: rotate(0turn);
@@ -822,7 +822,7 @@
   flex: none;
   width: 18px;
   height: 1px;
-  background: var(--clay);
+  background: var(--brass);
   transform: translateY(-4px);
 }
 .apr-founder__bio p {
@@ -963,7 +963,7 @@
   position: absolute;
   inset: 0 0 auto 0;
   height: clamp(0.9rem, 2vw, 1.6rem);
-  border: 1px solid var(--clay);
+  border: 1px solid var(--brass);
   border-bottom: 0;
 }
 .apr-seva__set {
@@ -986,7 +986,7 @@
   width: 1px;
   height: clamp(2.4rem, 6vw, 5rem);
   margin: 0 auto;
-  background: var(--clay);
+  background: var(--brass);
 }
 .apr-seva__plate {
   max-width: 62rem;
@@ -1027,14 +1027,14 @@
   font-size: clamp(1.12rem, 0.95rem + 0.7vw, 1.55rem);
   color: var(--ink);
   text-decoration: none;
-  border-bottom: 1px solid var(--clay);
+  border-bottom: 1px solid var(--brass);
   padding-bottom: 0.1em;
 }
 .apr-seva__go::after {
   content: '→';
   font-family: var(--font-text);
   font-size: 0.8em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .apr-seva__go:hover,
 .apr-seva__go:focus-visible {
@@ -1274,7 +1274,7 @@
     clip-path: none;
     inset: 0 auto 0 calc(-1 * clamp(0.9rem, 2.6vw, 2.6rem));
     width: 3px;
-    background: var(--clay);
+    background: var(--brass);
   }
   .apr-intro__l {
     max-width: none;

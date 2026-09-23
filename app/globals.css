@@ -30,20 +30,24 @@
    ============================================================ */
 
 
-/* The Pranava palette was applied here and reverted at the client request - not
-   discarded, only not in force. The measured values, so they need not be re-derived:
-     --forest      #22452F  cream on it 10.04
-     --forest-mid  #2A5C42  7.27
-     --forest-deep #1B3B2A  11.54
-     --brass       #8A6B1F  4.68 on cream - clears SMALL text, unlike clay 3.90
-     --sandstone   #E4D5BD  ink on it 11.51
-     --ground-deep #12201A  15.79 (the warm black below is 16.66)
-   Re-applying is this block plus a pass over anything that names clay. */
 :root {
-  /* grounds — warm, but they are a MAT for pictures, never the subject */
+  /* ─────────────────────────────────────────────────────────────────────────
+     PRAṆAVA. Every value MEASURED, not chosen by eye — the ratio in each
+     comment is against the ground named beside it.
+
+     The Blueprint asks for deep forest green, warm sandstone and antique brass
+     on a handmade-paper ground. These are that direction, measured so each
+     value actually carries the text it is asked to carry.
+     ───────────────────────────────────────────────────────────────────────── */
+
+  /* grounds — warm, but a MAT for pictures, never the subject */
   --ground:      #FBF7F2;
   --ground-warm: #F2E9DE;
-  --ground-deep: #1C1714;   /* the reversed ground, warm black not grey */
+  --sandstone:   #E4D5BD;   /* ink on it 11.51 — a GROUND, never a text colour */
+  /* the reversed plate is a green-black, so dark sections belong to the same
+     family as the brand. 15.79 with cream, against the warm black's 16.66 —
+     every pair previously measured on this ground is ~5% tighter. */
+  --ground-deep: #12201A;
 
   /* inks */
   --ink:         #241D18;
@@ -51,9 +55,22 @@
   --ink-onDark:  #FBF7F2;
   --ink-onDark-soft: rgba(251, 247, 242, 0.72);
 
-  /* the two voices, both pulled off the photographs */
-  --teal:        #2C6E6B;   /* rope rails, the blue kurta in shade */
-  --clay:        #C1613C;   /* the shala floor, the red slings     */
+  /* PRAṆAVA's voice */
+  --forest:      #22452F;   /* 10.04 with cream — carries text either way round */
+  --forest-mid:  #2A5C42;   /* 7.27 — hover and secondary grounds               */
+  --forest-deep: #1B3B2A;   /* 11.54 — pressed                                  */
+  --brass:       #8A6B1F;   /* 4.68 on cream: clears SMALL text, unlike the clay
+                               it replaces, so the accent can carry a label and
+                               not only a hairline.                             */
+
+  /* YOGA MANDALA keeps the terracotta it was designed in. It is a community
+     initiative UNDER the Trust, not a Praṇava programme, and letting it hold
+     its own accent inside its own section is what makes that legible. */
+  --clay:        #C1613C;   /* 3.90 on cream — hairline only, never text        */
+  --clay-deep:   #9C4526;   /* 5.98 — the ground its CTA stands on              */
+  --clay-press:  #7A3319;
+  --teal:        #2C6E6B;
+  --teal-deep:   #265E5B;
 
   --rule:        rgba(36, 29, 24, 0.14);
   --rule-onDark: rgba(251, 247, 242, 0.22);
@@ -64,6 +81,7 @@
   --page: clamp(1.25rem, 4vw, 4.5rem);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -124,7 +142,7 @@ a { color: inherit; }
 .eyebrow {
   font-size: 12px; font-weight: 500;
   letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--teal);
+  color: var(--forest-mid);
 }
 .lede {
   font-size: clamp(1.0625rem, 0.98rem + 0.42vw, 1.25rem);
@@ -140,7 +158,7 @@ a { color: inherit; }
 }
 .cap::before {
   content: ''; width: 18px; height: 1px;
-  background: var(--clay); display: inline-block;
+  background: var(--brass); display: inline-block;
   transform: translateY(-4px);
 }
 
@@ -245,7 +263,10 @@ body { overflow-x: clip; }
 
 /* PRANAVA is set as an all-caps wordmark, which wants the opposite treatment to the
    two-word name it replaces: caps need to be opened up, not tightened. */
+/* The mark sits beside the wordmark rather than replacing it: at 34px a calligraphic
+   ॐ alone is a texture, not a name, and the bar has to say who this is. */
 .pill__mark {
+  display: inline-flex; align-items: center; gap: 0.55rem;
   font-family: var(--font-display); font-optical-sizing: auto;
   font-size: clamp(0.95rem, 0.88rem + 0.34vw, 1.12rem);
   font-weight: 600; letter-spacing: 0.10em;
@@ -279,13 +300,13 @@ body { overflow-x: clip; }
   padding: 0.72rem 1.25rem; border-radius: 999px;
   /* the CTA ground: 5.98:1 with cream. */
 
-  background: var(--clay-deep); color: #FBF7F2;
+  background: var(--forest); color: #FBF7F2;
   white-space: nowrap;
   transition: background 0.3s var(--ease);
 }
 .pill__cta::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: var(--clay-press);
+  background: var(--forest-deep);
   transform: scaleX(0); transform-origin: left;
   transition: transform 0.4s var(--ease);
 }
@@ -323,7 +344,7 @@ body { overflow-x: clip; }
 }
 .sheet__cta {
   margin-top: 1.4rem; align-self: flex-start;
-  background: var(--clay-deep); color: #FBF7F2 !important;
+  background: var(--forest); color: #FBF7F2 !important;
   font-family: var(--font-text) !important; font-size: 15px !important;
   font-weight: 600 !important; letter-spacing: 0 !important;
   padding: 1rem 1.5rem !important; border-radius: 5px; border-bottom: 0 !important;
@@ -519,14 +540,14 @@ html.is-static .stage { position: relative; }
   position: relative; overflow: hidden; isolation: isolate;
   display: inline-flex; align-items: center; gap: 0.75em;
   padding: 1.02rem 1.6rem; border-radius: 5px;
-  background: var(--clay-deep); color: #FBF7F2;
+  background: var(--forest); color: #FBF7F2;
   font: 600 14px/1 var(--font-text); letter-spacing: 0.005em;
   text-decoration: none;
   box-shadow: 0 10px 34px rgba(var(--shade), 0.42);
 }
 .btn-join::before {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: var(--clay-press);
+  background: var(--forest-deep);
   transform: scaleX(0); transform-origin: left;
   transition: transform 0.48s var(--ease);
 }
@@ -629,7 +650,7 @@ html.is-static .stage { position: relative; }
 .within {
   position: relative; z-index: 3;
   background: var(--ground); color: var(--ink);
-  border-top: 2px solid var(--clay);
+  border-top: 2px solid var(--brass);
   box-shadow: 0 -30px 70px rgba(var(--shade), 0.30);
   padding: clamp(1.7rem, 3.2vw, 2.9rem) var(--rail) clamp(3.5rem, 8vw, 6rem);
   /* an in-page target must never land under the fixed pill */
@@ -646,11 +667,11 @@ html.is-static .within { margin-top: 0; }
 .within__eyebrow {
   margin: 0; display: flex; align-items: baseline; gap: 0.8rem;
   font: 600 11.5px/1 var(--font-text); letter-spacing: 0.19em;
-  text-transform: uppercase; color: var(--teal-deep);
+  text-transform: uppercase; color: var(--forest-mid);
 }
 .within__eyebrow span {
   font-family: var(--font-display); font-size: 13px; letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .within__h {
   font-family: var(--font-display); font-optical-sizing: auto;
@@ -674,7 +695,7 @@ html.is-static .within { margin-top: 0; }
 .reg__i:hover .reg__fig img { transform: scale(1.035); }
 .reg__n {
   margin: 0.9rem 0 0; font: 600 11px/1 var(--font-text);
-  letter-spacing: 0.16em; color: var(--clay-deep);
+  letter-spacing: 0.16em; color: var(--forest);
 }
 .reg__w {
   font-family: var(--font-display); font-optical-sizing: auto;
@@ -874,3 +895,10 @@ html.is-static .frame { transform: scale(1.02); }
   opacity: 0.78;
 }
 
+.pill__logo {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  /* the source is a photograph of print, so it carries a faint paper cast; a touch of
+     saturation puts the teal back where the banner has it */
+  filter: saturate(1.08);
+}
+@media (max-width: 860px) { .pill__logo { width: 30px; height: 30px; } }

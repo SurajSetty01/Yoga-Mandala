@@ -107,7 +107,7 @@
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.19em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 .ab-eyebrow__n {
   flex: none;
@@ -115,7 +115,7 @@
   font-optical-sizing: auto;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .ab-eyebrow--dark {
   color: var(--ink-onPic-2);
@@ -174,14 +174,14 @@
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.19em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 .ab-eyebrow__n {
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-size: 13px;
   letter-spacing: 0.06em;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .ab-eyebrow--dark { color: var(--ink-onPic-2); }
 .ab-eyebrow--dark .b-eyebrow__n { color: var(--ink-onPic); }
@@ -647,7 +647,7 @@
   font-optical-sizing: auto;
   font-weight: 500;
   font-variation-settings: "opsz" 144, "wght" 500, "SOFT" 0, "WONK" 0;
-  color: var(--clay);
+  color: var(--brass);
   user-select: none;
 }
 

@@ -47,8 +47,26 @@ export function SiteNav({ light = false }: { light?: boolean }) {
   return (
     <>
       <header className={`pill${light ? ' is-light' : ''}`} id="pill">
+        {/*
+          The client's OWN mark, not a drawn substitute. It exists in exactly two places in
+          1,211 archive frames — a certificate photographed flat and a roll-up banner seen at
+          an angle — and the certificate is the cleaner source at ~130px native. It is
+          therefore a raster, deliberately: a trace of a calligraphic ॐ at that resolution
+          filled the counters and stopped reading as the letter, which misrepresents an
+          identity rather than reproducing it. At 34px the raster is faithful and sharp.
+          `alt=""` because the wordmark beside it already names the organisation.
+        */}
         <Link className="pill__mark" href="/">
-          {site.wordmark}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="pill__logo"
+            src="/brand/pranava-mark-88.png"
+            width={34}
+            height={34}
+            alt=""
+            decoding="async"
+          />
+          <span>{site.wordmark}</span>
         </Link>
         <nav className="pill__nav" aria-label="Primary">
           <ul className="pill__links">

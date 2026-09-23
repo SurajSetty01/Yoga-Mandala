@@ -80,17 +80,17 @@
   font: 600 12px/1 var(--font-text);
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 .ln-mark__n {
   font-variant-numeric: tabular-nums;
-  color: var(--clay-deep);
+  color: var(--forest);
 }
 .ln-mark__rule {
   flex: none;
   width: clamp(18px, 3vw, 38px);
   height: 1px;
-  background: var(--clay);
+  background: var(--brass);
 }
 .ln-mark--dark {
   color: var(--sand);
@@ -346,7 +346,7 @@
   font: 600 12px/1.3 var(--font-text);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--teal-deep);
+  color: var(--forest-mid);
 }
 
 .ln-me__eight {
@@ -371,7 +371,7 @@
   font: 600 11px/1 var(--font-text);
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
-  color: var(--clay-deep);
+  color: var(--forest);
   transform: translateY(-0.15em);
 }
 .ln-me__t {
@@ -878,7 +878,7 @@
   flex: none;
   width: calc(var(--ln-tick) - var(--i) * var(--ln-tickStep));
   height: 1px;
-  background: var(--clay);
+  background: var(--brass);
   transform-origin: left center;
   transform: translateY(-0.4em);
 }
@@ -907,14 +907,14 @@
   margin: clamp(1.2rem, 3svh, 2rem) 0 0 calc(4 * var(--ln-stepX));
   padding: 0.85rem 1.35rem;
   border-radius: 999px;
-  background: var(--clay-deep);
+  background: var(--forest);
   color: #fbf7f2;
   font: 600 14px/1 var(--font-text);
   text-decoration: none;
   transition: background 0.3s var(--ease);
 }
 .ln-ch__cta:hover {
-  background: var(--clay-press);
+  background: var(--forest-deep);
 }
 .ln-ch__cta svg {
   transition: transform 0.35s var(--ease);
@@ -1042,14 +1042,14 @@
   gap: 0.6rem;
   padding: 0.8rem 1.3rem;
   border-radius: 999px;
-  background: var(--clay-deep);
+  background: var(--forest);
   color: #fbf7f2;
   font: 600 14px/1 var(--font-text);
   text-decoration: none;
   transition: background 0.3s var(--ease);
 }
 .ln-bg__cta:hover {
-  background: var(--clay-press);
+  background: var(--forest-deep);
 }
 .ln-bg__cta svg {
   transition: transform 0.35s var(--ease);
