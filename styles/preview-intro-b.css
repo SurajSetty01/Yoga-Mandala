@@ -378,11 +378,12 @@
   .ib-line--claim { --ib-measure: 13ch; }
   .ib-open__say { max-width: none; }
 
-  /* the room the passage opens onto has to be the biggest thing in the
-     section on a phone too, so it goes edge to edge and takes a 4:3 crop
-     rather than sitting as a 200px letterbox under the last line. */
+  /* the room the passage opens onto has to be the biggest thing in the section
+     on a phone too, so it takes a 4:3 crop rather than sitting as a 200px
+     letterbox under the last line. It keeps its rails: the deep ground stops
+     40px above its lower edge, and that seam has to be visible beside the
+     picture for the frame to read as standing in two grounds at once. */
   .ib-open__frame {
-    margin-inline: calc(-1 * var(--page));
     aspect-ratio: 4 / 3;
     --ib-openPos: 44% 50%;
   }
