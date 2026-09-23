@@ -26,7 +26,7 @@ import { useEffect } from 'react';
  */
 export function ApprCMotion() {
   useEffect(() => {
-    const root = document.querySelector<HTMLElement>('.ac');
+    const root = document.querySelector<HTMLElement>('.ac-page');
     if (!root || typeof IntersectionObserver === 'undefined') return;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 

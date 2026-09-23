@@ -48,49 +48,49 @@ export function ApprBTeach() {
   const plate = PLATES.restorative;
 
   return (
-    <section className="ab-s ab-s--warm ab-te" id="ab-teach" aria-labelledby="ab-te-h">
-      <div className="ab-rail">
-        <h2 className="ab-eyebrow" id="ab-te-h">
-          <span className="ab-eyebrow__n">04</span>
-          <span className="ab-eyebrow__rule" aria-hidden="true" />
+    <section className="apb-s apb-s--warm apb-te" id="apb-teach" aria-labelledby="apb-te-h">
+      <div className="apb-rail">
+        <h2 className="apb-eyebrow" id="apb-te-h">
+          <span className="apb-eyebrow__n">04</span>
+          <span className="apb-eyebrow__rule" aria-hidden="true" />
           How we teach
         </h2>
 
-        <div className="ab-te__head">
-          <p className="ab-te__lead" data-ab="up">
+        <div className="apb-te__head">
+          <p className="apb-te__lead" data-ab="up">
             {about.teach.lead}
           </p>
-          <p className="ab-te__open" data-ab="up">
+          <p className="apb-te__open" data-ab="up">
             {about.teach.open}
           </p>
         </div>
 
-        <p className="ab-te__prompt" data-ab="up">
+        <p className="apb-te__prompt" data-ab="up">
           {about.teach.prompt}
         </p>
 
-        <div className="ab-te__leaf">
-          <span className="ab-te__gauge" aria-hidden="true" />
+        <div className="apb-te__leaf">
+          <span className="apb-te__gauge" aria-hidden="true" />
 
-          <ol className="ab-te__entries">
+          <ol className="apb-te__entries">
             {about.teach.practices.map((p, i) => (
               <li
-                className="ab-te__entry"
+                className="apb-te__entry"
                 key={p}
                 data-ab="up"
                 style={{ ['--ab-r' as string]: ROWS[i] } as CSSProperties}
               >
                 {/* the tick and its number are one element so the margin reads as a
                     measure rather than as a bullet list: eight marks, spreading. */}
-                <span className="ab-te__n" aria-hidden="true">{`0${i + 1}`}</span>
-                <span className="ab-te__w">{p}</span>
+                <span className="apb-te__n" aria-hidden="true">{`0${i + 1}`}</span>
+                <span className="apb-te__w">{p}</span>
               </li>
             ))}
           </ol>
 
           {/* one plate, tipped in over the ruling: a class at work in one room, which is
               the only thing in this section that is not a sentence */}
-          <figure className="ab-te__plate" data-ab="up">
+          <figure className="apb-te__plate" data-ab="up">
             <img
               src={src(plate)}
               srcSet={srcSet(plate)}
@@ -104,13 +104,13 @@ export function ApprBTeach() {
             />
           </figure>
 
-          <p className="ab-te__close" data-ab="up">
+          <p className="apb-te__close" data-ab="up">
             {about.teach.close}
           </p>
 
           {/* forces the leaf to the full number of ruled lines, so the rules continue
               past everything written on them and fade off the foot of the page */}
-          <span className="ab-te__tail" aria-hidden="true" />
+          <span className="apb-te__tail" aria-hidden="true" />
         </div>
       </div>
     </section>

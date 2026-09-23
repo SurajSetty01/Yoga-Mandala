@@ -25,7 +25,7 @@ import { ApprBMotion } from '@/components/preview/appr-b/Motion';
  * and attaches one clip on a desktop with the bandwidth for it. Turn reduced motion on and
  * the argument is untouched, because the argument was never the movement.
  *
- * Everything is namespaced `.ab-` and lives in `styles/preview-appr-b.css`. `<SiteNav
+ * Everything is namespaced `.apb-` and lives in `styles/preview-appr-b.css`. `<SiteNav
  * light />` is included so the pill can be judged over these two grounds.
  */
 export const metadata = {
@@ -47,9 +47,9 @@ export default function ApprBPage() {
         <ApprBTeach />
 
         {/* ground below, so the pair can be driven past its own end */}
-        <div className="ab-foot">
-          <div className="ab-rail">
-            <span className="ab-foot__mark" aria-hidden="true" />
+        <div className="apb-foot">
+          <div className="apb-rail">
+            <span className="apb-foot__mark" aria-hidden="true" />
           </div>
         </div>
       </main>

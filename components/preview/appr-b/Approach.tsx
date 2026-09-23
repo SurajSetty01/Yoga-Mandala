@@ -63,36 +63,36 @@ export function ApprBApproach() {
   });
 
   return (
-    <section className="ab-s ab-s--deep ab-ap" id="ab-approach" aria-labelledby="ab-ap-h">
-      <div className="ab-rail">
-        <h2 className="ab-eyebrow ab-eyebrow--onDeep" id="ab-ap-h">
-          <span className="ab-eyebrow__n">03</span>
-          <span className="ab-eyebrow__rule" aria-hidden="true" />
+    <section className="apb-s apb-s--deep apb-ap" id="apb-approach" aria-labelledby="apb-ap-h">
+      <div className="apb-rail">
+        <h2 className="apb-eyebrow apb-eyebrow--onDeep" id="apb-ap-h">
+          <span className="apb-eyebrow__n">03</span>
+          <span className="apb-eyebrow__rule" aria-hidden="true" />
           Our approach
         </h2>
 
-        <p className="ab-ap__lead" data-ab="up">
+        <p className="apb-ap__lead" data-ab="up">
           {clauses.map((c) => (
-            <span className="ab-ap__clause" key={c}>
+            <span className="apb-ap__clause" key={c}>
               {c}
             </span>
           ))}
           {/* the fourth line, left open. Transmission is what stands in it. */}
-          <span className="ab-ap__open" aria-hidden="true" />
+          <span className="apb-ap__open" aria-hidden="true" />
         </p>
 
-        <ol className="ab-ap__run">
+        <ol className="apb-ap__run">
           {standing.map(({ item, plate, sizes }, i) => (
-            <li className="ab-ap__row" key={item.name}>
-              <div className="ab-ap__txt" data-ab="up">
-                <span className="ab-ap__n" aria-hidden="true">{`0${i + 1}`}</span>
-                <h3 className="ab-ap__name">{item.name}</h3>
-                <p className="ab-ap__body">{item.body}</p>
+            <li className="apb-ap__row" key={item.name}>
+              <div className="apb-ap__txt" data-ab="up">
+                <span className="apb-ap__n" aria-hidden="true">{`0${i + 1}`}</span>
+                <h3 className="apb-ap__name">{item.name}</h3>
+                <p className="apb-ap__body">{item.body}</p>
               </div>
               {/* the figure is observed; the <img> inside it is what is clipped. An
                   element clipped to zero reports intersection ratio 0 in Chromium and
                   never fires its own reveal — that shipped as a blank page once. */}
-              <figure className="ab-ap__fig" data-ab="open">
+              <figure className="apb-ap__fig" data-ab="open">
                 <img
                   src={src(plate)}
                   srcSet={srcSet(plate)}
@@ -109,8 +109,8 @@ export function ApprBApproach() {
       </div>
 
       {/* 04 · TRANSMISSION — out of the series, across the page, and moving. */}
-      <div className="ab-ap__last">
-        <figure className="ab-ap__stage">
+      <div className="apb-ap__last">
+        <figure className="apb-ap__stage">
           <picture>
             <source srcSet={TRANSMISSION.stillAvif} type="image/avif" />
             <img
@@ -127,7 +127,7 @@ export function ApprBApproach() {
               fetched even when `src` is never set. `src` arrives as `data-src` so a reader
               with no JavaScript downloads nothing here at all. */}
           <video
-            className="ab-ap__vid"
+            className="apb-ap__vid"
             data-src={TRANSMISSION.clip}
             muted
             loop
@@ -141,12 +141,12 @@ export function ApprBApproach() {
           />
         </figure>
 
-        <div className="ab-ap__lastTxt" data-ab="up">
-          <span className="ab-ap__n" aria-hidden="true">
+        <div className="apb-ap__lastTxt" data-ab="up">
+          <span className="apb-ap__n" aria-hidden="true">
             04
           </span>
-          <h3 className="ab-ap__name">{transmission.name}</h3>
-          <p className="ab-ap__body">{transmission.body}</p>
+          <h3 className="apb-ap__name">{transmission.name}</h3>
+          <p className="apb-ap__body">{transmission.body}</p>
         </div>
       </div>
     </section>

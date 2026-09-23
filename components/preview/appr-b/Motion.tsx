@@ -46,14 +46,14 @@ export function ApprBMotion() {
     /* ── 1. reveals ──────────────────────────────────────────────────────── */
     const revealables = [...root.querySelectorAll<HTMLElement>('[data-ab]')];
     for (const el of revealables) {
-      if (el.getBoundingClientRect().top < innerHeight * 0.94) el.classList.add('ab-on');
+      if (el.getBoundingClientRect().top < innerHeight * 0.94) el.classList.add('apb-on');
     }
 
     const reveal = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (!e.isIntersecting) continue;
-          e.target.classList.add('ab-on');
+          e.target.classList.add('apb-on');
           reveal.unobserve(e.target);
         }
       },
@@ -61,10 +61,10 @@ export function ApprBMotion() {
     );
 
     root.classList.add('is-live');
-    for (const el of revealables) if (!el.classList.contains('ab-on')) reveal.observe(el);
+    for (const el of revealables) if (!el.classList.contains('apb-on')) reveal.observe(el);
 
     /* ── 2. the one clip ─────────────────────────────────────────────────── */
-    const vid = root.querySelector<HTMLVideoElement>('.ab-ap__vid');
+    const vid = root.querySelector<HTMLVideoElement>('.apb-ap__vid');
     const stage = vid?.parentElement ?? null;
     let clipObs: IntersectionObserver | null = null;
     let onPlaying: (() => void) | null = null;
@@ -82,7 +82,7 @@ export function ApprBMotion() {
       const source = vid.dataset.src;
 
       if (source && canMp4 && !thin && !narrow) {
-        onPlaying = () => vid.classList.add('ab-live');
+        onPlaying = () => vid.classList.add('apb-live');
         vid.addEventListener('playing', onPlaying);
 
         clipObs = new IntersectionObserver(
@@ -96,7 +96,7 @@ export function ApprBMotion() {
                 void vid.play().catch(() => {});
               } else {
                 vid.pause();
-                vid.classList.remove('ab-live');
+                vid.classList.remove('apb-live');
                 if (vid.getAttribute('src')) {
                   vid.removeAttribute('src');
                   /* load() with no src releases the decoder and the buffered data; without
@@ -124,7 +124,7 @@ export function ApprBMotion() {
         vid.removeAttribute('src');
         vid.load();
       }
-      vid?.classList.remove('ab-live');
+      vid?.classList.remove('apb-live');
       root.classList.remove('is-live');
     };
   }, []);

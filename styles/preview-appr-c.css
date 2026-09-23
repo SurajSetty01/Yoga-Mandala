@@ -23,19 +23,21 @@
    COLOUR IS A THREE-PART SYSTEM AND EVERY PART IS MEASURED:
      · ink      #241D18  the client's prose            13.83 on warm, 15.58 on paper
      · forest   #22452F  the client's own terms         8.92 on warm, 10.04 on paper
-     · brass    #8A6B1F  every MARK that is not a word  4.68 on paper
-   Brass is 4.16 on the warm ground, which clears large text but not a label, so
-   no brass glyph is ever set on warm — on §03 it is rules and leader dots only,
-   which are backgrounds, not type. Clay never appears: this is a Praṇava page
-   and the terracotta belongs to Yoga Mandala (DESIGN-SYSTEM §4).
+     · brass    #705515  every MARK that is not a word  5.83 on warm, 6.56 on paper
+   Brass is the only glyph on the page that is not a word — the pilcrows in §04,
+   which is rubrication and is the reason it had to be measured rather than
+   chosen. Every hairline here is that same token at reduced alpha through
+   `color-mix`, so the rules and the marks stay one family if the token moves
+   again. Clay never appears: this is a Praṇava page and the terracotta belongs
+   to Yoga Mandala (DESIGN-SYSTEM §4).
 
    EVERYTHING IS FINISHED WITHOUT JAVASCRIPT. The reveal start states are scoped
-   to `.ac.is-live`, a class only the motion island adds and which it never adds
+   to `.ac-page.is-live`, a class only the motion island adds and which it never adds
    under prefers-reduced-motion. No JS and reduced motion both get the completed
    page, rules drawn, at full opacity.
    ══════════════════════════════════════════════════════════════════════════ */
 
-.ac {
+.ac-page {
   position: relative;
   z-index: 1;
   display: block;
@@ -62,10 +64,11 @@
   --ac-hang: calc(var(--ac-word) * 6.05);
   --ac-gloss: 40rem;
 
-  /* MARKS. Brass at two strengths and an ink hairline — none of these is type. */
-  --ac-mark: rgba(138, 107, 31, 0.58);
-  --ac-mark-soft: rgba(138, 107, 31, 0.3);
-  --ac-hair: rgba(36, 29, 24, 0.13);
+  /* MARKS. The brass token at two strengths, so a rule is the same colour as a
+     pilcrow and follows it if the token is re-measured. 48% of #705515 over the
+     warm ground composites to rgb(182,160,111) — the weight a hairline wants. */
+  --ac-mark: color-mix(in srgb, var(--brass) 48%, transparent);
+  --ac-mark-soft: color-mix(in srgb, var(--brass) 26%, transparent);
 }
 
 .ac-sec {
@@ -85,7 +88,7 @@
 
 /* Focus: the global treatment is a cream ring in a dark halo, which is invisible
    on paper. (0,2,0) beats the global (0,1,0). */
-.ac :focus-visible {
+.ac-page :focus-visible {
   outline-color: #241d18;
   box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
 }
@@ -196,7 +199,10 @@
   transition: transform 1.05s var(--ease);
   transition-delay: var(--ac-d, 0ms);
 }
-/* the closing rule under the fourth entry, so the four are ruled off top AND foot */
+/* The closing rule under the fourth entry, so the four are ruled off at both
+   ends rather than trailing away. It is deliberately NOT one of the leaf rules:
+   it stops at the text column and it is lighter, so it reads as the end of the
+   section rather than as a fifth entry about to begin. */
 .ac-entries__close {
   position: relative;
   height: 1px;
@@ -315,6 +321,9 @@
    no other photograph anywhere in the two sections. */
 .ac-plate {
   margin: 0 auto clamp(2.6rem, 5vw, 4.6rem);
+  /* the file's own width. The leaf is narrower than this at every viewport, so
+     the cap never binds today — it is here so the plate can never be upscaled
+     if the leaf is ever widened. */
   max-width: 101.25rem;
 }
 .ac-plate__img {
@@ -410,9 +419,10 @@
 .ac-run__item {
   display: inline;
 }
-/* RUBRICATION. Brass is 4.68 on this paper, so the mark clears 4.5 at every
-   size the block reaches — it is the one place on the page where a MARK is a
-   glyph, and it was measured before it was used. */
+/* RUBRICATION. Brass is 6.56 on this paper, so the mark clears 4.5 at every
+   size the block reaches, including the 22.7px it falls to at 320. It is the one
+   place on either leaf where a MARK is a glyph, and it was measured before it
+   was used. */
 .ac-pil {
   color: var(--brass);
   font-style: normal;
@@ -461,59 +471,59 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   REVEALS. Start states exist only under `.ac.is-live`, which the island adds
+   REVEALS. Start states exist only under `.ac-page.is-live`, which the island adds
    after it has resolved anything already on screen and never adds under
    prefers-reduced-motion. Transform and opacity only.
    ══════════════════════════════════════════════════════════════════════════ */
 /* Only these two variants start hidden. A rule and the plate are revealed by
    drawing and wiping, never by opacity, so they are listed separately. */
-.ac.is-live [data-ac='up'],
-.ac.is-live [data-ac='fade'] {
+.ac-page.is-live [data-ac='up'],
+.ac-page.is-live [data-ac='fade'] {
   opacity: 0;
   transition:
     opacity 0.85s var(--ease),
     transform 1s var(--ease);
   transition-delay: var(--ac-d, 0ms);
 }
-.ac.is-live [data-ac='up'] {
+.ac-page.is-live [data-ac='up'] {
   transform: translateY(20px);
 }
-.ac.is-live [data-ac='up'].ac-on,
-.ac.is-live [data-ac='fade'].ac-on {
+.ac-page.is-live [data-ac='up'].ac-on,
+.ac-page.is-live [data-ac='fade'].ac-on {
   opacity: 1;
   transform: none;
 }
 
-.ac.is-live .ac-entry,
-.ac.is-live .ac-entries__close,
-.ac.is-live .ac-colo__rule {
+.ac-page.is-live .ac-entry,
+.ac-page.is-live .ac-entries__close,
+.ac-page.is-live .ac-colo__rule {
   --ac-rx: 0;
 }
-.ac.is-live .ac-entry.ac-on,
-.ac.is-live .ac-entries__close.ac-on,
-.ac.is-live .ac-colo__rule.ac-on {
+.ac-page.is-live .ac-entry.ac-on,
+.ac-page.is-live .ac-entries__close.ac-on,
+.ac-page.is-live .ac-colo__rule.ac-on {
   --ac-rx: 1;
 }
-.ac.is-live .ac-head__leader {
+.ac-page.is-live .ac-head__leader {
   --ac-lx: 0;
 }
-.ac.is-live .ac-head.ac-on .ac-head__leader {
+.ac-page.is-live .ac-head.ac-on .ac-head__leader {
   --ac-lx: 1;
 }
-.ac.is-live .ac-plate {
+.ac-page.is-live .ac-plate {
   --ac-wipe: 100%;
 }
-.ac.is-live .ac-plate.ac-on {
+.ac-page.is-live .ac-plate.ac-on {
   --ac-wipe: 0%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ac [data-ac],
-  .ac .ac-entry,
-  .ac .ac-entries__close,
-  .ac .ac-colo__rule,
-  .ac .ac-head__leader,
-  .ac .ac-plate {
+  .ac-page [data-ac],
+  .ac-page .ac-entry,
+  .ac-page .ac-entries__close,
+  .ac-page .ac-colo__rule,
+  .ac-page .ac-head__leader,
+  .ac-page .ac-plate {
     opacity: 1 !important;
     transform: none !important;
     --ac-rx: 1;
@@ -521,12 +531,12 @@
     --ac-wipe: 0%;
     transition: none !important;
   }
-  .ac .ac-entry::before,
-  .ac .ac-entries__close,
-  .ac .ac-colo__rule {
+  .ac-page .ac-entry::before,
+  .ac-page .ac-entries__close,
+  .ac-page .ac-colo__rule {
     transform: scaleX(1) !important;
   }
-  .ac .ac-plate__img {
+  .ac-page .ac-plate__img {
     clip-path: none !important;
   }
 }

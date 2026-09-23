@@ -57,6 +57,9 @@ const ratio = (a, b) => {
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 };
 
+/** Scroll positions to measure. A single null means "wherever the page already is". */
+let STOPS = [null];
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width, height } });
 await page.goto(url, { waitUntil: 'networkidle' });
@@ -70,24 +73,45 @@ if (scrollTo) {
     await page.evaluate((t) => scrollTo({ top: t, behavior: 'instant' }), y);
     await page.waitForTimeout(140);
   }
+  /**
+   * A SECTION IS USUALLY TALLER THAN A VIEWPORT, and measuring one screen of it is not
+   * measuring it. This scrolled to the section's top and sampled a single viewport-height —
+   * so a 3,295px section had everything below its first screen checked by nobody, and every
+   * "0 FAIL --scroll-to" result it produced was a claim about the top screen only. A judge
+   * caught it: one section's Transmission text was never measured at any width.
+   *
+   * Now it returns every stop needed to cover the section, one viewport at a time with a
+   * small overlap so nothing falls between two frames.
+   */
   const target = await page.evaluate((sel) => {
     const el = document.querySelector(sel);
     if (!el) return null;
     const r = el.getBoundingClientRect();
-    // land the section's top just under the fixed navigation rather than at y=0
-    return Math.round(r.top + scrollY - 110);
+    const top = Math.round(r.top + scrollY - 110);
+    const bottom = Math.round(r.bottom + scrollY);
+    const step = Math.round(innerHeight * 0.85);          // 15% overlap between stops
+    const stops = [];
+    for (let y = top; y < bottom; y += step) stops.push(Math.max(0, y));
+    if (!stops.length) stops.push(Math.max(0, top));
+    return stops;
   }, scrollTo);
   if (target === null) {
     console.error(`--scroll-to: no element matches "${scrollTo}"`);
     await browser.close();
     process.exit(2);
   }
-  await page.evaluate((t) => scrollTo({ top: t, behavior: 'instant' }), target);
-  await page.waitForTimeout(settle);
+  STOPS = target;
 }
 
 /** Only leaf text elements: a <p> wrapping three <span>s would otherwise be measured twice,
  *  and its box would span all of them including whatever sits between. */
+const ALL = [];
+for (const stop of STOPS) {
+  if (stop !== null) {
+    await page.evaluate((t) => scrollTo({ top: t, behavior: 'instant' }), stop);
+    await page.waitForTimeout(settle);
+  }
+
 const targets = await page.evaluate((sels) => {
   const seen = new Set();
   const out = [];
@@ -157,7 +181,7 @@ await page.waitForTimeout(400);
 const noText = PNG.sync.read(await page.screenshot());
 
 const parse = (c) => c.match(/[\d.]+/g).slice(0, 3).map(Number);
-const results = [];
+  const results = [];
 
 for (const t of targets) {
   const fg = parse(t.color);
@@ -179,11 +203,23 @@ for (const t of targets) {
   samples.sort((a, b) => a - b);
   results.push({
     ...t,
+    stop,
     worst: +samples[0].toFixed(2),
     p5: +samples[Math.floor(samples.length * 0.05)].toFixed(2),
     px: samples.length,
   });
 }
+
+  ALL.push(...results);
+  // the hide-rule is re-added every stop; drop it so the next screenshot paints text again
+  await page.evaluate(() => {
+    const last = document.head.querySelectorAll('style');
+    if (last.length) last[last.length - 1].remove();
+  });
+  await page.waitForTimeout(150);
+}
+
+const merged = ALL;
 
 /**
  * De-duplicate the "two complementary copies" technique.
@@ -194,14 +230,12 @@ for (const t of targets) {
  * place is one thing to the reader, so keep the best-scoring copy.
  */
 const byIdentity = new Map();
-for (const r of results) {
+for (const r of merged) {
   const key = `${r.text}@${Math.round(r.box.x / 8)},${Math.round(r.box.y / 8)}`;
   const prev = byIdentity.get(key);
   if (!prev || r.p5 > prev.p5) byIdentity.set(key, r);
 }
-results.length = 0;
-results.push(...byIdentity.values());
-
+const results = [...byIdentity.values()];
 results.sort((a, b) => a.p5 - b.p5);
 let fails = 0;
 for (const r of results) {

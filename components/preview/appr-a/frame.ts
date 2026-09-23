@@ -22,7 +22,8 @@
  *
  * 1620 x 1080 on disk, exactly 3:2, in three derivatives. Nothing here assumes 2560 — this
  * frame has no 2560, which is why the sheet is capped at 112rem: at 2531 the tightest crop
- * is then asked to fill about 1.1x its own native pixels rather than 1.4x.
+ * is then asked to fill 1.24x its own native pixels (551 into 681) rather than 1.75x. That
+ * is the only upscale in the section at any width; the other three views downscale.
  */
 
 export const PHOTO = {

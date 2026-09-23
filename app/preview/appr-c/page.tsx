@@ -36,7 +36,7 @@ export default function ApprConceptCPage() {
   return (
     <>
       <SiteNav light />
-      <main className="ac" id="top">
+      <main className="ac-page" id="top">
         <h1 className="sr">About Praṇava</h1>
         <ApprCApproach />
         <ApprCTeach />
