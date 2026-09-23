@@ -2323,5 +2323,32 @@
   ],
   "maxWidth": 1620,
   "source": "Context/new/Prabodha TTC Photos-20260921T142915Z-1-001/Prabodha TTC Photos/DSC_0192(1).JPG"
+ },
+ {
+  "id": "pr-ttc-dsc_0479x",
+  "role": "hero",
+  "quality": 3,
+  "headroom": "top",
+  "w": 556,
+  "h": 1563,
+  "ratio": 0.356,
+  "focal": [
+   0.5,
+   0.42
+  ],
+  "alt": "A woman hanging inverted from a rope while three people support and steady her",
+  "subject": "A woman hangs inverted from a rope with her legs vertical while a man and two women support and steady her, on a red floor.",
+  "activity": "teaching-adjustment",
+  "setting": "indoor-shala",
+  "people": "few",
+  "lighting": "daylight",
+  "minorsVisible": false,
+  "qualityNotes": "Purpose-cropped from DSC_0479 to the supporting group: the original frame carries folding chairs at bottom-left and green shade netting at right, which forced object-position to 70% and clipped the figures. This crop excludes both, so the aperture can sit at centre.",
+  "widths": [
+   480,
+   556
+  ],
+  "maxWidth": 556,
+  "source": "Context/new/Prabodha TTC Photos-20260921T142915Z-1-001/Prabodha TTC Photos/DSC_0479.JPG"
  }
 ]

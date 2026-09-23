@@ -142,17 +142,20 @@ export const FRAMES = {
      hall's 20.36). This frame is PORTRAIT, so cover scales it by height against a source
      that is already tall: the same window needs 626px and 960 exists.
 
-     `pos` is 70%, not 50%: the source's bottom-left corner holds two folding chairs, and
-     at 70% they fall outside the aperture at every ratio up to about 0.45. That is also
-     why the window's width is set from its LEFT EDGE rather than capped — see the note in
-     styles/about-pranava.css. Quality 3 rather than 4 in the manifest, which is a judgment
-     about the whole frame; the column this crop takes is sharp. */
+     A PURPOSE-MADE CROP, not the manifest frame. DSC_0479 carries two folding chairs in its
+     bottom-left corner and green shade netting down its right, which forced `pos` to 70% to
+     dodge the chairs — and that pushed the aperture off the group, leaving a pale strip of
+     wall on the left and cutting the standing figure on the right. Fighting a frame with
+     object-position is the wrong tool: the crop now excludes both problems at source
+     (x 30-81.5% of the upright original), so the aperture can sit at CENTRE and show the
+     whole supporting group. 556px native — the short edge of a 1080-wide source is all
+     there is — so it upscales about 1.3x at 1440, which is mild and sharp enough. */
   heroHands: stills(
-    'pr-ttc-dsc_0479',
-    [480, 960],
-    '70% 50%',
+    'pr-ttc-dsc_0479x',
+    [480, 556],
+    '50% 46%',
     'A teacher takes the weight of a student suspended head-up in a rope hanging from the roof beam while two other practitioners steady her, in a hall with a red floor and green shade netting along the open side.',
-    '72% 50%',
+    '50% 48%',
   ),
 
   /* 02 · what is Praṇava. Ten people doing one thing: the frame answers "a place to
