@@ -1950,3 +1950,13 @@
     transition: none;
   }
 }
+
+/* Temporary: holds the page's single h1 while the deleted sections are rebuilt by their
+   workflows. Removed when the new hero lands. */
+.apr-hold {
+  margin: 0; padding: 22svh var(--rail) 14svh;
+  background: var(--ground); color: var(--ink);
+  font-family: var(--font-display); font-optical-sizing: none;
+  font-variation-settings: 'opsz' 144;
+  font-size: clamp(2rem, 1rem + 3.4vw, 4rem); font-weight: 400; letter-spacing: -0.03em;
+}

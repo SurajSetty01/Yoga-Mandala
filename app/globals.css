@@ -837,13 +837,7 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/preview-contact-a.css";
 @import "../styles/preview-contact-b.css";
 @import "../styles/preview-contact-c.css";
-@import "../styles/preview-intro-c.css";
 @import "../styles/preview-quote.css";
-@import "../styles/preview-intro-a.css";
-@import "../styles/preview-intro-b.css";
-@import "../styles/preview-appr-a.css";
-@import "../styles/preview-appr-c.css";
-@import "../styles/preview-appr-b.css";
 
 /* ── route skeletons ─────────────────────────────────────────────────────────
    Temporary. These exist so the navigation is real and clickable before the

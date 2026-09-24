@@ -1,16 +1,11 @@
 import { SiteNav } from '@/components/SiteNav';
+import { about as aboutCopy } from '@/content/pranava';
 import { SiteFooter } from '@/components/SiteFooter';
 import { AboutMotion } from '@/components/about-pranava/AboutMotion';
-import { Hero } from '@/components/about-pranava/Hero';
-import { Introduction } from '@/components/about-pranava/Introduction';
 import { WhatIs } from '@/components/about-pranava/WhatIs';
-import { Approach } from '@/components/about-pranava/Approach';
-import { Teach } from '@/components/about-pranava/Teach';
 import { Journey } from '@/components/about-pranava/Journey';
 import { Founder } from '@/components/about-pranava/Founder';
 import { Faculty } from '@/components/about-pranava/Faculty';
-import { Seva } from '@/components/about-pranava/Seva';
-import { Values } from '@/components/about-pranava/Values';
 import { Closing } from '@/components/about-pranava/Closing';
 
 /**
@@ -45,16 +40,10 @@ export default function AboutPranavaPage() {
     <>
       <SiteNav light />
       <main className="apr" id="top">
-        <Hero />
-        <Introduction />
         <WhatIs />
-        <Approach />
-        <Teach />
         <Journey />
         <Founder />
         <Faculty />
-        <Seva />
-        <Values />
         <Closing />
       </main>
       <AboutMotion />
