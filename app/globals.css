@@ -838,6 +838,18 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/preview-contact-b.css";
 @import "../styles/preview-contact-c.css";
 @import "../styles/preview-quote.css";
+@import "../styles/preview-sx1a.css";
+@import "../styles/preview-sx2a.css";
+@import "../styles/preview-sx2c.css";
+@import "../styles/preview-sx1d.css";
+@import "../styles/preview-sx3a.css";
+@import "../styles/preview-sx1b.css";
+@import "../styles/preview-sx1c.css";
+@import "../styles/preview-sx2b.css";
+@import "../styles/preview-sx3c.css";
+@import "../styles/preview-sx3d.css";
+@import "../styles/preview-sx2d.css";
+@import "../styles/preview-sx3b.css";
 
 /* ── route skeletons ─────────────────────────────────────────────────────────
    Temporary. These exist so the navigation is real and clickable before the

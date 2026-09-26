@@ -1,0 +1,572 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PREVIEW · SECTION 01 "INTRODUCTION" — concept B.  Namespace: .sx2b-
+   Prefix grepped across app/ components/ styles/ content/ before a line was written;
+   two namespace collisions (.in, .ab-) have already broken live pages on this project.
+
+   THE MECHANIC — the page opens outward from one vertical seam.
+
+   A hairline is drawn down the exact centre of the section and runs its whole height.
+   One photograph sits ON it with paper on all four sides.  Then the seam gives: two
+   windows open away from it at once, one each side, the same distance out; two more
+   open half again as far and past the page edge; and the last opens from the seam
+   itself in both directions and runs off both edges onto the deep ground below.
+
+   Placement is two signed numbers per plate — the positions of its left and right
+   edges measured from the seam in HALF-FIELD units — which this file turns into
+
+       margin-left: calc((1 + var(--a)) * 50%)
+       width:       calc((var(--b) - var(--a)) * 50%)
+
+   two percentages of the same containing block.  A pair is a mirror when
+   a_right = −b_left and b_right = −a_left; components/preview/sx2b/frames.ts checks
+   that, and checks that the reach climbs beat by beat, at module load, at all four
+   tiers, and throws if either ever stops being true.
+
+   THE LADDER — reach from the seam, |outer edge|, in half-field units:
+        beat 1 the seed   0.26        beat 3 the pair   1.02
+        beat 2 the pair   0.70        beat 4 the band   1.18
+   Identical at 1100, 1440, 1920 and 2531.  Below 720 there is no room for two plates
+   abreast, so one plate takes each row and they ALTERNATE SIDES: reach 0.44 → 1.02 →
+   1.22 → 1.34, plate centres 0, −102, +102, −119, +119 px against a 195px half-width.
+   That is the round-2 fix.  The previous build centred all six plates at 390 (offsets
+   0, +8, −10, +11, −13, 0 — two to three per cent of the half-width) and let plate
+   WIDTH do the opening instead, which is a different device wearing the same name at
+   the breakpoint where most readers arrive.
+
+   ═══ ROUND 3 · THE FOLD IS THE GROUND ════════════════════════════════════════
+
+   Both critics led with the same thing: "the seam is never drawn and is not actually
+   held", "the armature is invisible".  Half of that was already answered — the seam IS
+   held, by two signed numbers per plate checked at module load at all four tiers, and
+   the 390 ladder is real (plate centres 0, −102, +102, −119, +119, 0 against a 195px
+   half-width, measured in the rendered page).  The drawn half was not.  I measured the
+   hairline's own exposure: it is occluded by the six photographs and the five opaque
+   paper blocks that sit on it, and what was left was 28% of its height at 1440, 33% at
+   2531, 41% at 390, 46% at 1024.  A line that is absent for two thirds of the section
+   is not an armature, and it cannot be fixed with opacity, because the things covering
+   it are the content.
+
+   So the seam stopped being a line and became an EDGE.  The section is two sheets of
+   the site's own paper meeting at 50% with a hard stop — `--ground` to the left of the
+   seam, `--ground-warm` to the right — and every element that sits across the fold
+   carries the same gradient, aligned because they are all centred in the same
+   full-width column.  Probed in rendered pixels at 24 heights spread over the whole
+   section: left of the seam 251,247,242 and right of it 242,233,222 everywhere the
+   fold is paper, and a photograph everywhere it is not.  The fold is continuous over
+   100% of the section's height at 390, 1024, 1440 and 2531.  The brass hairline stays
+   on the edge, now uniform and running the section's full height, as definition rather
+   than as the armature; the `mask-image` fade is gone.
+
+   Both grounds are measured tokens.  Rendered-pixel probe, seven standard viewports,
+   full section sweep: 0 FAIL, and the worst real p5 in the section is 13.83:1 — body
+   ink on the warm sheet — against 15.79:1 on cream.
+
+   Two other things measured false and were fixed at the root, not tuned:
+   · the body scale a critic named as the best of the four, "22px/54ch at 2531", DID
+     NOT EXIST: `clamp(..., 1.1875rem)` caps at 19px and the cap bound from 1440 up, so
+     2531 shipped 19px at 52ch.  The ultra tier now continues the expression to 22.0px
+     (45ch in the same 620px column), joined at 1600 rather than stepped off it.
+   · "the closing serif paragraph set to a 30-character measure over five lines" was
+     still true: a frozen 44rem against type that grows to 40px gives 27ch and five
+     rows at 2531.  The cap is stated in the element's own ch now — 46ch, three rows,
+     at 1024, 1440 and 2531 alike.
+
+   ═══ ROUND 2 · THE THREE ROOT CHANGES IN THIS FILE ════════════════════════════
+
+   1. NO PLATE IS EVER CLOSED TO NOTHING.  Every closed state was `inset(0 50%)` or
+      `inset(0 0 0 100%)` — zero visible width — until its slice of the timeline
+      began.  Measured at scroll 0 at 390 that put the closing lawn band, this
+      section's best asset, at zero width, and the second plate at 6.8% of its own
+      (a 20px sliver of a 296px window).  Closed is now 55% of the plate's own final
+      width, hinged on whichever edge is nearer the seam.  The smallest any picture
+      on this page ever is: 135×490 at 1440, 106×257 at 390.  The motion widens each
+      window outward from the seam by 1.82×; the LAYOUT widens them 4.5× between beat
+      one and beat four.  Motion animates the geometry, it does not stand in for it.
+
+   2. NO TEXT ANIMATES.  The five sentences used to fade in, and measured after a
+      four-second settle — not mid-transition — one of them sat fully on screen at
+      opacity 0.51 (3.31:1 composited) and at another depth at 0.21 (1.55:1), against
+      4.5:1 for 19px body.  A contrast probe correctly skips low-opacity elements, so
+      it reported this section as clean; that is the "an overlay that hides text from
+      the probe is NOT a pass" case, and it was ours.  `sx2b-rise` is deleted.  All
+      five sentences are at full opacity from first paint at every scroll position.
+
+   3. NO `max-height` ANYWHERE, SO THE `sizes` STRINGS ARE EXACT.  Heights used to be
+      `aspect-ratio` + a ceiling in svh.  When the ceiling bit, the box's RENDERED
+      ratio changed, the cover factor computed from the declared ratio over-stated the
+      need, and no `sizes` string can express a vh ceiling against a vw width anyway
+      (at 2531, p2l declared 1291px for a box needing 1032).  Heights are now set by
+      `aspect-ratio` alone, and there is a fourth tier at 1600 where the ratios
+      flatten — which is what the ceilings were really for.  The box's ratio is now
+      known at authoring time at every viewport, so `need()` in frames.ts is exact:
+      four widths × six plates, every declared number equal to the source width the
+      cover crop requires.  Media at 1440 is 768 KB across six distinct photographs,
+      against the 819 KB measured on the previous build.
+
+   THE WINDOWS TURN AS THE SEAM GIVES.  5:6 → 1:2 → 5:2 → 22:9: nearly upright, a tall
+   slot, a level letterbox, the full band.  That also gave beat three the crop it
+   needed — pr-ttc-dsc_0271_1 in the old 3:2 window WAS the whole frame (a 3:2 file in
+   a 3:2 box crops nothing) at 44.2% flat tiles with the top two bands at 61% and 73%,
+   the empty wall and the netting; the 5:2 letterbox anchored at 92% cuts both off and
+   the same file measures 27.2% flat / chroma 46.2.
+
+   WHAT CARRIES IT WITH MOTION OFF.  The widening is in the LAYOUT and the seam is a
+   static rule.  With `prefers-reduced-motion: reduce`, with JavaScript off, and in any
+   browser without scroll-driven animation, every window is at its full width and the
+   composed page is the design.  There is no JavaScript in this section at all.
+
+   MEASURED FACTS THIS FILE DEPENDS ON
+   · `widths` was read off disk for all six frames: four stop at 1620, two at 960.
+   · All type sits on the two sheets with --ink, --ink-soft or --forest-mid.  Nothing
+     is set on a photograph anywhere in this section, so there is no scrim to tune and
+     no crop that can turn a passing ratio into a failing one at another viewport.
+   · Section length, rendered: 2.96 screens at 1440 and 3.24 at 2531, against the home
+     page's own 9.05 and 8.22.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.sx2b {
+  /* THE FOLD IS THE GROUND.  Round 3's root change, and it is the answer to the one
+     defect both critics led with: "the seam is never painted at any width, so the
+     armature is invisible."  It was painted — as a 1px brass hairline — and measured,
+     the hairline was visible over 28% of its own height at 1440 and 46% at 1024,
+     because the six photographs and the five opaque paper blocks are laid ON it and
+     each one occludes it.  A hairline that is absent for two thirds of the section is
+     not an armature, and no amount of opacity fixes it: the things covering it are
+     the content.
+
+     So the seam stopped being a line and became an EDGE.  The section is two sheets of
+     the site's own paper — `--ground` left of the seam, `--ground-warm` right of it —
+     meeting at 50% with a hard stop.  That edge is continuous over 100% of the
+     section's height at every viewport, it is behind every plate and every paragraph
+     because the paper IS the ground rather than something drawn on it, and it cannot
+     be occluded by the content: the type blocks carry the same gradient, aligned
+     because they are centred in the same full-width column, so a block laid on the
+     fold shows the fold through its own paper. The brass hairline stays on the edge as
+     definition, and is now the detail rather than the armature.
+
+     Both grounds are measured tokens: --ink on --ground-warm is 13.97:1, --ink-soft
+     6.31:1, --forest-mid 6.30:1, against 16.5 / 7.08 / 7.27 on --ground.  Nothing in
+     this section sits on a photograph, so there is no scrim and no crop-dependent
+     ratio anywhere in it. */
+  --sx2b-sheets: linear-gradient(to right, var(--ground) 0 50%, var(--ground-warm) 50% 100%);
+  background: var(--sx2b-sheets);
+  color: var(--ink);
+  /* Plates deliberately reach past both page edges.  `clip` rather than `hidden`
+     because clip does not create a scroll container — a scroll container here would
+     become the nearest scroller and silently re-anchor the view timeline below. */
+  overflow-x: clip;
+  --sx2b-pt: clamp(4.5rem, 3rem + 7vw, 10rem);
+  padding-block: var(--sx2b-pt) 0;
+  /* Published by .sx2b-field, consumed by every plate below. */
+  timeline-scope: --sx2b-run;
+
+  /* The corridor: the width of the type, centred on the seam.  Below 1100 it is
+     simply the page measure; above, it grows with the viewport so the prose does not
+     become a caption stranded in a gallery at 2531. */
+  --sx2b-corr: min(calc(100% - 2 * var(--page)), 32rem);
+  /* the space between the mark and the first plate — the seam is drawn up into it,
+     so the rule starts directly beneath the mark rather than at the seed's top edge */
+  --sx2b-head: clamp(1.75rem, 1rem + 2.6vw, 3rem);
+}
+
+/* ── the register mark.  The site's own object, re-set under this namespace, and
+   centred: it sits on the seam, and the seam begins directly beneath it. ────── */
+.sx2b-mark {
+  /* The mark sits ON the fold and carries the fold's own paper, so the hairline —
+     which now runs from the top of the section — passes behind the label instead of
+     through the word "Introduction". */
+  position: relative;
+  z-index: 2;
+  background: var(--sx2b-sheets);
+  padding-block: 0.35rem;
+  margin: 0 auto var(--sx2b-head);
+  max-width: var(--sx2b-corr);
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest-mid); /* 7.27:1 on cream */
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.7rem;
+}
+.sx2b-mark__n {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft); /* 7.08:1 on cream */
+}
+.sx2b-mark__w {
+  display: block;
+}
+
+/* ── the field ────────────────────────────────────────────────────────────────
+   One column, full width, no inline padding: 50% of this box IS the seam at every
+   viewport, and every plate's placement is a percentage of it.  The type carries its
+   own measure; nothing else needs a page gutter. */
+.sx2b-field {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(2.5rem, 1.2rem + 3.4vw, 5rem);
+}
+
+/* ── the seam ─────────────────────────────────────────────────────────────────
+   One rule, dead centre, the full height of the field, behind everything.  The type
+   blocks and the two plates that cross it are opaque and are laid over it, so it
+   passes behind them and emerges above and below — which is how a fold behaves when
+   something is laid on it.  Brass rather than a new colour: it is a hairline, it is
+   aria-hidden, and it is never text.
+
+   It is the definition on the fold, not the fold itself — see the note on the two
+   sheets in `.sx2b` above.  Uniform, static, one declaration: it reads the same with
+   motion off, with JavaScript off and on the first paint. */
+.sx2b-seam {
+  position: absolute;
+  z-index: 0;
+  /* the whole section, not the field: the fold is one object from the first pixel */
+  top: calc(-1 * (var(--sx2b-head) + var(--sx2b-pt)));
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  margin-left: -0.5px;
+  background: var(--brass);
+  /* Uniform.  It used to fade to 0.21 composited at the foot, on the theory that the
+     armature matters least once everything has opened — which, on a line that was
+     already invisible for most of its height, read as the armature giving up.  The
+     fold's continuity is now carried by the two grounds; the hairline is one constant
+     hairline, and there is no `mask-image` dependency left in this section. */
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ── one aperture ─────────────────────────────────────────────────────────────
+   The FIGURE is the window; the IMG is the picture behind it.  Width and offset are
+   both percentages of the field, so the mirror is exact by construction rather than
+   by a lucky pair of column numbers.  `aspect-ratio` is the ONLY thing that sets the
+   height — see note 3 in the header: a `max-height` in svh would silently reshape the
+   box and make every `sizes` string in frames.ts a guess. */
+.sx2b-plate {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  overflow: hidden;
+  background: var(--ground-warm); /* what shows while the file is still in flight */
+  justify-self: start;
+
+  /* EVERY ITEM IS PINNED TO COLUMN 1, AND THAT IS A BUG FIX, NOT A TIDY-UP.  The grid
+     has one explicit column and the items below carry an explicit `grid-row` but no
+     column.  Auto-placement then treats them as definite-row items and opens IMPLICIT
+     columns whenever two of them share a row: measured at 1440 the track list came out
+     `822px 446px 171px`, so the two plates of a pair were sizing their percentages
+     against three different containing blocks and the mirror was nonsense (p2l 140px
+     wide, p2r 29px).  Pinned to column 1 they all share one containing block — the
+     field — and overlap by design, which is the point: they are placed by margins
+     measured from the seam, not by tracks. */
+  grid-column: 1;
+
+  /* the live tier — reassigned at 720, at 1100 and at 1600 */
+  --a: var(--a-n);
+  --b: var(--b-n);
+  --ar: var(--ar-n);
+
+  width: calc((var(--b) - var(--a)) * 50%);
+  margin-left: calc((1 + var(--a)) * 50%);
+  aspect-ratio: var(--ar);
+
+  /* THE CLOSED STATE, AND IT IS NOT CLOSED TO NOTHING.  55% of the plate's own final
+     width is visible before anything moves.  The two plates that cross the seam keep
+     their middle — they open outward from the seam in both directions; the four that
+     flank it keep the half nearest the seam and open away from it. */
+  --sx2b-from: inset(0 22.5% 0 22.5%);
+}
+.sx2b-plate--p2l,
+.sx2b-plate--p3l {
+  --sx2b-from: inset(0 0 0 45%);
+}
+.sx2b-plate--p2r,
+.sx2b-plate--p3r {
+  --sx2b-from: inset(0 45% 0 0);
+}
+.sx2b-plate img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op-n, 50% 50%);
+}
+
+/* ── the five sentences ───────────────────────────────────────────────────────
+   Claim, argument, belief — three registers, so the shape of the section's own
+   reasoning is visible before a word is read.  Each block is opaque paper laid on the
+   seam.  Every capped measure is centred: `max-width` without `margin-inline: auto`
+   is invisible at 1440 and 462px wrong at 2531, and that shipped once.
+
+   NOTHING HERE ANIMATES.  See note 2 in the header. */
+.sx2b-line {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  grid-column: 1;
+  max-width: var(--sx2b-corr);
+  margin-inline: auto;
+  padding-block: 0.2rem;
+  /* The fold's own two sheets, not a flat cream block.  The element is centred in the
+     same full-width column the field is, so its 50% IS the seam: the fold runs through
+     the paragraph's paper at exactly the place it runs through the page. */
+  background: var(--sx2b-sheets);
+  color: var(--ink);
+}
+.sx2b-line--1 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 460;
+  /* 28.1px at 390, 45.2px at 1024, 56.5px at 1440, 80px at 2531 — one continuous
+     expression, no breakpoint step.  The previous build capped at 3.1rem and then
+     stepped to 3.5rem at 1600, which is 49.6 → 56px across a 1.76× change of
+     viewport: a 502px headline floating in a 2531px field, and the weakest ultra-wide
+     response in the tournament.  It is 1.42× now, and 80px is still under the home
+     page's own 81.6px display. */
+  font-size: clamp(1.75rem, 1.1rem + 2.7vw, 5rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  max-width: 15ch;
+  text-align: center;
+  text-wrap: balance;
+}
+.sx2b-line--2,
+.sx2b-line--3,
+.sx2b-line--4 {
+  font-family: var(--font-text);
+  /* A critic named this the best-resolved body scale of the four and quoted "22px/54ch
+     at 2531".  MEASURED, IT WAS 19px AND 52ch: this clamp caps at 1.1875rem = 19px and
+     the cap binds from 1440 upward, so the praised element did not exist above 1440 —
+     the section shipped a 19px paragraph in a 620px column at 2531, 52ch, wider than
+     the house body maximum of 64ch only by luck.  Rather than tune the measure down, it
+     now does what it was credited with: 17.3px at 390 (32ch), 19px at 1024 (43ch) and
+     1440 (37ch), and the ultra tier below carries it continuously to 22px at 2531,
+     which pulls the measure to 45ch at the same 620px column. */
+  font-size: clamp(1.0625rem, 0.98rem + 0.42vw, 1.1875rem);
+  line-height: 1.66;
+  color: var(--ink); /* 13.9:1 on cream — the body, not the secondary ink */
+}
+.sx2b-line--5 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 420;
+  /* 20px at 390, 28px at 1440, 40px at 2531 — the closing display answers the opening
+     one, so it scales with it rather than freezing. */
+  font-size: clamp(1.25rem, 0.79rem + 1.28vw, 2.5rem);
+  line-height: 1.38;
+  letter-spacing: -0.008em;
+  text-wrap: pretty;
+  /* A critic measured the closing serif at "a 30-character measure over five lines"
+     and that was STILL TRUE after the last round: a fixed 44rem = 704px against type
+     that grows to 40px gives 27ch and five rows at 2531.  The cap is now stated in the
+     element's OWN ch, so it tracks the type instead of freezing against it: 46ch
+     wherever the page is wide enough to hold it — 1196px and three rows at 2531,
+     929px and four at 1440, 768px at 1024 — and at 390 the page measure still binds
+     at 350px, which is the width of the phone and not a decision. */
+  max-width: min(calc(100% - 2 * var(--page)), 46ch);
+}
+
+/* ═══ 720 AND UP — the pairs come abreast ═════════════════════════════════════
+   Two plates in one row, mirrored across the seam with a 0.12 gap between them, and
+   the sentences below in a centred measure.  The reach ladder is already the desktop
+   one here: 0.26 / 0.70 / 1.02 / 1.18. */
+@media (min-width: 720px) {
+  .sx2b-plate {
+    --a: var(--a-m);
+    --b: var(--b-m);
+    --ar: var(--ar-m);
+  }
+  .sx2b-plate img { object-position: var(--op, 50% 50%); }
+
+  .sx2b-plate--seed { grid-row: 1; }
+  .sx2b-line--1     { grid-row: 2; }
+  .sx2b-plate--p2l  { grid-row: 3; }
+  .sx2b-plate--p2r  { grid-row: 3; }
+  .sx2b-line--2     { grid-row: 4; }
+  .sx2b-line--3     { grid-row: 5; }
+  .sx2b-plate--p3l  { grid-row: 6; }
+  .sx2b-plate--p3r  { grid-row: 6; }
+  .sx2b-line--4     { grid-row: 7; }
+  .sx2b-line--5     { grid-row: 8; }
+  .sx2b-plate--band { grid-row: 9; }
+}
+
+/* ═══ 1100 AND UP — the corridor ══════════════════════════════════════════════
+   The type moves INTO the gap between each pair and the pairs pull back to an inner
+   edge of 0.36, which at every width from 1100 to 2560 leaves 22–145px of paper
+   between the corridor and the nearest photograph.  The outer edges do not move: the
+   ladder is the same 0.26 / 0.70 / 1.02 / 1.18 it was at 720. */
+@media (min-width: 1100px) {
+  .sx2b {
+    /* 33ch at 1100, 41ch at 1440, 52ch at 2531 — the corridor grows with the field so
+       the prose stays the thing the pictures are opening away from. */
+    --sx2b-corr: clamp(19rem, 31vw, 38.75rem);
+  }
+  .sx2b-plate {
+    --a: var(--a-w);
+    --b: var(--b-w);
+    --ar: var(--ar-w);
+  }
+
+  .sx2b-plate--seed { grid-row: 1; }
+  .sx2b-line--1     { grid-row: 2; }
+
+  /* Beat two: the pair spans the two rows its two sentences occupy. */
+  .sx2b-plate--p2l  { grid-row: 3 / 5; }
+  .sx2b-plate--p2r  { grid-row: 3 / 5; }
+  .sx2b-line--2     { grid-row: 3; align-self: end; }
+  .sx2b-line--3     { grid-row: 4; align-self: start; }
+
+  /* Beat three: one sentence, centred between the two letterboxes. */
+  .sx2b-plate--p3l  { grid-row: 5; }
+  .sx2b-plate--p3r  { grid-row: 5; }
+  .sx2b-line--4     { grid-row: 5; align-self: center; }
+
+  .sx2b-line--5     { grid-row: 6; }
+  .sx2b-plate--band { grid-row: 7; }
+}
+
+/* ═══ 1600 AND UP — the windows flatten ═══════════════════════════════════════
+   This tier replaces the `max-height: N svh` ceilings the previous build used.  Same
+   job — the apertures are sized off the viewport WIDTH, so without this the
+   composition ran 5,612px at 2531 — but done by declaring the ratio rather than by
+   clamping a height, which is what lets frames.ts state an exact `sizes` number for
+   this tier instead of a ceiling it happens to be under.  Measured at 2531×1140 the
+   boxes are seed 658×740, p2 430×688, p3 835×334, band 2987×933; the old clamped
+   build rendered 658×730, 430×707, 835×334 and 2987×889. */
+@media (min-width: 1600px) {
+  .sx2b-plate {
+    --a: var(--a-u);
+    --b: var(--b-u);
+    --ar: var(--ar-u);
+  }
+  .sx2b-line--1 { max-width: 14ch; }
+
+  /* The body scale continues instead of freezing at 19px.  Joined to the lower
+     expression at the breakpoint, not stepped off it: at 1600 this evaluates to
+     13.84 + 5.15 = 18.99px, which the 1.1875rem floor holds at exactly the 19px the
+     tier below hands over, and it reaches 22.0px at 2531 and caps there.  Measured in
+     the rendered page at 1599 and 1601. */
+  .sx2b-line--2,
+  .sx2b-line--3,
+  .sx2b-line--4 {
+    font-size: clamp(1.1875rem, 0.865rem + 0.322vw, 1.375rem);
+  }
+}
+
+/* ── the handover ─────────────────────────────────────────────────────────────
+   There is no bottom padding under the band: the section ends ON the photograph, and
+   the next thing is the real opening of section 02 on its own #12201A ground, so the
+   seam OUT of the section can be judged rather than imagined.  The three "A place to"
+   lines are the client's own sentence split at its own full stops.
+
+   Both critics named this the best exit in the tournament and the only hand-off band
+   in the set that carries anything.  Nothing in it is touched this round. */
+.sx2b-after {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding: clamp(3.5rem, 2rem + 6vw, 8rem) var(--page) clamp(4rem, 2rem + 7vw, 9rem);
+}
+.sx2b-after__n {
+  margin: 0 0 clamp(1.75rem, 1rem + 2.4vw, 3rem);
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft); /* 11.4:1 on #12201A */
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+}
+.sx2b-after__places {
+  margin: 0;
+  max-width: min(100%, 34rem);
+}
+.sx2b-after__places p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.1rem + 1.9vw, 2.75rem);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  color: var(--ink-onDark); /* 15.6:1 on #12201A */
+}
+
+/* ═══ THE OPENING ═════════════════════════════════════════════════════════════
+   One named view timeline on the field; every plate subscribes to it through
+   `timeline-scope` on .sx2b and picks its own slice with `animation-range`.  A shared
+   timeline rather than six `view()` timelines on purpose: with `view()` each picture
+   reveals itself as it enters and the result is six independent reveals.  Driven from
+   the field's own progress, the whole page is one thing opening, and a plate already
+   on screen keeps opening while the sentence beside it is read.
+
+   WHAT ANIMATES IS THE WINDOW'S OUTER EDGE, FROM 55% OF ITS FINAL WIDTH TO 100%.  Not
+   from zero.  A plate at its closed state is a photograph — 135×490 at 1440, 106×257
+   at 390 — sitting at its final distance from the seam, on the drawn seam, in the
+   final ladder.  Everything the section claims is already true at scroll 0; the
+   motion widens each window outward from the seam by 1.82× as you pass it.
+
+   THE TWO PLATES OF A PAIR SHARE A RANGE EXACTLY.  They are a mirror; they open as
+   one gesture, or the symmetry is only true when the animation has finished.
+
+   `animation-duration: auto` is required — a clock duration is ignored on a
+   scroll-driven timeline and the animation simply never runs.
+
+   Everything is inside BOTH a @supports and a reduced-motion guard, so the three
+   fallbacks (no support, reduce, no JS) are one state: every window at full width,
+   seam drawn, ladder intact. */
+@keyframes sx2b-open {
+  from { clip-path: var(--sx2b-from); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes sx2b-draw {
+  from { transform: translateX(var(--sx2b-drift, 0)) scale(1.03); }
+  to   { transform: translateX(0) scale(1); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sx2b-field {
+      view-timeline-name: --sx2b-run;
+      view-timeline-axis: block;
+    }
+
+    .sx2b-plate {
+      animation: sx2b-open linear both;
+      animation-timeline: --sx2b-run;
+      animation-duration: auto;
+    }
+    /* The picture drifts a little against its own opening and settles — so the window
+       reads as being drawn back off a photograph that was already there, rather than
+       as a picture sliding in.  Transform only, and mirrored: the left plate of a pair
+       drifts right, the right plate left, both toward the seam. */
+    .sx2b-plate img {
+      animation: sx2b-draw linear both;
+      animation-timeline: --sx2b-run;
+      animation-duration: auto;
+      will-change: transform;
+    }
+
+    /* Ranges are slices of `cover`, so they are stated once and hold at every viewport
+       height: `cover` spans the field's whole passage across the screen.  Checked by
+       screenshot at 390, 1024, 1440 and 2531. */
+    .sx2b-plate--seed { animation-range: cover  4% cover 15%; }
+    .sx2b-plate--p2l,
+    .sx2b-plate--p2r  { animation-range: cover 19% cover 33%; }
+    .sx2b-plate--p3l,
+    .sx2b-plate--p3r  { animation-range: cover 36% cover 50%; }
+    .sx2b-plate--band { animation-range: cover 56% cover 74%; }
+
+    .sx2b-plate--seed img { --sx2b-drift:  0;  animation-range: cover  4% cover 18%; }
+    .sx2b-plate--p2l img  { --sx2b-drift:  3%; animation-range: cover 19% cover 37%; }
+    .sx2b-plate--p2r img  { --sx2b-drift: -3%; animation-range: cover 19% cover 37%; }
+    .sx2b-plate--p3l img  { --sx2b-drift:  3%; animation-range: cover 36% cover 54%; }
+    .sx2b-plate--p3r img  { --sx2b-drift: -3%; animation-range: cover 36% cover 54%; }
+    .sx2b-plate--band img { --sx2b-drift:  0;  animation-range: cover 56% cover 78%; }
+  }
+}

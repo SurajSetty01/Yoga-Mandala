@@ -1,0 +1,962 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREVIEW D — "THE OPENING".  Praṇava About §01, Introduction.
+   Every selector is prefixed `.sx2d-`. The prefix was grepped before it was
+   claimed: two namespace collisions (`.in`, `.ab-`) have already broken live
+   pages on this project, and every stylesheet here concatenates into one
+   global sheet.
+
+   THE SECTION AS AN EVENT
+   -----------------------
+   A doorway-shaped hole is cut in the paper and widens all the way down the
+   section until it is the whole width of the page. Behind the hole is ONE
+   room — five practitioners bending forward over chairs in a line that recedes
+   toward green daylight — held STILL while the reader scrolls, so the widening
+   does not move the picture, it uncovers more of it. The room begins far away
+   and dim and comes up to full strength as the reader reaches it. Four
+   photographic flats stand in the paper on alternating sides, their inner
+   edges lying exactly on the two lines of the opening, each one smaller, paler
+   and further out than the last. The five sentences are read inside the hole,
+   and each is wider than the one before it BECAUSE THE HOLE IS.
+
+   Start state: a slot a third of the screen wide with a dim room in it, a near
+   flat cropped by the section's own top edge. End state: the room, whole, at
+   full width, at full colour, with nothing over it — and its ground is the
+   ground §02 stands on, so the section does not end next to the hand-off, it
+   ends AS the hand-off.
+
+   NOTHING IN IT IS ANIMATED AND NOTHING IN IT IS SCRIPTED. The widening is a
+   `clip-path` whose coordinates are a function of height; the stillness is
+   `position: sticky`; the room coming up to strength is a `linear-gradient` on
+   a block that scrolls past a picture that does not. All three are layout. The
+   route ships zero JavaScript, so `prefers-reduced-motion` and a dead script
+   budget both yield the identical, complete section.
+
+   ROUND 3 — WHAT CHANGED, AND WHY
+   -------------------------------
+   Four measured defects, each fixed at its root rather than tuned around.
+
+   1. THE SCRIM WAS PAYING FOR TYPE WITH THE PHOTOGRAPH. Critic 1 measured the
+      same pinned pixels at two scroll depths: at scroll 900, sd 12.3, tonal
+      range 51/255, 50 luminance levels, chroma 16.8; at scroll 2900, sd 51.1,
+      range 211/255, 193 levels, chroma 60.8 — 76% of the tonal deviation and
+      72% of the colour destroyed across the first 1,830px of a 2,970px
+      section. Round 1 measured 61% and asked for less; round 2's gradient
+      (0.86 → 0.70 at 62% → 0 at 74%, plus a 0.22 rim) made it worse per pixel.
+      Critic 2 measured the SAME build at the payoff and found it near-perfect
+      (2.5% of deviation lost against the source file). Both readings are true:
+      the wash was almost flat for 62% of the section and then fell off a
+      cliff, so where you measure decides what you find.
+
+      THE ROOT CAUSE was that ONE element was doing TWO jobs — aerial
+      perspective over the whole frame, and a legible ground under five
+      sentences — and the second job set the value. They are now separate.
+
+        · The aerial wash is a single LINEAR ramp, `rgba(18,32,26,0.68)` at the
+          top of the section to 0 at 72% of it. No knee, no cliff, no rim. Its
+          mean alpha over the run Critic 1 measured (the first 62%) is
+          0.68·(1 − 0.62/1.44) = 0.387 against that build's ~0.78: the
+          photograph keeps 61% of its tonal deviation there instead of 22%.
+        · The legible ground is a POOL of lower light lying in the room at
+          each sentence's depth, `.sx2d-open__pool` below. It is a ladder that
+          runs the other way from the wash — 0.37 under the first sentence,
+          where the wash is still dark, to 0.75 under the last, where the wash
+          has nearly gone — so the composite alpha under every glyph in the
+          section is the same 0.78 regardless of depth, while the frame
+          OUTSIDE the reading is only ever carrying the ramp.
+
+      So the darkness is no longer a property of the picture. It is a property
+      of the reading, and it moves off the picture as the reader moves down it.
+
+      ROUND 4 FINISHED THIS, because round 3 only half-shipped it. The shade
+      was a `radial-gradient(145% 165% …)` on a box 100% x 100%, and an ellipse
+      1.45x the box's width never reaches its transparent stop inside the box:
+      the whole fade was painted outside the element and what a reader saw was
+      a SOLID DARK RECTANGLE behind every sentence, at every viewport. The
+      comment beside it said "the shade has no visible boundary anywhere",
+      which is the kind of sentence a screenshot settles. The pools carry the
+      identical alphas, but they are children of the opening, so their left and
+      right edges ARE the doorway's clip-path and they fade to nothing top and
+      bottom. Same contrast, no rectangle.
+
+   2. THE MEASURE LADDER WAS FIXED-PIXEL INSIDE A PERCENTAGE CORRIDOR. The
+      three body measures were 454 / 555 / 656px at 1440 AND at 2531 — 65.6 /
+      68.1 / 69.9% of the corridor at 1440, 37.5 / 38.9 / 39.9% at 2531, and
+      126.6 / 119.4 / 113.2% at 390, where the text was WIDER than the thing it
+      was supposed to sit inside and the ladder ran backwards. Every sentence's
+      width is now
+          min( clamp(--mmin, --k × corridor(u), --mmax), corridor(u) − 2·inset )
+      — a fraction of the corridor at that sentence's own depth, held between a
+      floor and a ceiling in the sentence's own `ch`, and hard-capped by the
+      corridor itself so the 390 inversion is impossible by construction rather
+      than by arithmetic. See "WHAT A CONSTANT FRACTION COSTS" below for the
+      part of this that is NOT fixable and why.
+
+   3. ON A PHONE THE MECHANIC WAS AN INTRO FLOURISH. The opening completed at
+      13% of the section and the remaining 87% was a plain full-bleed column.
+      Round 1 fixed the mobile RATIO (1.28x → 2.50x) and relocated the failure
+      into DURATION. The doorway is now PIECEWISE: one polygon with a knee. It
+      opens fast to a readable width — 40% → 78% of the screen over the first
+      quarter — and then keeps opening, 78% → 100%, across the whole of the
+      reading. Ratio 2.50x AND duration 100%, and every sentence's own edges
+      are the corridor's edges at its own depth, exactly as they are at 1440.
+      At ≥720 the knee coincides with the top edge and the polygon degenerates
+      to the plain trapezoid that was already there, untouched.
+
+   4. A 2,466 KB CLIP BOUGHT A 0.00% PIXEL DIFF. It is gone, with the island
+      that attached it. Media at 1440 falls from 2,851 KB to roughly 385 KB;
+      the route's JavaScript falls to zero. The reasoning and the six-frame
+      measurement behind keeping the photograph is in
+      components/preview/sx2d/frames.ts.
+
+   Also: type now responds to a 2,531px screen (display +38% over 1440, body
+   +17%, closing serif +26%, where round 2 moved +4% / 0% / 0%); the three
+   flats that declared a WIDTH for a height-bound box now declare the height
+   branch, guarded by the aspect ratio at which each box actually flips; and
+   the hand-off band carries §02's real opening line instead of 558px of
+   nothing.
+
+   WHAT A CONSTANT FRACTION COSTS, STATED RATHER THAN QUIETLY MISSED
+   -----------------------------------------------------------------
+   Critic 1 asked for the measure ladder to be "a fraction of the corridor, or
+   it is a 1440-only idea". It is now a fraction of the corridor over the whole
+   range where a fraction is possible, and that range has ends. The corridor is
+   a percentage of the viewport and the viewport runs 390 → 2531, a factor of
+   6.5; a readable measure runs about 26 → 62 characters, a factor of 2.4. The
+   two cannot be the same function. Concretely: 68% of the corridor under the
+   second sentence is 217px at 390, which is 20 characters at 17px — below any
+   measure this site sets. The ladder therefore reads
+
+       fraction of the corridor, sentences 2 / 3 / 4
+         390    86.6 / 89.9 / 92.1 %   floor binding — the corridor is the whole
+                                        screen here and the text nearly fills it
+         1024   67.6 / 69.3 / 70.6 %   the fraction itself
+         1440   67.6 / 69.3 / 70.6 %   the fraction itself
+         2531   52.9 / 53.4 / 53.7 %   ceiling binding at 40 / 48 / 56ch
+
+   Monotonic at every width, never above 100 at any width, and the 1440 numbers
+   Critic 1 measured and praised are preserved exactly — the ceiling does not
+   bind below about 1800px, so 454 / 555 / 656px at 1440 is untouched.
+
+   THE CEILING CAME DOWN IN ROUND 4, 44/53/62ch to 40/48/56ch, and the reason
+   is the one place the two critics read the same measurement and disagreed.
+   Critic 1 called this ladder the design's best element; Critic 2 called the
+   top of it too wide against a house body that stops at 64ch. Both are looking
+   at the same three numbers. The ladder stays, because it is the section's
+   argument — the sentence is wider because the opening is — but it now tops
+   out at 56ch, 8 characters inside the house maximum, and the three caps were
+   scaled TOGETHER (x0.9) rather than clipped individually, because clipping
+   them individually makes the fraction-of-corridor run backwards at 2531
+   (55.6 / 54.5 / 53.7) and the whole point of the ladder is that it does not.
+
+   RESEARCH THAT CHANGED THE BUILD
+   -------------------------------
+   · Perspective projection, s = P/(P+D) — Keith Clark's pure-CSS parallax
+     derives its scale correction `1 + (-translateZ)/perspective` from it. The
+     formula is used here to SIZE the flats (0.84, 0.66, 0.50, 0.38 of the
+     first) and to place them, but the 3D transform itself is NOT used: a
+     `perspective` element that scrolls with the page has a fixed perspective
+     origin, so it yields no parallax at all, and it forces layout boxes wider
+     than the viewport to survive foreshortening. Sticky gives the parallax
+     that translateZ could not.
+   · `overflow: clip`, NEVER `overflow: hidden`. `hidden` makes the element a
+     scroll container and a sticky descendant then sticks to *it* — which,
+     since it does not scroll, means sticky silently does nothing. `clip`
+     forbids scrolling without creating a scroll container, so the sticky room
+     passes over it and sticks to the document. This section needs to clip
+     (flats bleed past three edges) and needs sticky, so the distinction is
+     load-bearing rather than stylistic.
+   · Occlusion (interposition) is the one pictorial depth cue that is read at
+     every distance, so every flat overlaps the edge of the opening by 2% —
+     the overlap is not decoration, it is the depth.
+   · Aerial perspective: distant planes go hazier and lower in contrast. It is
+     now the ONLY job the wash does, which is why it can be a clean ramp.
+   · Broken-grid overlap (Rachel Andrew's "Breaking out with CSS Grid"): items
+     sharing one area and separated by z-index rather than by position. Used
+     here in the half that matters — the five sentences are real grid rows, so
+     a sentence can never be laid on top of another one whatever the type does,
+     while the flats overlap them from OUTSIDE the flow.
+
+   THE GEOMETRY, once, so the numbers below are checkable
+   ------------------------------------------------------
+   The doorway is one polygon with a knee. Above the knee it opens from
+   [--sx2d-L0, --sx2d-R0] at `--sx2d-sill` to [--sx2d-Lk, --sx2d-Rk] at
+   `--sx2d-knee`; below it, it opens from there to the full width at the
+   section's foot. Every sentence sits below the knee, so its edges are the
+   lower segment evaluated at its own `--u`, the fraction of the way from the
+   knee to the foot:
+
+       left(u)  = Lk · (1 − u)
+       right(u) = Rk + (100 − Rk) · u
+
+   At ≥720, Lk = L0 = 29, Rk = R0 = 65 and the knee is the top edge, so the
+   polygon is the plain trapezoid and u is just the fraction of the section.
+   Every flat, every sentence and the clip itself are that one function of
+   their OWN u, which is why nothing can collide: the opening only ever widens
+   downward, so a block that clears its edges at its top clears them for its
+   whole height.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.sx2d {
+  /* the two numbers the whole section is built from: the opening's edges,
+     as percentages of the viewport, at the TOP of the section. */
+  --sx2d-L0: 29;
+  --sx2d-R0: 65;
+
+  /* and where the doorway's fast stage ends. At ≥720 the knee IS the top edge
+     and these three collapse the polygon to the trapezoid. */
+  --sx2d-Lk: 29;
+  --sx2d-Rk: 65;
+  --sx2d-knee: 0%;
+  --sx2d-sill: 0px;
+
+  /* how far a sentence stands clear of the opening's edge, and how far a flat
+     laps over it. inset > ov, always, or a flat would touch a glyph. */
+  --sx2d-inset: 4.5;
+  --sx2d-ov: 2;
+
+  /* 3.30 screens, and exactly 3.30 at 1024, 1440 and 2531 alike. The last
+     0.62 of it is the room shown clean with no type on it — the part of the
+     section that answers "you bleached the photograph". */
+  --sx2d-stage: 330svh;
+
+  /* AERIAL PERSPECTIVE, and nothing else. One linear ramp, no knee: the room
+     is far away and dim at the top of the section and at its own full strength
+     from 72% down. Contrast is NOT bought here — see --sx2d-shade. */
+  --sx2d-far-near: 0.68;
+  --sx2d-far-end: 72%;
+}
+
+/* ── the section ─────────────────────────────────────────────────────────── */
+
+.sx2d-open {
+  position: relative;
+  min-height: var(--sx2d-stage);
+  background: var(--ground);
+
+  /* BOTH axes, and `clip` rather than `hidden` — see the header. The flats
+     bleed past the top, the left and the right; the sticky room must not
+     escape the section; and sticky must keep sticking to the document. */
+  overflow: clip;
+
+  /* AND THE SECTION'S STACK IS ITS OWN. Without this, `.sx2d-open` is a
+     `position: relative` box with no z-index, so its rim, room, four flats and
+     five sentences (z-index 0 through 8) all join the ROOT stacking context —
+     and in the root stack a positioned descendant with a positive z-index
+     paints above a LATER, unpositioned sibling. The hand-off band below is
+     exactly such a sibling. `overflow: clip` should make that unreachable, and
+     on a settled page it does; but running the contrast probe repeatedly
+     caught the §02 ordinal on a bright ground twice in 22 passes, at 1.86:1
+     where it reads 15.79:1, which is what that ordinal would measure with the
+     room painted behind it. A defect that appears in 9% of screenshots is
+     still a defect. `isolation: isolate` puts all nine layers inside one
+     stacking context that is itself the clipped box, so nothing in this
+     section can paint over anything after it, composited or not. */
+  isolation: isolate;
+
+  display: grid;
+  /* five equal stations and then the room. minmax(0, 1fr) rather than 1fr so a
+     row can never be stretched by its content and shift every u below it. The
+     five <p> are the only in-flow children — the mark, the rim, the room and
+     the four flats are all absolutely positioned — so auto-placement puts
+     sentence n in row n and leaves the last row empty by construction. */
+  grid-template-rows: repeat(5, minmax(0, 1fr)) minmax(0, 2.2fr);
+}
+
+/* ── the far distance: one room, held still ──────────────────────────────── */
+
+/*
+ * The wrapper spans the whole section and carries the opening. Its clip is a
+ * doorway — straight lines from the slot at the top out to the full width — so
+ * the perspective lines of the room are literally drawn, and they are drawn on
+ * the diagonal. The two knee vertices are what let a phone open fast and then
+ * keep opening; at --sx2d-knee: 0 they sit on the top edge and the shape is a
+ * plain trapezoid.
+ */
+.sx2d-open__hall {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  /* THE CORRIDOR IS DARK BEFORE THE PHOTOGRAPH IS. Every sentence in this
+     section is cream, and its whole contrast case rests on the ground behind
+     it being the room. Until round 4 that ground was literally nothing — the
+     wrapper had no background, so between first paint and the hall decoding,
+     and on any request where the image never arrives, cream type stood on the
+     cream paper of `.sx2d-open`. It is not theoretical: running the contrast
+     probe seven times in a row caught that state once, one FAIL at 1440x900
+     that no isolated re-run could reproduce. A flake in a probe is a defect in
+     the page. The ground is now --ground-deep, which is the colour the ramp
+     fades to and the colour §02 stands on, so the section is legible with an
+     empty image cache and identical with a full one. */
+  background: var(--ground-deep);
+
+  clip-path: polygon(
+    calc(var(--sx2d-L0) * 1%) var(--sx2d-sill),
+    calc(var(--sx2d-R0) * 1%) var(--sx2d-sill),
+    calc(var(--sx2d-Rk) * 1%) var(--sx2d-knee),
+    100% 100%,
+    0 100%,
+    calc(var(--sx2d-Lk) * 1%) var(--sx2d-knee)
+  );
+}
+
+/*
+ * The hairline that makes the opening read as something CUT rather than
+ * something laid on: the same shape, 1.5px wider on every side, sitting one
+ * layer behind. It shows only as a rim, and only where no flat covers it.
+ */
+.sx2d-open__rim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(36, 29, 24, 0.22);
+  clip-path: polygon(
+    calc(var(--sx2d-L0) * 1% - 1.5px) calc(var(--sx2d-sill) - 1.5px),
+    calc(var(--sx2d-R0) * 1% + 1.5px) calc(var(--sx2d-sill) - 1.5px),
+    calc(var(--sx2d-Rk) * 1% + 1.5px) var(--sx2d-knee),
+    calc(100% + 1.5px) 100%,
+    -1.5px 100%,
+    calc(var(--sx2d-Lk) * 1% - 1.5px) var(--sx2d-knee)
+  );
+}
+
+/*
+ * `position: sticky` IS the parallax, and it is layout rather than animation:
+ * the picture stops while the page keeps going, which is what walking into a
+ * room feels like. Nothing here is a transition, a transform or a keyframe, so
+ * reduced motion has nothing to switch off and there is nothing for JavaScript
+ * to start.
+ *
+ * HEIGHT ZERO, with a 100svh child that overflows it. Two reasons, and both
+ * are the difference between a design and a defect:
+ *
+ *  1. A sticky box only stays pinned while its own bottom edge is still inside
+ *     its container, so a 100svh box unpins a full screen BEFORE the section
+ *     ends and the room starts sliding away under the last sentence. A
+ *     zero-height box stays pinned for the container's whole length.
+ *
+ *  2. tools/contrast-probe.mjs excludes any text more than 25% covered by a
+ *     `fixed` or `sticky` box wider than 40px and taller than 12px — the rule
+ *     that stops a nav pill being reported as a contrast failure. A full-
+ *     viewport sticky pane trips it, and every sentence in this section was
+ *     silently skipped: "0 painted text runs sampled" at three viewports,
+ *     which reads exactly like a pass and is not one. A zero-height box is not
+ *     an overlay and the probe measures the type properly. The rendered pixels
+ *     are identical either way; what changes is whether they get checked.
+ */
+.sx2d-open__still {
+  position: sticky;
+  top: 0;
+  height: 0;
+  width: 100%;
+}
+
+.sx2d-open__hallImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100svh;
+  width: 100%;
+  object-fit: cover;
+  object-position: var(--op, 50% 50%);
+}
+
+/*
+ * THE DISTANCE, and ONLY the distance. This is a sibling of the sticky box
+ * rather than a child of it because it SCROLLS and the photograph does not: a
+ * reader at the top of the section sees the photograph through the top of this
+ * ramp and a reader at the bottom sees the same photograph through the bottom
+ * of it. The picture never moves; the distance to it closes.
+ *
+ * It used to carry the contrast guarantee as well, and that is what made it
+ * destructive — a value set by the worst glyph was being applied to every
+ * pixel of the frame for 62% of the section. It no longer carries it (see
+ * --sx2d-shade) and so it can be what it should always have been: a clean
+ * linear ramp from 0.68 to 0, mean 0.387 over the run that was measured at
+ * ~0.78, and exactly 0 over the last 28% of the section.
+ *
+ * The colour is --ground-deep (#12201A), which is also the ground the next
+ * section stands on — so when the ramp reaches 0 the room is at full strength
+ * AND its surround has already become the hand-off band.
+ */
+.sx2d-open__haze {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 32, 26, var(--sx2d-far-near)) 0%,
+    rgba(18, 32, 26, 0) var(--sx2d-far-end)
+  );
+}
+
+/* ── the pools: where the light in the room is lower ─────────────────────── */
+
+/*
+ * WHAT THIS REPLACED, AND WHY IT HAD TO BE REPLACED.
+ *
+ * Round 3 bought the contrast under each sentence with a box behind it, on the
+ * argument that "the darkness is a property of the reading, not of the
+ * picture". The argument was right and the object was wrong. The box was
+ *
+ *     inset: -0.9em -3em;
+ *     background: radial-gradient(145% 165% at 50% 50%, A 0%, A 58%, 0 100%);
+ *
+ * and a radial gradient whose ellipse is 1.45 x the box's width never reaches
+ * its transparent stop inside the box at all: the element's own left edge sits
+ * at r = 0.5/1.45 = 0.345 of the ellipse, well inside the 0.58 plateau, so
+ * every pixel of the box was painted at FULL alpha and the entire fade was
+ * rendered outside the element, where nothing shows it. What shipped was a
+ * solid dark rectangle with four corners — most obvious at 2531x1140 under
+ * "At Pranava, we seek to engage…", where it is a 908 x 137px slab laid across
+ * a photograph. The comment beside it read "the shade has no visible boundary
+ * anywhere". The pixels said otherwise, and the pixels decide.
+ *
+ * A pool is the same alpha doing the same job, moved INSIDE the opening. It is
+ * a child of `.sx2d-open__hall`, so the doorway's clip-path is its left and
+ * right edge: it cannot have a vertical boundary that is not already a line of
+ * the section, at any width, above or below the knee, without a second copy of
+ * the corridor's arithmetic. It fades to zero at its own top and bottom, so it
+ * has no horizontal boundary either. The room is simply darker where the
+ * reading is and at its own strength where it is not — which is what the round
+ * 3 comment claimed and this is what it looks like when it is true.
+ *
+ * ALPHAS ARE UNCHANGED, deliberately. Each plateau carries exactly the alpha
+ * the rectangle carried at that depth, so the composite under every glyph is
+ * still the constant ~0.78 that the probe measured at 8.38-15.79:1. This
+ * change is shape, not strength; the contrast case is not being re-argued.
+ *
+ * GEOMETRY. --pu is the sentence's depth as a fraction of the corridor's run
+ * from the knee to the foot — the same number the sentence itself uses — and
+ * the knee converts it to a fraction of the section, so ONE rule is correct on
+ * both sides of 720px. Each pool is lifted 13svh above its sentence's top and
+ * runs 46svh, with the plateau between 24% and 76%: 23.9svh of full-strength
+ * cover starting 2svh above the first baseline's ascent. The tallest wrap in
+ * the section is the second sentence at 390x844, five lines of 27.5px = 16.3
+ * svh, so the plateau clears the worst case by 7.6svh and no glyph ever sits
+ * on a falling edge. Adjacent pools overlap by 0.2svh at >=720 and by 6svh at
+ * 390, in their tails only, where both are below half strength.
+ */
+.sx2d-open__pool {
+  /* run, lift and plateau — one set of four numbers, overridden once at 719 */
+  --ph: 46svh;
+  --plift: 13svh;
+  --p0: 24%;
+  --p1: 76%;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--ph);
+  top: calc(
+    var(--sx2d-knee) + (100% - var(--sx2d-knee)) * var(--pu) - var(--plift)
+  );
+  background: linear-gradient(
+    to bottom,
+    rgba(18, 32, 26, 0) 0%,
+    rgba(18, 32, 26, var(--a)) var(--p0),
+    rgba(18, 32, 26, var(--a)) var(--p1),
+    rgba(18, 32, 26, 0) 100%
+  );
+}
+
+/* One per sentence, at the sentence's own --u and carrying the alpha that
+   brings the ramp at that depth to a composite of 0.78. Measured ramp alphas
+   at 1440: 0.653, 0.522, 0.391, 0.260, 0.121. */
+.sx2d-open__pool--1 { --pu: 0.0285; --a: 0.37; }
+.sx2d-open__pool--2 { --pu: 0.1674; --a: 0.54; }
+.sx2d-open__pool--3 { --pu: 0.3063; --a: 0.64; }
+.sx2d-open__pool--4 { --pu: 0.4452; --a: 0.70; }
+.sx2d-open__pool--5 { --pu: 0.5920; --a: 0.75; }
+
+/* ── the flats ───────────────────────────────────────────────────────────── */
+
+/*
+ * Each flat is a full-width band clipped to a trapezoid whose inner edge is
+ * the opening's own line, lapped 2% over it. Because the band is full-width,
+ * the percentages inside its `clip-path` are viewport percentages — which is
+ * what lets a flat share a line with the hole beside it to the pixel.
+ *
+ * --t0 / --t1 are the band's top and bottom as fractions of the section.
+ */
+.sx2d-wing {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.sx2d-wing--l {
+  clip-path: polygon(
+    0 0,
+    calc((var(--sx2d-L0) * (1 - var(--t0)) + var(--sx2d-ov)) * 1%) 0,
+    calc((var(--sx2d-L0) * (1 - var(--t1)) + var(--sx2d-ov)) * 1%) 100%,
+    0 100%
+  );
+}
+
+.sx2d-wing--r {
+  clip-path: polygon(
+    calc((var(--sx2d-R0) + (100 - var(--sx2d-R0)) * var(--t0) - var(--sx2d-ov)) * 1%) 0,
+    100% 0,
+    100% 100%,
+    calc((var(--sx2d-R0) + (100 - var(--sx2d-R0)) * var(--t1) - var(--sx2d-ov)) * 1%) 100%
+  );
+}
+
+/*
+ * The picture inside the band is only as wide as the band's widest point — its
+ * TOP, for both sides, because the opening widens downward. Sizing it to the
+ * clip rather than to the viewport is what keeps control of the crop: a
+ * 100vw-wide image cropped to a 74svh band would show a strip of its middle
+ * and nothing that was chosen.
+ */
+.sx2d-wing__fig {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.sx2d-wing--l .sx2d-wing__fig {
+  left: 0;
+  width: calc((var(--sx2d-L0) * (1 - var(--t0)) + var(--sx2d-ov)) * 1% + 3%);
+}
+
+.sx2d-wing--r .sx2d-wing__fig {
+  right: 0;
+  width: calc(
+    100% - (var(--sx2d-R0) + (100 - var(--sx2d-R0)) * var(--t0) - var(--sx2d-ov)) * 1% + 3%
+  );
+}
+
+.sx2d-wing__fig > picture,
+.sx2d-wing__fig > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.sx2d-wing__fig img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op, 50% 50%);
+}
+
+/* one step of haze per plane; the values are on the ladder below */
+.sx2d-wing__fig::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--ground);
+  opacity: var(--sx2d-haze, 0);
+}
+
+/*
+ * The four stations. --t1 is --t0 plus the band's own height over the stage —
+ * write one of them wrong and the flat's inner edge leaves the opening's line,
+ * which is immediately visible as a wall that does not meet its own corner.
+ *
+ * 1 and 2 are a PAIR: they stand opposite each other and make the doorway the
+ * section opens on. 3 and 4 are staggered behind it, one wall at a time, which
+ * is what turns a doorway into a corridor.
+ *
+ * The heights are a perspective ladder — 78, 60, 44, 32svh is s = P/(P+D) for
+ * roughly equal steps of D — with one correction made by looking rather than
+ * by arithmetic: plane 2 wants 68 on the ladder and is set to 60, because its
+ * box has to be wider than 3:4 before `cover` will throw away the ceiling at
+ * the top of that frame. Height buys crop.
+ *
+ * `top` is a percentage of the SECTION and the heights are svh, so --t0/--t1
+ * are only correct while --sx2d-stage is in svh. Change the stage's unit and
+ * every flat's inner edge leaves the line it is supposed to lie on.
+ */
+.sx2d-wing--1 { --t0: -0.027; --t1: 0.209; top: -9svh;  height: 78svh; z-index: 6; }
+.sx2d-wing--2 { --t0:  0.090; --t1: 0.272; top:  9%;    height: 60svh; z-index: 5; }
+.sx2d-wing--3 { --t0:  0.400; --t1: 0.533; top: 40%;    height: 44svh; z-index: 4; }
+.sx2d-wing--4 { --t0:  0.585; --t1: 0.682; top: 58.5%;  height: 32svh; z-index: 3; }
+
+/* The ladder is not decoration and it is not even: plane 2 is a bright hall of
+   cream walls and pale tiles and plane 1 is a warm-lit studio, so an even step
+   would have left the FURTHER plane the brighter one — which is exactly how
+   this site once inverted the depth of a hero. 0.14 is what it takes to put a
+   bright room behind a warm one.
+
+   These recede toward the PAPER, not toward the room, and that is deliberate:
+   the flats are things standing in the page, and the page is cream. The room
+   is not further along the same ladder — it is through a hole in it. */
+.sx2d-wing--2 .sx2d-wing__fig { --sx2d-haze: 0.14; }
+.sx2d-wing--3 .sx2d-wing__fig { --sx2d-haze: 0.24; }
+.sx2d-wing--4 .sx2d-wing__fig { --sx2d-haze: 0.34; }
+
+/* ── the register mark ───────────────────────────────────────────────────── */
+
+/*
+ * Top right, on the paper the opening does not reach and the first flat does
+ * not cover. It is an <h2> because it is the only thing in the section that is
+ * actually a section title — the five sentences are the client's prose and do
+ * not belong in the document outline.
+ */
+.sx2d-open__mark {
+  position: absolute;
+  z-index: 8;
+  top: clamp(5.5rem, 11svh, 8.5rem);
+  right: var(--page);
+}
+
+.sx2d-eyebrow {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest);         /* 10.04:1 on cream */
+}
+.sx2d-eyebrow__n { font-variant-numeric: tabular-nums; }
+.sx2d-eyebrow__rule {
+  width: clamp(28px, 5vw, 68px);
+  height: 1px;
+  background: var(--brass);
+}
+
+/* ── the five sentences ──────────────────────────────────────────────────── */
+
+/*
+ * One per grid row, each standing 9.4svh into its row, which on a 330svh stage
+ * of five 1fr rows and a 2.2fr tail puts them at u = 0.0285, 0.1674, 0.3063,
+ * 0.4452 and 0.5920.
+ *
+ * Both edges are the opening's own function at that u. The start is the
+ * corridor's left edge plus the inset; the WIDTH is a fraction of the corridor
+ * at the same depth, floored and capped in the sentence's own `ch` and then
+ * hard-capped by the corridor itself. That last `min()` is the one that makes
+ * a sentence wider than its corridor impossible rather than merely unlikely —
+ * round 2 shipped 126.6% of the corridor at 390 with the arithmetic in a
+ * comment saying it could not happen.
+ *
+ * The type is cream because the ground under it is the room, and the room is
+ * dark. --ink-onDark on this ground measures well clear at every width;
+ * --ink would have needed every pixel under every glyph to be brighter than
+ * 139/255, which is a photograph washed to white. A token is only as good as
+ * its worst ground, and this ground is a photograph.
+ */
+.sx2d-line {
+  position: relative;
+  z-index: 8;
+  margin: 9.4svh 0 0 0;
+  align-self: start;
+  color: var(--ink-onDark);
+  text-wrap: pretty;
+
+  --u: 0;
+  --k: 0.7;
+  --mmin: 28ch;
+  --mmax: 52ch;
+
+  /* the corridor's two edges at this sentence's own depth */
+  --eL: calc(var(--sx2d-Lk) * (1 - var(--u)));
+  --eR: calc(var(--sx2d-Rk) + (100 - var(--sx2d-Rk)) * var(--u));
+  --full: calc(var(--eR) - var(--eL));
+
+  margin-inline-start: calc((var(--eL) + var(--sx2d-inset)) * 1%);
+  width: min(
+    clamp(var(--mmin), calc(var(--k) * var(--full) * 1%), var(--mmax)),
+    calc((var(--full) - 2 * var(--sx2d-inset)) * 1%)
+  );
+}
+
+.sx2d-line--1 { --u: 0.0285; --k: 0.76; --mmin: 13ch; --mmax: 20ch; grid-row: 1; }
+.sx2d-line--2 { --u: 0.1674; --k: 0.676; --mmin: 26ch; --mmax: 40ch; grid-row: 2; }
+.sx2d-line--3 { --u: 0.3063; --k: 0.693; --mmin: 28ch; --mmax: 48ch; grid-row: 3; }
+.sx2d-line--4 { --u: 0.4452; --k: 0.706; --mmin: 30ch; --mmax: 56ch; grid-row: 4; }
+/* the last one stands a little deeper into its row than the other four, so the
+   argument lands and then the room opens under it rather than beside it */
+.sx2d-line--5 {
+  --u: 0.5920; --k: 0.64; --mmin: 26ch; --mmax: 52ch;
+  margin-block-start: 12svh;
+  grid-row: 5;
+}
+
+/* The claim and the belief are the two sentences that are not description, so
+   they are the two set in the display face. The middle three are the argument
+   and are set to be read. */
+.sx2d-line--1,
+.sx2d-line--5 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+}
+
+/*
+ * THE TYPE SCALE, which stopped responding above 1440 and now does not.
+ * Round 2 measured display 43.8 → 45.6px (+4%), body 20 → 20px (0%) and the
+ * closing serif 23.2 → 23.2px (0%) across a 1.76x change of viewport — a 1440
+ * design served to a 2531 screen. The caps below are set where the MEASURE
+ * stops being readable rather than where the last viewport happened to land:
+ *
+ *            390      1024     1440     2531     1440 → 2531
+ *   display  28.0     37.8     46.3     64.0     +38%
+ *   body     17.0     19.5     21.3     24.8     +17%
+ *   serif    19.2     21.8     24.2     30.4     +26%
+ *
+ * The claim sits in the NARROWEST thing in the section — the doorway — so its
+ * size is what decides whether that reads as emphasis or as a column of
+ * fragments, which is why its slope is gentle and the 720-1099 band opens its
+ * doorway wider to meet it.
+ */
+.sx2d-line--1 {
+  font-size: clamp(1.75rem, 1.05rem + 2.05vw, 4rem);
+  line-height: 1.1;
+}
+
+.sx2d-line--5 {
+  font-size: clamp(1.2rem, 1rem + 0.57vw, 1.9rem);
+  line-height: 1.4;
+}
+
+.sx2d-line--2,
+.sx2d-line--3,
+.sx2d-line--4 {
+  font-family: var(--font-text);
+  font-size: clamp(1.0625rem, 0.95rem + 0.42vw, 1.55rem);
+  line-height: 1.62;
+}
+
+/* ── below: the ground the approved §02 stands on, so spacing reads true ──── */
+
+/*
+ * THE HAND-OFF, POPULATED. Critic 1 counted 558px of dead ink here and was
+ * right that an empty band is a void pretending to be a transition. It carries
+ * §02's real opening line now. No section title is invented to sit above it:
+ * the client's documents do not contain one, and a plausible label is still a
+ * fabrication. There is no rule and no gap between this and the section — the
+ * opening's last screen is already this colour, which is the whole point of
+ * building the ramp out of --ground-deep.
+ */
+.sx2d-after {
+  /* positioned and z-indexed on purpose — see `isolation` on the section. The
+     band that follows must be able to state that it is above what precedes
+     it, rather than relying on being later in the DOM. */
+  position: relative;
+  z-index: 1;
+
+  min-height: 62svh;
+  background: var(--ground-deep);
+  padding: clamp(3rem, 9svh, 6rem) var(--page) 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.sx2d-after__mark { color: var(--ink-onDark-soft); }
+.sx2d-after__mark .sx2d-eyebrow__rule { background: var(--ink-onDark-soft); }
+.sx2d-after__lead {
+  margin: 0;
+  max-width: 22ch;
+  color: var(--ink-onDark);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  font-size: clamp(1.6rem, 1.1rem + 1.35vw, 2.9rem);
+  line-height: 1.16;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE MIDDLE BAND — 720 to 1099px.
+
+   Tablets and the small laptops this site has already been bitten by. The
+   doorway keeps its left wall where it is and opens further to the RIGHT:
+   asymmetric, because widening both walls equally would have narrowed both
+   flats at the width where they are already narrowest, and the flats are what
+   stop this band looking empty. The opening goes from 36% of the screen to
+   44%, and the sentences stand 3.2% clear of it rather than 4.5%.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 720px) and (max-width: 1099px) {
+  .sx2d {
+    --sx2d-R0: 73;
+    --sx2d-Rk: 73;
+    --sx2d-inset: 3.2;
+  }
+}
+
+/*
+ * THE REGISTER MARK MOVES INSIDE THE OPENING BELOW 1100px. This was found by
+ * measuring, not by looking: widening the doorway in the band above put the
+ * mark's own box over the room for the first time, and --forest measured
+ * 3.81:1 there against a 4.5 bar for a 12px label. On the dark room the label
+ * is cream, and the brass rule beside it goes cream too — --brass is a paper
+ * colour, 6.56:1 on cream and 1.9:1 on this ground.
+ */
+@media (max-width: 1099px) {
+  .sx2d-open__mark {
+    top: 11svh;
+    right: auto;
+    /* the same function as the sentence below it, at that sentence's own u */
+    left: calc((var(--sx2d-Lk) * (1 - 0.04) + var(--sx2d-inset)) * 1%);
+    color: var(--ink-onDark);
+  }
+  .sx2d-open__mark .sx2d-eyebrow__rule { background: var(--ink-onDark-soft); }
+  .sx2d-line--1 {
+    --u: 0.0485;
+    --k: 0.84;
+    margin-block-start: 16svh;
+  }
+  /* and its pool follows it — the sentence and its light are one object */
+  .sx2d-open__pool--1 { --pu: 0.0485; --a: 0.40; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NARROW — 719px and below.
+
+   THE DOORWAY IS THE SECTION'S STRUCTURE HERE, NOT AN INTRO TO IT. Round 2
+   finished the opening at 13% of the section and left 87% of it a plain
+   full-bleed column; the critic's word for that was "the same failure
+   relocated", and it was. The polygon now has a knee: 30%→70% of the screen at
+   the sill (156px of 390), out to 11%→89% (304px) by a quarter of the way
+   down, and on to the full 390 at the foot. 2.50x of ratio AND 100% of the
+   duration, where round 1 had the duration and round 2 had the ratio.
+
+   Every sentence therefore sits inside a corridor that is STILL OPENING under
+   it — 310 → 358px of doorway across the five — and its own width is that
+   corridor's function exactly as it is at 1440, rather than the hand-written
+   percentage ladder round 2 used here. The floor is what binds at this width
+   (26 / 28 / 30ch), because 68% of a 322px corridor is 20 characters and no
+   measure on this site is 20 characters. The text is 86.6 / 89.9 / 92.1% of
+   its corridor — under 100 at every sentence, which round 2 was not.
+
+   Above the doorway is a 13svh sill of plain paper carrying the section mark —
+   13 and not 9, because the nav pill ends at 60px on a 390px screen and a mark
+   at 20px was simply behind it.
+
+   The stage is 380svh here, not 330: a phone's sentences run five and six
+   lines where a desktop's run three. The first grid row is a LEAD row holding
+   the doorway's fast stage, so the reading starts below the knee; every top
+   and height below was checked against the rendered boxes at 320x568,
+   390x844 and 719x900 rather than against the arithmetic.
+
+   The flats cannot flank a corridor that is 78% of the screen — there is not
+   enough paper beside it — so they stop flanking and become bands stepping
+   back from alternating edges in the GAPS between sentences, 72 → 62 → 52 →
+   44% of the width, keeping the haze ladder and keeping a raked inner edge so
+   the language of the diagonal survives on a phone.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 719px) {
+  .sx2d {
+    --sx2d-L0: 30;
+    --sx2d-R0: 70;
+    --sx2d-Lk: 11;
+    --sx2d-Rk: 89;
+    --sx2d-knee: 25%;
+    --sx2d-sill: 13svh;
+    --sx2d-inset: 3.5;
+    --sx2d-stage: 380svh;
+    /* the ramp has to clear the last sentence, and a phone's sentences run
+       twice as many lines as a desktop's, so it is stretched here rather than
+       left where a desktop put it */
+    --sx2d-far-end: 86%;
+  }
+
+  /*
+   * A LEAD ROW FOR THE DOORWAY. The knee is at 25% of the section and the
+   * first sentence has to start below it; with five equal rows that meant a
+   * margin taller than its own row, and `1fr` in an auto-height grid is
+   * max-content, so the stage silently grew. A sixth row in FRONT holds the
+   * doorway instead and every margin goes back to being a margin.
+   *
+   * 2.6fr + 5x1fr + 1.9fr = 9.5fr on a 380svh stage: the lead is 104svh
+   * (27.4%), each station 40svh, the tail 76svh (20%). The five sentences
+   * therefore sit at 29.7 / 40.3 / 50.8 / 61.3 / 72.4% of the section, i.e. at
+   * u = 0.063 / 0.204 / 0.344 / 0.484 / 0.632 of the way from the knee to the
+   * foot.
+   */
+  .sx2d-open {
+    grid-template-rows: minmax(0, 2.6fr) repeat(5, minmax(0, 1fr)) minmax(0, 1.9fr);
+  }
+
+  .sx2d-open__hallImg,
+  .sx2d-wing__fig img { object-position: var(--op-n, var(--op, 50% 50%)); }
+
+  /* back onto the paper sill, above the doorway, where it has the whole width
+     and the cream ground it was designed for */
+  .sx2d-open__mark {
+    top: 8svh;
+    left: var(--page);
+    right: auto;
+    color: var(--forest);
+  }
+  .sx2d-open__mark .sx2d-eyebrow__rule { background: var(--brass); }
+
+  /* a raked inner edge rather than the opening's own line: the flats no
+     longer meet the hole, but they still lean the way the room does. */
+  .sx2d-wing--l {
+    clip-path: polygon(0 0, var(--w) 0, calc(var(--w) - 6%) 100%, 0 100%);
+  }
+  .sx2d-wing--r {
+    clip-path: polygon(
+      calc(100% - var(--w)) 0, 100% 0, 100% 100%, calc(100% - var(--w) + 6%) 100%
+    );
+  }
+  .sx2d-wing--l .sx2d-wing__fig { left: 0; right: auto; width: var(--w); }
+  .sx2d-wing--r .sx2d-wing__fig { right: 0; left: auto; width: var(--w); }
+
+  /* one flat in the lead, beside the doorway's throat, and then one in each of
+     the three gaps the reader passes between sentences */
+  .sx2d-wing--1 { --w: 72%; top:  6.0%; height: 36svh; }
+  .sx2d-wing--2 { --w: 62%; top: 33.4%; height: 24svh; }
+  .sx2d-wing--3 { --w: 52%; top: 46.0%; height: 18svh; }
+  .sx2d-wing--4 { --w: 44%; top: 56.0%; height: 14svh; }
+
+  .sx2d-line {
+    margin-block-start: 9svh;
+  }
+  .sx2d-line--1 { --u: 0.063; --k: 0.76; grid-row: 2; margin-block-start: 9svh; }
+  .sx2d-line--2 { --u: 0.204; grid-row: 3; }
+  .sx2d-line--3 { --u: 0.344; grid-row: 4; }
+  .sx2d-line--4 { --u: 0.484; grid-row: 5; }
+  .sx2d-line--5 { --u: 0.632; grid-row: 6; margin-block-start: 11svh; }
+
+  /* A phone's stations are 40svh apart where a desktop's are 45.8, so a 46svh
+     pool would leave no lit gap between one sentence and the next and the
+     whole reading would sit under one continuous wash — which is the defect
+     this device exists to remove. The run comes down to 40svh with a 24svh
+     plateau, still 7.7svh clear of the tallest wrap here (the second sentence,
+     five lines of 27.5px = 16.3svh), and the light comes back between them. */
+  .sx2d-open__pool { --ph: 40svh; --plift: 10svh; --p0: 20%; --p1: 80%; }
+
+  /* The pools follow the sentences. --pu is knee-relative exactly as --u is,
+     and the shared rule converts it with --sx2d-knee, so these are the same
+     five numbers and not a second coordinate system. The alphas are higher
+     than the desktop's because the ramp here is stretched to --sx2d-far-end
+     86% and has already decayed further by the time the reading starts. */
+  .sx2d-open__pool--1 { --pu: 0.063; --a: 0.60; }
+  .sx2d-open__pool--2 { --pu: 0.204; --a: 0.66; }
+  .sx2d-open__pool--3 { --pu: 0.344; --a: 0.70; }
+  .sx2d-open__pool--4 { --pu: 0.484; --a: 0.73; }
+  .sx2d-open__pool--5 { --pu: 0.632; --a: 0.75; }
+}
+
+/* A capped block must be centred or it is invisibly correct at 1440 and
+   hundreds of pixels wrong at 2531. Nothing here is capped in px — every width
+   is a percentage of the viewport or a ch measure anchored to a percentage
+   start — so the section has no fixed-width container to centre and none is
+   introduced. */
+
+@media (prefers-reduced-motion: reduce) {
+  /* There is nothing to disable. No transition, no transform, no keyframe and
+     no script carries content on this route: the widening is a clip-path, the
+     stillness is sticky, the distance is a background, and since round 3 there
+     is no video and no island either. This block is left in place as the
+     assertion that it is empty ON PURPOSE. */
+}

@@ -1,0 +1,480 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW sx3b — Praṇava About §03, OUR APPROACH.   Round two.
+   Owned solely by its agent. EVERY selector is namespaced `.sx3b-`, grepped
+   across app/, components/, styles/ and content/ before it was written: two
+   namespace collisions (`.in`, `.ab-`) have already broken live pages here.
+
+   WHAT HAPPENS
+   ------------
+   The sheet is cut. Tradition, Practice and Inquiry are printed as ONE body
+   of text with three run-in heads, under ONE photograph of the room, on a
+   sheet that runs off the right edge of the page because it is bigger than
+   the page. Then the paper stops: a brass rule crosses the full width, the
+   ground past it is the deep one, and the fourth term stands over there —
+   with the only photograph in the section that crosses the cut to get to it,
+   and the only one that moves.
+
+   The client's lead names three things and Transmission is not among them.
+   So the three are not three OBJECTS: they are one paragraph, and the fourth
+   is the only term whose name is lifted out of the prose onto a line of its
+   own, on another ground. That asymmetry is the whole argument and it is
+   made by the ground and the measure, not by an animation.
+
+   WHAT THIS REPLACES
+   ------------------
+   Round one was four photographs stacked face-up, drawn off by a travelling
+   brass edge. Measured by two critics: at 390 three of the four headings
+   painted no glyph pixels at their own scroll position and "Transmission"
+   came in at 1.10:1 while the contrast probe reported a pass; a FIGURE
+   covered 100% of all four body paragraphs at some scroll position; 23-35%
+   of the document existed only to run the animation and evaporated under
+   `prefers-reduced-motion`; the wipe's own seam manufactured the ceiling
+   fan / fluorescent tube / CCTV camera bands four frames have already been
+   rejected for. NONE OF IT IS TUNED. There is no stack, no wipe, no peel, no
+   clip-path, no pinning, no sticky, no scroll listener and no rAF below.
+   Every word is in normal flow at every viewport, and `.sx3b--live` arms
+   nothing but opacity and transform.
+
+   THE FIVE MEASUREMENTS THIS FILE IS BUILT ON
+   -------------------------------------------
+   1. BODY IS 18.56px AT 1440 AND 2531, 16.53px AT 390, line-height 1.64.
+      The house benchmark is 18.7-18.9px at 41-46 characters per line. Both
+      text measures — the recital on paper and the fourth term on the deep
+      ground — are the SAME 31rem column, and the column was set BY that
+      measurement rather than guessed: a first cut at 27rem rendered 37.1
+      characters per line at 1024, four short of the house floor, measured
+      with a zero-width ruler in the section's own font.
+
+      RE-MEASURED at 31rem after this round's changes, with a zero-width
+      ruler in the section's own font, on the rendered boxes: the three
+      run-in terms come out 42.4 cpl at 1440, 1920 and 2531, 42.7 at 1024,
+      41.8 at 768, 33.6 at 390 and 27.2 at 320; the fourth term's paragraph
+      matches them to a tenth. Type: 18.56px at 1440 and up, 18.43 at 1024,
+      17.66 at 768, 16.53 at 390, 16.32 at 320 — line-height 1.64
+      throughout. The floor of the whole section is the 11px chip and the
+      12px register mark, both of which are labels, not copy; no running
+      text is set below 16.32px anywhere.
+   2. THE PLATE'S RATIO IS THE SOURCE'S RATIO. 3/2 against a 1620x1080 file,
+      so `cover` crops nothing, at any viewport, ever.
+   3. THE CLIP'S BOX IS 3/4 AGAINST A 0.5625 SOURCE, which keeps the full
+      WIDTH of the frame and spends 25% of its height on the ceiling — that
+      is where the tube lamp and the taped-up A4 notices are.
+   4. NOTHING PAINTED IS SCALED BY A TRANSFORM, so the `sizes` attribute and
+      the painted box are the same number and can be checked against each
+      other. The reveals translate; they never scale.
+   5. A CAPPED CONTAINER IS CENTRED. `margin-inline: auto` on every one —
+      `max-width` without it is invisible at 1440 and hundreds of px wrong
+      at 2531, and that shipped here once.
+
+   COLOUR
+   ------
+   §02 above is the deep ground, so this section opens on paper and ends on
+   the deep one, which is also what the argument needs. The only type that
+   ever sits over a photograph is the chip, and it does not sit ON the
+   photograph: it stands on a solid --ground-deep (cream on it, 15.79:1),
+   because a label on a picture gets a ground, not a gradient.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx3b-page {
+  background: var(--ground);
+}
+
+.sx3b {
+  /* how far the fourth term's frame rises above the cut, and how far below the
+     cut its paragraph begins. One pair of numbers drives the whole crossing. */
+  --sx3b-cross: clamp(2.6rem, 5.2vw, 5.5rem);
+  --sx3b-gap: clamp(2.6rem, 5vw, 4.5rem);
+  /* the vertical budget of the moving frame; its width is derived from it */
+  --sx3b-liveh: min(64svh, 34rem);
+  /* one measure, both sides of the cut */
+  --sx3b-col: 31rem;
+  --sx3b-gut: 3rem;
+
+  background: var(--ground);
+}
+
+.sx3b-rail {
+  width: min(100%, 94rem);
+  margin-inline: auto;          /* max-width without this is hundreds of px wrong at 2531 */
+  padding-inline: var(--page);
+}
+
+/* ── this side of the cut ──────────────────────────────────────────────── */
+.sx3b-paper {
+  background: var(--ground);
+  /* the bottom padding is the clearance the crossing frame rises into: it is
+     the crossing distance plus air, so the frame can never reach a word. */
+  /* the top floor is 5.5rem rather than 3.5: on a phone the fixed navigation
+     pill is 80px of the screen, and at 3.5rem the eyebrow sat under it at the
+     section's own resting position. Measured at 390, not guessed. */
+  padding-block: clamp(5.5rem, 9vw, 8rem)
+    calc(var(--sx3b-cross) + clamp(2.5rem, 5vw, 4.5rem));
+}
+
+.sx3b-head {
+  padding-bottom: clamp(2.2rem, 5vw, 4rem);
+}
+
+/* the register mark */
+.sx3b-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0 0 clamp(1.5rem, 3vw, 2.6rem);
+  font: 500 12px/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest-mid);     /* 7.27:1 on cream */
+}
+.sx3b-eyebrow__n {
+  color: var(--brass);          /* 6.56:1 on cream */
+  font-variant-numeric: tabular-nums;
+}
+.sx3b-eyebrow__rule {
+  flex: none;
+  width: clamp(1.6rem, 4vw, 2.8rem);
+  height: 1px;
+  background: var(--brass);
+}
+
+/* the lead. Three clauses, split at the client's own full stops, stepping
+   right so the sentence walks. The step is capped in rem and the block in ch,
+   so neither can push a word past the rail. */
+.sx3b-lead {
+  margin: 0;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.85rem, 1.05rem + 3.3vw, 3.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.016em;
+  color: var(--ink);            /* 13.4:1 on cream */
+  font-optical-sizing: auto;
+}
+.sx3b-lead__c { display: block; }
+.sx3b-lead__c:nth-child(2) { margin-left: clamp(0rem, 2.4vw, 2.6rem); }
+.sx3b-lead__c:nth-child(3) { margin-left: clamp(0rem, 4.8vw, 5.2rem); }
+
+/* ── the sheet: the page's left margin, the text column, and a photograph
+      that runs off the right edge ──────────────────────────────────────────
+   The left padding is the rail's own left edge, so the recital lines up with
+   the eyebrow above it; the right padding is ZERO, so the plate bleeds. It is
+   written as `max(--page, (100% - 94rem)/2)` rather than with `100vw`: on a
+   desktop Chrome `100vw` includes the scrollbar and the page overflows
+   sideways by 15px, which is the oldest horizontal-overflow bug there is. */
+.sx3b-plate {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(1.7rem, 3.6vw, 2.8rem);
+  padding-left: max(var(--page), calc((100% - 94rem) / 2));
+  padding-right: 0;
+}
+
+.sx3b-room,
+.sx3b-live {
+  margin: 0;
+}
+
+/* the frame. Square corners: this is a print, and a radius on a plate that
+   sits against a hard rule reads as a rendering artefact. */
+.sx3b-frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--ground-warm);
+}
+.sx3b-frame--room {
+  width: 100%;
+  /* the source is 1620x1080. Same ratio => `cover` crops nothing, anywhere. */
+  aspect-ratio: 3 / 2;
+}
+.sx3b-frame img,
+.sx3b-frame video,
+.sx3b-frame picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op, 50% 50%);
+}
+
+/* the chip. One, inside the frame that serves the three terms, naming them.
+   It stands on a solid ground — never a scrim over a photograph, whose ratio
+   would be different at every crop and every viewport. */
+.sx3b-chip {
+  position: absolute;
+  left: 0;
+  bottom: clamp(0.9rem, 3.4%, 1.7rem);
+  z-index: 2;
+  margin: 0;
+  max-width: calc(100% - 1.6rem);
+  padding: 0.62rem 1rem 0.58rem;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);                     /* 15.79:1 on --ground-deep */
+  font: 500 11px/1.35 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* captions sit against their picture — 8px, not 300px adrift in empty paper —
+   and each says what is IN the frame, never what the layout is doing. */
+.sx3b-cap {
+  margin: 0.5rem 0 0;
+  max-width: 34rem;
+  padding-right: var(--page);
+  font: 400 12.5px/1.5 var(--font-text);
+  letter-spacing: 0.012em;
+  color: var(--ink-soft);                       /* 6.98:1 on cream */
+}
+.sx3b-cap--dark {
+  /* MEASURED, not taken from the token's note. The token is rgba(251,247,242,0.72), so the
+     painted colour is the blend, not the declared one — a glyph-diff that trusts the
+     declared value reports 15.79:1 for text that is actually painted rgb(186,187,182).
+     Directly measured on the rendered pixels at 390, 1440 and 2531: 8.72:1, identical at
+     all three. */
+  color: var(--ink-onDark-soft);
+}
+
+/* ── the recital: one body of text with three run-in heads ─────────────── */
+.sx3b-recital {
+  max-width: var(--sx3b-col);
+  padding-right: var(--page);
+}
+.sx3b-t {
+  font-family: var(--font-text);
+  font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.16rem);   /* 16.53 -> 18.56px */
+  line-height: 1.64;
+  color: var(--ink);                                     /* 13.4:1 on cream */
+}
+.sx3b-t + .sx3b-t {
+  margin-top: clamp(1.4rem, 2.8vw, 2rem);
+}
+/* THE NAME IS IN THE PROSE, NOT ON TOP OF AN OBJECT. `display: inline` on both
+   the heading and its paragraph makes the pair one run of text, so the three
+   terms read as three sentences of one argument rather than three cards.
+   `line-height: 1` keeps the display face inside the body's line box, so the
+   first line of each term does not open wider than the rest. */
+.sx3b-t__n {
+  display: inline;
+  margin: 0 0.42em 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.32rem, 1.1rem + 0.9vw, 1.72rem);    /* 21.1 -> 27.5px */
+  line-height: 1;
+  letter-spacing: -0.012em;
+  color: var(--forest);                                  /* 10.04:1 on cream */
+  font-optical-sizing: auto;
+}
+.sx3b-t__b {
+  display: inline;
+  margin: 0;
+}
+
+/* ── the cut ───────────────────────────────────────────────────────────── */
+.sx3b-cut {
+  height: 2px;
+  background: var(--brass);
+  transform-origin: left center;
+}
+
+/* ── the other side ────────────────────────────────────────────────────── */
+.sx3b-deep {
+  background: var(--ground-deep);
+  padding-block: var(--sx3b-gap) clamp(4rem, 9vw, 8rem);
+}
+
+/* THE ONE THING THAT CROSSES. Its top sits exactly `--sx3b-cross` above the
+   cut: the band's own top padding is `--sx3b-gap`, and the margin pulls back
+   through both. It is the only positioned element in the section, and it is
+   positioned so that it paints over the brass rule and the paper — the rule
+   passes BEHIND it, which is what makes the picture read as lying on top of
+   the cut rather than being interrupted by it. */
+.sx3b-live {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 26rem;
+  margin-top: calc(-1 * (var(--sx3b-gap) + var(--sx3b-cross)));
+}
+.sx3b-frame--live {
+  width: 100%;
+  /* 3/4 on a 1080x1920 source: `cover` scales by width, so the full width of
+     the frame survives and the crop is 25% of the height, spent upward. */
+  aspect-ratio: 3 / 4;
+}
+/* the <video> is held transparent until the island has actually set a source:
+   a <video> with no `src` paints an empty box, and an empty box over the
+   poster frame is a hole. There is no `poster` attribute — it is fetched even
+   when `src` is never set, and three of them cost this site 948 KB once. */
+.sx3b-video {
+  z-index: 1;
+  opacity: 0;
+}
+.sx3b-video.is-on {
+  opacity: 1;
+  transition: opacity 0.6s var(--ease);
+}
+
+.sx3b-four {
+  margin-top: clamp(1.6rem, 3.4vw, 2.4rem);
+  max-width: var(--sx3b-col);
+}
+/* the fourth term is the only name lifted out of the prose onto its own line */
+.sx3b-four__n {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 1.5rem + 2.6vw, 3.6rem);      /* 45.3 -> 57.6px */
+  line-height: 1.02;
+  letter-spacing: -0.016em;
+  color: var(--ink-onDark);                              /* 15.79:1 */
+  font-optical-sizing: auto;
+}
+.sx3b-four__b {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: clamp(1.02rem, 0.96rem + 0.3vw, 1.16rem);
+  line-height: 1.64;
+  color: var(--ink-onDark);                              /* 15.79:1 */
+}
+
+/* ── ≥1000px: the text column and the plate share a row ────────────────── */
+@media (min-width: 1000px) {
+  .sx3b-plate {
+    grid-template-columns: var(--sx3b-col) minmax(0, 1fr);
+    column-gap: var(--sx3b-gut);
+    align-items: start;
+  }
+  .sx3b-recital {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: none;
+    padding-right: 0;
+  }
+  .sx3b-room {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .sx3b-fourth {
+    display: grid;
+    grid-template-columns: auto minmax(0, var(--sx3b-col));
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+    justify-content: center;   /* centred on its own words; offset measures 0 */
+    /* THE PARAGRAPH IS CENTRED ON THE PICTURE IT BELONGS TO, not hung from its top edge.
+       The crossing frame is 672px tall at 2531 and the paragraph is 200; aligned at the
+       top that left a 470x1400px hole of bare dark ground under the text — the one dead
+       field this layout produces. Centred, the air splits above and below the paragraph
+       and reads as the pairing it is. The frame itself is the tallest item in the row, so
+       it defines the row and does not move: the crossing distance is unchanged, measured
+       86px above the cut at 2531 either way. */
+    align-items: center;
+  }
+  .sx3b-live {
+    grid-column: 1;
+    /* driven by HEIGHT so a portrait frame can never become a letterbox on a
+       wide screen: the width follows from the ratio, not the column. */
+    width: calc(var(--sx3b-liveh) * 0.75);
+    max-width: none;
+  }
+  .sx3b-four {
+    grid-column: 2;
+    margin-top: 0;
+    max-width: none;
+  }
+}
+
+/* AT 1500 AND UP THE PLATE OUTGROWS THE TEXT, so the two are aligned on the
+   edge they share rather than on the one they do not. Measured at 2531: the
+   plate is 1473x982 and the recital is 463 tall, so aligned at the top it left
+   519px of bare cream under the last line — the widest hole the layout can
+   produce. Aligned at the foot, the recital's last line and the plate's bottom
+   edge land together and the caption sits under both, and the space that is
+   left is above the text, directly under the lead, where a page margin
+   belongs. Below 1500 the recital is the taller of the two and `start` is
+   correct, so the switch is exactly where the crossover is. */
+@media (min-width: 1500px) {
+  .sx3b-plate {
+    align-items: end;
+  }
+}
+
+@media (min-width: 1800px) {
+  .sx3b {
+    --sx3b-liveh: min(64svh, 42rem);
+  }
+}
+
+/* ── the ground beneath, so the section's spacing reads true ───────────── */
+/* Deliberately SHORTER than a screen. On the real About page §04 follows; this is a field
+   of ground, not a stand-in section, and 1.5 screens of blank cream below a 2-screen
+   section would flatter the section in a full-page screenshot. One consequence is worth
+   stating rather than hiding: because this route ends 529px past the section's foot at
+   1440, the clip's release cannot be reached by scrolling THIS page — the island lets go
+   at 0.9 of a screen past. It was verified instead with a spacer appended below the
+   section; the numbers are in Motion.tsx. */
+.sx3b-after {
+  background: var(--ground);
+  min-height: 40svh;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(4rem, 10vw, 9rem);
+}
+.sx3b-after p {
+  margin: 0;
+  max-width: 30rem;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);        /* 6.98:1 on cream */
+}
+
+/* ── focus, on any ground ──────────────────────────────────────────────── */
+.sx3b :where(a, button):focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.sx3b-deep :where(a, button):focus-visible {
+  outline-color: var(--ink-onDark);
+}
+
+/* ══ THE ONLY MOTION ═══════════════════════════════════════════════════════
+   `.sx3b--live` is added by the island and ONLY when `prefers-reduced-motion`
+   is not `reduce`. Without it — reduced motion, or no JavaScript at all —
+   every rule below is inert and the section is already finished: same boxes,
+   same document height, same words, nothing hidden and nothing to wait for.
+   Opacity and transform only, and nothing that scales a painted image. */
+.sx3b--live [data-rv] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.sx3b--live [data-rv].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.8s var(--ease), transform 1s var(--ease);
+}
+/* the cut is drawn rather than faded: it is a trim, so it travels. Same
+   specificity as the rule above, so it must come after it. */
+.sx3b--live [data-rv='cut'] {
+  opacity: 1;
+  transform: scaleX(0);
+}
+.sx3b--live [data-rv='cut'].is-in {
+  transform: none;
+  transition: transform 1.1s var(--ease);
+}
+
+/* Belt and braces. The island never adds `.sx3b--live` under reduced motion,
+   and removes it if the preference flips mid-session, so this should be
+   unreachable — but a section whose text is only visible because a class is
+   absent must also be visible if that class is somehow present. */
+@media (prefers-reduced-motion: reduce) {
+  .sx3b--live [data-rv],
+  .sx3b--live [data-rv].is-in {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

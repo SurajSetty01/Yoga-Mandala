@@ -1,0 +1,701 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════════
+   PREVIEW · SX1C — PRAṆAVA / ABOUT / HERO.   "TYPE IS THE STRUCTURE."
+
+   Every selector in this file begins `.sx1c-`. Nothing here is a bare two-letter class and
+   nothing here redeclares a token, a primitive or a class that belongs to another sheet.
+   Two namespace collisions have already broken live pages on this project — one concept
+   claimed `.in`, the sitewide reveal class, and flattened every flex container on the site;
+   another claimed `.ab-`, the About page's own prefix, and dropped two live headings to
+   2.17:1. `sx1c` was verified free against the whole tree before a line of this was written.
+
+   ───────────────────────────────────────────────────────────────────────────────────────
+   THE SECTION IN ONE SENTENCE
+
+   The page is RULED — four hairlines that cross the screen from edge to edge and one that
+   stands down it — every word of type obeys that ruling, and the single photographic plate
+   does not: it is bound on the vertical rule and, over the hero's own screen of scroll, it
+   descends one whole band and comes to rest ACROSS the foot rule, hanging below the page.
+
+   WHAT THE READER CAN SEE WITHOUT SCROLLING, WITHOUT MOTION AND WITHOUT JAVASCRIPT
+   The foot rule is broken. The plate lies across it. That is the argument, and it is in the
+   still picture — which is the test round 1's C failed: "0 of 1,296,000 pixels differ
+   between t=120ms and t=3000ms", "a layout with a story attached". Motion adds the ACT of
+   the plate leaving the page; it does not carry the fact that the plate has left it.
+
+   ───────────────────────────────────────────────────────────────────────────────────────
+   WHAT ROUND 2'S CRITICS CHANGED HERE, EACH AT ITS ROOT
+
+   · THE GROUND IS #12201A — `--ground-deep`, the byte-exact colour of
+     `SECTION.apr-s--deep.apr-what`, which is the first thing under this hero on the live
+     route and 1,459px of it, followed by 998px more. Round 1's preview put paper under a
+     paper hero and so never rendered the seam it actually has to make. There is now no seam
+     to render: the hero's ground IS the next section's ground, full-bleed, uncapped, at
+     every viewport. Paper appears nowhere in this section.
+
+   · THE RULES ARE FULL-BLEED BY CONSTRUCTION. The outer tracks of the grid ARE the rails,
+     so `grid-column: 1 / -1` reaches both screen edges with no negative margin and no
+     `100vw` — `100vw` includes the scrollbar and a bleed built on it overhangs by half of
+     one. That answers "cream margin as the answer to 2531" in two ways at once: no column
+     of the screen is without ink at any viewport, and no ink-free rectangle can be taller
+     than one band, because a rule crosses every band boundary.
+
+   · THE RUNWAY IS REAL. 118svh — 1,062px at 1440x900, a 162px runway, inside the
+     1.00–1.20vh band both critics accepted. Round 1's 933px hero on a 900px screen had 33px
+     of scroll in it, which is why its plate "landed" by 1.045px. The plate now travels
+     135px at 1440, 171px at 2531 and 80px at 390, and `--sx1c-t` reaches exactly 1 at the
+     foot of the hero at all seven standard viewports — MEASURED, not assumed, after a first
+     attempt at the mapping left it at 0.982 at 1024x768 and 0.995 at 1280x800.
+
+   · THE PLATE IS CAPPED AT 810 CSS px — `min(50%, 50.625rem)`. Its file is 1620 wide, so
+     810 is exactly 1.00x at DPR 2 and 0.50x at DPR 1. Round 1 grew the plate to 1,266px at
+     2531 and inherited a 1.56x upscale doing it. See frames.ts.
+
+   · THE RUNNING HEAD IS A RUNNING FOOT. The navigation pill is `position: fixed`; anything
+     at the top of a scrolling section passes beneath it, and at 2531 "…& YOGIC STUDIES" did,
+     at y=88. The folio line at the foot cannot, and it puts ink along the bottom band, which
+     is where this design measured 100% blank in its lower-right quadrant at 1024x768.
+
+   THE VERTICAL RULE, AND WHERE IT FALLS
+   The grid's last track is the plate: `min(50%, 50.625rem)`. Below about 1620px wide that is
+   half the page, so the rule stands on the page's own centre — MEASURED 503.5 at 1024 and
+   712.5 at 1440, which is the midline of the layout box in both cases. Above 1620 the plate
+   stops growing and the rule travels right with the type field, because the alternative is a
+   photograph rendered larger than the file it is made of. Either way every block of type
+   stops on the rule, the plate begins on it, and the `sizes` hint is that track rather than
+   a hand-measured guess.
+
+   THE INDENT STAIR IS IN GRID COLUMNS, SO IT SPREADS WITH THE PAGE
+   Twelve columns inside the type field. Title flush to the rail, sentence two columns in,
+   paragraph four — MEASURED 110.4px and 220.8px of step at 1440, which is the figure a
+   critic measured and praised. Above 1900 the steps open to three and six columns and the
+   title sets on one line, so the ink walks the whole width of a wide page instead of
+   huddling at its left edge.
+
+   MOTION
+   One custom property, `--sx1c-t`, 0 → 1, spent on one translateY and on the opacity and
+   scaleY of the shadow beneath it. Its DEFAULT is 1 — the finished state — so the section is
+   complete with no JavaScript. `.js` (set on <html> before first paint by the root layout)
+   moves the start state back to 0, and `prefers-reduced-motion` pins it at 1 again.
+   ═══════════════════════════════════════════════════════════════════════════════════════ */
+
+.sx1c-page {
+  /* ── the page rail, the plate track, the twelve columns between them ───────────────── */
+  --sx1c-rail: clamp(1.25rem, 4vw, 4.5rem);
+  /*
+   * THE PLATE TRACK, and it is the one number this whole layout turns on.
+   *
+   * `50%` of the grid, not `50vw`: the grid's content box excludes the scrollbar, so a
+   * percentage keeps the vertical rule on the midline of the box the reader actually sees
+   * (712.5 at a 1440 screen) instead of 7.5px past it.
+   *
+   * `50.625rem` is 810px, which is 1620 / 2. `pr-ttc-dsc_0396`'s largest derivative on disk
+   * is 1620x1080 and this concept may not write to the shared media library, so 810 CSS px
+   * is the widest this photograph can be drawn without being enlarged on a DPR-2 display.
+   * Capping the TRACK rather than the image is what makes that true of the layout box the
+   * browser measures for `sizes`, not just of the file it happens to pick.
+   */
+  --sx1c-plate: min(50%, 50.625rem);
+
+  /* ── the leading. The unit of everything vertical in this section. ─────────────────── */
+  --sx1c-lead: clamp(1.625rem, 1.5rem + 0.4vw, 2rem);
+
+  /* ── the type scale. Every clamp is anchored in rem BEFORE the vw term, so a reader who
+        has raised their browser's base font size still gets larger type; a pure-vw
+        preferred value silently ignores that preference. ────────────────────────────── */
+  --sx1c-fs-body: clamp(1rem, 0.95rem + 0.22vw, 1.1875rem);
+  --sx1c-fs-sub: clamp(1.4375rem, 1.05rem + 1.3vw, 2.375rem);
+  --sx1c-fs-h1: clamp(3.25rem, 1.4rem + 6.4vw, 9rem);
+  --sx1c-fs-micro: clamp(0.75rem, 0.66rem + 0.22vw, 0.9375rem);
+
+  /* ── the drawn lines. Ornament weights, never text. Composited on #12201A these are
+        rgb(74,84,78) and rgb(116,122,117): 56 and 98 steps off the ground, so both are
+        comfortably "ink" by any emptiness measure, and neither is text. ─────────────── */
+  --sx1c-hair: rgba(251, 247, 242, 0.24);
+  --sx1c-hair-strong: rgba(251, 247, 242, 0.42);
+
+  /* The box reserved for the plate before its bytes arrive. A cream placeholder flashing on
+     a green-black ground is worse than no placeholder; this is the ground, lifted. */
+  --sx1c-mount: #1b2e25;
+
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+
+/* ═══ THE HERO ════════════════════════════════════════════════════════════════════════ */
+
+.sx1c-hero {
+  /* THE FINISHED STATE IS THE DEFAULT. No JavaScript, no island, no observer: the plate has
+     come down and the foot rule is already broken. */
+  --sx1c-t: 1;
+  /* How far the plate descends, and how far past the foot rule it comes to rest.
+
+     MEASURED as the plate's painted foot against the foot rule's top edge, at the head of
+     the runway and at its end. Negative is the rule whole; positive is the rule broken:
+
+        320x568    −48.0  →  +32.0        1280x800   −75.0  →  +45.0
+        390x844    −48.0  →  +32.0        1440x900   −84.5  →  +50.5
+        768x1024   −48.0  →  +32.0        2531x1140  −107.3 →  +63.7
+        1024x768   −71.9  →  +43.2
+
+     Every viewport starts with the ruling intact and ends with one object through it. The
+     sign flips at all seven, which is the test — a crossing that only happens on the
+     viewport you designed on is a crossing that does not happen. */
+  --sx1c-descent: clamp(6rem, 15vh, 11.5rem);
+  --sx1c-hang: clamp(2.25rem, 5.5vh, 4.25rem);
+
+  position: relative;
+  display: grid;
+  /* 1.18 viewports: enough runway for the descent to be a movement rather than a rounding
+     error, and inside the 1.00–1.20vh band the round settled on. */
+  min-height: 118svh;
+  /* NO inline padding. The rails are tracks of the grid below, which is what lets both the
+     rules and the plate reach the edges of the screen. */
+  padding-block: calc(var(--sx1c-lead) * 3.5) calc(var(--sx1c-lead) * 3.5);
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+
+/* Scripted readers start with the plate one band higher and the foot rule whole. Gated on
+   `.js`, which is on <html> before first paint, so it never lands and then jumps back up. */
+.js .sx1c-hero { --sx1c-t: 0; }
+
+.sx1c-hero__sheet {
+  position: relative;
+  display: grid;
+  /*
+   * rail · twelve columns · the plate track.  The rail is a real track so a rule placed at
+   * `1 / -1` starts at x=0, and the plate track is the last one so the same rule ends at the
+   * right edge of the screen. The twelve columns take whatever is left, which is what makes
+   * the indent stair a share of the type field rather than a fixed indent that reads right
+   * at 1440 and wrong at 2531.
+   */
+  grid-template-columns:
+    var(--sx1c-rail)
+    repeat(12, minmax(0, 1fr))
+    var(--sx1c-plate);
+  /* head rule · title · rule · sentence · rule · paragraph · foot rule · folio */
+  grid-template-rows: auto auto auto auto auto auto auto auto;
+  /* The slack on a tall screen is shared between the bands rather than collected in one
+     lump at the foot, so a 1,140px monitor gets deeper bands and not a dead strip. */
+  align-content: space-between;
+}
+
+/* ── THE RULING ────────────────────────────────────────────────────────────────────────
+   Four hairlines, each from the left edge of the screen to the right edge. They are the
+   page's top and bottom boundaries and its two band divisions.
+
+   They are painted BENEATH the plate deliberately. A ruling the picture passes over is a
+   ruling the picture is disobeying; a ruling drawn on top of the picture would make the
+   picture something the page is in front of. z-index 0 against the plate's 1.
+
+   The foot rule fades along its last tenth, because a drawn line that stops dead at the
+   screen edge reads as a cut and one that fades reads as a trim.
+
+   `display: block` IS LOAD-BEARING AND IT WAS MISSING. Each rule is a `<span>`. Above
+   900px the sheet is a grid, so every rule is blockified by being a grid item and `height:
+   1px` applies. Below 900px the sheet is `display: block` — and a span in normal flow is
+   INLINE, where `height` and `margin-inline` are both ignored and the used width is the
+   width of its (empty) content. So every rule measured 0px wide and 20px tall on a phone:
+   `.sx1c-rule--head` at 390x844 came back `{x:0, y:80, w:0, h:20}`, and the screenshot
+   shows four invisible lines. The page's entire ruling — the thing every other decision in
+   this file answers to, and the thing the plate exists to disobey — did not exist below
+   900px. A phone got type above a photograph, which is the rejected default this concept
+   was built against. One declaration, at the root, rather than four overrides in the
+   media query. */
+.sx1c-rule {
+  display: block;
+  position: relative;
+  z-index: 0;
+  grid-column: 1 / -1;
+  height: 1px;
+  background: var(--sx1c-hair);
+}
+.sx1c-rule--head { grid-row: 1; }
+.sx1c-rule--band { grid-row: 3; }
+.sx1c-rule--band2 { grid-row: 5; }
+.sx1c-rule--foot {
+  grid-row: 7;
+  background: linear-gradient(
+    to right,
+    var(--sx1c-hair) 0,
+    var(--sx1c-hair) 90%,
+    rgba(251, 247, 242, 0.06) 100%
+  );
+}
+
+/* ── THE MEASURE ───────────────────────────────────────────────────────────────────────
+   The one drawn line that stands down the page instead of across it, on the grid line where
+   the type field ends and the plate track begins. Every block of type is set to it as its
+   measure and none of them crosses it; the plate is bound to it and hangs off it.
+
+   Precisely, because this is the kind of claim that gets checked: it is the right edge of
+   the twelve type COLUMNS, which is what a measure is — not a margin the ink touches on
+   every line, because ragged-right setting does not do that and forcing it would mean
+   justified Inter at 38 characters.
+
+   z-index 3, above the plate: it is the binding edge, not a line the picture covers. It runs
+   the full height of the page's rectangle, meeting the head rule at the top and the foot
+   rule at the bottom, so the three drawn lines close. */
+.sx1c-limit {
+  position: relative;
+  z-index: 3;
+  grid-column: 14 / -1;
+  grid-row: 1 / 8;
+  align-self: stretch;
+  justify-self: start;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    var(--sx1c-hair-strong) 0,
+    var(--sx1c-hair-strong) 92%,
+    rgba(251, 247, 242, 0.1) 100%
+  );
+}
+
+/* ── THE TITLE ─────────────────────────────────────────────────────────────────────────
+   Two block lines, each pulled left by its OWN left side bearing so the A of "About" and the
+   P of "Pranava" are optically flush rather than mathematically flush. See the comment on
+   BEARING in Hero.tsx for the measured values and how they were taken. */
+.sx1c-title {
+  position: relative;
+  z-index: 2;
+  grid-column: 2 / 14;
+  grid-row: 2;
+  margin: calc(var(--sx1c-lead) * 1.1) 0 0;
+  padding-inline-end: var(--sx1c-lead);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-variation-settings: 'SOFT' 22, 'WONK' 1;
+  font-size: var(--sx1c-fs-h1);
+  line-height: 0.89;
+  letter-spacing: -0.024em;
+  color: var(--ink-onDark); /* 15.79:1 on #12201A */
+}
+.sx1c-title__line {
+  display: block;
+  margin-inline-start: calc(-1em * var(--sx1c-lsb, 0));
+}
+
+/* ── THE SENTENCE. Two columns in. Display face, the shortest measure. ─────────────── */
+.sx1c-sub {
+  position: relative;
+  z-index: 2;
+  grid-column: 4 / 14;
+  grid-row: 4;
+  margin: calc(var(--sx1c-lead) * 1.1) 0 0;
+  padding-inline-end: var(--sx1c-lead);
+  max-width: 29ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-variation-settings: 'SOFT' 40, 'WONK' 0;
+  font-size: var(--sx1c-fs-sub);
+  /* Exactly one and a half times the paragraph's leading. The relation is the point; it is
+     not annotated anywhere on the page, it is simply true. */
+  line-height: calc(var(--sx1c-lead) * 1.5);
+  letter-spacing: -0.006em;
+  color: var(--ink-onDark); /* 15.79:1 */
+  /* Even line lengths across a four-line display block. Chromium caps balancing at six
+     lines, which is why this is on the sentence and not on the paragraph. */
+  text-wrap: balance;
+}
+
+/* ── THE PARAGRAPH. Four columns in. Text face, the longest measure, the smallest type. ─
+   46ch, not 52: the house body measures 40.7ch at both 1440 and 2531 and round 1's C drifted
+   to 44.8ch at 2531 while the column squeezed it to 37 at 1440. 46 lands the rendered
+   measure at 38ch at 1440 and 44ch at 2531 — the closest this stair gets to the house at
+   both ends without the paragraph changing shape between them. */
+.sx1c-support {
+  position: relative;
+  z-index: 2;
+  grid-column: 6 / 14;
+  grid-row: 6;
+  margin: calc(var(--sx1c-lead) * 1.1) 0 0;
+  padding-inline-end: var(--sx1c-lead);
+  max-width: 46ch;
+  font-family: var(--font-text);
+  font-size: var(--sx1c-fs-body);
+  line-height: var(--sx1c-lead);
+  color: var(--ink-onDark-soft); /* glyph-mask measured: worst 7.55:1, p5 7.68:1 — see SOFT INK below */
+  /* Reworks only the last few lines, so it costs nothing on a paragraph this size and it
+     stops the closing word of the section sitting alone on a line. */
+  text-wrap: pretty;
+}
+
+/* ── THE RUNNING FOOT ──────────────────────────────────────────────────────────────────
+   A book repeats its own title at the foot of the page. The descriptor is uppercased because
+   it is pure ASCII; the name is NOT, and it is set in Inter, because `Praṇava` carries
+   ṇ U+1E47 and DESIGN-SYSTEM §1 records what Fraunces does to this client's diacritics.
+
+   It spans the type field and pushes its two halves apart, so at 2531 there is ink at x=57
+   and ink ending on the measure at x=1706 — the two places a wide screen is most likely to
+   be empty. It stops at the measure rather than at the screen edge, which leaves the plate's
+   bottom corner the foot margin to itself. */
+.sx1c-folio {
+  position: relative;
+  z-index: 2;
+  grid-column: 2 / 14;
+  grid-row: 8;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: clamp(0.7rem, 1.3vw, 1.4rem);
+  margin: calc(var(--sx1c-lead) * 0.7) 0 0;
+  padding-inline-end: var(--sx1c-lead);
+  font-family: var(--font-text);
+  font-size: var(--sx1c-fs-micro);
+  line-height: var(--sx1c-lead);
+  color: var(--ink-onDark-soft); /* worst 7.55:1, p5 7.68:1, measured */
+}
+.sx1c-folio__desc {
+  flex: 0 1 auto;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+}
+.sx1c-folio__name {
+  flex: 0 0 auto;
+  letter-spacing: 0.1em;
+}
+
+/* ═══ THE PLATE — BOUND ON THE MEASURE, LYING ACROSS THE FOOT RULE ═════════════════════
+   The grid item occupies the last track, which is `min(50%, 810px)`, and reaches the right
+   edge of the screen by construction.
+
+   `height: 0` with `align-self: end` is deliberate and load-bearing: the item contributes
+   nothing to row sizing, so the plate can hang past the foot rule and overlap two bands
+   without ever pushing a rule or a line of type by a pixel. Everything visible is
+   absolutely positioned against that zero-height box at the foot rule's own y.
+
+   The aperture is the frame's own 3:2, so `object-fit: cover` has nothing to cut: every
+   person in the photograph is in the picture at 320 and at 2560 alike, which is also what
+   makes one alt sentence honest at all of them.  ═══════════════════════════════════════ */
+
+/* THE PLATE SPANS THROUGH THE FOOT RULE'S ROW, NOT UP TO IT, AND THAT IS THE WHOLE CROSSING.
+   It used to be `1 / 7`, which ends on the line the foot rule starts on — so the plate's box
+   bottom was the bottom of the band ABOVE the rule, and the distance from there down to the
+   rule was whatever `align-content: space-between` had left over. That slack grows with the
+   screen while `--sx1c-hang` is clamped, so on a tall monitor the gap outran the hang and the
+   plate stopped SHORT of the line it exists to cross. MEASURED before this change, plate box
+   bottom to foot rule: 17.8px at 1024x768, 24.2px at 1440x900 — and 79.6px at 2531x1140,
+   against a hang of 68px. The section's one argument was absent on the largest viewport in
+   the brief, and absent silently, because at 1440 it looked right.
+
+   `1 / 8` ends on the line the foot rule ENDS on, so the plate's box bottom IS the foot
+   rule's bottom edge and the overhang is `--sx1c-hang` exactly — the same number at 320 and
+   at 2560, with no slack anywhere in the chain to grow into it. Zero height and `align-self:
+   end` keep the item itself out of the row sizing, so nothing about the ruling moves. */
+.sx1c-plate {
+  position: relative;
+  z-index: 1;
+  grid-column: 14 / -1;
+  grid-row: 1 / 8;
+  align-self: end;
+  height: 0;
+}
+
+/* The only thing that moves. One translateY, off one custom property. */
+.sx1c-plate__lift {
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(var(--sx1c-hang) * -1);
+  transform: translateY(calc((1 - var(--sx1c-t)) * var(--sx1c-descent) * -1));
+}
+
+/* A gradient, not a `box-shadow`: box-shadow may never be animated in a scroll handler. It
+   is anchored to where the plate comes to REST and stays there while the plate is still
+   above it, contracting as the plate comes down onto it — a cast shadow belongs to the
+   ground, not to the sheet. */
+.sx1c-plate__shadow {
+  position: absolute;
+  left: 2%;
+  right: 0;
+  bottom: calc(var(--sx1c-hang) * -1 - 9px);
+  height: 22px;
+  transform-origin: 50% 0%;
+  background: radial-gradient(62% 100% at 50% 0%, rgba(3, 9, 6, 0.72), rgba(3, 9, 6, 0) 76%);
+  transform: scaleY(calc(1 + (1 - var(--sx1c-t)) * 2.2));
+  opacity: calc(0.4 + (1 - var(--sx1c-t)) * 0.5);
+}
+
+.sx1c-plate__leaf {
+  position: relative;
+  z-index: 1;
+  /* THE FRAME'S OWN RATIO. `object-fit: cover` therefore has nothing to cut. */
+  aspect-ratio: 3 / 2;
+  overflow: clip;
+  background: var(--sx1c-mount);
+  /* Static, and static is the point: a plate lying on a ground has an edge. It is not
+     animated, so it is not in the handler's way. */
+  box-shadow: 0 0 0 1px rgba(251, 247, 242, 0.14);
+}
+
+.sx1c-plate__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Centred, and it does not matter: the aperture and the frame are the same ratio, so this
+     never moves the picture by more than a rounding pixel. There is no mobile crop to set
+     deliberately because there is no mobile crop. */
+  object-position: 50% 50%;
+}
+
+/* ═══ WIDE — above 1900 the stair opens and the title sets on one line ═════════════════
+   At 2531 the type field is 1,649px. Two columns of step and a two-line title leave the ink
+   huddled in its left third and put a 964x256 hole beside the title, which is the "dead
+   block" a critic measured. Three and six columns of step, with the title on one line, walk
+   the ink across the page: MEASURED at 2531 the title ends at x=1032, the sentence runs
+   473→1024, the paragraph 889→1395 and the folio to 1706 — and the widest ink-free rectangle
+   in the type field drops to a band's height by a band's width.
+   ═════════════════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1900px) {
+  .sx1c-title {
+    /* One line. It measures ~975px at 144px in a 1,649px field, so there is 674px of slack
+       before it could wrap; `nowrap` states the intent rather than relying on that. */
+    white-space: nowrap;
+  }
+  .sx1c-title__line {
+    /* Inline, so the two words are one line — and therefore no optical bearing, because a
+       bearing correction belongs to a line's first glyph and there is now only one. */
+    display: inline;
+    margin-inline-start: 0;
+  }
+  .sx1c-sub { grid-column: 5 / 14; }
+  .sx1c-support { grid-column: 8 / 14; }
+}
+
+/* ═══ NARROW ══════════════════════════════════════════════════════════════════════════
+   Below 900px the twelve columns stop being useful and the sheet becomes one column. What
+   survives is the part that IS the idea: the ruling still crosses the whole screen, the
+   three blocks still keep their three measures and their stair — reduced from a column-width
+   step to a thumb-width one — the plate still runs off the right edge of the page, and it
+   still comes down across the foot rule. The MEASURE is dropped rather than crushed: with no
+   columns to organise, a vertical hairline in a 20px rail is decoration pretending to be
+   structure. What stays is what it did — the type keeps its left margin and the picture
+   keeps going past the right one.
+
+   The rails come back as padding here, because there is no grid left to carry them, so the
+   rules take a negative inline margin of exactly one rail to keep reaching both edges.
+   ═════════════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 899px) {
+  .sx1c-hero {
+    /* The descent must exceed the hang or the still picture is a lie: at the head of the
+       runway the plate has to sit ABOVE the foot rule with the rule whole, and at the end
+       of it BELOW, with the rule broken. 80px down against a 32px hang leaves the plate
+       48px clear of the rule at t=0 and 32px past it at t=1 — the crossing is 80px of
+       travel on a 218px-tall plate at 390, 37% of its own height. 3.5rem was the old
+       figure and it was only 24px more than the hang. */
+    --sx1c-descent: 5rem;
+    --sx1c-hang: 2rem;
+    padding-inline: var(--sx1c-rail);
+    padding-block: calc(var(--sx1c-lead) * 3) calc(var(--sx1c-lead) * 2.5);
+  }
+  .sx1c-hero__sheet {
+    display: block;
+  }
+  .sx1c-limit {
+    display: none;
+  }
+  .sx1c-rule {
+    margin-inline: calc(var(--sx1c-rail) * -1);
+  }
+  .sx1c-title,
+  .sx1c-sub,
+  .sx1c-support,
+  .sx1c-folio {
+    padding-inline-end: 0;
+  }
+  .sx1c-title {
+    margin-block-start: calc(var(--sx1c-lead) * 0.9);
+  }
+  .sx1c-rule--band,
+  .sx1c-rule--band2 {
+    margin-block-start: calc(var(--sx1c-lead) * 0.9);
+  }
+  .sx1c-sub {
+    margin-inline-start: 1.35rem;
+    margin-block-start: calc(var(--sx1c-lead) * 0.9);
+    max-width: 24ch;
+  }
+  .sx1c-support {
+    margin-inline-start: 2.7rem;
+    margin-block-start: calc(var(--sx1c-lead) * 0.9);
+    max-width: 40ch;
+  }
+  .sx1c-plate {
+    height: auto;
+    /* Right: exactly one rail, so the plate's right edge is the screen's right edge and not
+       one pixel past it. Top: reserves the descent, so at the head of the runway the plate
+       stands `--sx1c-descent` higher and still may not reach the paragraph.
+
+       LEFT: 2.7rem, the support paragraph's own indent — the last step of the stair. This
+       is the change that makes the crossing legible on a phone instead of merely intended.
+       With the plate flush to the rail it covered 370 of the foot rule's 390px and the rule
+       survived for 20px, which is a stub, not a line. At the support's indent it survives
+       for 63px between 421 and 899 (rail 20 + indent 43.2) and for 52px at 390 and 320,
+       where the 420px query narrows the stair to 2rem and the plate follows it — MEASURED
+       off the rendered foot rule at both. Either way the reading is the one the
+       desktop gives — the line runs across the page, stops dead at the plate, and the plate
+       hangs below it. The plate is also then the one element that starts on the stair and
+       keeps going off the edge, while every block of type stops on its step. */
+    margin: calc(var(--sx1c-descent) + var(--sx1c-lead) * 0.6) calc(var(--sx1c-rail) * -1) 0
+      2.7rem;
+  }
+  .sx1c-plate__lift {
+    position: relative;
+    inset-inline: auto;
+    bottom: auto;
+  }
+  .sx1c-plate__shadow {
+    bottom: -9px;
+  }
+  /* The foot rule comes UP into the plate instead of the plate coming down past it — the
+     same crossing, built the only way it can be built when the two are in one column. The
+     folio is pushed back down by the same amount so it keeps its distance from the picture
+     and never sits on it.
+
+     This rule was already here and it was doing nothing, because the plate was the LAST
+     child of the sheet and the foot rule the third from last. In one column that meant the
+     negative margin pulled the foot rule up into the SUPPORT PARAGRAPH — MEASURED at
+     390x844, support bottom 603.5, foot rule top 605.5, plate top 804.2. The rule crossed
+     a paragraph by 2px and the plate crossed nothing. The plate now precedes it in the
+     markup, which is where the crossing actually comes from; this declaration is what
+     lifts the rule into it. */
+  .sx1c-rule--foot {
+    margin-block-start: calc(var(--sx1c-hang) * -1);
+  }
+  .sx1c-folio {
+    margin-block-start: calc(var(--sx1c-hang) + var(--sx1c-lead) * 0.75);
+  }
+}
+
+/*
+ * The folio stops fitting on one line somewhere under 560px: MEASURED at 390, the descriptor
+ * alone runs 370px inside a 350px column, which pushed the name off the right edge —
+ * invisible only because `body { overflow-x: hidden }` was hiding it, which is exactly the
+ * kind of "passing" overflow this project has been caught by before. The descriptor is the
+ * half that carries information and the wordmark is already in the pill, so the name stands
+ * down and the descriptor is allowed to WRAP rather than being shrunk until it fits. Round 1
+ * shrank it — to 10px, which is below anything this site sets — and it still measured 327px
+ * inside a 280px column at 320, i.e. 27px of real horizontal overflow at the narrowest
+ * viewport in the brief.
+ */
+@media (max-width: 560px) {
+  .sx1c-folio__desc {
+    flex: 1 1 auto;
+    min-width: 0;
+    letter-spacing: 0.145em;
+  }
+  .sx1c-folio__name {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .sx1c-sub { margin-inline-start: 1rem; }
+  .sx1c-support { margin-inline-start: 2rem; max-width: none; }
+  /* The plate stays ON the last step of the stair, so it moves with the paragraph it
+     follows rather than drifting off it. At 320 that leaves the foot rule 52px of drawn
+     length (rail 20 + indent 32) before the plate takes it. */
+  .sx1c-plate { margin-inline-start: 2rem; }
+}
+
+/* ═══ SHORT ═══════════════════════════════════════════════════════════════════════════
+   1024x768 and the 1440x810 laptop band are the hard case on this project and it is a HEIGHT
+   problem, not a width one — DESIGN-SYSTEM §1 records a headline failing at 2.43:1 at
+   1024x768 while 1440x900 and 2560x1440 were clean, for exactly this reason.
+
+   Nothing here is a contrast fix, because no text in this section sits on a photograph. It is
+   a fit fix: the page's top and bottom margins come in by half a line each, which is enough
+   to keep the ruling, the three blocks and the folio inside a 768px window with the descent
+   still in front of them.
+
+   ───────────────────────────────────────────────────────────────────────────────────────
+   SOFT INK: THE HOUSE PROBE'S NUMBER FOR IT IS NOT THE NUMBER
+
+   `tools/contrast-probe.mjs` passes this route at all seven standard viewports — 6 to 8
+   painted runs each, 0 FAIL, and NOTHING is excluded from the sample: no text here sits on
+   a photograph, nothing is sticky, no overlay covers a run. The h1's two lines, the
+   sentence, the paragraph, both halves of the folio and the harness note are all in it.
+   That is the opposite of the vacuous "0 painted text runs" pass two other entrants in this
+   round collected on sticky stages, and it is the only kind of 0 FAIL worth quoting.
+
+   But the probe reports 15.79:1 for EVERY run on this page, including `--ink-onDark-soft`,
+   which is `rgba(251,247,242,0.72)` and cannot possibly measure the same as the opaque
+   cream beside it. It is reading the specified colour and ignoring the alpha. So the soft
+   ink was measured directly instead, by glyph mask: paint the run, set `color: transparent`,
+   screenshot both, diff, and read the contrast at the pixels that differ — keeping only
+   pixels at ≥92% of the maximum diff in the box, so antialiased edges are excluded rather
+   than averaged in. (A first pass used a flat diff threshold, let ~40%-coverage edge pixels
+   through, and returned a nonsensical 3.25:1 for cream-on-near-black. The threshold is the
+   measurement.)
+
+     .sx1c-support   390: worst 7.55 p5 7.61   1440: worst 7.55 p5 7.68   2531: p5 7.70
+     .sx1c-folio     390: worst 7.55 p5 7.61   1440: worst 7.55 p5 7.68   2531: p5 7.70
+     .sx1c-sub       390: worst 13.54 p5 13.77 1440: worst 13.54 p5 13.90 2531: p5 14.02
+     .sx1c-title     390: worst  9.62          1440: worst 13.54 p5 14.55 2531: p5 14.97
+
+   7.55:1 against the 4.5 the body sizes need, 13.54:1 against the 3 the display sizes need.
+   Comments in this file previously said 8.72:1 for the soft ink; that was the arithmetic
+   composite, not a reading off the screen, and it was 15% optimistic. The measured figure
+   stands in its place.
+   ═════════════════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 900px) and (max-height: 820px) {
+  .sx1c-hero {
+    padding-block: calc(var(--sx1c-lead) * 2.5) calc(var(--sx1c-lead) * 2.5);
+  }
+  .sx1c-title,
+  .sx1c-sub,
+  .sx1c-support {
+    margin-block-start: calc(var(--sx1c-lead) * 0.8);
+  }
+}
+
+/* ═══ THE GROUND BELOW — THE REAL ONE ═════════════════════════════════════════════════
+   Preview harness, and it is the point of the harness that it is not invented. On the live
+   route `main`'s first two children are `SECTION.apr-s.apr-s--deep` at rgb(18,32,26),
+   1,459px and 998px — 2,457px of deep green before any paper returns. Round 1's harness put
+   cream there, so the seam this hero actually has to make was never once rendered.
+
+   Both blocks are that colour and those heights. The seam is invisible because the hero is
+   printed on the same ground; the only thing that crosses it is the plate's own foot margin,
+   which is the last thing the reader sees of the hero and the first thing they see of the
+   page. The label is preview furniture and says so.
+   ═════════════════════════════════════════════════════════════════════════════════════ */
+.sx1c-ground {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+.sx1c-ground__block {
+  padding: calc(var(--sx1c-lead) * 4) var(--sx1c-rail);
+  min-height: 1459px;
+}
+.sx1c-ground__block + .sx1c-ground__block {
+  min-height: 998px;
+}
+.sx1c-ground__note {
+  margin: 0;
+  max-width: 44ch;
+  font-family: var(--font-text);
+  font-size: var(--sx1c-fs-micro);
+  line-height: var(--sx1c-lead);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft); /* worst 7.55:1, p5 7.70:1, measured */
+}
+
+/* ═══ REDUCED MOTION ══════════════════════════════════════════════════════════════════
+   The plate is down and the foot rule is already broken. Everything the section IS — the
+   ruling, the measure, the three blocks stopping on it, the indent stair, the optical hang,
+   and the one plate that crosses two of the page's own boundaries — is untouched, because
+   none of it was ever carried by motion. What reduced motion removes is the ACT of the plate
+   leaving the page, and it renders the state after it has left: the payoff, not the set-up.
+   ═════════════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .sx1c-hero,
+  .js .sx1c-hero {
+    --sx1c-t: 1;
+  }
+}

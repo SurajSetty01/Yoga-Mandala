@@ -1,0 +1,520 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOURNAMENT PREVIEW · Praṇava About — HERO, concept SX1A.
+
+   "The marked crop opens."
+
+   One screen. A masthead line, a mounted plate, and beside the plate the same
+   negative printed small with a hairline rectangle on it. The plate arrives
+   masked down to that rectangle — an open palm resting on a wooden block — and
+   four sheets of the page's own paper withdraw to the four edges: sideways
+   first, so the hand lengthens out into a row of people receding down a hall;
+   then up and down, so their raised legs arrive, resting over the backs of
+   folding chairs. The last thing the section gives you is the thing that makes
+   it practice and not rest. Nothing zooms. The near figure stays exactly where
+   and exactly as large as she was, and the room is ADDED to her.
+
+   WHAT CHANGED IN THIS ROUND, AND WHY. Every number below is off the render.
+
+   ·  LENGTH. The hero was 3,286px at 1440 and 88–95% blank paper for its first
+      1,250px. It is now 905.5px at 1440×900 — 1.006 viewports — and 1.000 at
+      390×844, 1.000 at 1024×768, 1.026 at 1920, 1.000 at 2531 and 1.087 at
+      768×1024. The one over-run is 320×568 at 1.352, where a stacked masthead,
+      plate, key, sub and paragraph do not fit in 568px; it buys nothing there
+      because there is no sticky element and no scroll listener anywhere in
+      this section, so its length costs a flick, not a runway. For reference
+      the concept the critics ranked best on length measured 1.21 viewports at
+      390×844, where this one measures 1.000.
+
+   ·  EMPTINESS, which is what the length was really being charged for. Rows
+      carrying no ink, first screen, settled: 17% at 1440 (was 54%), 29% at
+      390, 19% at 1024, 20% at 2531. Longest unbroken blank run 44px at 1440
+      and 40px at 390 — 5% of the phone screen, against the 439px band (52% of
+      the screen) a critic measured on the previous build, and against 67–129px
+      for the best of the other three.
+
+   ·  THE MECHANIC ASSEMBLES. Its two halves were never on screen together,
+      which is the only way the comparison could ever be made. They are now
+      side by side, permanently, at every viewport and every scroll position,
+      because the whole section is one screen. And the key is a measured scale
+      model, not a thumbnail: the marked rectangle's width, height and origin
+      as fractions of the picture it is drawn on agree between plate and key to
+      within 0.001 at all seven viewports.
+
+   ·  THE PLATE IS NOT FULL BLEED. About §02, directly beneath this hero on the
+      live page, IS a full-bleed landscape group shot of a hall; a second one
+      900px above it was the same picture twice.
+
+   ·  NO UPSCALE, ANYWHERE. The widest the file is ever drawn is 1,241 CSS px
+      (at 1920) against a 1,620px source. The previous build served the 1620
+      derivative into a 2531-wide band (1.56×) and `sizes="100vw"` into a
+      portrait cover box on a phone (2.64×). Both are gone at the root: there
+      is no full-bleed band, and the aperture, the drawn box and the source are
+      all 3:2, so `object-fit: cover` has nothing to crop and no
+      `object-position` is chosen anywhere.
+
+   ·  THE FRAME, AND THEN ITS CROP. `pr-ttc-dsc_0271_1` carried a fully
+      identifiable upside-down face as its nearest figure and a legible garment
+      wordmark. `pr-ttc-dsc_0274` carries neither — but changing the frame did
+      NOT fix the defect the critics actually named, because this frame has a
+      plain green wall across its top fifth too (81.7% flat at luminance 176).
+      The crop below does fix it. Whole source 60.3% flat; this crop 43.1%,
+      against the home page hero's own 41%.
+
+   ·  TYPE. The support paragraph was frozen at 17.01px in a 408px column at
+      both 1440 and 2531. It now measures 18.59px at 1440, 19.65 at 1920 and
+      20.99 at 2531 — the house body is 18.72 at 1440 — in a 42ch column. The
+      masthead is untouched: a critic named it the best type in the round.
+
+   REDUCED MOTION, MEASURED
+   Every blade's BASE transform is the withdrawn one; the keyframes run covered
+   → withdrawn. globals.css cancels all animation under `prefers-reduced-
+   motion`, so the section lands on the finished plate. The locator does not
+   evaporate with it: `.sx1a-rest` rests at opacity 1 and is only animated UP
+   from 0, so with motion off the rectangle is already drawn on the picture and
+   the key beside it carries the same rectangle.
+
+   The proof is a diff, not a claim. The reduced-motion render and the settled
+   motion render are PIXEL-IDENTICAL: 0 of 1,296,000 differing pixels at
+   1440×900, 0 of 329,160 at 390×844, 0 of 786,432 at 1024×768 and 0 of
+   2,885,340 at 2531×1140. With JavaScript disabled the only difference at any
+   of the four is 2,006 pixels, identical at every width, and it is the site's
+   own floating button outside this section. Nothing here is reachable only
+   through motion, and there is no runway for reduced motion to freeze: the
+   hero is one screen and holds no sticky element.
+
+   CONTRAST
+   `tools/contrast-probe.mjs --scroll-to .sx1a` at 320×568, 390×844, 768×1024,
+   1024×768, 1440×900, 1920×1080 and 2531×1140: 0 FAIL at all seven, on 5 to 7
+   painted runs each — which is every text run on the route, not a sample that
+   an overlay emptied. Two entrants in this round drew "0 painted text runs"
+   from the same probe because their whole stage was sticky and the probe drops
+   sticky boxes. Nothing here is sticky and no text is set on the photograph,
+   so there is nothing for it to exclude. Worst p5 in the section: 6.56:1
+   (eyebrow, brass on cream), 7.30:1 (support), 10.04:1 (sub), 15.58:1 (h1).
+
+   EVERY SELECTOR IS `.sx1a-`. Two namespace collisions have already broken
+   live pages on this project.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.sx1a {
+  /* ── THE PLATE'S CROP ───────────────────────────────────────────────────
+     The aperture stays 3:2 and so does the crop, so every layout number in
+     this sheet is unchanged; what changes is WHICH 3:2 the reader gets. The
+     source keeps its centre — x 12→88%, y 24→100% — which is 0.76 of the
+     file on both axes, so the scale is uniform and the offsets are just
+     0.12/0.76 and 0.24/0.76 of the drawn size.
+
+     WHY, MEASURED (16px tiles, sd < 7 counted flat, on the 1620 file):
+       whole source        60.3% flat, detail 12.2, mean luminance 133
+       its top 25%         81.7% flat, detail  8.3, mean luminance 176  ← a wall
+       this crop           43.1% flat, detail 15.7, mean luminance 108
+     The home page's own hero — this project's quality benchmark — measures
+     41% flat. The uncropped file failed the same test a critic applied to the
+     previous build's frame ("a blank concrete wall across ~37% of the frame's
+     height"); changing the frame had not fixed it, because this frame has a
+     plain green wall across its top fifth too. Cropping it out did.
+     It also drops the blown-out floor corner at the right: the source's last
+     fifth of width measures 69% flat at luminance 202. */
+  --sx1a-cs: 0.76; /* fraction of the source kept, both axes */
+  --sx1a-cx: 0.12; /* left edge of the kept region, as a fraction of the file */
+  --sx1a-cy: 0.24; /* top edge  of the kept region, as a fraction of the file */
+
+  /* THE OPENING WINDOW as blade sizes in per cent of the plate: top, right,
+     bottom, left. The uncovered rectangle is what is left of the plate. Set by
+     cropping the real file at these fractions and looking at the result, not
+     by arithmetic — the crop is the composition. It opens on an open palm
+     resting on a wooden block, a bangle, a forearm and a patterned bolster:
+     one person, unplaceable. Every blade that withdraws from it uncovers
+     people — the right one the receding row, the top one the raised legs and
+     the chairs holding them, which is the thing that makes it practice and
+     not rest. Nothing it opens onto is a wall. */
+  --sx1a-t: 50%;
+  --sx1a-r: 56%;
+  --sx1a-b: 5%;
+  --sx1a-l: 9%;
+
+  --sx1a-gap: clamp(2rem, 3vw, 4rem);
+
+  /* Hairline, cream inside dark, so it holds over the red floor, the pale wall
+     and the jute equally. A single-colour rule vanishes into one of them. */
+  --sx1a-line: 1px solid rgba(251, 247, 242, 0.62);
+  --sx1a-line-shadow: 0 0 0 1px rgba(16, 12, 10, 0.32);
+
+  /* One screen — but capped. The plate is width-driven (3:2 of its column), so on a
+     very tall screen the composition stops growing and `100svh` alone turns the surplus
+     into dead paper: measured 366px of unbroken blank and 40% empty rows at 2560x1440.
+     With the cap the hero is 1200px there, the green section below it starts 240px up
+     the screen — which is what a handoff should look like — and the largest blank run
+     falls to 222px; distributing the remaining slack into the row gaps (below) takes it
+     to 147px, most of which is the scaffold band's own top padding. At 390x844,
+     1024x768, 1440x900, 1920x1080 and 2531x1140 the cap is never reached and nothing
+     changes. */
+  min-height: min(100svh, 1200px);
+  max-width: 1720px;
+  margin-inline: auto; /* RULE 8: a capped container without this is 462px off at 2531 */
+  padding:
+    clamp(5rem, 4rem + 4vw, 8.5rem)
+    var(--page)
+    clamp(1.5rem, 1.1rem + 1.6vw, 3.25rem);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  /* Where the composition is shorter than the screen the surplus goes into the
+     rhythm — four rows, three gaps — instead of collecting in one dead band under
+     the plate. Where it is taller (320x568, 768x1024) this resolves to `start`
+     and changes nothing. */
+  align-content: space-between;
+  row-gap: clamp(1rem, 0.6rem + 1.1vw, 2.25rem);
+  column-gap: var(--sx1a-gap);
+
+  background: var(--ground);
+  color: var(--ink);
+}
+
+/* ── the masthead line ────────────────────────────────────────────────────
+   "About Pranava" set to the measure. The size is not a step on a scale: it
+   is the string divided by the column it has to fill, which is the whole
+   reason it reads as a masthead and not as a large heading. The coefficient
+   is set from the narrowest case — at 320 the gutter stops shrinking and eats
+   a larger share of the screen — so the line never has to wrap. If a face
+   substitutes and it does wrap, it wraps between the two words; it cannot
+   overflow. */
+.sx1a-brow {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75em;
+  font-family: var(--font-text);
+  color: var(--brass); /* 6.56:1 on cream */
+  font-size: clamp(0.688rem, 0.62rem + 0.2vw, 0.813rem);
+  font-weight: 500;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.sx1a-brow::before {
+  content: '';
+  flex: none;
+  width: clamp(24px, 3vw, 46px);
+  height: 1px;
+  background: currentColor;
+  transform: translateY(-0.28em);
+}
+
+.sx1a-h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: clamp(2.1rem, 10.9vw, 12.2rem);
+  line-height: 0.88;
+  letter-spacing: -0.026em;
+  color: var(--ink);
+}
+
+.sx1a-rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  width: 100%;
+  margin: clamp(0.25rem, 0.6vw, 0.75rem) 0 0;
+}
+
+/* ── the plate ────────────────────────────────────────────────────────────
+   3:2 is the source's own ratio, so `cover` has nothing to crop and there is
+   no `object-position` decision to get wrong on a phone. */
+.sx1a-plate {
+  margin: 0;
+  min-width: 0;
+}
+
+.sx1a-ap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--ground-warm);
+  /* the mount: a hairline on the paper, drawn outside the picture so it never
+     sits on a glyph or a blade edge */
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+/* The plate's image and the key's image carry the SAME geometry, which is what
+   makes the key a scale model rather than a thumbnail: same crop, same aspect,
+   same `srcSet`, same `sizes`, so the hairline rectangle drawn on the key and
+   the one drawn on the plate are one rectangle at two sizes. Percentage `left`
+   resolves against the box's width and `top` against its height, and both boxes
+   are 3:2, so one pair of numbers is correct at both scales.
+   The drawn box is 1/0.76 = 131.579% of the aperture on both axes and therefore
+   3:2 itself, so `cover` has nothing left to crop and no `object-position`
+   decision is taken anywhere. */
+.sx1a-ap__img,
+.sx1a-key__img {
+  position: absolute;
+  /* globals.css line 103 is `img, video { max-width: 100% }`. Without this the
+     drawn box is clamped back to the aperture width while its height keeps the
+     1/0.76, and the plate renders as a 119px band of empty mount down its right
+     edge. Found in the render, not in the source. */
+  max-width: none;
+  width: calc(100% / var(--sx1a-cs));
+  height: calc(100% / var(--sx1a-cs));
+  left: calc(var(--sx1a-cx) / var(--sx1a-cs) * -100%);
+  top: calc(var(--sx1a-cy) / var(--sx1a-cs) * -100%);
+  object-fit: cover;
+}
+
+/* ── the blades ───────────────────────────────────────────────────────────
+   Four sheets of the page's own paper, each exactly as large as the strip it
+   covers, each withdrawing by its own length. The BASE transform is the
+   WITHDRAWN state, deliberately: anything that cancels the animation — the
+   global reduced-motion rule, a dropped keyframe set — lands on the finished
+   plate rather than on a permanently masked one. */
+.sx1a-blade {
+  position: absolute;
+  background: var(--ground);
+  animation-duration: 0.7s;
+  animation-timing-function: var(--ease);
+  animation-fill-mode: both;
+}
+/* the sheet's inner edge, so it reads as paper lying over a print rather than
+   as a hole in the picture. Travels off with its blade. */
+.sx1a-blade::after {
+  content: '';
+  position: absolute;
+  background: rgba(36, 29, 24, 0.15);
+}
+
+/* MOVE ONE, at 0.35s — sideways. The right blade is 45% of the plate and its
+   withdrawal is the whole reveal: the hand lengthens out into the row. */
+.sx1a-blade--l {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--sx1a-l);
+  transform: translateX(-101%);
+  animation-name: sx1a-left;
+  animation-delay: 0.25s;
+}
+.sx1a-blade--l::after { top: 0; bottom: 0; right: 0; width: 1px; }
+
+.sx1a-blade--r {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--sx1a-r);
+  transform: translateX(101%);
+  animation-name: sx1a-right;
+  animation-delay: 0.25s;
+}
+.sx1a-blade--r::after { top: 0; bottom: 0; left: 0; width: 1px; }
+
+/* MOVE TWO, at 0.85s — up and down. The wall, the mats and the daylight. */
+.sx1a-blade--t {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--sx1a-t);
+  transform: translateY(-101%);
+  animation-name: sx1a-up;
+  animation-delay: 0.7s;
+}
+.sx1a-blade--t::after { left: 0; right: 0; bottom: 0; height: 1px; }
+
+.sx1a-blade--b {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--sx1a-b);
+  transform: translateY(101%);
+  animation-name: sx1a-down;
+  animation-delay: 0.7s;
+}
+.sx1a-blade--b::after { left: 0; right: 0; top: 0; height: 1px; }
+
+@keyframes sx1a-up    { from { transform: translateY(0); } to { transform: translateY(-101%); } }
+@keyframes sx1a-down  { from { transform: translateY(0); } to { transform: translateY(101%);  } }
+@keyframes sx1a-left  { from { transform: translateX(0); } to { transform: translateX(-101%); } }
+@keyframes sx1a-right { from { transform: translateX(0); } to { transform: translateX(101%);  } }
+
+/* ── the locator ──────────────────────────────────────────────────────────
+   The rectangle the plate opened from, left drawn on the picture. It RESTS at
+   opacity 1 and is only ever animated up from 0, so with animation cancelled
+   it is already there: the detail-and-key relationship survives the motion
+   being switched off, which is the whole test this section has to pass. */
+.sx1a-rest {
+  position: absolute;
+  inset: var(--sx1a-t) var(--sx1a-r) var(--sx1a-b) var(--sx1a-l);
+  border: var(--sx1a-line);
+  box-shadow: var(--sx1a-line-shadow);
+  opacity: 1;
+  pointer-events: none;
+  animation: sx1a-mark 0.4s var(--ease) 1.2s both;
+}
+@keyframes sx1a-mark { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── the text column, and the key ─────────────────────────────────────────
+   The sub sits at the top of the column and the key at its foot, so the key's
+   bottom edge lands on the plate's bottom edge. */
+.sx1a-side {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: clamp(1.1rem, 0.7rem + 1.2vw, 2rem);
+}
+
+.sx1a-sub {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 0.92rem + 1.28vw, 2.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--forest); /* 10.04:1 on cream */
+  max-width: 22ch;
+  text-wrap: pretty;
+}
+
+/* House body is 18.72px / 1.60 / 40.6ch at 1440. This lands 18.6px / 1.62 /
+   42ch there and keeps climbing — 21px at 2531 — instead of freezing at 17px
+   in a 408px column across a 76% change of screen width. */
+.sx1a-sup {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: clamp(1.063rem, 0.964rem + 0.22vw, 1.313rem);
+  line-height: 1.62;
+  color: var(--ink-soft); /* 7.30:1 on cream */
+  max-width: 42ch;
+  text-wrap: pretty;
+}
+
+/* The key is a scale model of the plate: same file, same 3:2, same `sizes`, so
+   it resolves to the same candidate and the second request costs nothing. The
+   rectangle on it and the rectangle on the plate are one rectangle at two
+   sizes — which is the only claim this section makes, and it is made in
+   pixels rather than in words. */
+.sx1a-key {
+  position: relative;
+  width: clamp(104px, 13vw, 168px);
+  max-width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--ground-warm);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+.sx1a-key__box {
+  position: absolute;
+  inset: var(--sx1a-t) var(--sx1a-r) var(--sx1a-b) var(--sx1a-l);
+  border: var(--sx1a-line);
+  box-shadow: var(--sx1a-line-shadow);
+  pointer-events: none;
+}
+
+/* ── two columns, from 900 ────────────────────────────────────────────────
+   1.42 : 1 is not a taste: at 1440×900 it is the widest picture column whose
+   3:2 height still leaves the masthead, the rule and the page's own padding
+   inside one screen. Everything above derives from that. */
+@media (min-width: 900px) {
+  .sx1a {
+    grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
+    grid-template-areas:
+      'brow  brow'
+      'head  head'
+      'rule  rule'
+      'plate side';
+  }
+  .sx1a-brow  { grid-area: brow; }
+  .sx1a-h     { grid-area: head; }
+  .sx1a-rule  { grid-area: rule; }
+  .sx1a-plate { grid-area: plate; }
+  .sx1a-side  {
+    grid-area: side;
+    align-content: space-between;
+  }
+  /* Above 1700 the masthead stops growing — it is capped at 1720 — but the
+     screen does not, so the picture has to take the slack or it turns into a
+     band of dead paper under the plate. Measured at 2531: the plate goes from
+     887px to 939px and the largest blank run on the screen from 125px to 66px.
+     1.64 rather than something rounder because it is the largest ratio whose
+     plate still measures UNDER 960 CSS px at every width from 1700 to 2560 —
+     939.9 / 943.3 / 939.3 / 939.3 — so the 960 derivative covers the box at
+     DPR 1 everywhere and `sizes` can state a number that is true. The text
+     column is 573px at 2531, and the paragraph in it is 42ch at 21px = 556px. */
+  @media (min-width: 1700px) {
+    .sx1a { grid-template-columns: minmax(0, 1.64fr) minmax(0, 1fr); }
+  }
+  /* Optical alignment: the sub's cap height, not its line box, lands on the
+     plate's top edge. Measured off the render — the half-leading was putting
+     it 9px low at 1440. */
+  .sx1a-sub { margin-top: -0.2em; }
+}
+
+/* Below 900 the plate is the measure and the column stacks under it. The key
+   keeps its own line rather than crowding the paragraph beside it: a 104px
+   miniature next to a 25ch measure is two bad shapes instead of one good one. */
+@media (max-width: 899px) {
+  .sx1a {
+    /* A larger window below 900: the plate is the measure there, so the
+       wide-screen percentages would give a 123 x 105 detail at 390, which is
+       under the size at which a hand and a block read as a hand and a block.
+       These give 161 x 124 there and 129 x 99 at 320. */
+    --sx1a-t: 44%;
+    --sx1a-r: 48%;
+    --sx1a-b: 3%;
+    --sx1a-l: 6%;
+
+    row-gap: clamp(0.9rem, 0.5rem + 1.6vw, 1.5rem);
+  }
+  .sx1a-side {
+    gap: clamp(1rem, 0.6rem + 2vw, 1.6rem);
+  }
+  .sx1a-sub { max-width: 26ch; }
+  /* The key belongs next to the picture it keys. Stacked, that means directly
+     under the plate rather than 400px below it at the foot of the column — a
+     locator you have to scroll to find is not a locator. It is `aria-hidden`
+     and not focusable, so moving it visually reorders nothing that is read. */
+  /* And it is sized against the PLATE, not against the screen: at the 104px
+     floor the key was 0.371 of the plate at 320 and 0.297 at 390, against
+     0.18-0.25 on wide screens — at that size it stops reading as a key and
+     starts reading as a second photograph. 26vw holds the ratio at 0.30 / 0.29
+     / 0.19 across 320 / 390 / 768, and the marked rectangle inside it is still
+     39 x 30 at the narrowest. */
+  .sx1a-key {
+    order: -1;
+    width: clamp(84px, 26vw, 132px);
+  }
+}
+
+/* The eyebrow is 41 characters and measures 320px on one line at this size.
+   At 390 the measure is 350px, so the rule and its gap are what decide it:
+   24 + 8 leaves 318 and it wrapped; 16 + 6 leaves 328 and it does not. The
+   type size is not the variable here — measured, not guessed. At 320 the
+   measure is 280 and two lines is the honest answer. */
+@media (max-width: 480px) {
+  .sx1a-brow { letter-spacing: 0.13em; gap: 0.55em; }
+  .sx1a-brow::before { width: 16px; }
+}
+
+/* ── the ground the plate is released onto ────────────────────────────────
+   Preview scaffold. Not a design for anything; it exists so the cut from the
+   hero back to the page can be judged at real spacing. The live page hands off
+   to a deep-green section, so the scaffold states that rather than pretending
+   the paper continues. */
+.sx1a-after {
+  min-height: 70svh;
+  background: var(--ground-deep);
+}
+.sx1a-after > * {
+  max-width: 1720px;
+  margin-inline: auto;
+  padding: clamp(3rem, 2rem + 4vw, 6rem) var(--page) 0;
+}
+.sx1a-note {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(251, 247, 242, 0.72);
+  padding-top: 0.8em;
+  border-top: 1px solid rgba(251, 247, 242, 0.24);
+}

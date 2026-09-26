@@ -37,3 +37,6 @@ Thumbs.db
 
 # editor workspace file
 YogaMandala.code-workspace
+
+# generated workflow scripts
+tools/workflows/

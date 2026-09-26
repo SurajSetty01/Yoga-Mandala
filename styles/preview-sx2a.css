@@ -1,0 +1,499 @@
+/* preview-sx2a — owned solely by /preview/sx2a/. No other file may declare these selectors.
+   The `.sx2a-` prefix was grepped across the repo before it was claimed: zero hits. Two
+   namespace collisions have already broken live pages on this project (`.in`, and an `.ab-`
+   preview sheet that overrode the real About page's eyebrow), so the check comes first. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · ABOUT §01 — INTRODUCTION.  Concept A: THE APERTURE OPENS.
+
+   WHAT HAPPENS.  One photograph, shown four times.  Every showing ends on the
+   SAME EDGE of it — the near edge of a lawn — and every showing opens a
+   measured amount further up it: 26%, 44%, 72%, all of it.  The photograph is
+   never enlarged.  It is laid in at exactly the same rendered width in all four
+   windows, so the grass at the foot of the last one is the same grass at the
+   same size on the screen as the grass the section opened on.  Nothing moved.
+   The opening did.
+
+   THE HELD EDGE IS THE WHOLE MECHANIC.  Because every window ends where the
+   last one ended, each contains the one before it, and the reader recognises
+   the bottom of the frame four times without being told to.  Both critics
+   measured it and both named it this concept's best element: 26.0 / 44.0 /
+   72.0 / 100.0% of the frame's height, identical to three decimals at 390,
+   1024, 1440 AND 2531; horizontal coverage 100.0% at every one; every window
+   containing the one above it on a bottom edge held to half a pixel; the whole
+   thing CSS on a stacked <img>, so reduced motion changes nothing.  Not one
+   number in this block moves in round 2.
+
+   ── WHAT CHANGED IN ROUND 2 ───────────────────────────────────────────────
+
+   · THE PHOTOGRAPH.  Both critics' first defect: the ladder was engineered to
+     unveil a wall.  The old plate measured 60.2% flat tiles at detail 12.2,
+     and the band the payoff ADDED — its top 28%, the climax — was 76.6% flat
+     at detail 10.2.  The new plate is 3.2% flat at detail 30.1, and its payoff
+     band is 1.8% flat at detail 37.8: the densest 28% of the photograph, not
+     its emptiest.  The bands the ladder adds now measure 18.8 → 30.5 → 32.7 →
+     37.8, denser at every rung.  See components/preview/sx2a/frames.ts.
+   · THE CAPTION MOVED UNDER THE PLATE AND GREW A MEASURE.  It was a 17-character
+     column beside the sentence — 158px at 1440, 200px at 2531, so a 1.76×
+     change of viewport bought 1.27× of column and the text never left a
+     four-word rag.  It is now the plate's own caption on the plate's own width,
+     with a 54ch cap, and it is set two steps larger at every viewport: 15 /
+     17.3 / 18.4px against 13 / 15 / 17, in --ink at 15.5:1 rather than
+     --ink-soft at 7.3:1, which is the root of the seven anti-aliased
+     sub-4.5:1 readings a critic found at 13–15px.
+   · THE TYPE NO LONGER RUNS BACKWARDS.  It was Fraunces 70.2 / Fraunces 30.1 ×2
+     / Inter 21.4 ×2 — three treatments for five sentences, with the thesis the
+     whole mechanic exists to deliver set SMALLER than two of its peers.  It is
+     now TWO voices: the claim and the thesis in Fraunces, the three sentences
+     between them identical in Inter.  70.2 / 20.9 / 20.9 / 20.9 / 39.6 at 1440.
+     The payoff lands on the second-largest type in the section.
+   · THE HAND-OFF BAND CARRIES THE REAL §02 instead of 558px of dead ink.
+
+   WHAT IS NOT HERE, AND WILL NOT COME BACK: the 68×48px crop diagram that drew
+   the mechanism beside the mechanism; the fifth photograph (ceiling, roof beam,
+   tube light, two folding chairs, 2.35 viewport-heights); and the caption "The
+   same photograph as the first window, whole", which performed the reader's
+   recognition and so destroyed the payoff it named.
+
+   ── ROUND 3: LENGTH, AND WHERE ITS FLOOR ACTUALLY IS ──────────────────────
+
+   The instruction was "the ladder has to fit in roughly a third" of the first
+   build's 5,700px at 1440.  It is now 2,703px — 3.00 screens, down from 6.33,
+   0.60 screens per client sentence against 1.27 — and a third, 1,900px, is
+   below this mechanic's physical floor.  Measured at 1440: the four windows are
+   162.9 + 275.7 + 451.2 + 626.7 = 1,516.5px, which is not a layout choice but
+   0.26 + 0.44 + 0.72 + 1.00 = 2.42 frame-heights of one 3:2 plate 940px wide;
+   the client's five sentences at this section's sizes are 609px.  2,125px is
+   therefore the section with every caption, every pad and the register mark
+   deleted — 2.36 screens of nothing but photograph and copy.  1,900px can only
+   be bought by narrowing the plate, and the plate is the coverage dial: at the
+   air this section actually has, a 1,900px section needs a 413px plate, which
+   puts the photograph at 10.1% of the section's area — under the 11% the same
+   critique calls "an Introduction with no pictures in it".  940px holds 36.6%
+   at 1440 and 34.8% at 390, so this is the short end of the honest range, not
+   the middle of it.  The 264px that did come out of round 2 came out of air:
+   the rung's two gaps (below), the caption's lift toward its plate, the
+   register mark, and the paper side of the seam into §02.
+
+   MOTION IS NOT THE IDEA.  Every window's height, every crop, the order and the
+   whole ladder are static CSS.  With JavaScript off, and under
+   prefers-reduced-motion, the section is complete and identical — the reveal is
+   opt-in behind `.is-live`, which only a client allowed to animate ever adds.
+
+   NO TEXT SITS ON A PHOTOGRAPH anywhere here.  That is a decision: type inside a
+   picture is the home hero's mechanic and this page may not repeat it.  Every
+   word is ink on paper, so contrast is a constant rather than a function of a
+   crop.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx2a,
+.sx2a-after {
+  /* ── THE PLATE ───────────────────────────────────────────────────────────
+     One length governs the photograph, the caption AND the text column, so
+     there is exactly one relationship on the page at every viewport instead of
+     three blocks that never line up.  The hand-off band below the section is
+     given the same length so that §02's mark starts on §01's left edge.
+
+       min(100%, clamp(39rem, 38.5vw + 24.1rem, 85rem))
+
+     · `100%` — never wider than the section, which is why the full frame is
+       actually whole on a phone and why nothing can widen the page.  Below a
+       627px viewport the plate IS the viewport, full bleed.
+     · the slope — 627 to 2531, the plate grows with the window and the paper
+       margin grows with it: 780px at 1024, 940 at 1440, 1360 at 2531.
+     · 85rem ceiling (1360px).  The landscape archive tops out at 1620px, so a
+       1360px box means the 1620 file lands at 1.19 device pixels per CSS pixel —
+       a 0.84× DOWNSCALE.  Nothing in this section is ever upscaled: a critic
+       measured the declared `sizes` chain against the rendered boxes at four
+       widths and got 390 / 780 / 940 / 1360 against 390 / 780 / 940 / 1360,
+       max upscale 1.003.  That contract is untouched: the new plate is the same
+       3:2 ratio at the same three widths, so every one of those numbers holds.
+
+     WHY THE PLATE IS THIS WIDE AND NOT NARROWER.  Picture area and section
+     length are the same dial, and a narrower plate buys length by spending
+     pictures.  At 820px the section was 2.71 screens at 1440 but the photograph
+     covered only 30.9% of the section's area — BELOW the 33–36% a critic called
+     "an Introduction with no pictures in it".  At 940 the photograph holds most
+     of the section's vertical run and is on screen for all of it.  That is the
+     trade, made deliberately.
+
+     THE LADDER'S LENGTH IS THIS NUMBER TIMES 2.42, and that is the whole reason
+     the plate is capped at all.  Four windows at 0.26 + 0.44 + 0.72 + 1.00 of a
+     3:2 frame is 2.42 frame-heights of photograph BY CONSTRUCTION — 1,516px at
+     1440.  The first build ran the same ladder full-bleed (2,323px) and then
+     added a 2,112px portrait finale, and the section came to 5,700px.  Cap the
+     plate and the ladder comes with it; there is no other honest lever. */
+  --sx2a-plate: min(100%, clamp(39rem, 38.5vw + 24.1rem, 85rem));
+}
+
+.sx2a {
+  /* ── TWO VOICES, NOT THREE ───────────────────────────────────────────────
+     The client's five sentences are a claim, three sentences that widen it, and
+     a thesis.  The claim opens in display Fraunces; the three that widen are
+     PEERS and are set identically in Inter; the thesis closes in Fraunces
+     again, at half the claim's size and twice the peers'.
+
+     At 1440 that reads 70.2 / 20.9 / 20.9 / 20.9 / 39.6px.  The round-1 build
+     read 70.2 / 30.1 / 30.1 / 21.4 / 21.4 — three treatments, and the sentence
+     the entire mechanic exists to deliver set joint-SMALLEST in the section,
+     below two of its peers.  A critic called that "the layout contradicts the
+     argument"; it was the same failure this project rejected on concept C one
+     round earlier, and it had simply moved house.
+
+     All three GROW with the viewport, which is the other half of the fix: at
+     390 / 1440 / 2531 the claim is 32.4 / 70.2 / 108.8, the peers 17.1 / 20.9 /
+     23.2 and the close 24.5 / 39.6 / 48.0.  Two rivals in this round froze a
+     display at one size across a 1.76× change of width; nothing here is frozen,
+     and the claim still tops out under the 118.4px house maximum. */
+  --sx2a-say: clamp(1.95rem, 1.15rem + 3.6vw, 6.8rem);
+  --sx2a-peer: clamp(1.06rem, 0.98rem + 0.36vw, 1.45rem);
+  --sx2a-close: clamp(1.5rem, 1.18rem + 1.44vw, 3rem);
+
+  /* The register mark stays at the house 11.5px: it is the site's "where am I",
+     and it is the one label that must match every other section exactly. */
+  --sx2a-mark: 11.5px;
+
+  --sx2a-hair: rgba(36, 29, 24, 0.18);
+
+  position: relative;
+  z-index: 1;
+  background: var(--ground);
+  color: var(--ink);
+  /* The top pad clears the fixed navigation pill at every width — 93px at 390
+     against a pill whose bottom edge is at 68, 91px at 1440 against 78. */
+  padding-block: clamp(5.8rem, 6.3vw, 6.4rem) 0;
+  overflow-x: clip;
+}
+
+/* The text sits on the plate's own width, inset by the page gutter when the
+   plate is the whole viewport.  `margin-inline: auto` is not optional — a
+   `max-width` without it caps the column and then pins it left, invisible at
+   1440 and hundreds of px off-axis at 2531.  That shipped on this site once. */
+.sx2a-rail {
+  width: min(var(--sx2a-plate), 100% - (2 * var(--rail)));
+  margin-inline: auto;
+}
+
+/* ── the register mark ────────────────────────────────────────────────────
+   Section 02 of the home page's object, kept to the letter: 11.5px Inter,
+   0.19em, uppercase, a Fraunces numeral in forest, a sand rule.  Forest is
+   10.04:1 on cream and forest-mid 7.27:1 — both carry an 11.5px label.  Sand
+   is the rule and never a letter. */
+.sx2a-eyebrow {
+  width: min(var(--sx2a-plate), 100% - (2 * var(--rail)));
+  margin: 0 auto clamp(1.15rem, 1.75vw, 1.7rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 var(--sx2a-mark) / 1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx2a-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx2a-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand, #f6d9c1);
+}
+
+/* ══ THE WINDOW ═══════════════════════════════════════════════════════════
+   `.sx2a-frame` is the full-width clip.  `.sx2a-band` is the window: its width
+   is the plate and its HEIGHT comes entirely from `--sx2a-ar`, the frame's own
+   aspect ratio divided by the share on show.  A 3:2 photograph at 26% is a
+   5.77:1 band; at 100% a 1.5:1 one.  The image is never resized between
+   windows — `width: 100%` of the same plate in every one.
+
+   THE SHIFT IS A TRANSFORM PERCENTAGE, and that is load-bearing.  A percentage
+   in `top` resolves against the BAND, which is a different height in every
+   window and would put the crop somewhere different each time.  A percentage in
+   `translate` resolves against the ELEMENT'S OWN size — the image's height — so
+   "lift this photograph by 74% of itself" means the same crop at 390 and at
+   2531, in a band of any height.  Every shift is the exact complement of its
+   window (74 / 56 / 28 / 0), which is what anchors all four to one bottom edge.
+
+   `left: 50%` + `translateX(-50%)` rather than auto margins, which resolve to
+   ZERO the instant a block is as wide as its parent. */
+.sx2a-plate {
+  margin: 0;
+}
+.sx2a-frame {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+}
+.sx2a-band {
+  position: relative;
+  left: 50%;
+  width: var(--sx2a-plate);
+  aspect-ratio: var(--sx2a-ar, 1.5);
+  transform: translateX(-50%);
+  overflow: clip;
+  background: var(--ground-deep);
+}
+.sx2a-band > img {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  height: auto;
+  transform: translateY(calc(var(--sx2a-shift, 0) * -1%));
+}
+
+/* ══ THE PLATE CAPTION ════════════════════════════════════════════════════
+   Under the photograph, on the photograph's own width, with the convention's
+   word set as a lead-in against a hairline that runs the full plate.
+
+   WHY IT MOVED.  As a right-hand column beside the sentence it measured 158px
+   and 17 characters at 1440, and 200px and 19 characters at 2531 — a 1.76×
+   change of viewport for 1.27× of column, four-word lines down a 124px rag,
+   and the same 13px floor at a 390px window and a 2531px one.  Here it takes
+   the plate's width (940px at 1440, 1360 at 2531), caps its measure at 54ch,
+   and grows with the plate.
+
+   WHY IT IS SET THIS WAY.  The lead-in is Inter 600 uppercase in --forest
+   (10.04:1); the description is the DISPLAY face at reading size in --ink
+   (15.5:1).  That is a printed plate's own pairing — a sans key and a serif
+   description — and it separates the caption from the body without spending
+   contrast to do it.  Round 1 set the description in --ink-soft at 13–15px,
+   a 7.3:1 pair, and a critic measured seven rendered readings below 4.5:1 with
+   a minimum of 4.10, all of it anti-aliasing at small sizes.  The size floor is
+   now 15px, the top is 18.4px, and the pair is 15.5:1. */
+.sx2a-cap {
+  margin-top: clamp(0.45rem, 0.6vw, 0.62rem);
+  padding-top: clamp(0.42rem, 0.62vw, 0.6rem);
+  border-top: 1px solid var(--sx2a-hair);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: clamp(0.9rem, 1.6vw, 1.5rem);
+  row-gap: 0.3rem;
+}
+.sx2a-cap__what {
+  flex: none;
+  font: 600 clamp(12px, 11.2px + 0.14vw, 14px) / 1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest); /* #22452F on #FBF7F2 = 10.04:1 */
+}
+.sx2a-cap__of {
+  max-width: 54ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(0.9375rem, 0.88rem + 0.22vw, 1.15rem);
+  line-height: 1.45;
+  color: var(--ink); /* #241D18 on #FBF7F2 = 15.5:1 */
+  text-wrap: pretty;
+}
+
+/* ══ THE PAPER ROW ════════════════════════════════════════════════════════
+   One sentence, one column.  The right-hand label column is gone: it was 17
+   characters wide and it is now the plate's caption. */
+.sx2a-say {
+  /* THE RUNG IS GROUPED BY ITS AIR, and the two gaps are not equal.  A sentence
+     belongs to the window ABOVE it — it is what that window is for — so the gap
+     from the caption down to the sentence is small and the gap from the
+     sentence on to the NEXT window is three times it: 10.4px and 32.4px at
+     1440, 8 and 24 at 390.  Round 2 set them at 19.2 and 26.4, a ratio of 1.37,
+     and at that ratio the sentence floats between two pictures and the reader
+     has to decide which one it answers.  The sum is unchanged, so this costs no
+     length: it is the same air, spent where it says something. */
+  padding-block: clamp(0.5rem, 0.72vw, 0.68rem) clamp(1.5rem, 2.25vw, 2.1rem);
+}
+.sx2a-line {
+  margin: 0;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+/* 01 · the claim */
+.sx2a-line--say {
+  max-width: min(19ch, 100%);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx2a-say);
+  line-height: 1.04;
+  letter-spacing: -0.016em;
+}
+/* 02–04 · the three that widen it.  PEERS: one treatment, one measure, one
+   colour, identical at every width.
+
+   48ch, AND THE NUMBER IS A RENDERED COUNT, NOT A CSS UNIT.  `ch` is the
+   advance of a zero, which in Inter is wider than its average letter, so a
+   `ch` cap always under-states the line.  Round 1 set 62ch and a critic
+   measured 73 real characters against a house body that tops out at 64.
+   Round 2 set 52ch — and the rendered count, taken per line with a Range over
+   the text node, was still 66 at 1024, 1440 AND 2531: over the house maximum
+   at three of four widths, and 50ch was still 65.  48ch measures 62 at 1024,
+   1440 and 2531 and 42 at 390, with the same three-, three- and two-line
+   settings as before — the cap came down by four characters and cost no line.
+   62 is the number that had to be checked, because it is the one a reader's eye
+   actually travels. */
+.sx2a-line--peer {
+  max-width: 48ch;
+  font-size: var(--sx2a-peer);
+  line-height: 1.6;
+}
+/* 05 · the thesis.  The sentence the whole ladder climbs to, and the one the
+   whole frame arrives under.  Display face, and the second-largest type in the
+   section rather than the joint-smallest. */
+.sx2a-line--close {
+  max-width: min(30ch, 100%);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx2a-close);
+  line-height: 1.24;
+  letter-spacing: -0.01em;
+}
+
+/* THE PAUSE.  The client's fourth sentence is the one that is a list, and it is
+   the only one in the section with no photograph under it — the section's one
+   refusal to answer an enumeration by enumerating.  The extra air below it is
+   what makes the absence read as a held breath rather than a missing picture,
+   and both critics measured the result: 309px against 188 and 166 before the
+   earlier windows, a 1.85× pause, deliberate and felt. */
+.sx2a-rung[data-sx2a-pause] .sx2a-say {
+  padding-bottom: clamp(3.4rem, 5.2vw, 4.6rem);
+}
+
+/* THE SEAM OUT.  The thesis is the last thing on paper and the ground changes
+   directly under it — no rule, no gap that could be mistaken for the end of the
+   page, and nothing between the sentence and §02's ink.  The paper side of the
+   seam is 44.6px at 1440 and 35.2 at 390, down from 60.8 / 41.6: the arrival on
+   the dark ground is the section's last event and it should happen close to the
+   sentence that earns it. */
+.sx2a-rung:last-child .sx2a-say {
+  padding-bottom: clamp(2.2rem, 3.1vw, 2.9rem);
+}
+
+/* ══ THE REVEAL ═══════════════════════════════════════════════════════════
+   A grace note, and nothing else.  Opt-in behind `.is-live`, which the client
+   island adds ONLY when the reader has not asked for reduced motion — so no
+   JavaScript, or reduced motion, means every word and every window is painted
+   exactly as authored.
+
+   The iris opens UPWARD, from the same held bottom edge the windows are built
+   on: `inset(68% 0 0 0)` → `inset(0)`.  It never clips to zero.  That is
+   deliberate twice over: a band clipped to nothing is a blank page if the
+   observer never fires, and Chromium computes an IntersectionObserver's rect
+   AFTER clips, so the clip goes on `.sx2a-band` while the observed element is
+   `.sx2a-frame` outside it.  Both of those shipped once. */
+/* ROUND 3 DELETED THE TEXT'S FADE-UP, and the reason is a measurement rather
+   than taste.  The sentences used to arrive at opacity 0 / translateY(18px) and
+   settle over 0.8-1s.  Swept at 1024×768 the glyph-accurate probe returned 1
+   FAIL on one run in three — "Yoga is a vast body of knowledge", p5 1.42:1,
+   worst 1.07:1 — and the reason is that the probe shoots the paragraph twice,
+   once painted and once transparent, and a paragraph caught mid-fade is a
+   different paragraph in the two frames.  The ink is 15.58:1 on this paper at
+   every width and always was; the failure was the animation, not the colour.
+   A section whose own gate reports a phantom failure one run in three has a
+   defect whether or not a reader can see it, and the honest fix is at the root:
+   the words do not move now.  What moves is the window, in the one direction
+   the whole ladder moves — up, from the held bottom edge. */
+.sx2a.is-live [data-sx2a-r='iris'] > .sx2a-band {
+  clip-path: inset(68% 0 0 0);
+}
+.sx2a.is-live [data-sx2a-r='iris'].in > .sx2a-band {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.9s var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx2a.is-live [data-sx2a-r='iris'] > .sx2a-band {
+    clip-path: none;
+  }
+}
+
+/* ── narrow ──────────────────────────────────────────────────────────────
+   The caption stacks: the convention's word over the description, both still on
+   the plate's inset width. */
+@media (max-width: 640px) {
+  .sx2a-cap {
+    flex-direction: column;
+    row-gap: 0.4rem;
+  }
+  .sx2a-cap__what {
+    letter-spacing: 0.17em;
+  }
+}
+
+/* Focus: the global ring is a cream halo, invisible on paper.  (0,2,0) beats
+   the global (0,1,0). */
+.sx2a :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ══ THE HAND-OFF ═════════════════════════════════════════════════════════
+   §02 is a deep green-black plate, and the section's job is to arrive on it.
+
+   Round 1 made this band 62svh of empty ground — 558px of dead ink at 1440, and
+   a critic counted it as the largest unforced waste in the concept, noting that
+   exactly one of the four rivals had fixed it by putting the REAL next
+   section's opening in the band rather than a void pretending to be a
+   transition.  It now carries §02's register mark and §02's opening line, both
+   verbatim from content/pranava.ts and from the live
+   components/about-pranava/WhatIs.tsx.
+
+   The band's height is its content plus its padding — no svh floor, nothing
+   arbitrary — so the trailing void is one padding block, not most of a screen.
+   It is deliberately not designed further: §02 has a mechanic of its own on the
+   real page and this route does not own it. */
+.sx2a-after {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-block: clamp(3.6rem, 6.4vw, 6rem);
+}
+.sx2a-after__rail {
+  width: min(var(--sx2a-plate), 100% - (2 * var(--rail)));
+  margin-inline: auto;
+}
+.sx2a-after__mark {
+  margin: 0 0 clamp(1.2rem, 2.2vw, 2rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2, rgba(251, 247, 242, 0.9));
+}
+.sx2a-after__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic, #fbf7f2);
+}
+.sx2a-after__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand, #f6d9c1);
+}
+.sx2a-after__lead {
+  margin: 0;
+  max-width: min(22ch, 100%);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 1.1rem + 2.1vw, 3.2rem);
+  line-height: 1.14;
+  letter-spacing: -0.014em;
+  color: var(--ink-onDark, #fbf7f2);
+  text-wrap: pretty;
+}

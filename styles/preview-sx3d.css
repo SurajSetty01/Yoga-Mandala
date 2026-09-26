@@ -1,0 +1,538 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PREVIEW · sx3d — PRAṆAVA / ABOUT / §03 "Our approach"
+   Angle: SPATIAL. A type scale made out of distance.
+
+   THE MECHANIC, as something that happens:
+   Three terms stand at three depths in one dark room and walk away from you as
+   you read them — Tradition nearest and largest, Practice further, Inquiry
+   furthest and smallest, each stepping right toward the hall at the end of the
+   room. Then the room ends: the ground turns to paper and Transmission is
+   standing on your side of it, flat, at the site's own body size, beside a
+   photograph taken from inside a class instead of from outside one.
+
+   ── THE NUMBERS, BECAUSE THEY ARE THE DESIGN ──────────────────────────────────
+   ONE perspective constant:  2400px.
+   FOUR depths:               z = 400 / 276 / 157 / 0px
+   FOUR scale factors:        2400/(2400−z) = 1.200 / 1.130 / 1.070 / 1.000
+   ONE authored body size:    15.6px  (--sx3d-body)
+   → rendered body:           18.72 / 17.63 / 16.69px in the room
+   ONE flat body outside it:  18.88px — the site's own, to two decimals
+   Measure:                   434px authored at all three depths, so the
+                              magnification that grows the type grows the column
+                              grows with it. MEASURED cpl, all three terms
+                              identical at each width: 44 at 768, 41 at 1024,
+                              44 at 1280 / 1440 / 2531, 29 at 390, 23 at 320.
+                              The fourth term: 43 cpl.
+   House benchmark, measured on http://localhost:3000/ :
+                              18.72–18.88px at 41–46 cpl (1440 and 2531),
+                              16.0–18.87px at 29–34 cpl (390).
+
+   Every rendered size in this section is inside that band. Nothing was tuned
+   until it fitted a photograph; the sizes are what the geometry returns.
+
+   ── WHAT THE CRITIQUE CHANGED, AT THE ROOT ────────────────────────────────────
+   1. THE CARDS ARE GONE. Not restyled — removed. The site already deals four
+      mounted plates (home §04, `.ab-plate`) and runs a four-up photo grid
+      (home §02); a third set of four parallel photo+name+body objects is
+      repetition, and it packages the paragraph that says Yoga is not information
+      that can be packaged and delivered. Three of these terms are now type
+      standing in a room with no object around them at all, and the fourth is
+      not given the same object either.
+   2. THE TYPE COMES FROM A SCALE, NOT FROM THE COMPOSITION. The previous version
+      ran five body sizes at 1440 — 11 / 12.48 / 13.44 / 14.08 / 14.50px, every
+      one below the house's 18.7, with measures from 25 to 116 cpl. There are now
+      two authored body values in the entire section and four rendered ones, all
+      inside 16.69–18.88px, at 29–44 cpl.
+   3. NO PHOTOGRAPH IS CROPPED TO A SHAPE IT IS NOT. The hall is landscape and
+      gets a landscape box at every width — its own, 1620 × 1080, so `cover` has
+      nothing to take. The previous version forced it into a 390 × 1267 portrait
+      slot and kept 21% of its width, discarding the line of five and the raking
+      light it was chosen for.
+   4. NOTHING IS EVER PAINTED WIDER THAN ITS LARGEST DERIVATIVE. Measured at all
+      seven standard viewports, the smallest downsample factor anywhere in the
+      section is 1.02× — the hall never paints above 938px against a 960px file,
+      the teaching frame never above 832px against the same. The previous version
+      full-bled the hall and upscaled it 1.56× at 2531. Full bleed is kept where
+      it costs nothing — the dark band IS the viewport — and dropped where it
+      cost the picture.
+   5. CAPTIONS SIT ON THEIR PICTURES. Both are `<figcaption>` inside the
+      `<figure>`, 8.8px under the image. The previous pair floated 298–440px
+      below the nearest image and 608–864px below the backdrop they named.
+   6. THE TEACHER IS IN THE FRAME. `pr-ttc-dsc_0274` had no teacher in it and was
+      sitting under a paragraph about the relationship between teacher and
+      student. `pr-pbh-img_5407` has the teacher, the student he is attending to,
+      and a third person learning by watching.
+
+   ── WHAT THE CRITIQUE PROTECTED, AND WHAT IT IS ───────────────────────────────
+   · Real depth, not a drawing of it. Every plane's transform is a perspective
+     matrix; the computed style is a `matrix3d`, and the scale is the browser's
+     own 2400/(2400−z). It is the geometry that sets the type, not the reverse.
+   · The screen as a space, not a column: the room is a full-bleed band at every
+     viewport, so there is no capping bug possible in it and no dead paper beside
+     it. The stage INSIDE it is capped — and centred, which is the rule this site
+     shipped wrong once.
+   · Honest delivery. Zero video, no `poster`. Imagery: 58 KB at 320 and 390,
+     146 KB at 1024, 191 KB at 768/1280/1440, 275 KB at 1920 and 2531. Both
+     `sizes` values are the painted box — measured ratio 1.000 to 1.001 at all
+     seven viewports — because neither photograph is ever scaled above 1.000 by
+     anything, so the box and the paint are the same number. Measured downsample,
+     served file ÷ painted width, at the seven: 1.38 / 1.36 / 1.18 / 1.86 / 1.31 /
+     1.48 / 1.48 for the hall and 1.38 / 1.36 / 1.15 / 1.54 / 1.26 / 1.15 / 1.15
+     for the teaching frame. Nothing is upscaled anywhere, at any scroll position.
+
+   ── CONTRAST, MEASURED THE WAY THE BRIEF ASKS ─────────────────────────────────
+   tools/contrast-probe.mjs returns 0 FAIL at all seven standard viewports, but
+   it reaches only 11–14 of this section's 15 leaf text runs and it takes the
+   foreground from the CSS `color`, which overstates a translucent ink. So every
+   one of the 15 was ALSO measured directly at that run's own scrolled-into-view
+   position, at 390, 1440 and 2531 — painted vs. transparent screenshot, glyph
+   CORES only (pixels at ≥ 90% of the box's maximum diff, so no antialiased edge
+   is read as text), with the foreground taken as the element's own rgba
+   composited over the ground actually measured under each glyph. 45
+   measurements, 0 FAIL. Worst in the section: the paper caption at 7.30:1
+   against a 4.5 bar. The furthest term, the one carrying the atmospheric fade,
+   is 11.41:1. Read instead straight off the painted pixel — the conservative
+   cross-check, which undercounts because a glyph core is still not 100% coverage
+   — the same two are 5.72:1 and 9.31:1. Both are printed every run.
+
+   A NOTE ON THE FIRST ATTEMPT AT THIS MEASUREMENT, because it is the trap the
+   brief warns about in the other direction: masking on "A and B differ by ≥ 90"
+   admits antialiased edge pixels, and reading the PAINTED pixel there returns
+   the blend, not the ink. That version reported 45/45 FAIL at 1.39–2.25:1 for
+   cream on a dark ground — a number no reader could experience. 1.49:1 is
+   exactly what a pixel sitting on the 90 threshold returns. The mask has to be
+   the core, not the difference.
+   · Reduced motion changes nothing. `--sx3d-dz` is a registered property whose
+     initial value is the settled geometry; the document height is identical
+     either way because transforms do not affect layout.
+
+   ── WHAT MOVES, AND WHY IT IS NOT THE IDEA ────────────────────────────────────
+   One registered custom property on one element: `--sx3d-dz`, −80px → 0px over
+   the room's entry. Because the four planes are at four different depths, one
+   number moves them by four different amounts (near 1.148 → 1.200, the wall
+   0.968 → 1.000), which is differential parallax computed rather than authored.
+   The range is bounded by the floor, not by taste, and both bounds were swept at
+   six scroll stops per viewport rather than reasoned about: the smallest body
+   anywhere in the travel is 16.28px (390), 16.28px (1440), 16.34px (2531) — all
+   above the house's 16.0 — and the largest scale the photograph ever reaches is
+   0.9999, so it is never magnified at any scroll position. Turn reduced motion
+   on and the room is simply already arrived: --sx3d-dz resolves to 0px, the
+   three bodies measure exactly 18.72 / 17.63 / 16.69px, and the document height
+   is identical to the nine-hundredth of a pixel in all three modes.
+
+   Everything is namespaced `.sx3d-`. Grepped before use; the prefix was free.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* The one animated value. Registered so it interpolates; inherited so the whole
+   room reads it; initial 0px so no-JS, no-support and reduced-motion all land on
+   the settled geometry rather than on a start state. */
+@property --sx3d-dz {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.sx3d {
+  /* THE PERSPECTIVE CONSTANT. 2400px is chosen, not picked: the deepest plane is
+     z = 400, so the largest magnification anywhere in the section is 1.200. Any
+     shorter focal length and the nearest term's type is being enlarged by a
+     transform far enough to soften it; any longer and the recession stops
+     reading at all. One number, and every plane's size follows from its depth. */
+  --sx3d-p: 2400px;
+
+  /* THE ONE AUTHORED BODY SIZE IN THE ROOM. 15.6px. Everything the reader sees
+     at 18.72 / 17.63 / 16.69px is this number at three distances. */
+  --sx3d-body: 0.975rem;
+
+  /* THE MEASURE, AUTHORED. 434px → 44 characters per line at every depth,
+     because the scale that grows the type grows the column with it. */
+  --sx3d-measure: 27.125rem;
+
+  --sx3d-max: 105rem; /* 1680px of stage, centred */
+  /* The gap between the terms is a MEASUREMENT, not a rhythm. Half of each
+     plane's magnification lands above it and half below, so two neighbours
+     intrude on the space between them by (s−1)/2 × their own height. At 320,
+     where the paragraphs are tallest, that is 29px from Tradition and 12px from
+     Practice: 41px. The floor of this clamp is 54.4px. It was 35.2px and the
+     two planes touched — found by a scripted overlap probe at 320, not by eye. */
+  --sx3d-gap: clamp(3.4rem, 3.4vw, 3.7rem);
+
+  position: relative;
+  /* Clip, on both axes and as `clip` rather than `hidden`. `overflow-x: clip`
+     with `overflow-y: visible` is not a legal pair — the spec resolves the
+     `visible` to `hidden` — and `hidden` is a scroll container, which in the
+     ancestry breaks scroll-driven animation seeking. This is the belt for
+     "no horizontal overflow 320 → 2560"; the braces is that every transform in
+     here has `transform-origin: 0% 50%`, so no plane can grow past its own left
+     edge, and every width is `min()`ed against the space it has. */
+  overflow: clip;
+}
+
+.sx3d :focus-visible {
+  outline: 2px solid var(--ground);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(18, 32, 26, 0.9);
+}
+
+/* ── THE TWO GROUNDS ───────────────────────────────────────────────────────── */
+
+/* The room. Full bleed at every viewport — the band is the screen. */
+.sx3d-room {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-block: clamp(3.6rem, 7vw, 6.4rem) clamp(3.4rem, 6vw, 5.4rem);
+}
+
+/* Your side of it. One hard edge, no gradient, no transition band. */
+.sx3d-out {
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: clamp(3.8rem, 7vw, 6.2rem) clamp(3.6rem, 6.5vw, 5.8rem);
+}
+
+/* A capped container must also be centred. `max-width` alone reads correct at
+   1440 and is hundreds of px off at 2531 — that has shipped on this site once,
+   and a design in this very tournament is 104px asymmetric at 2531. */
+.sx3d-stage {
+  max-width: calc(var(--sx3d-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the register mark ─────────────────────────────────────────────────────── */
+.sx3d-eyebrow {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.4rem);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft); /* 8.69:1 composited, 7.52:1 off the painted pixel */
+}
+.sx3d-eyebrow__n {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-onDark);
+}
+.sx3d-eyebrow__rule {
+  flex: none;
+  width: clamp(2rem, 5vw, 3.6rem);
+  height: 1px;
+  background: var(--rule-onDark);
+}
+
+/* ── THE PLANES ────────────────────────────────────────────────────────────────
+   Three variables per plane and nothing else: its depth, the scale that depth
+   returns, and how far into the room it stands. The fourth value, `--sx3d-air`,
+   is atmospheric perspective — the far term is fractionally closer to the ground
+   it stands on. It is not decoration that costs contrast. Measured by a direct
+   paint/transparent glyph diff at the element's own scroll position — NOT by
+   tools/contrast-probe.mjs, which reads the CSS triple and would score a
+   translucent ink as if it were opaque — the three terms come in at 15.79 /
+   13.49 / 11.41:1 composited, and 12.52 / 11.32 / 9.31:1 read straight off the
+   painted pixel, against a 4.5 bar. */
+.sx3d-p1 {
+  --sx3d-z: 400px;
+  --sx3d-s: 1.2;
+  --sx3d-in: 0%;
+  --sx3d-air: 1;
+}
+.sx3d-p2 {
+  --sx3d-z: 276px;
+  --sx3d-s: 1.13;
+  --sx3d-in: 6%;
+  --sx3d-air: 0.92;
+}
+.sx3d-p3 {
+  --sx3d-z: 157px;
+  --sx3d-s: 1.07;
+  --sx3d-in: 12%;
+  --sx3d-air: 0.84;
+}
+
+/* THE TRANSFORM ITSELF, and it is the same three lines for every plane in the
+   section. `transform-origin: 0% 50%` pins the left edge, which is what makes
+   the recession a step to the RIGHT and makes horizontal overflow structurally
+   impossible: a plane can only ever grow into the space its own `min()` width
+   already reserved for it. */
+.sx3d-lead__l,
+.sx3d-term,
+.sx3d-wall {
+  transform: perspective(var(--sx3d-p)) translateZ(calc(var(--sx3d-z) + var(--sx3d-dz)));
+  transform-origin: 0% 50%;
+}
+
+/* ── the lead: the section, performed before it happens ────────────────────── */
+.sx3d-lead {
+  margin: 0 0 clamp(2.6rem, 5vw, 4.4rem);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  line-height: 1.16;
+}
+.sx3d-lead__l {
+  display: block;
+  width: fit-content;
+  /* one authored display size; three depths do the rest */
+  font-size: clamp(1.42rem, 1.06rem + 1.55vw, 2.2rem);
+  color: rgba(251, 247, 242, var(--sx3d-air));
+}
+.sx3d-lead__l + .sx3d-lead__l {
+  margin-top: 0.34em;
+}
+
+/* ── the floor: the three terms, and the hall at the end of them ───────────── */
+.sx3d-floor {
+  display: grid;
+  gap: clamp(2.8rem, 5vw, 4rem);
+}
+
+.sx3d-terms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sx3d-gap);
+  /* the vertical half of the magnification lands above and below each plane —
+     at the deepest, (1.200 − 1) / 2 × the plane's own height. The gap is set
+     wider than that everywhere; verified by screenshot at all seven viewports,
+     not by arithmetic alone. */
+}
+
+.sx3d-term {
+  margin: 0;
+  margin-inline-start: var(--sx3d-in);
+  /* THE MEASURE. 434px authored wherever it fits; otherwise exactly the width
+     that PAINTS to the edge of the column after magnification. One declaration,
+     correct from 320 to 2560, and the reason cpl is 44 on every desktop and
+     29–31 on a phone instead of 25 in one place and 116 in another. */
+  width: min(var(--sx3d-measure), calc((100% - var(--sx3d-in)) / var(--sx3d-s)));
+  color: rgba(251, 247, 242, var(--sx3d-air));
+}
+.sx3d-term__n {
+  margin: 0 0 0.42em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-size: clamp(1.35rem, 1.02rem + 1.1vw, 1.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.005em;
+}
+.sx3d-term__b {
+  margin: 0;
+  font-size: var(--sx3d-body);
+  line-height: 1.59;
+  color: inherit;
+}
+
+/* THE WALL AT THE END OF THE ROOM. z = 0 — the picture plane. It is the one
+   plane the dolly never magnifies past 1.000, which is also why its `sizes`
+   value and its painted box are the same number at every viewport. */
+.sx3d-wall {
+  --sx3d-z: 0px;
+  --sx3d-s: 1;
+  margin: 0;
+}
+.sx3d-wall img {
+  width: 100%;
+  height: auto;
+  /* the frame's own ratio: `cover` has nothing to crop, so 100% of the
+     photograph survives at 320 and at 2560 */
+  aspect-ratio: 1620 / 1080;
+  object-fit: cover;
+  object-position: var(--op-n, 50% 50%);
+}
+
+/* ── the captions. On their picture, 8.8px under it. ───────────────────────── */
+.sx3d-cap {
+  margin: 0.55rem 0 0;
+  font: 500 11.5px/1.45 var(--font-text);
+  letter-spacing: 0.055em;
+  color: var(--ink-onDark-soft); /* 8.69:1 composited, 7.52:1 off the painted pixel */
+}
+.sx3d-cap--paper {
+  color: var(--ink-soft); /* 7.30:1 on --ground composited, 5.72:1 off the painted pixel */
+}
+
+/* ── THE FOURTH TERM, on your side of the picture ──────────────────────────── */
+.sx3d-fourth {
+  display: grid;
+  gap: clamp(2.2rem, 4vw, 3.2rem);
+}
+.sx3d-fourth__n {
+  margin: 0 0 0.34em;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-size: clamp(1.9rem, 1.2rem + 2.4vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  color: var(--forest);
+}
+.sx3d-fourth__b {
+  margin: 0;
+  /* NOT in the frustum, and that is the point. 18.88px flat — the site's own
+     body size to two decimals — at 32rem, measured at 43 characters per line. */
+  max-width: 32rem;
+  font-size: 1.18rem;
+  line-height: 1.62;
+  color: var(--ink);
+}
+.sx3d-fourth__fig {
+  margin: 0;
+  /* capped so the plate cannot grow past the point where its 960 derivative
+     stops downsampling, and so a 2531 screen does not spend 830px of height on
+     one photograph */
+  max-width: 52rem;
+}
+.sx3d-fourth__fig img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  object-position: var(--op-n, 50% 49%);
+}
+
+/* ══ 720px and up: the hall gets its own ratio back on a wider box ═══════════ */
+@media (min-width: 720px) {
+  .sx3d-fourth__fig img {
+    aspect-ratio: 4 / 3;
+    object-position: var(--op, 50% 49%);
+  }
+  .sx3d-wall img {
+    object-position: var(--op, 50% 50%);
+  }
+}
+
+/* ══ 1024px and up: the triad and the hall in ONE view ══════════════════════
+   The three terms have to be readable AS a triad. The copy's shape is "three,
+   and then a fourth that is not one of them", and a design that gives each term
+   a screen of its own never lets the three exist together at all. From 1024 up
+   all three stand in the left column with the hall beside them and the whole
+   room fits inside one viewport — the room is 1001px at 1440 and 922px at 1024.
+   Measured triad span (Tradition's top to Inquiry's bottom) against the viewport:
+   679/844 at 390, 538/1024 at 768, 577/768 at 1024, 565/900 at 1440, 575/1140 at
+   2531 — the three exist as a triad at every one of the seven, including the
+   phone.
+
+   The 1.2 / 1 split is what holds the measure: the left column is
+   (inner − gap) × 1.2/2.2, which is 490px at 1024 and 696px at 1440, and the
+   `min()` on each plane turns that into 41 characters per line at the narrowest
+   desktop and 44 everywhere above it. At 1152 — where this breakpoint used to
+   start — the room cost 1561px at 1024×768 because the hall was stacked under
+   the terms at full width. It now costs 922px. Above 1440 the split is replaced
+   by a fixed track; see the next breakpoint for why. */
+@media (min-width: 1024px) {
+  .sx3d-floor {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    /* the hall is a window in the middle of the wall, not a picture that stops
+       short of the floor: centred against the three terms, so the room has no
+       dead quarter under it */
+    align-items: center;
+    column-gap: clamp(2.5rem, 3vw, 4rem);
+  }
+}
+
+/* ══ 1152px and up: the fourth term beside its photograph ═══════════════════
+   `justify-content: start`, NOT `space-between`. Measured: with `space-between`
+   the first track took the whole remainder while the figure was capped at 52rem,
+   so the leftover opened BETWEEN the photograph and the paragraph — 336px at
+   1920 and at 2531, against a declared 64px gap. The two halves of the fourth
+   term stopped reading as one thing. Sizing the first track to the figure's own
+   cap and packing to the start puts that slack outside the pair instead, where
+   it is an ordinary right margin (272px at 2531, 11% of the viewport), and it
+   keeps the figure's left edge flush with the room's column above it — the same
+   column, a different ground, which is the whole point of the fourth term. */
+@media (min-width: 1152px) {
+  .sx3d-fourth {
+    grid-template-columns: minmax(0, 52rem) minmax(0, 32rem);
+    justify-content: start;
+    align-items: center;
+    column-gap: clamp(2rem, 3vw, 4rem);
+  }
+  .sx3d-fourth__t {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sx3d-fourth__fig {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+}
+
+/* ══ 1440px and up: the terms column STOPS GROWING ══════════════════════════
+   MEASURED DEFECT, and this is the root of it. Under the 1.2fr / 1fr split the
+   left column keeps widening with the screen while the three terms do not — each
+   plane is capped at the 434px measure, and `--sx3d-in` is a PERCENTAGE of that
+   column, so the far term's indent grows too. The hole between the widest term
+   and the hall therefore grows without limit: measured left-of-hall void 40px at
+   1024, 119px at 1280, 191px at 1440, 372px at 1920 and 375px at 2531. At 1920
+   the largest single feature of the room was a 372px hole.
+
+   From 1440 the column is a FIXED 33rem = 528px, which is the exact width the
+   terms paint to and not a round number: the near plane paints 434 × 1.200 =
+   520.8px from the column's left edge, and the far plane paints 0.12 × 528 +
+   434 × 1.070 = 527.8px. One track, filled to within 0.2px by whichever plane is
+   widest. Measured void after the change: 56px at 1440, 1920 and 2531 — the
+   column gap itself, nothing more.
+
+   The slack goes to the HALL, which is the right place for it: the window at the
+   far end of a room is what should open as the room gets wider, and the picture
+   is the one thing in the section a 2531 screen can actually give more of. It
+   never outruns its file — painted 735px at 1440 and 1096px at 1920/2531 against
+   a 1620px derivative, a 1.48× downsample at the widest. */
+@media (min-width: 1440px) {
+  .sx3d-floor {
+    grid-template-columns: minmax(0, 33rem) minmax(0, 1fr);
+    /* fixed, so the three `sizes` clauses above 1440 are three clean terms
+       rather than a clamp inside a fraction */
+    column-gap: 3.5rem;
+  }
+}
+
+/* ══ THE DOLLY ══════════════════════════════════════════════════════════════
+   One property, one element, one timeline. The room drifts 80px forward as it
+   arrives and then holds at the geometry documented at the top of this file.
+
+   The range is bounded by the floor, not by taste: at dz = −80 the three bodies
+   measure 17.97 / 17.02 / 16.12px and the wall measures 0.968 — so no body ever
+   drops below the house's 16.0 and the photograph is never magnified above
+   1.000 at any point in the travel. Both are checked in VERIFY at mid-scroll,
+   not only at rest.
+
+   `entry 0% → entry 100%` and not `cover`: the settled state is what the reader
+   reads. By the time the room is fully in view the dolly is finished. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) and (animation-range: entry 0%) {
+    .sx3d-space {
+      animation: sx3d-dolly linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+    @keyframes sx3d-dolly {
+      from {
+        --sx3d-dz: -80px;
+      }
+      to {
+        --sx3d-dz: 0px;
+      }
+    }
+  }
+}
+
+/* ── PREVIEW SCAFFOLD ───────────────────────────────────────────────────────
+   Neither of these exists on the real page. `.sx3d-above` is the tail of the
+   approved §02, which ends on the DEEP ground — so the seam into this section is
+   judged against the ground it will actually meet, and the reason the room opens
+   deep is that it is CONTINUOUS with what is above it. The section spends its
+   one ground change where the argument changes. `.sx3d-below` is a screen of
+   paper so the bottom spacing is not the end of the document and the view()
+   range resolves as it will in place. */
+.sx3d-above {
+  height: 62svh;
+  background: var(--ground-deep);
+}
+.sx3d-below {
+  height: 110svh;
+  background: var(--ground);
+}

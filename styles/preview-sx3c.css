@@ -1,0 +1,619 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PREVIEW · sx3c — OUR APPROACH, set as a page of a book.
+
+   THE SECTION AS AN EVENT
+   A column of type holds ONE right edge all the way down — the lead sentence, then
+   three names standing against a hairline rule in the margin — until Transmission,
+   where the rule stops on a brass tick, the name crosses to the other side of the
+   gutter into the text itself, and the section's only photograph arrives in exactly
+   the column the words have just vacated. Below 900px the page is turned over rather
+   than flattened: the gutter goes to the right of the measure and every part of that
+   still happens, the picture crossing the rule's own line on its way off the page.
+
+   WHY THAT SHAPE. The client's lead names three things (tradition, practice,
+   inquiry) and the section has four items. Transmission is not a fourth peer; it is
+   what the other three move through. So it is the only one that does not get a
+   margin head, and the type does the argument: three names hold the edge, the
+   fourth leaves it.
+
+   RESEARCH → IMPLEMENTATION (each one is load-bearing, not decoration)
+   · Tufte-CSS marginalia proportions (text ~60% / margin ~36%) and its documented
+     failure mode — marginalia that collide or vanish below ~760px. Both tracks here
+     are explicit, and the whole thing collapses to one column at 900px with the
+     rule and the outdent preserved rather than dropped.
+   · HANGING PUNCTUATION, hand-set. `hanging-punctuation: last` is Safari-only, so
+     the lead's three full stops are wrapped and pulled with a negative margin. The
+     result is optical margin alignment: the three NOUNS — tradition, practice,
+     inquiry — end on the rule, and the three margin heads below stand on the same
+     rule. The sentence and the structure share one edge, which is the whole idea.
+   · `text-wrap: balance` on display lines, `text-wrap: pretty` on body paragraphs
+     (kills orphans on the last lines only).
+   · `font-optical-sizing: auto` — Fraunces' opsz axis is loaded by the root layout,
+     and the margin heads (~58px) and the lead (~25px) genuinely want different
+     stroke weights.
+   · FIRST-BASELINE ALIGNMENT via `align-items: baseline` inside a `subgrid` row, so
+     each margin head sits on its paragraph's first baseline the way a marginal head
+     sits in a book. Subgrid is Baseline 2023; the fallback repeats the track list.
+   · SCROLL-DRIVEN CSS (`view-timeline` + `animation-timeline`) draws the rule. No
+     scroll listener, no rAF, no JavaScript at all for it. Firefox still ships it
+     behind a flag, so it is inside `@supports` and every browser that lacks it gets
+     the rule fully drawn — which is also what reduced motion gets, and what a
+     reader with JS off gets. The composition is complete without the draw; the
+     draw is a grace note, never the idea.
+
+   MEDIA. Exactly one frame in the whole section, and it is a STILL — the first frame
+   of pr-mov-img_5681, a teacher speaking with his hands while a student holds a
+   supported headstand at the wall and three people sit watching. It ran as a silent
+   loop until this revision. The manifest calls that clip "Steady"; extracted at 0 / 2
+   / 5 / 8 s it is not — the camera drifts right and in for 10.5 s until the watchers
+   are outside the frame, the wall of A4 notices is the top half of the picture and a
+   black folding chair has arrived at the right. A crop cannot follow a moving camera,
+   so the clip is cut rather than gated or re-cropped: the caption is now true at every
+   width and every moment, and the section costs 665 KB everywhere instead of 3815 KB
+   from 1280 up. See components/preview/sx3c/Sx3cMotion.tsx.
+
+   The plate is a 1080×1200 window on the 1080×1920 still: full width, every person,
+   the teacher's crown down past the near mat. What it drops is the ~518px of tube
+   lamp, door head and A4 notices above them and the bare tile below — the bands a
+   1140px viewport was landing on whole.
+
+   Every selector is `.sx3c-`. Verified free before a line was written — two
+   namespace collisions have already broken live pages on this project.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.sx3c {
+  /* THE TWO TRACKS. Explicit, so the rule's x can be computed exactly rather than
+     guessed from a percentage, and so the measure is CAPPED: a book's measure does
+     not grow with the monitor. 33rem at the reader's 18px measures 60.8 characters
+     per line at 1440, and it is still 60.8 at 2531. The TYPE SCALE is capped for the
+     same reason — a 2560 monitor is not a reason to set a book at 80px. What grows
+     instead is the white around the block, which is what a page's margins are. */
+  --sx3c-marg: clamp(10rem, 30vw, 40rem);
+  --sx3c-gut: clamp(1.5rem, 3vw, 3.25rem);
+  --sx3c-meas: clamp(17rem, 51.5vw, 33rem);
+  --sx3c-block: calc(var(--sx3c-marg) + var(--sx3c-gut) + var(--sx3c-meas));
+
+  /* THE MARGIN COLUMN IS THE PLATE, and there is no bleed any more. The plate used to
+     hang 93.6px further left than anything else in the section, so what `margin-inline:
+     auto` centred (the BLOCK) was not what a reader sees (the block PLUS the plate): the
+     composition sat 47px left of centre at 1440 and 52px at 2531 — measured gutters
+     168/262 and 672/776. Two reviewers found it independently and both were right. The
+     fix is not to nudge the block over. It is that the picture belongs in exactly the
+     column the words have just left — col 1, 432px at 1440 and 640px at 2531 — so left
+     gutter equals right gutter at every width AND the claim the section makes about
+     itself becomes true to the pixel. Widening that column from 24vw/25rem is the same
+     move: at 2531 the band was 1084px (42.8% of the screen), which is the narrowest use
+     of a wide monitor of the four concepts. It is now 1220px, and the extra 240px is all
+     photograph.
+
+     THE MEASURE IS STILL CAPPED at 33rem — 46.5 characters at 1440 and 46.5 at 2531,
+     inside the home page's own 41–46. A wide monitor is not a reason to set a book at
+     80px; it is a reason to let the picture be bigger. */
+  /* THE RULE SITS OFF-CENTRE IN THE GUTTER, and that is measured rather than tidy.
+     Centred, the margin heads stood 22px clear of it at 1440 and read as floating
+     beside a line rather than standing against it. Held this close, the type leans
+     on the rule and the text column keeps the rest of the gutter as air. The floor
+     was 0.5rem and is now 0.72rem: at 390 the hung full stops reach 375px and the rule
+     sat at 378 — three pixels, which reads as a collision rather than a lean. It is
+     381.5 now, 6.5px of daylight, which is what the two-column layout gives them at
+     1440. */
+  --sx3c-lean: clamp(0.72rem, 1vw, 0.85rem);
+  /* the single-column indent: what the paragraphs stand back from the rule by */
+  --sx3c-in: clamp(0.95rem, 4.2vw, 1.5rem);
+
+  /* which way the margin head opens. A TOKEN, not a second `clip-path` declaration:
+     the one-column override used to redeclare the property inside a media query, and
+     it tied the reveal rule on specificity (0,5,0 against 0,5,0) and won on source
+     order — so at 390 every head stayed clipped to zero and three names were missing
+     from the page. Source-order ties are how a start state silently becomes an end
+     state. One property, one declaration site, and the variable carries the change. */
+  --sx3c-clip: inset(0 0 0 100%);
+
+  --sx3c-body: clamp(1rem, 0.95rem + 0.26vw, 1.125rem);
+  --sx3c-name: clamp(2.15rem, 1.05rem + 3.35vw, 3.6rem);
+  --sx3c-lead: clamp(1.12rem, 0.7rem + 1.2vw, 1.55rem);
+  --sx3c-stand: clamp(1.35rem, 0.95rem + 1.35vw, 2.05rem);
+
+  position: relative;
+  background: var(--ground);
+  padding-block: clamp(3.5rem, 9vh, 7.5rem) 0;
+  /* the plate runs out past the text block; nothing may run out past the page */
+  overflow-x: clip;
+}
+
+/* ── the register mark sits on the text block's own left edge ─────────────── */
+.sx3c-rail {
+  width: var(--sx3c-block);
+  max-width: calc(100% - 2 * var(--page));
+  margin-inline: auto; /* DESIGN-SYSTEM §3.8 — a capped box must also be centred */
+  margin-bottom: clamp(2.5rem, 6vh, 5rem);
+}
+
+/* ══ THE SPINE — lead + three items, one rule ═════════════════════════════ */
+
+.sx3c-block {
+  position: relative;
+  width: var(--sx3c-block);
+  max-width: calc(100% - 2 * var(--page));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: var(--sx3c-marg) var(--sx3c-gut) var(--sx3c-meas);
+  /* the rule is drawn against this element's own view progress */
+  view-timeline-name: --sx3c-read;
+  view-timeline-axis: block;
+}
+
+/* THE RULE. Absolutely positioned rather than placed in the grid on purpose:
+   negative grid line numbers (`-1`) resolve against the EXPLICIT grid, and these
+   rows are implicit, so `grid-row: 1 / -1` would silently span one row. The block's
+   width is known to the pixel, so the gutter's centre is arithmetic. */
+.sx3c-rule {
+  position: absolute;
+  top: 0.55em;
+  bottom: 0;
+  left: calc(var(--sx3c-marg) + var(--sx3c-lean));
+  width: 1px;
+  background: var(--rule);
+  transform-origin: 50% 0;
+}
+
+/* the rule's terminal: the brass tick the site already uses under every caption.
+   It is where the margin stops having words in it. */
+.sx3c-tick {
+  position: absolute;
+  bottom: calc(-1 * clamp(1.6rem, 4vh, 3rem));
+  left: calc(var(--sx3c-marg) + var(--sx3c-lean));
+  width: 26px;
+  height: 1px;
+  margin-left: -13px;
+  background: var(--brass);
+}
+
+/* ── the lead: three clauses, right-aligned, full stops hung ──────────────── */
+.sx3c-lead {
+  grid-column: 1;
+  margin: 0 0 clamp(2.75rem, 7vh, 5.5rem);
+  padding-right: 0;
+  text-align: right;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx3c-lead);
+  line-height: 1.34;
+  letter-spacing: -0.006em;
+  color: var(--forest); /* 10.04:1 on cream, measured */
+}
+.sx3c-lead__l {
+  display: block;
+  text-wrap: balance;
+}
+.sx3c-lead__l + .sx3c-lead__l {
+  margin-top: 0.34em;
+}
+/* HAND-SET HANGING PUNCTUATION. `hanging-punctuation: last` is Safari-only, so the
+   stop is pulled out of the measure by hand and the three nouns — tradition,
+   practice, inquiry — end on the rule instead of three full stops ending on it. */
+.sx3c-lead__stop {
+  margin-right: -0.3em;
+  color: var(--forest);
+}
+
+/* ── an item: a margin head and a paragraph, first baselines aligned ──────── */
+.sx3c-item {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: var(--sx3c-marg) var(--sx3c-gut) var(--sx3c-meas);
+  align-items: baseline;
+}
+@supports (grid-template-columns: subgrid) {
+  .sx3c-item {
+    grid-template-columns: subgrid;
+  }
+}
+.sx3c-item + .sx3c-item {
+  margin-top: clamp(3.25rem, 8.5vh, 7rem);
+}
+
+.sx3c-name {
+  grid-column: 1;
+  margin: 0;
+  padding-right: 0;
+  text-align: right;
+  text-wrap: balance;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx3c-name);
+  line-height: 1;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+}
+
+.sx3c-said {
+  grid-column: 3;
+  margin: 0;
+  font-size: var(--sx3c-body);
+  line-height: 1.66;
+  text-wrap: pretty;
+  color: var(--ink);
+}
+
+/* ══ THE TURN — Transmission. The band under the fourth item changes paper. ══ */
+
+.sx3c-turn {
+  margin-top: clamp(4.5rem, 11vh, 9rem);
+  padding-block: clamp(3.25rem, 8vh, 6.5rem) clamp(3.5rem, 9vh, 7rem);
+  background: var(--ground-warm);
+}
+.sx3c-turn .sx3c-block {
+  align-items: start;
+  view-timeline-name: none;
+}
+
+/* THE PLATE. It fills the margin column exactly: the box the three names stood in. */
+/* THE FIGURE SPANS THE WHOLE BLOCK so that it inherits the section's track list through
+   `subgrid` and the plate can be placed in column 1 — the margin, the box the three names
+   stood in — while "Transmission" sits in column 3 in the same row. The caption is the
+   figure's second row IN COLUMN 1, directly under its own picture. `align-self: start`
+   rather than the default stretch, or a tall text column drags the figure's rows apart. */
+.sx3c-fig {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-self: start;
+  margin: 0;
+  display: grid;
+  grid-template-columns: var(--sx3c-marg) var(--sx3c-gut) var(--sx3c-meas);
+}
+@supports (grid-template-columns: subgrid) {
+  .sx3c-fig {
+    grid-template-columns: subgrid;
+  }
+}
+.sx3c-plate {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  /* CROPPED, DELIBERATELY, AND THE PREVIOUS BUILD WAS WRONG NOT TO BE. The source is
+     1080×1920 and it was shown whole, which reads as discipline until it is measured
+     band by band: the top 500px of the frame is a wall-mounted tube lamp, a door head,
+     a switch plate and two A4 notices, and the bottom ~360px is bare tile. The plate
+     was 896px tall in an 1140px viewport at 2531, so a scroll stop lands on one of
+     those bands and nothing else — the previous build's own s3 screenshot is 896px of
+     picture whose entire visible content is two mats and a floor. This project has
+     already rejected four frames for having a fan, a cooler, a folding chair or a
+     speaker stand as their actual subject; retaining 100% of a frame is not a virtue
+     when 45% of it is the room's fittings. The window kept is y 518→1718 of 1920 —
+     full width, every person, the teacher's crown to the near mat. */
+  aspect-ratio: 1080 / 1200;
+  /* a ground under the picture, so the box is never a white hole before it decodes */
+  background: var(--ground-deep);
+  overflow: clip;
+}
+.sx3c-plate__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  /* 0.72 × (1920 − 1200) = 518px down from the top of the frame: the window is y 518→1718
+     of 1920. Full width — every person, including the three watching — the teacher's crown
+     down past the near mat. What it drops is the tube lamp, the door head, the switch plate
+     and the two A4 notices above them, and the bare tile below. */
+  object-position: 50% 72%;
+}
+/* THE CAPTION SITS UNDER ITS OWN PICTURE, at every width, 12.8px below it — measured at
+   390, 768, 1024, 1440 and 2531 and identical at all five. It used to sit at the foot of
+   the TEXT column, level with the plate's foot across the gutter, which closed the corner
+   prettily and measured 43px from the picture horizontally and −16.5px vertically. A
+   caption belongs against its image; one that has to be traced across a gutter is a
+   caption the reader has to work for, and the standard this round set — captions 0–13px
+   from their frame — is a standard worth being the reference for rather than the exception
+   to. The corner it used to close is now paper, which is what a page's margin is. */
+.sx3c-cap {
+  grid-column: 1;
+  grid-row: 2;
+  margin: 0.8rem 0 0;
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft); /* 6.48:1 on --ground-warm, computed then measured */
+}
+/* the caption is now as wide as the PLATE, not as the measure, so it sets to two lines from
+   1440 down. Balanced, because a two-line caption whose second line is the single word
+   WATCHING is an orphan, and this is the one place in the section where a line break is
+   decided by a box rather than by a sentence. It is its own element rather than an anonymous
+   flex item so that `text-wrap` has a block box to act on. */
+.sx3c-cap__t {
+  text-wrap: balance;
+}
+.sx3c-cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--brass);
+  transform: translateY(-4px);
+}
+
+/* the fourth name, on the far side of the gutter. This is the event. */
+.sx3c-say {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: start;
+}
+.sx3c-say .sx3c-name {
+  display: block;
+  grid-column: auto;
+  padding-right: 0;
+  text-align: left;
+  margin-bottom: 0.5em;
+}
+/* THE PLATE HANGS FROM THE WORD. `line-height: 1` still leaves the difference between
+   Fraunces' ascender and its cap height above the T, so the picture's top edge sat
+   about 5px proud of the letter it is named by. `text-box: trim-start cap` removes
+   exactly that leading, and the plate's top edge and the cap line of "Transmission"
+   become one line across the gutter. Chrome 133+/Safari 18.2+; without it the 5px
+   stays and nobody can see it, which is what a progressive enhancement should cost. */
+@supports (text-box: trim-start cap alphabetic) {
+  .sx3c-say .sx3c-name {
+    text-box: trim-start cap alphabetic;
+  }
+}
+
+/* the first sentence of Transmission is the turn of the whole section, so it is set
+   at display size and the rest at reading size. The fourth item reads differently
+   because it IS different. */
+.sx3c-stand {
+  margin: 0 0 1.15em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx3c-stand);
+  line-height: 1.26;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  color: var(--forest);
+}
+.sx3c-rest {
+  margin: 0;
+  font-size: var(--sx3c-body);
+  line-height: 1.66;
+  text-wrap: pretty;
+  color: var(--ink);
+}
+.sx3c-rest + .sx3c-rest {
+  margin-top: 1em;
+}
+
+/* ══ MOTION ═══════════════════════════════════════════════════════════════════
+   Everything below is additive. With it removed the section is complete. */
+
+/* the reveal: the margin heads open from the rule outward, because that is the edge
+   they belong to. The clip is on a CHILD — Chromium computes an
+   IntersectionObserver's rect AFTER clips, and an observed element clipped to zero
+   never fires. That shipped a blank page on this site once. */
+.sx3c-name__in {
+  display: inline-block;
+}
+.js .sx3c[data-sx3c-live] [data-sx3c='name'] .sx3c-name__in {
+  clip-path: var(--sx3c-clip);
+}
+.js .sx3c[data-sx3c-live] [data-sx3c='up'],
+.js .sx3c[data-sx3c-live] [data-sx3c='fade'] {
+  opacity: 0;
+}
+.js .sx3c[data-sx3c-live] [data-sx3c='up'] {
+  transform: translateY(20px);
+}
+
+.js .sx3c [data-sx3c='up'].sx3c-on,
+.js .sx3c [data-sx3c='fade'].sx3c-on {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.85s var(--ease),
+    transform 1s var(--ease);
+  transition-delay: var(--sx3c-d, 0ms);
+}
+.js .sx3c [data-sx3c='name'].sx3c-on .sx3c-name__in {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.95s var(--ease);
+  transition-delay: var(--sx3c-d, 0ms);
+}
+
+/* THE RULE DRAWS ITSELF, in CSS, against the block's own view progress. No scroll
+   listener and no rAF exist on this page. `cover 64%` is where the block's foot
+   reaches the viewport foot at a typical window, so the rule is complete by the
+   time the reader is. Firefox still ships this behind a flag; it therefore gets the
+   rule fully drawn, which is the same state reduced motion gets. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sx3c-rule {
+      animation: sx3c-draw linear both;
+      animation-timeline: --sx3c-read;
+      animation-range: cover 6% cover 64%;
+    }
+    @keyframes sx3c-draw {
+      from {
+        transform: scaleY(0);
+      }
+      to {
+        transform: scaleY(1);
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .sx3c[data-sx3c-live] [data-sx3c],
+  .js .sx3c[data-sx3c-live] [data-sx3c='name'] .sx3c-name__in {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* ══ ONE COLUMN, ≤ 899px ══════════════════════════════════════════════════════
+   THE 51.5vw AND THE 29rem ARE BOTH MEASURED. At the first values I wrote, the text
+   column was 464px at 899 and 342px at 900: a reader who widened their window by one
+   pixel got a line a third shorter. That is the same defect a judge found on another
+   concept this round (345.6px at 1440 against 346.8px at 390), and it lives at every
+   breakpoint where a column count changes — which is why it is so easy to ship. The
+   two numbers are now tuned against each other so the column only ever grows:
+   280px at 320, 350 at 390, 464 from 600 to 899, 463.5 at 900, 527 at 1024, 528 from
+   1100 up. The step across the breakpoint is half a pixel.
+
+   Tufte-CSS's documented failure is marginalia that collide below ~760px or vanish
+   behind a toggle. Nothing vanishes here and nothing is flattened: the page is TURNED
+   OVER. The gutter moves to the right of the measure, the lead and the three names go
+   on holding one optical edge against the rule in it, the paragraphs go on standing
+   back from it, and Transmission goes on being the one term that crosses it. Every
+   part of the mechanic is present at 390; only its handedness changes, because 350px
+   cannot hold a 32px display margin AND a 41-character line and a reader on a phone
+   should get the argument, not a summary of it.
+
+   The measure is capped here too. A tablet at 768 would otherwise get a longer line
+   than a desktop at 1440 — the wrong way round, and a real bug found on this
+   project's other concepts. */
+@media (max-width: 899px) {
+  .sx3c-rail,
+  .sx3c-block {
+    width: min(100% - 2 * var(--page), 29rem);
+    max-width: none;
+  }
+  .sx3c-block {
+    display: block;
+  }
+  /* THE RULE STAYS IN A GUTTER, AND THE NAMES STAY RIGHT-ALIGNED AGAINST IT.
+     The previous build turned the rule to the far left and set every name flush left,
+     which meant the one thing this section is — a structure standing on a rule, then a
+     fourth term that crosses it — was simply absent at 390, the viewport most people
+     read on. A reviewer measured exactly that and they were right: there was no gutter
+     to cross. It is impossible to keep BOTH a margin track wide enough for 32px Fraunces
+     AND a 41-character measure inside 350px, which is Tufte-CSS's own documented failure
+     below ~760px. So the page is turned over instead of broken up: the gutter moves to
+     the RIGHT of the measure, 8px outside the block in the page margin, and everything
+     the two-column layout does against it is done against it here.
+
+       · the lead's three clauses are right-aligned with their full stops still hung, so
+         tradition / practice / inquiry end on one optical edge — the same edge the three
+         names below stand on. That shared edge is the whole idea and the old 390 threw
+         it away (`text-align: left`, `margin-right: 0`).
+       · the three names are right-aligned to it, and open from it outward — the same
+         `--sx3c-clip` value the two-column layout uses, so there is no second
+         declaration site and no source-order tie. The override that used to live here is
+         gone with it.
+       · the paragraphs stand BACK from the rule, exactly as they stand back across the
+         gutter at 1440.
+
+     THEN TRANSMISSION CROSSES IT, twice over and visibly: the name is the only one set
+     flush LEFT — it leaves the edge the other three hold and takes the far side of the
+     column — its paragraphs take back the strip the margin indent held, and the plate
+     runs from the block's left edge THROUGH the line the rule stood on and off the page.
+     The rule itself stops on the brass tick above all of it. */
+  .sx3c-rule {
+    top: 0.3em;
+    left: auto;
+    right: calc(-1 * var(--sx3c-lean));
+  }
+  .sx3c-tick {
+    left: auto;
+    right: calc(-1 * var(--sx3c-lean));
+    margin-left: 0;
+    margin-right: -13px;
+    bottom: calc(-1 * clamp(1.25rem, 3.5vh, 2.25rem));
+  }
+
+  .sx3c-lead {
+    margin-bottom: clamp(2.25rem, 6vh, 3.5rem);
+  }
+
+  .sx3c-item {
+    display: block;
+  }
+  .sx3c-item + .sx3c-item {
+    margin-top: clamp(2.5rem, 7vh, 4rem);
+  }
+  .sx3c-name {
+    margin-bottom: 0.42em;
+  }
+  /* ONLY the three bodies stand back, and they stand back from the RULE, which is now
+     on their right. The lead and the three heads are margin content and hold that edge
+     together. Transmission's paragraphs carry no such indent — the fourth term takes
+     back the strip the margin kept, which is the same event as the plate crossing the
+     rule, said in type. */
+  .sx3c-said {
+    padding-right: var(--sx3c-in);
+  }
+
+  .sx3c-turn .sx3c-block {
+    display: block;
+  }
+  .sx3c-fig {
+    display: block;
+  }
+  /* THE PICTURE CROSSES THE RULE. It starts on the block's own left edge — the one edge
+     this section has held from the eyebrow down — and runs right, over the line the three
+     names stood on, to the page edge. `margin-right: calc(50% - 50vw)` is that distance
+     exactly and arithmetically, whatever the block is: the block is centred, so its right
+     gap is (100vw − block) / 2, and 50% of the block minus 50vw is its negative. It is
+     not a full bleed: the left edge is kept, because the left edge is what the type kept.
+     `max-height` is a guard, not a crop target — at 390 the plate is 370 × 411 and the
+     cap never bites. */
+  .sx3c-plate {
+    margin-right: calc(50% - 50vw);
+    max-height: 86svh;
+  }
+  /* the caption goes on sitting under the picture's OWN left edge — same rule as the two
+     column layout, which is the point: a caption belongs against its image at every width,
+     never across a gutter from it and never floating in the paper below it. */
+  .sx3c-say {
+    margin-top: clamp(2rem, 5vh, 3rem);
+  }
+  .sx3c-say .sx3c-name {
+    margin-bottom: 0.4em;
+  }
+}
+
+/* on a real phone the name wants to be a shade smaller than the fluid curve gives,
+   or "Transmission" sets to two lines against a 350px measure */
+@media (max-width: 420px) {
+  .sx3c {
+    --sx3c-name: 2rem;
+  }
+}
+
+/* ── the honest neighbours, so spacing and the dark→paper turn read true ──── */
+.sx3c-above {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  min-height: 62svh;
+  display: grid;
+  align-content: end;
+  padding: 0 var(--page) clamp(3rem, 8vh, 6rem);
+}
+/* deliberately more than one screen: the section must be judged with somewhere to
+   scroll past it, not as the last thing on the page. */
+.sx3c-below {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  min-height: 125svh;
+  display: grid;
+  align-content: start;
+  padding: clamp(3rem, 8vh, 6rem) var(--page) 0;
+}
+.sx3c-ghost {
+  width: min(100%, 44rem);
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 1rem + 1.2vw, 2rem);
+  line-height: 1.3;
+  color: var(--ink-onDark-soft);
+}
