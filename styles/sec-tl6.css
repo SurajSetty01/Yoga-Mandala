@@ -235,7 +235,7 @@
     padding-block: clamp(1rem, 3svh, 2rem);
   }
   .tl6:not(.tl6--flow) .tl6-track {
-    height: 380svh;
+    height: 170svh; /* about one screen of scroll for all five steps; 380svh held readers for three */
   }
   .tl6:not(.tl6--flow) .tl6-stage {
     position: sticky;

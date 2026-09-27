@@ -1,19 +1,14 @@
 /**
  * sx6: THE FOUNDER'S PORTRAIT SLOT.
  *
- * The archive has no photograph of Pranav Murthy, and nothing in it identifies anyone, so no
- * frame may stand in for him. Until the client supplies one, this slot holds a line drawing
- * of a teacher seated cross-legged, hands resting on the knees with thumb and forefinger
- * joined: an illustration, drawn by hand as SVG, with no face and no likeness. It is labelled
- * as what it shows, never as him.
+ * Founder.tsx passes `photo`: an illustration of Pranav Murthy made from an archive photograph
+ * of him (Prabodha TTC, DSC_0333, seated under the banyan with palms joined), which the site
+ * owner identified as him. His figure was cut out and reduced to three flat tones inside a
+ * brass outline, so it reads as a drawing rather than a photo. The source file is
+ * public/media/founder/pranav-murthy-seated.webp.
  *
- * TO SWAP IN A REAL PHOTOGRAPH, pass `photo` where Founder.tsx renders <Sx6Portrait />. The
- * slot keeps its place and width in every layout; the picture takes its own aspect ratio.
- *
- * The drawing is one pen: every stroke is the same brass line (sec-sx6.css sets its width
- * in screen px, so it matches the room's hairlines at any size). The body is symmetrical
- * about its own axis, as the room is about the vanishing point; only the legs, one shin
- * crossed in front of the other, break the symmetry.
+ * Without `photo` the slot falls back to the hand-drawn line figure below, which is labelled
+ * as what it shows and never as him.
  */
 
 export type Sx6Photo = { src: string; alt: string; width: number; height: number };

@@ -193,11 +193,19 @@ export function Sx6Founder() {
 
         {/* ── the ceiling: who, and the five sentences, narrowing toward the point ── */}
         <div className="sx6-ceiling">
-          {/* THE PORTRAIT SLOT. A line drawing of a seated teacher until the client supplies
-              a photograph of Pranav; pass it as <Sx6Portrait photo={{ src, alt, width,
-              height }} /> and it takes the drawing's place. Wide: the left margin, beside
-              the biography. Narrower: centred above his name. */}
-          <Sx6Portrait />
+          {/* THE PORTRAIT SLOT: Pranav himself, as a flat three-tone figure cut from an
+              archive photograph of him seated under the banyan at Prabodha TTC (DSC_0333),
+              chosen by the site owner. Not a photo: forest, brass and cream fills inside a
+              brass outline. Wide: the left margin, beside the biography. Narrower: centred
+              above his name. */}
+          <Sx6Portrait
+            photo={{
+              src: '/media/founder/pranav-murthy-seated.webp',
+              alt: 'Illustration of Pranav Murthy seated cross-legged, palms joined',
+              width: 974,
+              height: 1170,
+            }}
+          />
           <div className="sx6-by">
             <p className="sx6-kicker">{kicker}</p>
             <p className="sx6-role">{f.role}</p>
