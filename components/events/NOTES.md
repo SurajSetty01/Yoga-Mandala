@@ -1,5 +1,10 @@
 # Praṇava — Events
 
+> **Superseded (2026-09).** The three sections below were rebuilt as te1 (`components/events/te1/`),
+> te2 (`te2/`) and te3 (`te3/`), each with its own stylesheet (`styles/sec-te<n>.css`); te2 and
+> te3 carry a client island. Grounds still run paper · deep · warm. The empty-state reasoning and
+> the content limits recorded here still hold; the section designs described here no longer exist.
+
 `/events/`. Three sections, six photographs, no JavaScript, and the page is a record rather
 than a programme.
 

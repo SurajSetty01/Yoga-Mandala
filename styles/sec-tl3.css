@@ -1,0 +1,292 @@
+/* Final tl3 section. Every selector is namespaced .tl3- */
+
+/* ══ /learn/ §02 · WHAT TEACHER EDUCATION IS — THE DIVIDER ═══════════════════════
+   Two panes share one frame. The class pane (a man demonstrating, three watching) and
+   the guiding pane (a man steadying one person inverted at a wall) each carry a clip in
+   an outer third and their clause in the middle third. With motion, the panes overlap and
+   a divider walks from 2/3 to 1/3 of the frame: the refusal is wiped, the answer uncovered.
+
+   `--tl3-d` is the only number the script writes. Every transform is derived from it in
+   container units (the frame is the container), so one property moves five layers.
+
+   Without `.tl3-live` (no JS, reduced motion, or <900px) nothing overlaps and nothing is
+   hidden: ≥900 the two panes step down the frame left to right, <900 they stack with the
+   two clauses meeting across the divider.
+
+   MEASURED: cream #FBF7F2 on the class panel #0B1611 → 17.9:1; on --forest #22452F →
+   10.04:1. --sand #F6D9C1 (the accent phrase) on #0B1611 → 14.0:1; on --forest → 7.9:1.
+   No text on this section animates its opacity; only pictures and veils fade.
+   ══════════════════════════════════════════════════════════════════════════════════ */
+
+.tl3 {
+  --tl3-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --tl3-max: 101.25rem;
+  /* the fixed nav pill (~5.3rem) + the mark + a foot, subtracted from the pinned stage */
+  --tl3-chrome: 12.5rem;
+  --tl3-ratio: 1.86;
+  --tl3-panel-a: #0b1611;
+  --tl3-panel-b: var(--forest);
+
+  position: relative;
+  display: block;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding: clamp(4.5rem, 12svh, 9.5rem) 0 clamp(5rem, 13svh, 10rem);
+  overflow-x: clip;
+}
+
+.tl3-stage {
+  width: min(100% - 2 * var(--tl3-rail), var(--tl3-max));
+  margin-inline: auto;
+}
+
+/* ── the register mark ─────────────────────────────────────────────────────── */
+.tl3-mark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 clamp(1.4rem, 3.4svh, 2.4rem);
+  font: 600 12px/1 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.tl3-mark__n {
+  font-variant-numeric: tabular-nums;
+}
+.tl3-mark__t {
+  line-height: 1.4;
+}
+.tl3-mark__rule {
+  flex: none;
+  width: clamp(18px, 3vw, 38px);
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the frame and its panes ───────────────────────────────────────────────── */
+.tl3-frame {
+  --tl3-d: 0.6667;
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+}
+.tl3-pane--a {
+  order: 1;
+}
+.tl3-divider {
+  order: 2;
+  display: block;
+  width: min(9rem, 40%);
+  height: 1px;
+  margin: clamp(1.8rem, 6vw, 2.6rem) 0;
+  background: var(--sand);
+}
+.tl3-pane--b {
+  order: 3;
+}
+
+.tl3-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.tl3-clip {
+  position: relative;
+  margin: 0;
+  overflow: clip;
+  background: #0e1512;
+  width: min(100%, 26rem);
+  aspect-ratio: 2 / 3;
+}
+.tl3-pane--b .tl3-clip {
+  margin-left: auto;
+}
+.tl3-clip picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.tl3-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tl3-vid {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.75s var(--ease-io);
+}
+.tl3-vid.tl3-on {
+  opacity: 1;
+}
+/* the veil is only ever lowered over the narrower pane's picture, and only with motion */
+.tl3-veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 16, 12, 0.58);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-io);
+}
+
+.tl3-say {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+.tl3-pane--a .tl3-say {
+  padding-top: clamp(1.2rem, 4vw, 1.8rem);
+}
+.tl3-pane--b .tl3-say {
+  padding-bottom: clamp(1.2rem, 4vw, 1.8rem);
+}
+.tl3-clause {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 6.4cqi, 2.1rem);
+  line-height: 1.17;
+  letter-spacing: -0.015em;
+  color: var(--ink-onDark);
+  text-wrap: pretty;
+}
+.tl3-shows {
+  display: none;
+  margin: 0;
+  max-width: 34ch;
+  font: 400 clamp(12px, 0.95cqi, 14px)/1.45 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.tl3-em {
+  font-style: italic;
+  color: var(--sand);
+}
+
+/* ── ≥900px, still: the two panes step down the frame, left to right ────────── */
+@media (min-width: 900px) {
+  .tl3-frame {
+    gap: clamp(1rem, 1.6cqi, 1.8rem);
+  }
+  .tl3-divider {
+    display: none;
+  }
+  .tl3-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 66.667%;
+    grid-template-rows: minmax(0, 1fr);
+    aspect-ratio: 1.24;
+  }
+  .tl3-pane--b .tl3-body {
+    margin-left: auto;
+  }
+  .tl3-clip,
+  .tl3-pane--b .tl3-clip {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+  .tl3-say,
+  .tl3-pane--a .tl3-say,
+  .tl3-pane--b .tl3-say {
+    padding: clamp(1.1rem, 2.5cqi, 2.6rem);
+  }
+  /* the panel's head: a sand hairline and what the picture beside it shows; its foot:
+     the clause */
+  .tl3-shows {
+    display: block;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--sand);
+    margin-bottom: auto;
+  }
+  .tl3-pane--a .tl3-say {
+    background: var(--tl3-panel-a);
+  }
+  .tl3-pane--b .tl3-say {
+    background: var(--tl3-panel-b);
+  }
+  .tl3-clause {
+    max-width: none;
+    font-size: clamp(1.2rem, 2.75cqi, 3rem);
+    line-height: 1.16;
+  }
+}
+
+/* ── ≥900px with motion: one frame, one divider ─────────────────────────────── */
+@media (min-width: 900px) {
+  .tl3.tl3-live {
+    padding: 0;
+  }
+  .tl3-live .tl3-run {
+    height: 250svh;
+  }
+  .tl3-live .tl3-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    width: min(100% - 2 * var(--tl3-rail), var(--tl3-max), (100svh - var(--tl3-chrome)) * var(--tl3-ratio));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(5.6rem, 11svh, 7rem) 0 clamp(1rem, 3svh, 2.2rem);
+  }
+  .tl3-live .tl3-frame {
+    display: block;
+    aspect-ratio: var(--tl3-ratio);
+  }
+  .tl3-live .tl3-pane {
+    position: absolute;
+    inset: 0;
+    overflow: clip;
+  }
+  .tl3-live .tl3-body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    aspect-ratio: auto;
+  }
+  .tl3-live .tl3-pane--a .tl3-body {
+    left: 0;
+  }
+  .tl3-live .tl3-pane--b .tl3-body {
+    left: 33.333%;
+    margin: 0;
+  }
+  /* each pane is a window whose edge is the divider; its body is counter-moved so the
+     picture and the words stay where they are while the edge passes over them */
+  .tl3-live .tl3-pane--a {
+    transform: translate3d(calc((var(--tl3-d) - 1) * 100cqi), 0, 0);
+  }
+  .tl3-live .tl3-pane--a .tl3-body {
+    transform: translate3d(calc((1 - var(--tl3-d)) * 100cqi), 0, 0);
+  }
+  .tl3-live .tl3-pane--b {
+    transform: translate3d(calc(var(--tl3-d) * 100cqi), 0, 0);
+  }
+  .tl3-live .tl3-pane--b .tl3-body {
+    transform: translate3d(calc(var(--tl3-d) * -100cqi), 0, 0);
+  }
+  .tl3-live .tl3-divider {
+    display: block;
+    position: absolute;
+    top: -0.9rem;
+    bottom: -0.9rem;
+    left: 0;
+    width: 2px;
+    height: auto;
+    margin: 0;
+    z-index: 2;
+    transform: translate3d(calc(var(--tl3-d) * 100cqi - 1px), 0, 0);
+  }
+  .tl3-live .tl3-pane:not(.tl3-act) .tl3-veil {
+    opacity: 1;
+  }
+}

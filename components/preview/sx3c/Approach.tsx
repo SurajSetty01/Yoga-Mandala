@@ -1,161 +1,192 @@
-import type { CSSProperties } from 'react';
 import { about } from '@/content/pranava';
-import { Eyebrow } from '@/components/about-pranava/parts';
 
 /**
- * OUR APPROACH — set as a page of a book.
+ * PREVIEW · sx3c — "Our approach", set as two leaves of a commented manuscript.
  *
- * WHAT HAPPENS: a column of type holds one right edge all the way down — the lead sentence,
- * then three names standing against a hairline rule in the margin — until Transmission, where
- * the rule stops on a brass tick, the name crosses the gutter into the text column itself, and
- * the section's only photograph arrives in exactly the column the words have vacated. Below
- * 900px the page is turned over rather than flattened: the gutter goes to the right of the
- * measure, the lead's hung stops and the three names go on holding one optical edge against
- * the rule in it, and Transmission still crosses — the name to the far side, the picture over
- * the rule's own line and off the page.
+ * WHAT HAPPENS. The first leaf is a text folio in the Sanskrit commentarial layout — the
+ * mūla (root text) in the centre of the ruled block, the commentary written into the margins
+ * around it. The root is the client's one sentence; the three commentaries are the three
+ * things it names. The second leaf has the same rules, the same margins and the same centre —
+ * but its root is not a sentence. A tissue lifts off a photograph of a teacher's hand reaching
+ * a student's back, and Transmission is written around THAT instead, split across the margins
+ * the way a commentary is. Yoga "is not simply information that can be packaged and
+ * delivered", so its root on the page is not a line of type.
  *
- * WHY. The client's lead names three things and the section has four items. Transmission is
- * not a fourth peer; it is what the other three move through. So it is the only one without a
- * margin head, and the type carries the argument rather than a caption explaining it. The
- * version this replaces made all four equal numbered panels in a row, which is precisely the
- * reading the copy contradicts.
+ * WHERE THE LAYOUT COMES FROM (the research — see the stylesheet for each measurement):
+ *  · tri-pāṭha / pañca-pāṭha manuscripts (Jainpedia, "How to read a Jain manuscript"): the
+ *    root in the centre, the commentary in the margins — above and below (tri-pāṭha) or on
+ *    all four sides (pañca-pāṭha). Desktop is the four-sided form; below 1000px the margins
+ *    fold into the three-part form rather than hiding behind a toggle, which is what Tufte
+ *    CSS does below 760px and the one thing it gets wrong.
+ *  · the text block bounded by DOUBLE vertical rules filled with red, a matching pair of red
+ *    discs standing in the margins (D'source layout study; manuscriptevidence.org).
+ *  · the folio's title written in its head margin, abridged (Jainpedia) — the register mark.
+ *  · the catchword: the first word of the next leaf printed at the foot of this one, so the
+ *    reading is handed on. It is the only thing on the first leaf that names Transmission.
  *
- * NOTHING IS RETYPED. Both of the client's multi-sentence values are split at their OWN full
- * stops with a lookbehind, so the pieces concatenate back character for character — the same
- * technique components/about-pranava/WhatIs.tsx already uses. `npm run check:copy` walks
- * content/pranava.ts, and no sentence in this file is a copy of one.
+ * EVERYTHING IS DERIVED FROM THE CONTENT, NOT RETYPED. The lead is split at its own full
+ * stops; each clause is paired with the item whose name it contains; the item that NO clause
+ * names is computed, not asserted — it is the one that goes to the second leaf. Change the
+ * client's copy and the asymmetry follows it.
+ *
+ * No client component and no JavaScript. The one motion — the tissue lifting off the plate —
+ * is a CSS scroll-driven animation inside `@supports`; every browser without it, every reader
+ * with reduced motion and every reader with JavaScript off gets the finished leaves, which ARE
+ * the idea. No text is ever moved or faded by scroll.
  */
 
-/** The one frame. See NOTES.md for why this one, why it is the only frame in the section,
-    and why it is a STILL after the clip of the same id was cut on evidence. */
-const PLATE = {
-  id: 'pr-mov-img_5681',
-  /* The intrinsic size of the FILE, which is what these attributes are for. The plate's box
-     is a 1080x1200 window on it — see the crop note in styles/preview-sx3c.css. Nothing here
-     is scaled by a transform, so the painted width IS the box width: 370px at 390, 616 at
-     768, 307 at 1024, 432 at 1440, 640 at 2531, against a 1080px source. Every one of those
-     is a downsample (0.28x-0.59x), and there is no `sizes` to get wrong because there is one
-     file, one box, and no transform between them. */
-  w: 1080,
-  h: 1920,
-  /* Written from LOOKING at the frame, not from the manifest — which calls the shirt white,
-     says "two", and describes only the inversion. What is actually in it is a teacher
-     mid-sentence with his hands shaping the instruction, a student inverted at the wall, and
-     three people sitting on the floor watching. Nobody is named: the archive does not record
-     who is in which frame.
+const { lead, items } = about.approach;
 
-     Alt written against the CROP THAT SHIPS, not the whole file: the tube lamp, the door head
-     and the two A4 notices above them are outside the box, so they are not described. */
-  alt:
-    'A teacher standing on a mat, hands open as he speaks, while a student holds a supported ' +
-    'headstand against the wall and three people sit watching from the floor.',
-  cap: 'One teacher, one student at the wall, and the room watching',
-} as const;
+/** The lead at its own full stops: "Rooted in tradition." / "Alive in practice." / … */
+const clauses = lead.split(/(?<=\.)\s+/);
 
-/** 'Rooted in tradition.' -> ['Rooted in ', 'tradition', '.'] — the stop is hung by CSS. */
-function hangStop(clause: string): [string, string, string] {
-  const m = /^([\s\S]*?)(\S+)(\.)$/.exec(clause);
-  /* if a clause ever arrives without a final stop the whole clause is simply set, unhung —
-     the alignment is lost and not one character of the client's sentence is. */
-  if (!m) return ['', clause, ''];
-  return [m[1] ?? '', m[2] ?? clause, m[3] ?? ''];
+const names = (clause: string, name: string) =>
+  clause.toLowerCase().includes(name.toLowerCase());
+
+/** The items a clause of the lead names, in the client's order — and the one none does. */
+const glossed = items.filter((it) => clauses.some((c) => names(c, it.name)));
+const unnamed = items.filter((it) => !glossed.includes(it));
+const handed = unnamed[0];
+
+/** Transmission's paragraph at its own full stops, to be written around the plate. */
+const handedParts = handed ? handed.body.split(/(?<=\.)\s+/) : [];
+
+const SLOTS = ['a', 'b', 'c'] as const;
+
+/**
+ * One clause, set as two lines: the words before the named term, then the term itself in
+ * italic with whatever follows it. Split on the term's own position in the client's string,
+ * so the two lines concatenate back to the clause character for character.
+ */
+function Clause({ clause }: { clause: string }) {
+  const item = glossed.find((it) => names(clause, it.name));
+  if (!item) return <span className="sx3c-line">{clause} </span>;
+  const at = clause.toLowerCase().indexOf(item.name.toLowerCase());
+  const before = clause.slice(0, at);
+  const term = clause.slice(at, at + item.name.length);
+  const after = clause.slice(at + item.name.length);
+  return (
+    <>
+      <span className="sx3c-line">{before}</span>
+      <span className="sx3c-line sx3c-line--term">
+        <em>{term}</em>
+        {after}{' '}
+      </span>
+    </>
+  );
 }
 
-export function Sx3cApproach() {
-  const { lead, items } = about.approach;
-  const clauses = lead.split(/(?<=\.)\s+/);
-  const three = items.slice(0, 3);
-  const fourth = items[3];
-  const [stand, ...rest] = fourth.body.split(/(?<=\.)\s+/);
-
+/**
+ * The double rules that run the full height of the leaf, and the pair of discs standing in
+ * the margins beside them. Siblings, not parent and child: the rule is drawn by scaling it,
+ * and a disc inside it would be squashed into an ellipse on the way.
+ */
+function Rules() {
   return (
-    <section className="sx3c" id="sx3c-approach" aria-label="Our approach">
+    <>
+      <span className="sx3c-rule sx3c-rule--l" aria-hidden="true" />
+      <span className="sx3c-rule sx3c-rule--r" aria-hidden="true" />
+      <span className="sx3c-disc sx3c-disc--l" aria-hidden="true" />
+      <span className="sx3c-disc sx3c-disc--r" aria-hidden="true" />
+    </>
+  );
+}
+
+/**
+ * The photograph. `pr-pbh-img_5622`, chosen by looking, not by the manifest: the clearest
+ * hands-on correction in the archive — a man's arm extended to a woman's back as she folds
+ * forward onto a chair, a second student working behind her. Not used anywhere on the live
+ * site. Encoded at 480/960/1920/2560 from a 1920×2560 (3:4) derivative; shown SQUARE at
+ * object-position 50% 55%, which is y 352→2272: the teacher's crown to the student's feet,
+ * and it takes out the two ceiling fans at the top and the bare tile at the bottom — a crop
+ * checked on the rendered pixels at every aspect, because this project has already rejected
+ * four frames whose real subject turned out to be a fan, a cooler, a stand or a chair.
+ */
+const PLATE = {
+  id: 'pr-pbh-img_5622',
+  widths: [480, 960, 1920, 2560],
+  alt: 'A man reaches out to the back of a woman folding forward with her hands on the seat of a folding chair, while a second woman works at a chair behind her.',
+};
+const plateSrc = (w: number) => `/media/stills/${PLATE.id}-${w}.webp`;
+
+/*
+ * `sizes` is written against the plate as MEASURED, not guessed: 235px at 320, 303 at 390,
+ * 316 from 414 to 719 (capped), 339 at 768, 373 from ~900 to 1179, 377 at 1180, 460 at
+ * 1440, 552 at 2531. Each clause slightly over-states its range, never under.
+ */
+
+export function Sx3cApproach() {
+  return (
+    <section className="sx3c" aria-labelledby="sx3c-title">
       <div className="sx3c-rail">
-        <Eyebrow n="03">Our approach</Eyebrow>
-      </div>
+        {/* ── LEAF I · the text folio. Root in the centre, three commentaries around it. */}
+        <div className="sx3c-leaf sx3c-leaf--text">
+          <Rules />
+          <h2 className="sx3c-mark" id="sx3c-title">
+            <span className="sx3c-mark__n">03</span>
+            <span className="sx3c-mark__rule" aria-hidden="true" />
+            Our approach
+          </h2>
 
-      {/* ── the spine: the lead, three names, one rule ───────────────────────────── */}
-      <div className="sx3c-block">
-        {/* The rule and its terminal are ornament and carry no meaning a reader needs, so
-            they are hidden from assistive technology. The rule draws itself in CSS against
-            this block's own view progress — there is no scroll listener on this page. */}
-        <span className="sx3c-rule" aria-hidden="true" />
-        <span className="sx3c-tick" aria-hidden="true" />
-
-        <p className="sx3c-lead" data-sx3c="up">
-          {clauses.map((c) => {
-            const [head, noun, stop] = hangStop(c);
-            return (
-              <span className="sx3c-lead__l" key={c}>
-                {head}
-                {noun}
-                <span className="sx3c-lead__stop">{stop}</span>
-              </span>
-            );
-          })}
-        </p>
-
-        {three.map((it, i) => (
-          <div className="sx3c-item" key={it.name}>
-            <h3 className="sx3c-name" data-sx3c="name">
-              <span className="sx3c-name__in">{it.name}</span>
-            </h3>
-            <p
-              className="sx3c-said"
-              data-sx3c="up"
-              style={{ ['--sx3c-d' as string]: `${120 + i * 40}ms` } as CSSProperties}
-            >
-              {it.body}
+          <div className="sx3c-block">
+            <p className="sx3c-root">
+              {clauses.map((c) => (
+                <Clause clause={c} key={c} />
+              ))}
             </p>
-          </div>
-        ))}
-      </div>
 
-      {/* ── the turn: the paper changes, the margin loses its words ──────────────── */}
-      <div className="sx3c-turn">
-        <div className="sx3c-block">
-          <figure className="sx3c-fig" data-sx3c="fade">
-            {/* the aspect box is a CHILD of the observed figure: it carries `overflow: clip`,
-                and Chromium computes an IntersectionObserver's rect AFTER clips, so an
-                observed element that clips can report ratio 0 and never fire. */}
-            <div className="sx3c-plate">
-              <picture>
-                <source type="image/avif" srcSet={`/media/posters/${PLATE.id}.avif`} />
+            {glossed.map((it, i) => (
+              <div
+                className={`sx3c-gloss sx3c-gloss--${SLOTS[i] ?? 'c'}${i < 2 ? ' sx3c-gloss--onterm' : ''}`}
+                key={it.name}
+              >
+                <h3 className="sx3c-lemma">{it.name}</h3>
+                <p>{it.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {handed ? (
+            <p className="sx3c-catch" aria-hidden="true">
+              {handed.name}
+            </p>
+          ) : null}
+        </div>
+
+        {/* ── LEAF II · the illustrated folio. Same rules, same margins, a picture at the root. */}
+        {handed ? (
+          <div className="sx3c-leaf sx3c-leaf--plate">
+            <Rules />
+            <div className="sx3c-block">
+
+              <div className="sx3c-gloss sx3c-gloss--a">
+                <h3 className="sx3c-lemma">{handed.name}</h3>
+                <p>{handedParts[0]}</p>
+              </div>
+
+              <figure className="sx3c-root sx3c-plate">
                 <img
                   className="sx3c-plate__img"
-                  src={`/media/posters/${PLATE.id}.jpg`}
-                  width={PLATE.w}
-                  height={PLATE.h}
+                  src={plateSrc(1920)}
+                  srcSet={PLATE.widths.map((w) => `${plateSrc(w)} ${w}w`).join(', ')}
+                  sizes="(min-width: 1180px) min(34vw, 620px), (min-width: 720px) min(44vw, 380px), min(calc(100vw - 5rem), 316px)"
+                  width={1920}
+                  height={2560}
                   alt={PLATE.alt}
                   loading="lazy"
                   decoding="async"
                 />
-              </picture>
-            </div>
-            <figcaption className="sx3c-cap">
-              <span className="sx3c-cap__t">{PLATE.cap}</span>
-            </figcaption>
-          </figure>
+                <span className="sx3c-tissue" aria-hidden="true" />
+              </figure>
 
-          <div className="sx3c-say">
-            <h3 className="sx3c-name" data-sx3c="name">
-              <span className="sx3c-name__in">{fourth.name}</span>
-            </h3>
-            <p className="sx3c-stand" data-sx3c="up" style={{ ['--sx3c-d' as string]: '90ms' } as CSSProperties}>
-              {stand}
-            </p>
-            {rest.map((s, i) => (
-              <p
-                className="sx3c-rest"
-                key={s}
-                data-sx3c="up"
-                style={{ ['--sx3c-d' as string]: `${170 + i * 60}ms` } as CSSProperties}
-              >
-                {s}
-              </p>
-            ))}
+              <div className="sx3c-gloss sx3c-gloss--b">
+                {handedParts.slice(1).map((part) => (
+                  <p key={part}>{part}</p>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </section>
   );

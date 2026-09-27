@@ -1,0 +1,341 @@
+/* sec-sx2 — About §01, Introduction: "The mat's width". Final section; base is preview
+   concept sx2a, with plate IV from sx2d and the "practice" key word from sx2c.
+   Every selector is the `.sx2-intro` root or carries the `.sx2-` prefix, state classes
+   included (`.sx2-is-live`, `.sx2-in`, `.sx2-is-playing`). */
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · ABOUT §01 — INTRODUCTION.  THE MAT'S WIDTH.
+
+   The claim is split around a photograph cut to a yoga mat's proportions (1 : 2.8),
+   with brass crop marks at its two edges. Four photographs follow, one per sentence.
+   Each is seen first as a strip the mat's width, under crop marks at the same x, and
+   opens outward to 2.5, 4.4 and 7 mats wide, and then to the whole page. The marks
+   never move; by the last picture the mat is a narrow band in a field.
+
+   Photography leads: the picture comes FIRST and the sentence names it afterwards.
+   All text sits on paper, so no scrim, veil or overlay stands between any glyph and
+   the contrast probe.
+
+   ONE UNIT, --sx2-m, the mat's width. Every width in the section is a multiple of it,
+   and every crop mark stands at ±m/2 from the page axis. Desktop: 10vw between 110 and
+   200px. Phone: 27vw.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx2-intro {
+  --sx2-m: clamp(110px, 10vw, 200px);
+  /* the height every essay plate shares, so width is the only thing that grows */
+  --sx2-h: clamp(260px, 50svh, 620px);
+  --sx2-tick: 14px;
+  --sx2-tick-gap: 8px;
+
+  position: relative;
+  width: 100%;
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: clamp(6.5rem, 12vw, 10rem) clamp(5.5rem, 10vw, 9.5rem);
+  /* x only: a rounding error at 320 must never become a horizontal scrollbar */
+  overflow-x: clip;
+}
+
+/* A CAPPED MEASURE IS ALSO A CENTRED ONE. max-width without margin-inline:auto reads
+   right at 1440 and is hundreds of px off at 2531 — that shipped once on this site. */
+.sx2-rail {
+  max-width: calc(94rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the register mark: the site's "where am I" object, to its letter ─────── */
+.sx2-mark {
+  margin: 0 0 clamp(2.6rem, 5.5vw, 4.8rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx2-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx2-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand); /* the page register mark: same rule as 02–10 */
+}
+
+/* ── I · THE CLAIM, split around the mat ───────────────────────────────────
+   Three columns: the first half of the sentence hugging the strip from the left and
+   hanging from its TOP edge, the second half hugging it from the right and standing on
+   its BOTTOM edge. The halves are offset vertically on purpose — set level, a reader
+   could run "Yoga is … a practice" across the picture and read the claim wrongly.
+   Read on the diagonal they cannot. */
+.sx2-claim {
+  display: grid;
+  grid-template-columns: 1fr var(--sx2-m) 1fr;
+  column-gap: clamp(1.1rem, 2.6vw, 2.9rem);
+  max-width: calc(96rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+  /* room for the crop marks above and below the strip */
+  padding-block: calc(var(--sx2-tick) + var(--sx2-tick-gap));
+}
+/* The sentence is ONE paragraph for a screen reader; its two halves are placed as grid
+   items of the claim, either side of the strip. */
+.sx2-claim__p {
+  display: contents;
+}
+.sx2-claim__a,
+.sx2-claim__b {
+  grid-row: 1;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: clamp(2.3rem, 0.8rem + 4.2vw, 5.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.sx2-claim__a {
+  grid-column: 1;
+  align-self: start;
+  justify-self: end;
+  text-align: right;
+  /* the cap-height, not the line box, meets the strip's top edge */
+  margin-top: -0.14em;
+}
+.sx2-claim__b {
+  grid-column: 3;
+  align-self: end;
+  justify-self: start;
+  text-align: left;
+  margin-bottom: -0.2em;
+}
+.sx2-claim__a em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ── THE PLATE: one object for all five ────────────────────────────────── */
+.sx2-plate {
+  position: relative;
+  margin: 0;
+}
+.sx2-plate__win {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ground-warm);
+}
+.sx2-plate__img,
+.sx2-plate__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.sx2-plate__img {
+  object-position: var(--sx2-op, 50% 50%);
+}
+.sx2-plate__vid {
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+.sx2-plate--mat.sx2-is-playing .sx2-plate__vid {
+  opacity: 1;
+}
+
+/* The mat itself: exactly --sx2-m wide and 2.8 of it tall. */
+.sx2-plate--mat {
+  grid-column: 2;
+  grid-row: 1;
+  width: var(--sx2-m);
+  height: calc(var(--sx2-m) * 2.8);
+}
+
+/* ── THE CROP MARKS: the mat's width, carried down the whole section ──────
+   Four brass ticks per plate, just outside its top and bottom edges, at ±m/2 from the
+   plate's axis. On the strip they sit on its corners; on every later plate they stand
+   inside its width, marking where the mat would have cropped it. Ornament, not text:
+   brass is 6.56:1 on cream, so they read, but nothing depends on them. */
+.sx2-tick {
+  position: absolute;
+  width: 1px;
+  height: var(--sx2-tick);
+  background: var(--brass);
+  pointer-events: none;
+}
+.sx2-tick--tl,
+.sx2-tick--bl {
+  left: calc(50% - var(--sx2-m) / 2 - 0.5px);
+}
+.sx2-tick--tr,
+.sx2-tick--br {
+  left: calc(50% + var(--sx2-m) / 2 - 0.5px);
+}
+.sx2-tick--tl,
+.sx2-tick--tr {
+  bottom: calc(100% + var(--sx2-tick-gap));
+}
+.sx2-tick--bl,
+.sx2-tick--br {
+  top: calc(100% + var(--sx2-tick-gap));
+}
+
+/* ── II–V · THE ESSAY ─────────────────────────────────────────────────── */
+.sx2-essay {
+  margin-top: clamp(4.6rem, 10vw, 9rem);
+}
+.sx2-step + .sx2-step {
+  margin-top: clamp(4.4rem, 9vw, 8.5rem);
+}
+.sx2-step > .sx2-plate {
+  margin-inline: auto;
+  height: var(--sx2-h);
+  /* never wider than the page's own measure, whatever the multiple says */
+  max-width: calc(100% - 2 * var(--rail));
+}
+.sx2-plate--2 { width: calc(var(--sx2-m) * 2.5); }
+.sx2-plate--3 { width: calc(var(--sx2-m) * 4.4); }
+.sx2-plate--4 { width: calc(var(--sx2-m) * 7); }
+/* V bleeds. `100%` of the section, never 100vw — 100vw includes the scrollbar and is a
+   horizontal overflow on every desktop that has one. */
+.sx2-step > .sx2-plate--5 {
+  width: 100%;
+  max-width: none;
+  height: clamp(340px, min(54vw, 84svh), 1000px);
+}
+
+/* THE LEAVES. Paper, laid over the picture outside the mat's width. They are drawn
+   only once Sx2aMotion has marked the section live — with no JavaScript, or with
+   reduced motion, they never appear and every plate is open. The half-pixel overlap
+   keeps a hairline of photograph from showing at the band edge at odd widths. */
+.sx2-leaf {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(50% - var(--sx2-m) / 2 + 0.5px);
+  background: var(--ground);
+  will-change: transform;
+}
+.sx2-leaf--l { left: 0; }
+.sx2-leaf--r { right: 0; }
+.sx2-intro.sx2-is-live .sx2-leaf {
+  display: block;
+}
+
+/* THE SENTENCE, after its picture: the picture leads, the sentence names it. */
+.sx2-line {
+  max-width: 31ch;
+  margin: clamp(1.9rem, 3.2vw, 2.8rem) auto 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 0.94rem + 1.05vw, 1.95rem);
+  line-height: 1.3;
+  letter-spacing: -0.008em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink);
+}
+/* The belief is the thesis the whole sequence argues toward: larger, and in the italic
+   the site gives emphasis. */
+.sx2-line--last {
+  max-width: 29ch;
+  margin-top: clamp(2.4rem, 4.4vw, 3.8rem);
+  font-style: italic;
+  font-size: clamp(1.5rem, 0.98rem + 2vw, 3.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+}
+
+/* rising in — gated on .sx2-is-live, so a page whose JavaScript never arrives keeps it all */
+.sx2-intro.sx2-is-live [data-sx2-r] {
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.sx2-intro.sx2-is-live [data-sx2-r]:not(.sx2-in) {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+}
+
+/* ── PHONE ─────────────────────────────────────────────────────────────────
+   The claim stacks: first half flush left, the strip on the axis, second half flush
+   right — the same diagonal, turned down the screen. The mat is 27vw; the plates are
+   1.7, 2.4 and 3.3 of it and then the full width. */
+@media (max-width: 719px) {
+  .sx2-intro {
+    --sx2-m: 27vw;
+    --sx2-h: clamp(250px, 44svh, 440px);
+    --sx2-tick: 12px;
+    --sx2-tick-gap: 7px;
+  }
+  .sx2-claim {
+    grid-template-columns: 1fr;
+    row-gap: clamp(1.1rem, 4vw, 1.6rem);
+    padding-block: 0;
+  }
+  .sx2-claim__a,
+  .sx2-claim__b {
+    grid-column: 1;
+    font-size: clamp(2.05rem, 1.2rem + 4.4vw, 3rem);
+  }
+  .sx2-claim__a {
+    grid-row: 1;
+    justify-self: start;
+    text-align: left;
+    margin-top: 0;
+  }
+  .sx2-plate--mat {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    margin-block: calc(var(--sx2-tick) + var(--sx2-tick-gap));
+  }
+  .sx2-claim__b {
+    grid-row: 3;
+    justify-self: end;
+    text-align: right;
+    margin-bottom: 0;
+  }
+  .sx2-plate--2 { width: 46vw; }
+  .sx2-plate--3 { width: 66vw; }
+  .sx2-plate--4 { width: calc(100% - 2 * var(--rail)); }
+  .sx2-step > .sx2-plate--5 {
+    height: clamp(300px, 112vw, 540px);
+  }
+  .sx2-plate__img {
+    object-position: var(--sx2-op-n, var(--sx2-op, 50% 50%));
+  }
+}
+
+/* Reduced motion: no leaves, no rise, no clip — the finished sequence, still. */
+@media (prefers-reduced-motion: reduce) {
+  .sx2-leaf { display: none !important; }
+  .sx2-intro [data-sx2-r] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .sx2-plate__vid { display: none; }
+}
+
+/* ── THE KEY WORD (from concept sx2c's concordance) ────────────────────────
+   "practice" is in all five sentences. It is set in forest italic wherever it falls —
+   the one word that stays as every picture widens, as the crop marks are the one mark
+   that stays. Forest is 10.04:1 on the paper. In the belief, already italic, colour
+   alone carries it. */
+.sx2-key {
+  font-style: italic;
+  font-weight: inherit;
+  color: var(--forest);
+}
+.sx2-claim__b .sx2-key {
+  font-weight: 400;
+}

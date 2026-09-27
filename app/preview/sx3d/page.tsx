@@ -1,48 +1,60 @@
 import { SiteNav } from '@/components/SiteNav';
+import { about } from '@/content/pranava';
 import { Sx3dApproach } from '@/components/preview/sx3d/Approach';
+import { Sx3dMotion } from '@/components/preview/sx3d/Sx3dMotion';
 
 /**
- * TOURNAMENT PREVIEW — Praṇava / About / §03 "Our approach", concept sx3d.
+ * TOURNAMENT PREVIEW — Praṇava / About / §03 "Our approach", concept sx3d (spatial).
  *
- * SPATIAL. A type scale made out of distance: one perspective constant, four
- * depths, one authored body size, and a room that three of the four terms stand
- * in while the fourth stands on your side of it.
+ * A room arrives drawn flat and stands up around a teacher and a student: floor, walls and
+ * ceiling fold up in the order the lead names them, and the far wall — Transmission — is
+ * the one surface that never moves, and the only picture in the room that does.
  *
- * The section is rendered honestly: the navigation pill above it, a band of the
- * DEEP ground above where the approved §02 ends, and a full screen of paper
- * below, so the spacing either side reads true and there is enough length for
- * the view() range to resolve the way it will in place.
+ * Rendered honestly. The pill above is the paper treatment the real page gives it. Above
+ * the section is the tail of the approved §02 on its own DEEP ground, ending on §02's own
+ * closing sentence, so the seam is judged against what it will actually meet; below it is
+ * the opening of §04 on WARM ground, so the section's bottom spacing is not the end of the
+ * document and no two neighbours share a ground. Both bands carry the real sections' own
+ * register mark and sentence, verbatim, and nothing more — this route does not design
+ * either of them.
  *
- * `<SiteNav />` — the dark treatment — because the first thing under the pill on
- * this route is §02's deep ground, and the section's own room continues it.
- *
- * The page's single `<h1>` is visually hidden: on the real page the hero owns it
- * and this section is an `<h2>` beneath it, and changing its level for a preview
- * would misjudge the type scale. Everything on the route is a server component;
- * there is no client island of this section's own.
+ * The page's one <h1> is the client's page heading, off-screen: on the real page the hero
+ * owns it and this section is an <h2> beneath it.
  */
 export const metadata = {
-  title: 'Our approach — sx3d',
+  title: 'Preview sx3d — The room',
+  description:
+    'Concept D for Pranava About §03: a laid-out room folds up around a teacher and a student — floor, walls and ceiling in the order the lead names them.',
   robots: { index: false, follow: false },
 };
 
-export default function Sx3dPreviewPage() {
+export default function PreviewSx3d() {
   return (
     <>
-      <SiteNav />
+      <SiteNav light />
       <main id="top">
-        <h1 className="sr">Praṇava — our approach</h1>
+        <h1 className="sr">{about.hero.heading}</h1>
 
-        {/* the tail of the approved §02, so the seam above the section is judged
-            on the ground it will actually meet */}
-        <div className="sx3d-above" aria-hidden="true" />
+        <div className="sx3d-before">
+          <div className="sx3d-before__rail">
+            <p className="sx3d-before__line">{about.what.intention}</p>
+          </div>
+        </div>
 
         <Sx3dApproach />
 
-        {/* ground below, so the section's own bottom spacing is not the end of
-            the document */}
-        <div className="sx3d-below" aria-hidden="true" />
+        <div className="sx3d-after">
+          <div className="sx3d-after__rail">
+            <h2 className="sx3d-mark">
+              <span className="sx3d-mark__n">04</span>
+              <span className="sx3d-mark__rule" aria-hidden="true" />
+              How we teach
+            </h2>
+            <p className="sx3d-after__lead">{about.teach.lead}</p>
+          </div>
+        </div>
       </main>
+      <Sx3dMotion />
     </>
   );
 }

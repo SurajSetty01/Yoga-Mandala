@@ -1,141 +1,116 @@
 /**
- * The two photographs this section stands in.
+ * The five surfaces of the room, and why each photograph is on the surface it is on.
  *
- * ONE IS THE ROOM AND ONE IS THE RELATIONSHIP, and that split is the section's
- * argument, not a pairing of two nice frames. The first is a hall seen from
- * outside the practice — five people, a line, light coming in from the open
- * side; it is the room the first three terms stand in. The second is shot from
- * inside a class with a teacher down on his heels beside a student; it is the
- * one thing in the section that is NOT in the room, because the fourth term is
- * not a fourth of the same kind.
+ * Every frame below was chosen by LOOKING at it on the plane it is mapped to, not by
+ * reading the manifest: a photograph on a side wall is seen at a grazing angle, so what
+ * matters is which way the picture's own perspective runs, and a picture whose own room
+ * recedes the wrong way reads as a wall that bends.
  *
- * WHY THE TWO DO NOT SHARE AN ATMOSPHERE, deliberately. An earlier draft of this
- * section composited paper plates over the hall at five depths in one frustum,
- * and there the design system's rule applies: every plane must share an
- * atmosphere or the near plane reads as a bright rectangle laid on a dark
- * picture. That composite is gone. Nothing is now laid over either photograph —
- * no type, no plate, no scrim — and the two frames are on opposite sides of a
- * hard ground change. A different room, a different light and a different
- * distance is exactly what "on your side of the picture" needs to look like.
+ *   back wall   Transmission   pr-mov-img_5681   clip + its own still beneath it
+ *   left wall   Practice       pr-ttc-dsc_0500   the rope wall; the row recedes to the
+ *                                                  RIGHT, which is toward the back wall
+ *                                                  once the flap is folded
+ *   right wall  Practice       pr-ttc-dsc_0510   the same rope wall from nearer; its
+ *                                                  figures grow toward the RIGHT, which is
+ *                                                  the front on this side. The wide V of
+ *                                                  each body is symmetric, so it survives
+ *                                                  the grazing angle better than anything
+ *                                                  with a direction in it
+ *   floor       Tradition      pr-ttc-dsc_0020_1 an earth lane, top of the frame hinged
+ *                                                  at the back wall, so the lane runs away
+ *                                                  from the reader toward the teacher
+ *   ceiling     Inquiry        pr-ttc-dsc_0056   a palm crown photographed looking
+ *                                                  straight UP — the only frame in either
+ *                                                  library that was taken at the angle a
+ *                                                  ceiling is seen from
  *
- * NEITHER IS USED ANYWHERE ELSE ON THE SITE. Checked against every `pr-` id
- * quoted in `components/` and `app/` outside `components/preview/`:
- * `pr-ttc-dsc_0566` appears once in the whole tree, inside a comment in
- * `components/about-pranava/frames.ts` explaining why the page's HERO does not
- * use it (it would repeat the hero's own standing-class composition one screen
- * later). That objection is about adjacency to the hero and does not apply four
- * sections down. `pr-pbh-img_5407` appears nowhere.
+ * The two walls are the same rope wall in the same TTC hall on the same morning — the same
+ * white render, the same red floor, the same slings — so the room's two sides agree, and
+ * the room is symmetrical the way a hall with ropes on both walls is. pr-ttc-dsc_0195_1 was
+ * the first right wall and was dropped on the render: a row of legs and chair frames seen
+ * at a grazing angle turned into a tangle nobody could read.
+ * None of the five appears anywhere else on the site (grepped across components/ and app/,
+ * previews excluded).
  *
- * NEITHER IS EVER PAINTED WIDER THAN ITS LARGEST DERIVATIVE, and this is the
- * measurement, not the intention. Painted width against served file at the seven
- * standard viewports — hall: 347←480, 704←960, 408←480, 515←960, 735←960,
- * 1096←1620, 1096←1620; teaching frame: 347←480, 704←960, 832←960, 622←960,
- * 764←960, 832←960, 832←960. The smallest downsample anywhere in the section is
- * 1.15× and the largest is 1.86×. Nothing is upscaled at any viewport or at any
- * point in the dolly's travel, where the wall's scale tops out at 1.0000.
+ * WIDTHS ARE THE ONES ON DISK. Every TTC still stops at 1620; the clip's still is a
+ * 1080 × 1920 poster. Nothing here is asked for at a width that does not exist.
  *
- * ONE COLLISION TO DECLARE. `pr-pbh-img_5407` is used by no component outside
- * `components/preview/` — it is on none of the live pages — but it IS used by
- * sx2d, a competing concept for §02 of this same page. At most one of the two
- * can ship on the About page; if both win their sections, this one is the frame
- * that must move, because §02 chose it first. The archive's nearest equivalents
- * that are free at the time of writing are `pr-pbh-img_5397` (the same line of
- * shoulderstands with a teacher kneeling at the far end beside a seated student,
- * quality 4) and `pr-pbh-img_5623` (the teacher standing close behind the
- * student, hand near her shoulder, quality 4).
- *
- * NOBODY IS NAMED. The archive does not record who is in which frame and the
- * client has supplied no faculty names; every description below says what is
- * happening, which is what a reader who cannot see the picture actually needs.
+ * NOBODY IS NAMED. The archive does not record who is in a frame; every alt says what is
+ * happening.
  */
+
+export type Face = 'back' | 'left' | 'right' | 'floor' | 'ceiling';
 
 export type Frame = {
   id: string;
-  /** widths that actually exist on disk, largest last */
   widths: number[];
-  /** the source pixel ratio, so a box can be given the frame's own shape */
-  ratio: number;
-  /** object-position for the wide box */
+  /** object-position on the surface */
   pos: string;
-  /** object-position for the narrow box, set deliberately and looked at */
-  posNarrow: string;
   alt: string;
-  /** the visible caption. It says what is IN the frame, never what the page does. */
-  cap: string;
+  /** `sizes` for the srcset — the width the picture is DRAWN at, not the surface's box:
+      a landscape frame covering a portrait wall is scaled to the wall's height */
+  sizes: string;
 };
 
-export const src = (f: Frame) => `/media/stills/${f.id}-${f.widths[f.widths.length - 1]}.webp`;
-export const srcSet = (f: Frame) =>
-  f.widths.map((w) => `/media/stills/${f.id}-${w}.webp ${w}w`).join(', ');
+const still = (id: string, pos: string, alt: string, sizes: string): Frame => ({
+  id,
+  widths: [480, 960, 1620],
+  pos,
+  alt,
+  sizes,
+});
 
-export const FRAMES = {
-  /* THE ROOM.
-   *
-   * Five practitioners stand in a line down an open-sided hall with a wooden
-   * stick held overhead, straps hanging from the roof beams above them, low sun
-   * raking across the red oxide floor from the open side and green trees beyond
-   * it. The audit calls the light "the best light in the archive"; it is held
-   * back to quality 3 for softness and for the row being cut at the right edge.
-   *
-   * IT IS SHOWN AT ITS OWN RATIO, 1620 × 1080, AT EVERY VIEWPORT — `aspect-ratio:
-   * 1620 / 1080` on the image, so `object-fit: cover` has nothing to crop. 100%
-   * of the frame survives at 320 and at 2560. The previous version of this
-   * section forced it into a 390 × 1267 portrait slot and kept 21% of its width,
-   * throwing away the line of five, the raking light and the open side — the
-   * three things it was chosen for. A landscape frame now gets a landscape box,
-   * and the box is the frame's own.
-   *
-   * The `pos` values below therefore do nothing at the rendered ratio. They are
-   * left as the deliberate fallback if the box is ever changed, and they name
-   * the part of the frame that must survive if it is: the row and the floor. */
-  hall: {
-    id: 'pr-ttc-dsc_0566',
-    widths: [480, 960, 1620],
-    ratio: 1620 / 1080,
-    pos: '50% 54%',
-    posNarrow: '50% 54%',
-    alt: 'Five practitioners stand in a line down an open-sided hall, each holding a wooden stick overhead with straps hanging from the roof beams, low sunlight raking across the red floor from the open side and green trees beyond it.',
-    cap: 'Five in a line with sticks overhead, and the open side the light crosses',
-  } satisfies Frame,
+export function src(f: Frame): string {
+  return `/media/stills/${f.id}-${f.widths[f.widths.length - 1]}.webp`;
+}
 
-  /* THE RELATIONSHIP.
-   *
-   * A row of practitioners lie in supported shoulderstand with their legs up a
-   * pale wall over folding chairs; at the far end of the row a man in a yellow
-   * kurta is down on his heels beside the nearest of them, looking at her, and a
-   * second student stands behind him watching. The audit calls it "the most
-   * complete story on the sheet: a foreground practitioner, a receding line of
-   * the same pose, and a teacher actively working in the background."
-   *
-   * IT REPLACES pr-ttc-dsc_0274, AND THE CRITIC WAS RIGHT. 0274 is a line of
-   * people lying with their legs over chairs photographed from the foot of the
-   * row; there is no teacher anywhere in it, and it was sitting under a
-   * paragraph whose subject is "the relationship between teacher and student".
-   * This frame has the teacher, the student he is attending to and a third
-   * person learning by watching — which is the paragraph, exactly.
-   *
-   * IT IS NOT THE 3.2 MB CLIP. `pr-mov-img_5681` is the archive's other
-   * teacher-and-student frame and it is a 10.5s, 1080 × 1920, ~2.46 Mbps MOV
-   * with no smaller encode. Delivering it here would cost more than three times
-   * this whole section's current weight, on a phone, to animate one plate. This
-   * section carries no video at all.
-   *
-   * THE CROP IS SET AGAINST THE PIXELS, NOT THE MANIFEST. The frame is portrait
-   * (3024 × 4032 at source, derivatives at 480 / 960 / 1920) and is shown in a
-   * 4:3 box, keeping the middle 56% of its
-   * height: y 0.21 → 0.78 of the source. That window was rendered and looked at
-   * before it was written down. It drops the four framed A4 notices along the
-   * top edge and the ceiling fan in the top-right corner — the furniture four
-   * frames have already been rejected on this project for — and keeps the whole
-   * row, the teacher, the watching student and the floor. The chairs and blocks
-   * inside it are props in use under the shoulders of the people lying on them. */
-  teach: {
-    id: 'pr-pbh-img_5407',
-    widths: [480, 960, 1920],
-    ratio: 3024 / 4032,
-    pos: '50% 49%',
-    posNarrow: '50% 49%',
-    alt: 'A row of practitioners lie in supported shoulderstand with their legs up a pale wall over folding chairs, while at the far end of the row a man crouches down beside the nearest of them, looking at her, and another student stands behind him watching.',
-    cap: 'A teacher down on his heels at the end of the row, and one student watching',
-  } satisfies Frame,
-} as const;
+export function srcSet(f: Frame): string {
+  return f.widths.map((w) => `/media/stills/${f.id}-${w}.webp ${w}w`).join(', ');
+}
+
+/* Walls are portrait boxes (0.63) covered by 3:2 frames, so the picture is drawn at
+   ~0.68 × the stage's width × 1.5 ≈ the stage's own width, then magnified up to 1.75×
+   at the wall's front edge. Floor and ceiling are 1.27 boxes and nearly fit. */
+const WALL = '(min-width: 960px) 46vw, 96vw';
+const FLAT = '(min-width: 960px) 36vw, 72vw';
+
+export const FRAMES: Record<Exclude<Face, 'back'>, Frame> = {
+  left: still(
+    'pr-ttc-dsc_0500',
+    '22% 50%',
+    'Women hanging upside down from ropes fixed to a white wall, their hands reaching towards a red floor',
+    WALL,
+  ),
+  right: still(
+    'pr-ttc-dsc_0510',
+    '66% 50%',
+    'Women hanging upside down from wall ropes with their legs spread wide, hands reaching to a red floor',
+    WALL,
+  ),
+  floor: still(
+    'pr-ttc-dsc_0020_1',
+    '46% 100%',
+    'An earth lane running away between a white building and a wall of hanging vines',
+    FLAT,
+  ),
+  ceiling: still(
+    'pr-ttc-dsc_0056',
+    '50% 40%',
+    'A coconut palm seen from directly below, its fronds spread against the sky',
+    FLAT,
+  ),
+};
+
+/** The back wall: a 12-second silent loop, with its own still beneath it as the only
+    poster. No `poster` attribute anywhere — it is fetched even when `src` never is. */
+export const CLIP = {
+  id: 'pr-mov-img_5681',
+  mp4: '/media/clips/pr-mov-img_5681.mp4',
+  avif: '/media/posters/pr-mov-img_5681.avif',
+  jpg: '/media/posters/pr-mov-img_5681.jpg',
+  /* 1080 × 1920 on a 4:5 wall: 70% of the frame's height is shown, from 16% to 86%, which
+     keeps the teacher's head, the student's feet on the wall and the mats beneath them,
+     and loses the notices above and the floor clutter below. */
+  pos: '50% 55%',
+  alt: 'A teacher standing beside a student in a headstand against a wall, his hands raised as he explains, while others sit on the floor and watch',
+};

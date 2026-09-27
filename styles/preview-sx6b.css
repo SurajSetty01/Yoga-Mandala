@@ -1,0 +1,569 @@
+/* preview-sx6b — owned solely by /preview/sx6b/. Every selector is `.sx6b` or carries the
+   `.sx6b-` prefix, including every state class (`.sx6b--live`, `.sx6b-in`, `.sx6b-vid--on`).
+   No bare two-letter class anywhere: two namespace collisions have broken live pages here.
+
+   ═════════════════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · ABOUT §06 THE FOUNDER — designer B.  "THE HANDS COME OFF."
+
+   The founder in one line across the page, his role, his five sentences. Then six moments
+   from one workshop, sorted by how much the teacher is doing — holding, a hand, a step away,
+   watching, across the room, alone — pass along a wall as the reader scrolls. The gaps
+   between them widen as the teacher's part shrinks (the first two overlap; the last stands
+   half a screen from anything) and the pan comes to rest with the sixth centred while the
+   student in it climbs down the ropes and walks out of frame. Under the wall the client's
+   sentence lights one clause at a time as its pictures pass.
+
+   THE DEFAULT IN THIS FILE IS THE FINISHED STATE: one line of six (a column below 1100px)
+   with the same widening gaps and the whole sentence lit. That is what a reader gets with
+   no JavaScript, with reduced motion, and on a screen too short to pin. `.sx6b--live` —
+   added by Motion.tsx only when motion is allowed and the viewport is ≥600px tall — is the
+   only thing that turns on the runway, the pin, the pan and the unlit clauses.
+
+   RESEARCH, AND WHAT EACH PIECE CHANGED
+   · The Pudding, "Easier scrollytelling with position sticky": the stage is `position:
+     sticky` inside a tall runway, so the pin is CSS and the script only moves one thing.
+   · scrollytelling.ai's pattern reference: "one step, one visible change" — six panes, one
+     clause change per group of them — and "every state change needs an inverse": the pan
+     and the lit clause are pure functions of scroll, so reading back up un-walks the wall.
+     Its reduced-motion rule for a sticky figure ("stack the figure above each step") is the
+     static column below 1100px.
+   · The same reference on scroll-SCRUBBED sequences (SBS "The Boat", Apple): scrub only
+     from dense frame sequences. These clips have keyframes at 0 s and ~7.4 s (ffprobe), so
+     seeking currentTime would stall; the films PLAY, and scroll only decides where you are.
+   · Codrops "Sticky Grid Scroll": a runway split into phases with a stabilisation hold at
+     the end. Here: an 18% hold before the pan and 72% after, so the last clip is watched to
+     the moment she walks out, not scrolled past.
+   · web.dev "Lazy-loading video": preload="none", attach on intersection — minus its
+     `poster` attribute, which this site has measured as 948 KB of waste under a visible img.
+   · Snow Fall's full-bleed chapter card was REJECTED for this section: the home hero is
+     already a full-bleed sticky film, so this stage is paper with the footage at the size
+     of people standing in a row, and no word is ever set on a photograph.
+   ═════════════════════════════════════════════════════════════════════════════════════ */
+
+.sx6b-page {
+  display: block;
+  background: var(--ground);
+}
+
+.sx6b {
+  --sx6b-max: 92rem;
+  --sx6b-pad: clamp(4.4rem, 10vw, 9rem);
+  /* the unlit clause: 4.63:1 on paper, so it passes even as small text — a clause waiting
+     its turn is quieter, never illegible. Lit is --ink at 15.58:1. */
+  --sx6b-unlit: #7a6e66;
+  --sx6b-hair: rgba(36, 29, 24, 0.14);
+  /* brass #705515 is 6.56:1 on paper; as an underline it is ornament at any alpha */
+  --sx6b-brass-line: rgba(112, 85, 21, 0.72);
+  /* clearance for the fixed navigation pill above the pinned stage */
+  --sx6b-clear: clamp(4.6rem, 10svh, 6.4rem);
+
+  position: relative;
+  display: block;
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: var(--sx6b-pad);
+  /* only x is clipped; the stage must be free to stick */
+  overflow-x: clip;
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED. A cap without margin-inline:auto reads right at
+   1440 and is hundreds of px off-axis at 2531. */
+.sx6b-rail {
+  max-width: calc(var(--sx6b-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.sx6b :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
+  border-radius: 999px;
+}
+
+/* ── the register mark: the About page's own object, to the letter ──────── */
+.sx6b-mark {
+  margin: 0 0 clamp(1.6rem, 3.4vw, 2.7rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx6b-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx6b-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the kicker: ONE line across the page, not five lines down one side of it ──
+   The client's complaint about the current section was a heading stacked four or five
+   lines deep on the left with nothing opposite it. Here the kicker is the width of the
+   measure at every desktop size — solved as a size, not left to wrap. "Founded by" is
+   Fraunces; the name is Inter, because DESIGN-SYSTEM §1 forbids a person's name in the
+   display face. */
+.sx6b-kicker {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.26em;
+  font-size: clamp(2.45rem, 0.7rem + 5.55vw, 7.6rem);
+  line-height: 1;
+  min-width: 0;
+  color: var(--ink);
+}
+.sx6b-kicker__by {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--ink-soft);
+}
+.sx6b-kicker__name {
+  font-family: var(--font-text);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+}
+/* the row: kicker at the left, the role at the far right on the kicker's baseline */
+.sx6b-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(1rem, 2vw, 1.6rem) clamp(1.5rem, 3vw, 3rem);
+}
+.sx6b-role {
+  margin: 0;
+  flex: none;
+  font: 600 clamp(11px, 0.6rem + 0.2vw, 13.5px) / 1.55 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.sx6b-role__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(112, 85, 21, 0.45);
+  /* sit the last line on the kicker's baseline, not its descender */
+  margin-bottom: 0.35em;
+}
+/* below the width where both fit on one row, the role drops beneath the kicker and runs
+   as one line — stacking three words under a two-line name would only add height */
+@media (max-width: 899px) {
+  .sx6b-role__stack {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 1.1em;
+    padding-top: 0.7rem;
+    margin-bottom: 0;
+  }
+  .sx6b-role {
+    flex: 1 1 100%;
+  }
+}
+
+/* ── the five sentences: one lede, then four columns the width of the page ── */
+.sx6b-bio {
+  margin-top: clamp(2.4rem, 5.2vw, 4.6rem);
+}
+.sx6b-bio__lede {
+  margin: 0;
+  max-width: 31em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.28rem, 0.92rem + 1.45vw, 2.45rem);
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.sx6b-bio__cols {
+  margin-top: clamp(1.8rem, 3.6vw, 3.1rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.4rem, 2.4vw, 2.8rem);
+}
+.sx6b-bio__cols p {
+  margin: 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--sx6b-hair);
+  font: 400 clamp(0.95rem, 0.9rem + 0.2vw, 1.08rem) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+@media (max-width: 1099px) {
+  .sx6b-bio__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 639px) {
+  .sx6b-bio__cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ══ THE RUN AND THE STAGE ════════════════════════════════════════════════
+   Static first. The stage is a container so the frieze can size itself from its own width
+   (cqw), which is the width it actually has — not 100vw, which includes the scrollbar. */
+.sx6b-run {
+  margin-top: clamp(4rem, 8vw, 7.4rem);
+}
+.sx6b-stage {
+  position: relative;
+  container-type: inline-size;
+}
+.sx6b-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem 1.4rem;
+}
+/* the site's caption object: small Inter, a clay tick, sentence case */
+.sx6b-source {
+  margin: 0;
+  max-width: 46rem;
+  display: flex;
+  gap: 0.7em;
+  align-items: baseline;
+  font: 400 clamp(11.5px, 0.66rem + 0.14vw, 13px) / 1.5 var(--font-text);
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+.sx6b-source::before {
+  content: '';
+  flex: none;
+  width: 16px;
+  height: 1px;
+  transform: translateY(-0.3em);
+  background: var(--clay);
+}
+.sx6b-pause {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 0.95rem;
+  border: 1px solid rgba(36, 29, 24, 0.32);
+  border-radius: 999px;
+  background: transparent;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.sx6b-pause[hidden] {
+  display: none;
+}
+.sx6b-pause:hover {
+  background: var(--ground-warm);
+  border-color: rgba(36, 29, 24, 0.55);
+}
+
+/* ── the frieze ──────────────────────────────────────────────────────────
+   Six panes of one shape, 3:5. Their GAPS are the argument, in units of a pane's width:
+     1→2  −0.14   overlapping: holding, and a hand
+     2→3   0.10
+     3→4   0.28
+     4→5   0.56
+     5→6   1.10   (static) / half a screen (live) — the last one stands alone
+   Static ≥1100px: the whole line fits the measure, so 6 + 1.9 = 7.9 panes wide. */
+.sx6b-track {
+  --sx6b-w: calc(min(100cqw - 2 * var(--rail), var(--sx6b-max)) / 7.9);
+  list-style: none;
+  margin: clamp(1.3rem, 2.4vw, 2.1rem) auto 0;
+  padding: 0 var(--rail);
+  max-width: calc(var(--sx6b-max) + 2 * var(--rail));
+  display: flex;
+  align-items: flex-start;
+}
+.sx6b-pane {
+  position: relative;
+  flex: none;
+  width: var(--sx6b-w);
+  margin: 0;
+}
+.sx6b-pane--2 { margin-left: calc(var(--sx6b-w) * -0.14); z-index: 2; }
+.sx6b-pane--3 { margin-left: calc(var(--sx6b-w) * 0.1); }
+.sx6b-pane--4 { margin-left: calc(var(--sx6b-w) * 0.28); }
+.sx6b-pane--5 { margin-left: calc(var(--sx6b-w) * 0.56); }
+.sx6b-pane--6 { margin-left: calc(var(--sx6b-w) * 1.1); }
+
+.sx6b-pane__fig {
+  margin: 0;
+}
+/* the clip lives on this CHILD, never on the observed <figure> — an observed element that
+   clips reports ratio 0 in Chromium and never fires (DESIGN-SYSTEM §1) */
+.sx6b-pane__frame {
+  position: relative;
+  aspect-ratio: 3 / 5;
+  overflow: clip;
+  background: var(--ground-warm);
+}
+/* the second pane lies ON the first: contact, drawn as a paper edge so both stay legible */
+.sx6b-pane--2 .sx6b-pane__frame {
+  box-shadow: 0 0 0 3px var(--ground);
+}
+.sx6b-pane__img,
+.sx6b-pane__vid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--sx6b-pos, 50% 50%);
+}
+.sx6b-pane__vid {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-io);
+}
+.sx6b-pane__vid.sx6b-vid--on {
+  opacity: 1;
+}
+.sx6b-pane__cap {
+  display: block;
+  /* never wider than the part of the pane nothing overlaps */
+  max-width: calc(var(--sx6b-w) * 0.84);
+  margin-top: 0.7rem;
+}
+.sx6b-pane__label {
+  display: block;
+  font: 600 10.5px/1.3 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.sx6b-pane__line {
+  display: block;
+  margin-top: 0.3rem;
+  font: 400 12.5px/1.45 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* Static below 1100px: a column, the gaps turned vertical, and the last pane across on the
+   far side of the page from the others. Caption beside the picture where there is room. */
+@media (max-width: 1099px) {
+  .sx6b:not(.sx6b--live) .sx6b-track {
+    --sx6b-w: min(18rem, 54vw);
+    flex-direction: column;
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane {
+    width: auto;
+    margin-left: 0;
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane--2 { margin-top: 0.9rem; }
+  .sx6b:not(.sx6b--live) .sx6b-pane--3 { margin-top: 1.5rem; }
+  .sx6b:not(.sx6b--live) .sx6b-pane--4 { margin-top: 2.4rem; }
+  .sx6b:not(.sx6b--live) .sx6b-pane--5 { margin-top: 3.8rem; }
+  .sx6b:not(.sx6b--live) .sx6b-pane--6 { margin-top: 6.5rem; align-self: flex-end; }
+  .sx6b:not(.sx6b--live) .sx6b-pane--2 .sx6b-pane__frame { box-shadow: none; }
+  .sx6b:not(.sx6b--live) .sx6b-pane__fig {
+    display: grid;
+    grid-template-columns: var(--sx6b-w) minmax(0, 15rem);
+    align-items: end;
+    column-gap: 1.1rem;
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane__cap {
+    max-width: none;
+    margin-top: 0;
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane--6 .sx6b-pane__fig {
+    grid-template-columns: minmax(0, 15rem) var(--sx6b-w);
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane--6 .sx6b-pane__cap {
+    order: -1;
+    text-align: right;
+  }
+}
+@media (max-width: 559px) {
+  .sx6b:not(.sx6b--live) .sx6b-track {
+    --sx6b-w: min(18rem, 66vw);
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane__fig,
+  .sx6b:not(.sx6b--live) .sx6b-pane--6 .sx6b-pane__fig {
+    display: block;
+    width: var(--sx6b-w);
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane__cap {
+    margin-top: 0.7rem;
+  }
+  .sx6b:not(.sx6b--live) .sx6b-pane--6 .sx6b-pane__cap {
+    text-align: left;
+  }
+}
+
+/* ── the sentence ────────────────────────────────────────────────────────
+   Beneath the wall, across the measure. Lit by default; unlit clauses exist only live. */
+.sx6b-quote {
+  margin: clamp(1.8rem, 3.6vw, 3.2rem) 0 0;
+}
+.sx6b-quote p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 0.9rem + 2.2vw, 3.3rem);
+  line-height: 1.14;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+.sx6b-clause {
+  text-decoration-line: underline;
+  text-decoration-thickness: max(1px, 0.04em);
+  text-underline-offset: 0.17em;
+  text-decoration-color: transparent;
+  /* the colour settles inside 0.3s — longer, and a probe that hides text by making it
+     transparent photographs it half-faded and reports a ghost failure */
+  transition:
+    color 0.3s var(--ease-io),
+    text-decoration-color 0.6s var(--ease-io);
+}
+.sx6b-quote[data-lit='none'] .sx6b-clause,
+.sx6b-quote[data-lit='0'] .sx6b-clause:not([data-c='0']),
+.sx6b-quote[data-lit='1'] .sx6b-clause:not([data-c='1']),
+.sx6b-quote[data-lit='2'] .sx6b-clause:not([data-c='2']) {
+  color: var(--sx6b-unlit);
+}
+.sx6b-quote[data-lit='0'] .sx6b-clause[data-c='0'],
+.sx6b-quote[data-lit='1'] .sx6b-clause[data-c='1'],
+.sx6b-quote[data-lit='2'] .sx6b-clause[data-c='2'] {
+  text-decoration-color: var(--sx6b-brass-line);
+}
+
+/* ══ LIVE ═══════════════════════════════════════════════════════════════
+   The runway is one screen plus exactly what Motion.tsx measured (the wall's overflow plus
+   two holds). The stage sticks; the wall is laid out at its full length and only its
+   transform moves. */
+.sx6b--live .sx6b-run {
+  height: calc(100svh + var(--sx6b-travel, 0px));
+  margin-top: clamp(2.6rem, 5vw, 4.6rem);
+}
+.sx6b--live .sx6b-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--sx6b-clear);
+  padding-bottom: clamp(0.8rem, 2.6svh, 2.2rem);
+  overflow-x: clip;
+}
+.sx6b--live .sx6b-stage > .sx6b-rail {
+  width: 100%;
+}
+/* the wall takes what the source line and the sentence leave, and is a SIZE container so
+   the pane can be solved from it: frame height = the wall's height less the caption's
+   allowance, width = 0.6 of that, capped at 44rem tall */
+.sx6b--live .sx6b-wall {
+  flex: 1 1 0;
+  min-height: 0;
+  container-type: size;
+  margin: clamp(0.8rem, 2svh, 1.6rem) 0 0;
+  /* a wall taller than its capped panes keeps them on its centre line, not its top */
+  display: flex;
+  align-items: center;
+}
+.sx6b--live .sx6b-track {
+  --sx6b-cap: 4.9rem;
+  --sx6b-h: min(100cqh - var(--sx6b-cap), 56rem);
+  --sx6b-w: calc(var(--sx6b-h) * 0.6);
+  width: max-content;
+  max-width: none;
+  margin: 0;
+  /* the first pane starts on the measure's left edge, wherever the measure is */
+  padding-left: max(var(--rail), (100cqw - var(--sx6b-max)) / 2);
+  /* …and the last can come to rest dead centre */
+  padding-right: calc(50cqw - var(--sx6b-w) / 2);
+  will-change: transform;
+}
+.sx6b--live .sx6b-pane--6 {
+  /* half a screen from anything: when the wall stops, the pane before it is off the left
+     edge and the student is the only person on the page */
+  margin-left: calc(50cqw - var(--sx6b-w) / 2 + 1.5rem);
+}
+.sx6b--live .sx6b-quote {
+  margin-top: clamp(0.9rem, 2.6svh, 2.4rem);
+}
+/* a caption under a narrow pane runs to three lines */
+@media (max-width: 719px) {
+  .sx6b--live .sx6b-track {
+    --sx6b-cap: 5.6rem;
+  }
+}
+/* short screens: the sentence gives up some size so the wall keeps its height */
+@media (max-height: 760px) {
+  .sx6b--live .sx6b-quote p {
+    font-size: clamp(1.5rem, 0.9rem + 1.7vw, 2.5rem);
+  }
+}
+
+/* ── the rise: opt-in, and only when Motion.tsx has confirmed motion is allowed ── */
+.sx6b--anim [data-sx6b-rise] {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.1s var(--ease);
+  transition-delay: var(--sx6b-d, 0ms);
+}
+.sx6b--anim [data-sx6b-rise].sx6b-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx6b-clause,
+  .sx6b-pane__vid,
+  .sx6b-pause {
+    transition: none;
+  }
+}
+
+/* ══ PREVIEW SCAFFOLD — not the section ═════════════════════════════════ */
+.sx6b-scaffold {
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+  padding: clamp(5rem, 12vw, 8rem) 0 clamp(2rem, 4vw, 3rem);
+}
+.sx6b-scaffold--after {
+  padding: clamp(2.4rem, 5vw, 3.4rem) 0 clamp(18rem, 60svh, 40rem);
+}
+.sx6b-scaffold p {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  font: 400 12.5px/1.5 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.sx6b-scaffold__tag {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid rgba(251, 247, 242, 0.34);
+  border-radius: 999px;
+  font: 600 10.5px/1 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+}

@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
-import { Masthead } from '@/components/learn/Masthead';
-import { Method } from '@/components/learn/Method';
-import { Spine } from '@/components/learn/Spine';
-import { Forms } from '@/components/learn/Forms';
-import { Register } from '@/components/learn/Register';
-import { Choose } from '@/components/learn/Choose';
-import { Begin } from '@/components/learn/Begin';
-import { LearnMotion } from '@/components/learn/LearnMotion';
+import { Tl1Masthead } from '@/components/learn/tl1/Masthead';
+import { LearningOverTime } from '@/components/learn/tl2/LearningOverTime';
+import { LearnTeacherEducation } from '@/components/learn/tl3/TeacherEducation';
+import { Tl4Forms } from '@/components/learn/tl4/Forms';
+import { Tl5Register } from '@/components/learn/tl5/Register';
+import { Tl6Choose } from '@/components/learn/tl6/Choose';
+import { Tl7Begin } from '@/components/learn/tl7/Begin';
 import { journeys } from '@/content/pranava';
 
 /**
@@ -26,22 +25,23 @@ import { journeys } from '@/content/pranava';
  * What it is instead: the client's own ARGUMENT about education, evidenced by the archive,
  * with a register of real names and a real route at the end of it.
  *
- *   01  the window opens          a narrow slot widens into the room as you scroll
- *   02  the heap straightens      eight scattered practices draw into one ordered column
- *   03  the sentence turns        one claim, two frames, two distances; the close one moves
- *   04  five forms, one line      five apertures of five shapes standing on one baseline
- *   05  the register              a ruled book: names entered, details honestly on enquiry
- *   06  the sentence narrows      four beginnings taper to a path's vanishing point
- *   07  a place is taken          the room set out, nobody in it, and the first seat yours
+ *   hero  the room comes into focus  a blurred room sharpens as the veil drops to a paper band
+ *   01  the list is read in time    a clip plays only while the eight practices are read
+ *   02  one frame, two clips        a sand divider wipes one clause off and uncovers the other
+ *   03  the scatter closes          five forms at five depths close into one band under a bar
+ *   04  the register                choosing a name rewrites the WhatsApp slip letter by letter
+ *   05  the path meets              four panels swing their feet in onto one strip of paving
+ *   --  a place is taken            a window rises from the floor; a man sits on a bolster
+ *
+ * Each section owns its own client script and its own styles/sec-tl<n>.css; grounds run
+ * paper / warm / deep / paper / deep / paper / warm, then the deep Next strip.
  *
  * FAQs. Blueprint §6 asks Learn for them and the client has supplied none. Writing eight
  * plausible questions and answering them would be the same class of error as inventing a
  * fee, so the page has no FAQ section. It is recorded here so the omission reads as a
  * decision rather than an oversight.
  *
- * `<SiteNav light />` because the masthead is paper from its first pixel — the pill takes
- * its paper treatment immediately rather than waiting on a hero choreography that does not
- * run on this route.
+ * `<SiteNav light />` — the pill reads on the masthead's veiled photograph and on its paper band.
  */
 export const metadata = {
   title: 'Learn',
@@ -54,13 +54,13 @@ export default function LearnPage() {
       <SiteNav light />
 
       <main className="ln" id="top">
-        <Masthead />
-        <Method />
-        <Spine />
-        <Forms />
-        <Register />
-        <Choose />
-        <Begin />
+        <Tl1Masthead />
+        <LearningOverTime />
+        <LearnTeacherEducation />
+        <Tl4Forms />
+        <Tl5Register />
+        <Tl6Choose />
+        <Tl7Begin />
 
         {/* the rule belongs to the measure, not to the page: on the padded outer box a
             border-top draws edge to edge and reads as a stray line under a phone. */}
@@ -75,8 +75,6 @@ export default function LearnPage() {
             </Link>
           </div>
         </nav>
-
-        <LearnMotion />
       </main>
 
       <SiteFooter />

@@ -1,18 +1,18 @@
 import { SiteNav } from '@/components/SiteNav';
 import { about } from '@/content/pranava';
+import { Eyebrow } from '@/components/about-pranava/parts';
 import { Sx2cIntroduction } from '@/components/preview/sx2c/Introduction';
+import { Sx2cMotion } from '@/components/preview/sx2c/Motion';
 
 /**
- * ISOLATED PREVIEW — PRAṆAVA About §01, concept sx2c.
+ * ISOLATED PREVIEW — Praṇava About §01 Introduction, concept sx2c ("a concordance of
+ * practice"). See components/preview/sx2c/Introduction.tsx.
  *
- * Rendered honestly rather than flatteringly: the pill above on the paper it will actually
- * sit on, real ground above the section so its top spacing is measurable, and the DEEP
- * ground below, because §02 "What Praṇava is" is a deep section and the handoff out of
- * this one has to be looked at rather than assumed.
- *
- * The page's single <h1> is visually hidden. On the real page the hero owns the <h1> and
- * this section is an <h2> beneath it; promoting the display sentence here would misjudge
- * the type scale against its neighbours, which is the whole point of the preview.
+ * Rendered in its real position rather than flatteringly: the paper pill above; the tail
+ * of a DEEP hero above the section, carrying the page's one <h1> (`about.hero.heading`,
+ * which is the hero's own heading on the real page); and the opening of §02 "What Praṇava
+ * is" below on its real #12201A ground, with its real register mark and lead, so the
+ * section is judged as the paper interval between two dark grounds it will actually be.
  */
 export const metadata = {
   title: 'About §01 — concept sx2c',
@@ -23,25 +23,26 @@ export default function PreviewSx2cPage() {
   return (
     <>
       <SiteNav light />
-      <main className="sx2c-stage" id="top">
-        <h1 className="sr">Praṇava — Introduction</h1>
-        <div className="sx2c-stage__above" aria-hidden="true" />
+      <main className="sx2c-page" id="top">
+        <header className="sx2c-above">
+          <div className="sx2c-above__in">
+            <h1 className="sx2c-above__h1">{about.hero.heading}</h1>
+            <p className="sx2c-above__sub">{about.hero.sub}</p>
+          </div>
+        </header>
+
         <Sx2cIntroduction />
 
-        {/* THE HAND-OFF. Both critics measured this and both were right: a section that
-            ends on cream has not ended. §02 "What Praṇava is" is a DEEP section, so the
-            bottom of §01 is where the page changes ground, and the band carries the real
-            §02 opening rather than 700px of empty dark. The eyebrow is the shipped
-            section's own (components/about-pranava/WhatIs.tsx) and the lead is
-            `about.what.lead`, verbatim. */}
-        <aside className="sx2c-next" aria-label="What comes next">
-          <p className="sx2c-next__eyebrow">
-            <span className="sx2c-next__n">02</span>
-            What Praṇava is
-          </p>
-          <p className="sx2c-next__lead">{about.what.lead}</p>
-        </aside>
+        <section className="sx2c-next" aria-label="Next section">
+          <div className="sx2c-next__in">
+            <Eyebrow n="02" dark>
+              What Praṇava is
+            </Eyebrow>
+            <p className="sx2c-next__lead">{about.what.lead}</p>
+          </div>
+        </section>
       </main>
+      <Sx2cMotion />
     </>
   );
 }

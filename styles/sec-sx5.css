@@ -1,0 +1,604 @@
+/* sec-sx5 — About §05 The Praṇava Journey, FINAL. Every selector is namespaced .sx5-.
+   Base: concept D (/preview/sx5d/). Grafted: the names that roll through one window
+   (concept B) and the one provenance line printed after the doors (concept C).
+
+   AN ENFILADE YOU WALK THROUGH. Four rooms, each seen through the far doorway of the one
+   before; scrolling carries the reader through the doorways one by one. See
+   components/preview/sx5/Enfilade.tsx for the event and rooms.ts for the frames.
+
+   THE FINISHED STATE IS THE DEFAULT. Everything below the `--live` rules is what a reader
+   gets with no JavaScript, or under prefers-reduced-motion: the whole vista from the first
+   threshold — four rooms nested one through the next — and the four doors listed beside it.
+   The island only adds `.sx5-journey--live`, which pins the stage and moves the camera.
+
+   ONLY transform AND opacity ARE EVER CHANGED AFTER LOAD. Rooms are positioned by
+   `translate(%) scale()` from custom properties; the island overwrites the transform and
+   the opacities, never a box. */
+
+.sx5-journey {
+  --sx5-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --sx5-max: 92rem;
+  --sx5-pad: clamp(4.4rem, 10vw, 9rem);
+  /* clears the fixed pill: its bottom edge is 68px at 390 and 85px at 1440 */
+  --sx5-top: clamp(5.6rem, 12svh, 7.75rem);
+  --sx5-bottom: clamp(1.25rem, 5svh, 3.5rem);
+  /* the pinned walk: a threshold, three doorways, three rooms to stand in */
+  --sx5-travel: 330svh;
+  /* a doorframe: cream, thin, and scaled WITH its room, so a near door has a thick frame
+     and a far one a hairline — which is what perspective does to a frame */
+  --sx5-ring: rgba(251, 247, 242, 0.74);
+
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-block: var(--sx5-pad);
+  /* x only: the stage inside must stay able to stick */
+  overflow-x: clip;
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED — max-width without margin-inline:auto is invisible
+   at 1440 and hundreds of px off at 2531. */
+.sx5-frame {
+  max-width: calc(var(--sx5-max) + 2 * var(--sx5-rail));
+  margin-inline: auto;
+  padding-inline: var(--sx5-rail);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(2.5rem, 7vw, 4rem);
+}
+
+/* ── the view: one 4:5 box every room shares ─────────────────────────────── */
+.sx5-slot {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.sx5-view {
+  position: relative;
+  flex: none;
+  width: min(100%, 30rem);
+  aspect-ratio: 4 / 5;
+  /* its width is always set from outside, never by its rooms, so it can be the container
+     the still vista's smallest sign is judged against */
+  container: sx5-view / inline-size;
+}
+
+.sx5-room {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #2b2925;
+  transform-origin: 0 0;
+  transform: translate(calc(var(--x) * 100%), calc(var(--y) * 100%)) scale(var(--s));
+}
+/* the doorway the reader stands in. It is NOT part of any room: a ring scaled with its room
+   is 1.5px at rest and a 4-10px blur three times over, so the frame that holds the room you
+   are in is drawn once, here, unscaled, and each door's own ring hands over to it as you
+   reach it. */
+.sx5-view__frame {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  box-shadow: 0 0 0 1.5px var(--sx5-ring);
+  pointer-events: none;
+}
+
+.sx5-room__img,
+.sx5-room__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* the clip stays invisible until it is actually playing, so the still beneath is never
+   replaced by a black first frame */
+.sx5-room__vid {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.sx5-room__vid.is-playing {
+  opacity: 1;
+}
+/* a clip whose room is behind you stops and hides under the veil (see the island) */
+.sx5-journey--live .sx5-room[data-behind='1'] .sx5-room__vid {
+  opacity: 0;
+}
+
+/* the reveal of the doorway this room is seen through. A viewer below and to the left of
+   an opening sees the inside faces of its left jamb and its sill, in shadow. */
+.sx5-room__jamb {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(9, 15, 12, 0.6), rgba(9, 15, 12, 0.18) 3.2%, rgba(9, 15, 12, 0) 6%),
+    linear-gradient(to top, rgba(9, 15, 12, 0.55), rgba(9, 15, 12, 0.14) 3%, rgba(9, 15, 12, 0) 5.5%);
+}
+
+/* the veil: a room you have walked out of darkens into the doorframe you stand in. It is
+   the section's own ground, uniform, never a gradient — so words that land on it have a
+   constant contrast (DESIGN-SYSTEM §1). */
+.sx5-room__dim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: var(--ground-deep);
+  opacity: 0;
+}
+
+/* the rim of a room you have left. At 2560 the view is 760px and the room one doorway back
+   is 2.5x that — narrower than the screen — so it stood behind the lit doorway as a dark
+   rectangle with four hard edges, and at 1440 its top edge ran as a 12px band under the
+   pill. An enfilade's last room is AROUND you, not a card behind you: its edges go to the
+   ground. Only the island ever shows it (opacity 0 here), and it only ever darkens. */
+.sx5-room__rim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(to right, var(--ground-deep), transparent 10%),
+    linear-gradient(to left, var(--ground-deep), transparent 10%),
+    linear-gradient(to bottom, var(--ground-deep), transparent 8%),
+    linear-gradient(to top, var(--ground-deep), transparent 8%);
+}
+
+.sx5-room__door {
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--ox) * 100%);
+  top: calc(var(--oy) * 100%);
+  width: calc(var(--or) * 100%);
+  height: calc(var(--or) * 100%);
+  box-shadow: 0 0 0 1.5px var(--sx5-ring);
+  pointer-events: none;
+}
+
+/* the sign beside the next door: bottom-aligned with the opening, just to its left, in
+   the pill's own material so its contrast is a constant over any wall */
+.sx5-room__plaque {
+  position: absolute;
+  z-index: 3;
+  right: calc((1 - var(--ox)) * 100%);
+  bottom: calc((1 - var(--oy) - var(--or)) * 100%);
+  margin-right: 0.7em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6em;
+  padding: 0.62em 0.95em 0.58em;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 247, 242, 0.22);
+  background: rgba(18, 32, 26, 0.9);
+  color: var(--ink-onPic);
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.sx5-room__plaque-n {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 1.08em;
+  letter-spacing: 0.04em;
+}
+
+/* STILL VISTA: every sign is set at 11.5px ON SCREEN, however deep its room — its layer is
+   scaled by --s, so its type is set at 11.5px / --s. The deepest room (4.6% of the view)
+   carries only its numeral. */
+.sx5-journey:not(.sx5-journey--live) .sx5-room__plaque {
+  font-size: calc(11.5px / var(--s));
+}
+.sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='2'] .sx5-room__plaque-name {
+  display: none;
+}
+/* at 320 the second room is 115px wide and "03 Heal" no longer fits the wall beside its
+   door; the list beside the vista names every door, so the sign keeps its numeral */
+@media (max-width: 479px) {
+  .sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='1'] .sx5-room__plaque-name {
+    display: none;
+  }
+}
+/* the third room is 13.6% of the view. Its "04" needs ~46px of wall left of the last door,
+   which it has once the view is ~570px wide (1440 gives it 576). Below that the pill was
+   cut by the room's own edge and read "4" (seen at 390, and at 1024 where the view is
+   410px). The list beside the vista names the last door; half a sign is worse than none. */
+@container sx5-view (max-width: 569px) {
+  .sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='2'] .sx5-room__plaque {
+    display: none;
+  }
+}
+
+/* ── the words ─────────────────────────────────────────────────────────── */
+.sx5-text {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+/* the register mark, the site's one voice for "where am I" — on the reversed plate the
+   mark goes cream and the accent is a sand RULE, the one thing sand may be */
+.sx5-eyebrow {
+  margin: 0 0 clamp(1.4rem, 3.2vw, 2.6rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.sx5-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic);
+}
+.sx5-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+.sx5-doors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule-onDark);
+}
+.sx5-door {
+  border-bottom: 1px solid var(--rule-onDark);
+}
+.sx5-door__link {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  grid-template-areas:
+    'n head'
+    '. body';
+  column-gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  row-gap: 0.4rem;
+  align-items: baseline;
+  padding-block: clamp(1.1rem, 2.2vw, 1.55rem);
+  color: inherit;
+  text-decoration: none;
+}
+.sx5-door__n {
+  grid-area: n;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic-2);
+}
+.sx5-door__head {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+.sx5-door__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.85rem, 1.25rem + 2.1vw, 3.05rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.sx5-door__body {
+  grid-area: body;
+  max-width: 34ch;
+  font-size: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  line-height: 1.55;
+  color: var(--ink-onPic-2);
+}
+.sx5-door__go {
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 247, 242, 0.34);
+  color: var(--ink-onPic);
+  transition:
+    background 0.3s var(--ease),
+    color 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+/* touch has no hover: the ring is the affordance on its own, and fills on focus too */
+@media (hover: hover) and (pointer: fine) {
+  .sx5-door__link:hover .sx5-door__go {
+    background: var(--ink-onPic);
+    color: var(--ground-deep);
+    transform: translateX(3px);
+  }
+}
+.sx5-door__link:focus-visible .sx5-door__go {
+  background: var(--ink-onPic);
+  color: var(--ground-deep);
+}
+
+.sx5-where {
+  display: none;
+}
+
+/* the one provenance line, printed once after the doors (from concept C) */
+.sx5-prov {
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
+  max-width: 34rem;
+  font: 600 11px/1.5 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.sx5-journey--live .sx5-prov {
+  margin-top: clamp(0.75rem, 2svh, 1.6rem);
+}
+
+/* ── wide: words on the left, the view on the right ─────────────────────────
+   Every opening sits in the upper right of its photograph, so the room you walk out of
+   grows toward the lower LEFT. The words are therefore on the left, and the room you have
+   left darkens in behind them. */
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .sx5-frame {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(3.5rem, 7vw, 8rem);
+    align-items: center;
+  }
+  .sx5-slot {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sx5-view {
+    width: min(40vw, 38rem, calc((100svh - 6rem) * 0.8));
+  }
+  .sx5-text {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 36rem;
+  }
+}
+
+/* ══ LIVE: the pinned walk ═══════════════════════════════════════════════ */
+.sx5-journey--live {
+  padding-block: 0;
+}
+.sx5-journey--live .sx5-track {
+  height: calc(100svh + var(--sx5-travel));
+}
+.sx5-journey--live .sx5-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+}
+.sx5-journey--live .sx5-frame {
+  height: 100%;
+  padding-top: var(--sx5-top);
+  padding-bottom: var(--sx5-bottom);
+  /* the words take the height they need; the view takes the rest */
+  grid-template-rows: minmax(0, 1fr) auto;
+  row-gap: clamp(1.25rem, 3.2svh, 2rem);
+}
+/* A SIZE CONTAINER, so the 4:5 view can be sized against the space actually left to it:
+   as wide as the slot, or 0.8 of its height, whichever runs out first. A fixed allowance
+   for the words was right at 390 and 60px short at 768, where the type is larger. */
+.sx5-journey--live .sx5-slot {
+  container-type: size;
+  min-height: 0;
+  /* a size container has no height of its own: it MUST stretch to its track, or cqh is 0
+     and the view vanishes (the wide grid centres its items, which did exactly that) */
+  align-self: stretch;
+  align-items: flex-end;
+}
+.sx5-journey--live .sx5-view {
+  width: min(100cqw, 80cqh);
+}
+.sx5-journey--live .sx5-eyebrow {
+  margin-bottom: clamp(0.9rem, 2.4svh, 2.6rem);
+}
+.sx5-journey--live .sx5-room {
+  will-change: transform;
+}
+/* the sign beside the next door is switched by the island and faded here, so no scroll
+   position ever holds it half-grounded */
+.sx5-journey--live .sx5-room__plaque {
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.sx5-journey--live .sx5-room__plaque[data-on='1'] {
+  opacity: 1;
+}
+
+/* one door at a time, all four in the same place; the island sets which */
+.sx5-journey--live .sx5-doors {
+  display: grid;
+  border: 0;
+}
+.sx5-journey--live .sx5-door {
+  grid-area: 1 / 1;
+  border: 0;
+  pointer-events: none;
+}
+/* the numeral, arrow and sentence are switched by the island and faded here: no scroll
+   position ever holds them half-painted over the room behind. The NAME is not faded — it
+   rolls through its window (below), so the column is never empty mid-walk. */
+.sx5-journey--live .sx5-door__n,
+.sx5-journey--live .sx5-door__go,
+.sx5-journey--live .sx5-door__body {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.sx5-journey--live .sx5-door[data-on='1'] {
+  pointer-events: auto;
+}
+.sx5-journey--live .sx5-door[data-on='1'] .sx5-door__n,
+.sx5-journey--live .sx5-door[data-on='1'] .sx5-door__go,
+.sx5-journey--live .sx5-door[data-on='1'] .sx5-door__body {
+  opacity: 1;
+}
+/* THE WINDOW the four names roll through (grafted from concept B): the line plus room for
+   the ascenders and the descender of "Insights"; the island moves each word by 130% of
+   its own height, which clears the window both ways */
+.sx5-journey--live .sx5-door__name {
+  overflow: clip;
+  padding-block: 0.05em 0.2em;
+  margin-block: -0.05em -0.2em;
+}
+.sx5-journey--live .sx5-door__word {
+  display: block;
+  will-change: transform;
+}
+.sx5-journey--live .sx5-door__link {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'n'
+    'head'
+    'body';
+  row-gap: clamp(0.35rem, 1.2svh, 0.9rem);
+  padding: 0;
+}
+.sx5-journey--live .sx5-door__head {
+  justify-content: flex-start;
+  gap: clamp(1rem, 2vw, 1.75rem);
+}
+.sx5-journey--live .sx5-door__n {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.sx5-journey--live .sx5-door__n::after {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+.sx5-journey--live .sx5-door__name {
+  font-size: clamp(2.6rem, 1.5rem + 5vw, 7.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+/* under the view on a phone a line may run the full measure: one line fewer is 25px more
+   picture */
+.sx5-journey--live .sx5-door__body {
+  max-width: 40ch;
+}
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .sx5-journey--live .sx5-door__body {
+    max-width: 30ch;
+  }
+}
+.sx5-journey--live .sx5-door__go {
+  align-self: flex-end;
+  margin-bottom: 0.5em;
+}
+
+.sx5-journey--live .sx5-where {
+  display: flex;
+  gap: 1.15rem;
+  margin-top: clamp(1rem, 3svh, 2.4rem);
+  font: 400 13px/1 var(--font-display);
+  letter-spacing: 0.06em;
+  color: rgba(251, 247, 242, 0.62);
+}
+.sx5-where__i {
+  position: relative;
+  padding-bottom: 0.55rem;
+  transition: color 0.3s var(--ease);
+}
+.sx5-where__i::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--sand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.sx5-where__i[data-on='1'] {
+  color: var(--ink-onPic);
+}
+.sx5-where__i[data-on='1']::after {
+  transform: scaleX(1);
+}
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .sx5-journey--live .sx5-frame {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .sx5-journey--live .sx5-slot {
+    align-items: center;
+  }
+  .sx5-journey--live .sx5-text {
+    align-self: center;
+  }
+  .sx5-journey--live .sx5-door__body {
+    margin-top: 0.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx5-door__n,
+  .sx5-door__body,
+  .sx5-room__plaque,
+  .sx5-room__vid,
+  .sx5-door__go,
+  .sx5-where__i,
+  .sx5-where__i::after {
+    transition: none;
+  }
+}
+
+/* ── /preview/sx5/ scaffold only (not the section): the neighbours' real grounds ── */
+.sx5-scaffold {
+  padding: clamp(5rem, 14svh, 9rem) var(--rail, 1.5rem) clamp(2.5rem, 7svh, 4.5rem);
+  background: var(--ground-warm);
+  color: var(--ink);
+}
+.sx5-scaffold--paper {
+  background: var(--ground);
+  /* long enough that the page runs more than a screen past the section, so the clip's
+     release can actually be seen to happen */
+  min-height: 160svh;
+  padding-top: clamp(3rem, 9svh, 6rem);
+}
+.sx5-scaffold p {
+  max-width: 92rem;
+  margin-inline: auto;
+  margin-block: 0;
+  font: 500 13px/1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+.sx5-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8em;
+  padding: 0.3em 0.7em;
+  border: 1px dashed rgba(36, 29, 24, 0.4);
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--ink);
+}

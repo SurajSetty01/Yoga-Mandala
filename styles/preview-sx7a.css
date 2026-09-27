@@ -1,0 +1,494 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW sx7a — ABOUT · FACULTY · concept A, PHOTOGRAPHY LEADS.
+   Owned by app/preview/sx7a + components/preview/sx7a. Every selector is .sx7a-.
+
+   THE EVENT. A photograph is pinned beside the words; as each caption rises, the next
+   photograph is wiped up over the last. All five are registered on the student, so the
+   practice holds still across the cuts and only the teacher changes — a hand taking the
+   weight, a hand stopped above a back, a teacher watching from the edge, nobody — and the
+   last frame holds both ends at once, with the client's lead landing on it.
+
+   TWO LAYOUTS FROM ONE DOM, decided by CSS at first paint:
+     default                      a static photo essay: each picture beside its caption
+                                  (desktop) or above it (phone), in sequence. This is what
+                                  a reader gets with JavaScript off or reduced motion on,
+                                  and it is complete: the argument IS the order.
+     .js + motion allowed         the pinned stage. Motion.tsx writes one number per
+                                  frame, --sx7a-p, inside one rAF.
+   Only transform and opacity ever change at scroll time.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx7a {
+  /* registration target: where the student's point of support sits in every pane */
+  --sx7a-tx: 0.45;
+  --sx7a-ty: 0.4;
+  /* the pane: full-bleed at the left, 4:5 by height, never more than 54% of the width */
+  --sx7a-pw: min(54vw, 80svh);
+  --sx7a-gut: clamp(1.5rem, 5.4vw, 7rem);
+
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  /* the pane bleeds to the left edge by design; nothing may bleed past the right one */
+  overflow-x: clip;
+}
+
+/* ── frames: the window, the counter-window, the picture ───────────────── */
+
+.sx7a-frame {
+  --sx7a-ufx: var(--sx7a-fx);
+  --sx7a-ufy: var(--sx7a-fy);
+  --sx7a-uz: var(--sx7a-z);
+  position: relative;
+  overflow: hidden;
+  background: #0d1712;
+}
+.sx7a-frame__in {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* the picture below is placed in units of THIS box */
+  container-type: size;
+}
+
+/* REGISTRATION, IN CSS. The picture is sized to cover its box (times a crop zoom) and then
+   placed so that its point (fx, fy) lands on the box's (tx, ty) — clamped, so that no edge
+   of the picture can ever come inside the box. Where coverage and registration disagree,
+   coverage wins; the frames were chosen so they rarely do. Static values, never animated. */
+.sx7a-img,
+.sx7a-clip {
+  --sx7a-w: calc(max(100cqw, 100cqh * var(--sx7a-r)) * var(--sx7a-uz));
+  --sx7a-h: calc(var(--sx7a-w) / var(--sx7a-r));
+  position: absolute;
+  display: block;
+  max-width: none;
+  width: var(--sx7a-w);
+  height: var(--sx7a-h);
+  left: clamp(calc(100cqw - var(--sx7a-w)), calc(var(--sx7a-tx) * 100cqw - var(--sx7a-ufx) * var(--sx7a-w)), 0px);
+  top: clamp(calc(100cqh - var(--sx7a-h)), calc(var(--sx7a-ty) * 100cqh - var(--sx7a-ufy) * var(--sx7a-h)), 0px);
+  object-fit: cover;
+}
+.sx7a-clip {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.sx7a-clip.is-playing {
+  opacity: 1;
+}
+
+/* ── words ──────────────────────────────────────────────────────────────── */
+
+.sx7a-card {
+  width: 100%;
+  /* grows with the viewport: at 2531 the portrait pane is only 36% of the width, and a
+     36rem caption centred in the remaining 1,600px read as floating free of its picture.
+     Centred (margin-inline: auto) at every width — DESIGN-SYSTEM rule 8. */
+  max-width: clamp(36rem, 16rem + 24vw, 50rem);
+  margin-inline: auto;
+}
+/* the conclusion needs the room to set in two lines at the widths where it is largest */
+.sx7a-step[data-k='both'] .sx7a-card {
+  max-width: clamp(36rem, 18rem + 28vw, 56rem);
+}
+
+/* the site's "where am I" voice, reversed: cream caps, a sand rule (the one thing sand is
+   allowed to be) */
+.sx7a-eyebrow {
+  margin: 0 0 clamp(1.4rem, 3.2vw, 2.4rem);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.sx7a-eyebrow__rule {
+  flex: none;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* The photo-editor's caption: a slug in the display italic, the sentence in the text face.
+   It is the picture's voice; the client's words are set in roman, below it. */
+.sx7a-cap {
+  margin: 0;
+  max-width: 38rem;
+  font: 400 clamp(0.9rem, 0.8rem + 0.2vw, 1.16rem) / 1.6 var(--font-text);
+  color: var(--ink-onPic-2);
+}
+.sx7a-cap__slug {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 1.05rem + 1.3vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink-onPic);
+}
+.sx7a-cap__slug::before {
+  content: '';
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  margin-right: 0.7rem;
+  vertical-align: 0.32em;
+  background: var(--sand);
+}
+
+.sx7a-body {
+  margin: clamp(1.5rem, 3.6svh, 2.4rem) 0 0;
+  max-width: 32ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 0.98rem + 0.8vw, 2.2rem);
+  line-height: 1.36;
+  letter-spacing: -0.004em;
+  color: var(--ink-onPic);
+}
+
+.sx7a-lead {
+  margin: clamp(1.4rem, 4svh, 2.6rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 1.1rem + 4.4vw, 8.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  color: var(--ink-onPic);
+}
+
+.sx7a-prov {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  margin: clamp(1.6rem, 4.4svh, 2.8rem) 0 0;
+  max-width: 40rem;
+  font: 400 clamp(12px, 0.62rem + 0.18vw, 14px) / 1.5 var(--font-text);
+  letter-spacing: 0.01em;
+  color: rgba(251, 247, 242, 0.76);
+}
+/* the site's caption object: a short rule, then the sentence */
+.sx7a-prov::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--sand);
+  transform: translateY(-4px);
+}
+
+/* THE RECAP STRIP — four close-ups, the sequence in one line, placed by the same
+   registration rule as the stage: centre (fx, fy) on the middle of a square window. */
+.sx7a-strip {
+  list-style: none;
+  margin: 0 0 clamp(1.5rem, 4svh, 2.4rem);
+  padding: 0;
+  max-width: clamp(30rem, 14rem + 16vw, 38rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.45rem, 0.9vw, 0.8rem);
+}
+.sx7a-strip__i {
+  --sx7a-tx: 0.5;
+  --sx7a-ty: 0.5;
+  min-width: 0;
+}
+.sx7a-strip__win {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  container-type: size;
+  background: #0d1712;
+}
+.sx7a-strip__slug {
+  display: block;
+  margin-top: 0.45rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(0.82rem, 0.76rem + 0.2vw, 0.98rem);
+  line-height: 1.2;
+  color: var(--ink-onPic-2);
+}
+
+/* ══ STATIC ESSAY (no JavaScript, or reduced motion) ════════════════════════ */
+
+.sx7a-track {
+  display: grid;
+  grid-template-columns: min(46vw, 70svh) minmax(0, 1fr);
+  row-gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-block: clamp(4.4rem, 10vw, 9rem);
+}
+.sx7a-stage,
+.sx7a-steps {
+  display: contents;
+}
+.sx7a-frame {
+  grid-column: 1;
+  grid-row: var(--sx7a-i);
+  aspect-ratio: 4 / 5;
+}
+.sx7a-step {
+  grid-column: 2;
+  grid-row: var(--sx7a-i);
+  align-self: center;
+  padding-inline: var(--sx7a-gut);
+}
+
+/* ══ THE PINNED STAGE ══════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .sx7a-track {
+    grid-template-columns: var(--sx7a-pw) minmax(0, 1fr);
+    row-gap: 0;
+    padding-block: 0;
+  }
+  .js .sx7a-stage {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: #0d1712;
+  }
+  .js .sx7a-steps {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  /* The window travels up by (1 − p) of its height and the picture inside travels down by
+     the same amount, so the picture never moves — only the seam does. Frame 1 is simply
+     there; frames 2–5 wait below until their caption arrives. */
+  .js .sx7a-frame {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    z-index: var(--sx7a-i);
+    transform: translate3d(0, calc((1 - var(--sx7a-p, 0)) * 100%), 0);
+  }
+  .js .sx7a-frame__in {
+    transform: translate3d(0, calc((var(--sx7a-p, 0) - 1) * 100%), 0);
+  }
+  .js .sx7a-frame[data-k='held'] {
+    --sx7a-p: 1;
+  }
+  /* the seam: a sand hairline on the leading edge of the incoming print, only mid-cut */
+  .js .sx7a-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    z-index: 3;
+    background: var(--sand);
+    opacity: 0;
+    transition: opacity 0.25s linear;
+  }
+  .js .sx7a-frame.is-wiping::after {
+    opacity: 0.9;
+  }
+
+  /* the steps: one screen-ish each, caption at the top so it arrives WITH its picture */
+  .js .sx7a-step {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100svh;
+    padding-inline: var(--sx7a-gut);
+  }
+  .js .sx7a-step[data-k='held'] {
+    padding-top: clamp(7rem, 22svh, 13rem);
+    min-height: 108svh;
+  }
+  .js .sx7a-step[data-k='almost'],
+  .js .sx7a-step[data-k='watched'] {
+    min-height: 86svh;
+  }
+  /* the closer: the picture arrives first (its wipe runs while the step's top is at
+     86→46% of the screen, and the words start 34svh below that top), then the recap, the
+     caption and the conclusion rise into view and HOLD there, whole, for about a third of a
+     screen of scrolling, which ends exactly as the stage lets go (step bottom = screen
+     bottom at step top = −30svh). */
+  .js .sx7a-step[data-k='both'] {
+    justify-content: flex-start;
+    min-height: 130svh;
+    padding-block: 34svh 0;
+  }
+}
+
+/* ══ NARROW: the picture is the screen ═════════════════════════════════════ */
+
+@media (max-width: 899px) {
+  .sx7a {
+    --sx7a-tx: 0.5;
+    --sx7a-ty: 0.34;
+    --sx7a-gut: 16px;
+  }
+  .sx7a-frame {
+    --sx7a-ufx: var(--sx7a-fxn);
+    --sx7a-ufy: var(--sx7a-fyn);
+    --sx7a-uz: var(--sx7a-zn);
+  }
+
+  /* static essay, one column: picture, then its words, in order */
+  .sx7a-track {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0;
+    padding-block: clamp(3.6rem, 12vw, 5rem) clamp(2rem, 8vw, 3rem);
+  }
+  .sx7a-frame {
+    order: var(--sx7a-o);
+    width: 100%;
+    aspect-ratio: 3 / 4;
+  }
+  .sx7a-step {
+    order: var(--sx7a-o);
+    padding: 1.4rem var(--sx7a-gut) clamp(2.6rem, 10vw, 3.6rem);
+  }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+  .js .sx7a-track {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 0;
+  }
+  .js .sx7a-stage {
+    grid-column: 1;
+    grid-row: 1;
+    height: 100svh;
+  }
+  .js .sx7a-steps {
+    grid-column: 1;
+    grid-row: 1;
+    position: relative;
+    z-index: 8;
+  }
+
+  /* A CARD IS PINNED TO THE BOTTOM OF THE SCREEN FOR THE LENGTH OF ITS STEP. It sits at the
+     foot of its step (flex-end) and sticks at the foot of the viewport, so it arrives from
+     below, stays in the lower part of the screen while its picture holds, and leaves with
+     the step. The upper part of every frame — where the registration puts the student — is
+     never covered.
+     `padding-top` is the distance from the leaving card to the arriving one. It must be at
+     least 65svh (see Motion.tsx: the seam runs at 1/0.35 of the cards' speed), or the next
+     caption would come up over the previous picture. The first and last steps pad further,
+     so the first frame and the closer are each seen whole before any words cover them. */
+  .js .sx7a-step {
+    order: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 86svh;
+    padding: 64svh var(--sx7a-gut) 0;
+  }
+  .js .sx7a-step[data-k='held'] {
+    padding-top: 90svh;
+    min-height: 146svh;
+  }
+  .js .sx7a-step[data-k='unaided'] {
+    min-height: 114svh;
+  }
+  .js .sx7a-step[data-k='both'] {
+    padding-top: 108svh;
+    min-height: 164svh;
+  }
+  .js .sx7a-step .sx7a-card {
+    position: sticky;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    margin-bottom: 14px;
+  }
+
+  /* On a picture, a label gets a GROUND, not a gradient (DESIGN-SYSTEM §1): the nav
+     pill's own material, so its contrast is a constant whatever the frame behind it. */
+  .js .sx7a-card {
+    max-width: 30rem;
+    padding: 1rem 1.1rem 1.15rem;
+    border-radius: 18px;
+    background: rgba(var(--shade), 0.74);
+    border: 1px solid rgba(251, 247, 242, 0.18);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .js .sx7a-body {
+    margin-top: 0.9rem;
+    font-size: clamp(1.08rem, 0.95rem + 0.8vw, 1.3rem);
+  }
+  .js .sx7a-eyebrow {
+    margin-bottom: 0.9rem;
+  }
+  .js .sx7a-lead {
+    margin-top: 0.9rem;
+    font-size: clamp(2.1rem, 1.2rem + 4.6vw, 3.3rem);
+  }
+  .js .sx7a-prov {
+    margin-top: 1rem;
+  }
+  /* the phone reader has just seen each frame at the size of the screen; the recap would
+     only double the card over the one picture that proves the sentence */
+  .js .sx7a-strip {
+    display: none;
+  }
+}
+
+/* ══ PREVIEW SCAFFOLD — not part of the section ═══════════════════════════ */
+
+.sx7a-page {
+  display: block;
+  background: var(--ground);
+}
+.sx7a-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.sx7a-scaffold {
+  min-height: 62svh;
+  display: flex;
+  align-items: flex-end;
+  padding: 7rem var(--rail) 3rem;
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.sx7a-scaffold p {
+  width: 100%;
+  max-width: 92rem;
+  margin: 0 auto;
+  font: 400 14px/1.6 var(--font-text);
+}
+.sx7a-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px dashed rgba(36, 29, 24, 0.35);
+  border-radius: 4px;
+  font: 600 10.5px/1.4 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sx7a-scaffold--after {
+  min-height: 130svh;
+  align-items: flex-start;
+  padding-top: 4rem;
+  background: var(--ground-warm);
+}

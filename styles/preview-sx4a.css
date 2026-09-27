@@ -1,0 +1,576 @@
+/* preview-sx4a — owned solely by /preview/sx4a/. Every selector carries the .sx4a- prefix.
+
+   §04 HOW WE TEACH, concept A — photography leads.
+
+   THE MECHANIC, AS THE THING THAT HAPPENS
+   One photograph is exposed as a darkroom test strip while you read. A card steps across
+   the sheet uncovering one band per practice, and every band keeps deepening for as long
+   as it stays uncovered — so the first practice ends the densest and the eighth,
+   "Continue learning beyond a single course", ends the palest: still coming up. Then the
+   same frame arrives whole, as the print, and the client's closing sentence sits beneath
+   the teacher whose hands are on a student's hips in it.
+
+   The finished strip is a static photographic object. Every value below has its FINISHED
+   default, so the section with no JavaScript, under prefers-reduced-motion, and on a
+   viewport too short to pin, is the completed strip rather than the start state.
+   `.sx4a--live` (added by Sx4aMotion only when motion is allowed and the stage fits) is
+   the only thing that turns on the pin, the card and the start state.
+
+   The paper IS the photographic paper: an unexposed band is the section's own ground, so
+   the picture comes up out of the page rather than being laid on top of it. */
+
+.sx4a {
+  --sx4a-lead: clamp(2.3rem, 1.05rem + 4.5vw, 6.1rem);
+  --sx4a-mid: clamp(1.14rem, 0.98rem + 0.95vw, 1.86rem);
+  --sx4a-read: clamp(0.98rem, 0.94rem + 0.34vw, 1.16rem);
+  --sx4a-note: clamp(0.8rem, 0.72rem + 0.3vw, 1.02rem);
+  --sx4a-max: 100rem;
+  /* brass is 5.83:1 on the warm ground, but it is used here only as hairline and numeral */
+  --sx4a-hair: rgba(112, 85, 21, 0.5);
+  --sx4a-hair-soft: rgba(36, 29, 24, 0.16);
+  /* pinned travel: eight steps and a short hold. 34svh a step is roughly three wheel
+     notches on a laptop — long enough that the deepening is seen, not inferred. */
+  --sx4a-travel: 300svh;
+  /* clearance for the fixed navigation pill above the pinned stage */
+  --sx4a-clear: clamp(5.6rem, 12svh, 7.4rem);
+
+  position: relative;
+  display: block;
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-top: clamp(4.4rem, 10vw, 9rem);
+  overflow-x: clip;
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED. A cap without margin-inline:auto is invisible at
+   1440 and hundreds of px off-axis at 2531. */
+.sx4a-rail {
+  max-width: calc(var(--sx4a-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── head ─────────────────────────────────────────────────────────────── */
+.sx4a-head {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+/* the register mark — the About page's own object: 11.5px Inter, 0.19em, uppercase, forest
+   (6.46:1 on warm), a Fraunces numeral, and a rule beside it */
+.sx4a-mark {
+  grid-column: 1 / -1;
+  margin: 0 0 clamp(1.6rem, 3.4vw, 2.7rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx4a-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx4a-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
+}
+.sx4a-lead {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: var(--sx4a-lead);
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.sx4a-open {
+  grid-column: 4 / -1;
+  margin: clamp(1.3rem, 2.8vw, 2.4rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 360;
+  font-size: var(--sx4a-mid);
+  line-height: 1.42;
+  color: var(--ink-soft);
+  max-width: 40ch;
+  text-wrap: pretty;
+}
+
+/* ── the stage ────────────────────────────────────────────────────────── */
+.sx4a-stage {
+  position: relative;
+  margin-top: clamp(2.8rem, 6vw, 5.2rem);
+}
+.sx4a-pin {
+  position: relative;
+}
+/* In the pinned flex column an item with auto inline margins is centred INSTEAD of being
+   stretched, so it shrinks to its content — and the bench inside is an inline-size
+   container, whose content width is zero by definition. It collapsed to a 20px column on
+   the first render. The rail is given its width explicitly; max-width and the auto margins
+   still centre it. */
+.sx4a-pin > .sx4a-rail {
+  width: 100%;
+}
+
+/* The bench: the prompt, the strip and the notes, all one width so each note stands
+   exactly under its band. Its width is the strip's, and the strip's height is solved for
+   the viewport: never wider than twice its height, so at least 72% of the frame's height
+   shows at every size and nobody loses a head or a pair of feet on a short laptop. */
+.sx4a-bench {
+  --sx4a-sh: clamp(12rem, 100svh - 20rem, 50rem);
+  container-type: inline-size;
+  width: min(100%, calc(2 * var(--sx4a-sh)));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.sx4a-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 2rem;
+  margin: 0 0 clamp(1rem, 1.9vw, 1.5rem);
+}
+.sx4a-prompt {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: var(--sx4a-read);
+  line-height: 1.4;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* the site's caption object — 11.5px Inter, brass tick, sentence case */
+.sx4a-cap {
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 11.5px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+.sx4a-cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--brass);
+  transform: translateY(-4px);
+}
+
+/* ── the strip ────────────────────────────────────────────────────────── */
+.sx4a-frame {
+  grid-column: 1 / -1;
+  position: relative;
+  margin: 0;
+}
+/* the enlarging easel's four corners, drawn 9px outside the sheet */
+.sx4a-easel {
+  position: absolute;
+  inset: -9px;
+  pointer-events: none;
+  --k: 22px;
+  background:
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) left top / var(--k) 1px no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) left top / 1px var(--k) no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) right top / var(--k) 1px no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) right top / 1px var(--k) no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) left bottom / var(--k) 1px no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) left bottom / 1px var(--k) no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) right bottom / var(--k) 1px no-repeat,
+    linear-gradient(var(--sx4a-hair), var(--sx4a-hair)) right bottom / 1px var(--k) no-repeat;
+}
+.sx4a-sheet {
+  position: relative;
+  overflow: hidden;
+  height: var(--sx4a-sh);
+  background: var(--ground-warm);
+}
+/* THE NEGATIVE CARRIER. The frame is cropped to 0.12–0.935 of its width, and that crop is
+   an integrity decision before it is a composition one: the last 6.5% of the frame holds a
+   tote bag printed with ANOTHER organisation's name, legible at full size, and a blurred
+   face cut by the edge. The carrier is the sheet widened by 1/0.815 and pulled left by
+   0.12 of itself, so the picture it holds can only ever show that window; the vertical
+   crop is object-position, centred a little below the middle so heads and feet both stay. */
+.sx4a-carrier {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -14.724%;
+  width: 122.699%;
+}
+.sx4a-carrier picture,
+.sx4a-carrier img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+.sx4a-carrier img {
+  object-fit: cover;
+  object-position: 50% 52%;
+}
+
+/* EIGHT VEILS OF UNEXPOSED PAPER. A band's veil is the page's own ground at an opacity of
+   1 − density; the density of a band is (its exposure)^0.85, and its exposure is how long
+   it has been uncovered. The inline style carries the FINISHED value for each band. */
+.sx4a-veil {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--i) * 12.5%);
+  width: 12.5%;
+  background: var(--ground-warm);
+}
+
+/* THE CARD. An opaque darkroom card, in the brand's own deep green-black, laid over every
+   band not yet uncovered. It was sandstone first, and at the start of the sequence that was
+   a flat beige rectangle filling the stage — indistinguishable from an image that had
+   failed to load. Dark, with a lit edge and a shadow thrown onto the paper, it is plainly an
+   object lying on the sheet. --c is the fraction of the sheet it has uncovered; its default
+   is past the end, so without the island it is simply not there. */
+.sx4a-card {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(251, 247, 242, 0.07), rgba(251, 247, 242, 0) 3.5rem),
+    var(--ground-deep);
+  transform: translateX(calc(var(--c, 1.1) * 100%));
+  box-shadow:
+    -1px 0 0 rgba(251, 247, 242, 0.28),
+    -18px 0 26px -16px rgba(18, 32, 26, 0.55);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sx4a--live .sx4a-card {
+    transition: transform 0.62s var(--ease);
+    will-change: transform;
+  }
+  .sx4a--live .sx4a-veil {
+    will-change: opacity;
+  }
+}
+
+/* ── the notes: pencilled on the paper under their bands ─────────────── */
+.sx4a-notes {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sx4a-note {
+  position: relative;
+  padding: clamp(0.7rem, 1.2vw, 1rem) clamp(0.45rem, 0.9vw, 0.95rem) 0;
+  border-left: 1px solid var(--sx4a-hair);
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: var(--sx4a-note);
+  line-height: 1.34;
+  color: var(--ink);
+}
+.sx4a-note:last-child {
+  border-right: 1px solid var(--sx4a-hair);
+}
+.sx4a-note__n {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--brass);
+}
+/* the band being exposed now is marked by a short brass bar across the top of its note;
+   pending notes stay fully legible in ink-soft (6.48:1) — nothing is hidden by motion */
+.sx4a-note::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 1px);
+  height: 3px;
+  background: var(--brass);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sx4a--live .sx4a-note {
+    transition: color 0.35s var(--ease);
+  }
+  .sx4a--live .sx4a-note::before {
+    transition: transform 0.45s var(--ease);
+  }
+}
+.sx4a-note[data-state='wait'] {
+  color: var(--ink-soft);
+}
+.sx4a-note[data-state='now']::before {
+  transform: scaleX(1);
+}
+.sx4a-text {
+  display: block;
+}
+
+/* ── the print ────────────────────────────────────────────────────────── */
+.sx4a-print {
+  max-width: var(--sx4a-max);
+  margin: clamp(4.6rem, 10vw, 9rem) auto 0;
+}
+.sx4a-plate {
+  position: relative;
+  overflow: hidden;
+  /* 0.935 of a 16:9 frame is 1.662:1 — the whole room, minus the bag */
+  aspect-ratio: 1.662;
+  background: var(--ground-warm);
+}
+.sx4a-plate picture,
+.sx4a-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sx4a-plate img {
+  object-fit: cover;
+  object-position: 0% 50%;
+}
+.sx4a-plate__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--ground-warm);
+  opacity: 0;
+}
+.sx4a-print .sx4a-cap {
+  margin-top: 0.9rem;
+  /* flush with the plate when the plate is narrower than the screen, on the rail when it
+     runs edge to edge */
+  padding-inline: max(0px, calc(var(--rail) - max(0px, (100vw - var(--sx4a-max)) / 2)));
+}
+
+.sx4a-close {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  padding-top: clamp(1.6rem, 3.6vw, 3.2rem);
+  padding-bottom: clamp(4.4rem, 10vw, 9rem);
+}
+.sx4a-close__p {
+  grid-column: 4 / -1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: var(--sx4a-mid);
+  line-height: 1.4;
+  color: var(--ink);
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+.sx4a-close__a {
+  color: var(--ink-soft);
+}
+
+/* ── pinned, only when live and only when the stage fits ─────────────── */
+@media (min-height: 560px) {
+  .sx4a--live .sx4a-stage {
+    height: calc(100svh + var(--sx4a-travel));
+    margin-top: 0;
+  }
+  .sx4a--live .sx4a-pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: var(--sx4a-clear);
+    padding-bottom: clamp(0.8rem, 2.4svh, 1.6rem);
+  }
+}
+
+/* ── narrow: the strip stands up ──────────────────────────────────────────
+   Eight vertical bands of a landscape frame are 45px wide on a phone, which is a barcode,
+   not a photograph. So below 900px the strip is what a real test strip is — a narrow strip
+   of paper — cut from the one part of the frame that means most: the teacher and the
+   student whose hips he is holding, head to feet. Its bands run top to bottom, and each
+   note is pencilled beside its band. */
+@media (max-width: 899px) {
+  .sx4a-open {
+    grid-column: 1 / -1;
+  }
+  .sx4a-bench {
+    /* the strip is 0.382:1 exactly — 0.215 of the frame's width by all of its height — and
+       its height is whatever fits the screen AND leaves the notes at least 9.6rem */
+    --sx4a-sh: clamp(20rem, min(100svh - 12.5rem, (100cqw - 9.8rem) / 0.382), 46rem);
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(0.8rem, 3vw, 1.6rem);
+  }
+  .sx4a-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  /* THE NOTES CAN NEVER OVERRUN THEIR BANDS. At 320×568 a 43px band had to hold a
+     three-line note and "Yoga" was printed over "Observe their own experience". So the
+     note rows are eight equal 1fr tracks whose height is at LEAST a band — an auto-height
+     grid sizes every 1fr row to the tallest note — and the strip stretches to the height of
+     that row. The bands stay eighths of the strip, so they stay aligned with the notes; if
+     the notes need more room the strip simply grows, and the picture inside it zooms a
+     little, inward, away from the cropped edge. */
+  .sx4a-frame {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: stretch;
+  }
+  .sx4a-sheet {
+    height: 100%;
+    min-height: var(--sx4a-sh);
+    width: calc(var(--sx4a-sh) * 0.382);
+  }
+  /* 0.72 → 0.935 of the frame's width: carrier = 1/0.215 of the strip, pulled left by
+     0.72 of itself */
+  .sx4a-carrier {
+    left: -334.884%;
+    width: 465.116%;
+  }
+  .sx4a-carrier img {
+    object-position: 50% 50%;
+  }
+  .sx4a-veil {
+    top: calc(var(--i) * 12.5%);
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 12.5%;
+  }
+  .sx4a-card {
+    background:
+      linear-gradient(180deg, rgba(251, 247, 242, 0.07), rgba(251, 247, 242, 0) 3.5rem),
+      var(--ground-deep);
+    transform: translateY(calc(var(--c, 1.1) * 100%));
+    box-shadow:
+      0 -1px 0 rgba(251, 247, 242, 0.28),
+      0 -18px 26px -16px rgba(18, 32, 26, 0.55);
+  }
+  .sx4a-notes {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: var(--sx4a-sh);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+  }
+  .sx4a-note {
+    display: flex;
+    gap: 0.55rem;
+    align-items: flex-start;
+    padding: 0.42rem 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--sx4a-hair);
+    font-size: clamp(0.76rem, 0.7rem + 0.4vw, 0.95rem);
+    line-height: 1.26;
+  }
+  .sx4a-note:last-child {
+    border-right: 0;
+  }
+  .sx4a-note__n {
+    flex: none;
+    width: 0.9rem;
+    margin: 0.05rem 0 0;
+  }
+  .sx4a-note::before {
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+  }
+  .sx4a-plate {
+    aspect-ratio: 6 / 5;
+  }
+  /* the nav pill is shorter on a phone; the stage takes back the difference */
+  .sx4a {
+    --sx4a-clear: clamp(4.9rem, 11svh, 6.6rem);
+  }
+  /* 0.26 → 0.935 of the frame */
+  .sx4a-plate img {
+    object-position: 80% 50%;
+  }
+  .sx4a-close__p {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 599px) {
+  .sx4a-plate {
+    aspect-ratio: 4 / 5;
+  }
+  .sx4a-prompt {
+    font-size: 0.95rem;
+  }
+  /* 0.45 → 0.90 of the frame: the class on the right, the student, the teacher */
+  .sx4a-plate img {
+    object-position: 81.8% 50%;
+  }
+}
+
+@media (max-width: 379px) {
+  .sx4a-note {
+    gap: 0.4rem;
+    padding-top: 0.32rem;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .sx4a-note__n {
+    width: 0.7rem;
+    font-size: 12px;
+  }
+}
+
+/* ── preview scaffold (not the section) ──────────────────────────────── */
+.sx4a-page {
+  display: block;
+}
+.sx4a-scaffold {
+  padding-block: clamp(3.4rem, 8vw, 6rem) clamp(2rem, 5vw, 3.4rem);
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.sx4a-scaffold--deep {
+  padding-block: clamp(3rem, 7vw, 5rem) clamp(12rem, 40vh, 22rem);
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+}
+.sx4a-scaffold p {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+}
+.sx4a-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}

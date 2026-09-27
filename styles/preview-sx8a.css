@@ -1,0 +1,511 @@
+/* preview-sx8a — owned solely by /preview/sx8a/. Every selector is .sx8a-prefixed. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA & SEVA — CONCEPT A (PHOTOGRAPHY LEADS).
+
+   THE SENTENCE IS DRIVEN THROUGH THE PHOTOGRAPH AT THE LINE WHERE THE WEIGHT
+   CHANGES HANDS.
+
+   One frame from the training hall (pr-ttc-dsc_0479), cut ONCE, at her shins —
+   the height at which a woman climbing into the roof rope stops being alone and
+   starts standing on three people. Above the cut the frame is a narrow strip
+   with nobody in it but her: "From individual practice". The cut itself is a
+   band of paper that carries "to collective responsibility." Below it the frame
+   is wide again — her shins arrive on a man's shoulder and in two women's
+   hands — and the Trust's words stand either side of the people holding her up.
+
+   Both crops are windows onto ONE image at ONE scale, so her legs run straight
+   on across the sentence. `--sx8a-W` is the width the WHOLE photograph would
+   have; every crop is a fraction of it, which is what keeps the two halves in
+   register at every viewport.
+
+   Then the section turns on its side: a vertical stack of four people holding
+   one up gives way to a horizontal row of four teachers in conversation under
+   the Praṇava mark — which is the door to Yoga Mandala, in Yoga Mandala's own
+   terracotta.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx8a {
+  position: relative;
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-block: clamp(4.5rem, 10vw, 9rem) clamp(5rem, 11vw, 10rem);
+  overflow-x: clip;
+
+  /* the width the whole photograph would have if it were shown uncut.
+     Stacked: the held crop (0.73 W) is the full viewport width, capped at 760px
+     so a 960px source never upscales. */
+  --sx8a-W: min(137vw, 930px, 110svh);
+  --sx8a-lead: clamp(1.95rem, 1.05rem + 3.4vw, 5.1rem);
+  --sx8a-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.16rem);
+  --sx8a-small: clamp(0.84rem, 0.82rem + 0.14vw, 0.93rem);
+  --sx8a-gap: clamp(1.25rem, 3.2vw, 4rem);
+  --sx8a-rail: clamp(1rem, 4.2vw, 4.25rem);
+  --sx8a-max: 96rem;
+  --sx8a-hair: rgba(112, 85, 21, 0.55); /* brass, as a rule — Praṇava's voice */
+}
+
+/* A capped container is also a centred one — max-width without
+   margin-inline:auto is invisible at 1440 and hundreds of px off at 2531. */
+.sx8a-rail {
+  max-width: calc(var(--sx8a-max) + 2 * var(--sx8a-rail));
+  margin-inline: auto;
+  padding-inline: var(--sx8a-rail);
+}
+
+/* on paper the focus ring inverts: ink ring in a cream halo */
+.sx8a :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
+}
+/* the global focus rule rounds corners to 3px, which would square the pill off
+   while it is focused; the ring follows the button's own shape instead */
+.sx8a .sx8a-door__go:focus-visible {
+  border-radius: 999px;
+}
+
+/* ── the register mark (the site's own object) ─────────────────────────── */
+.sx8a-eyebrow {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx8a-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx8a-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
+  opacity: 0.7;
+}
+
+/* ── the lead, in two halves ───────────────────────────────────────────── */
+.sx8a-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx8a-lead);
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+.sx8a-lead--b {
+  font-style: italic;
+  color: var(--forest);
+}
+
+/* ── the two windows onto one photograph ───────────────────────────────── */
+.sx8a-crop {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: #cfc6ba;
+}
+.sx8a-crop img {
+  position: absolute;
+  left: calc(var(--sx8a-x) * -1 * var(--sx8a-W));
+  top: calc(var(--sx8a-y) * -1.5 * var(--sx8a-W));
+  width: var(--sx8a-W);
+  height: calc(var(--sx8a-W) * 1.5);
+  max-width: none;
+  display: block;
+}
+/* above the cut: her, and nobody else. x 0.26–0.56, y 0–0.51 of the frame */
+.sx8a-strip {
+  --sx8a-x: 0.26;
+  --sx8a-y: 0;
+  width: calc(var(--sx8a-W) * 0.3);
+  height: calc(var(--sx8a-W) * 0.765);
+}
+/* below the cut: the three of them. x 0.15–0.88, y 0.51–0.95 */
+.sx8a-hold {
+  --sx8a-x: 0.15;
+  --sx8a-y: 0.51;
+  width: calc(var(--sx8a-W) * 0.73);
+  height: calc(var(--sx8a-W) * 0.66);
+}
+
+/* ── the cut: the line the photograph was severed along, run on across the
+   page. Ornament only — brass as a hairline, never as text. */
+.sx8a-seam {
+  position: relative;
+}
+.sx8a-cut {
+  display: block;
+  height: 1px;
+  background: var(--sx8a-hair);
+  /* the cut is laid down FROM the photograph outward: it starts under the
+     middle of her strip and runs to both edges of the page */
+  transform-origin: calc((100% - var(--sx8a-W) * 0.73) / 2 + var(--sx8a-W) * 0.26) 50%;
+}
+.sx8a-cut--floor {
+  transform-origin: 50% 50%;
+}
+
+/* ── the Trust's words, either side of the people holding her ──────────── */
+.sx8a-body p,
+.sx8a-work p {
+  margin: 0;
+  font: 400 var(--sx8a-read) / 1.6 var(--font-text);
+  color: var(--ink);
+  max-width: 30rem;
+}
+.sx8a-body p + p {
+  margin-top: 1em;
+}
+.sx8a-body p:first-child {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.6rem);
+  line-height: 1.3;
+  letter-spacing: -0.006em;
+}
+.sx8a-work p {
+  font-size: var(--sx8a-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+.sx8a-list {
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--sx8a-hair);
+}
+.sx8a-list li {
+  padding: 0.55rem 0 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.02rem, 0.96rem + 0.34vw, 1.28rem);
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+/* ── the door: a row of four under the Praṇava mark ────────────────────── */
+.sx8a-door {
+  position: relative;
+}
+.sx8a-door__plate {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: #d8d2c6;
+  /* a window of x 0–821, y 16–524 on the 960×540 frame: all four teachers
+     whole, the mark above them, and the wall chart on the right cut away —
+     truncated it read "WHEEL OF POWE", and legible it names a panel topic the
+     client's material never states. Same window technique as the held climb. */
+  aspect-ratio: 821 / 508;
+}
+.sx8a-door__plate img {
+  position: absolute;
+  left: 0;
+  top: -3.15%;
+  width: 116.93%;
+  height: auto;
+  max-width: none;
+  display: block;
+  transform-origin: 44% 60%;
+  transition: transform 1.1s var(--ease);
+}
+.sx8a-door__words p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.2rem, 0.96rem + 1.05vw, 2.05rem);
+  line-height: 1.28;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  max-width: 27em;
+}
+.sx8a-door__go {
+  margin-top: clamp(1.1rem, 2vw, 1.6rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.35rem 0.95rem 1.5rem;
+  border-radius: 999px;
+  background: var(--clay-deep);
+  color: #fbf7f2;
+  font: 600 15px/1 var(--font-text);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background-color 0.3s var(--ease);
+}
+.sx8a-door__go svg {
+  flex: none;
+  transition: transform 0.45s var(--ease);
+}
+/* the whole door is one target: the link's box is stretched over the plate and
+   the words, so a tap on the photograph goes where the button goes. One tab stop. */
+.sx8a-door__go::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.sx8a-door:hover .sx8a-door__go:not(:focus-visible) {
+  box-shadow: inset 0 0 0 1px rgba(251, 247, 242, 0.45);
+}
+.sx8a-door:hover .sx8a-door__go svg,
+.sx8a-door__go:focus-visible svg {
+  transform: translateX(4px);
+}
+.sx8a-door:hover .sx8a-door__plate img,
+.sx8a-door:focus-within .sx8a-door__plate img {
+  transform: scale(1.025);
+}
+/* press is colour, never a transform: a transform on the link would make it the
+   containing block of its own stretched ::after, and a press that began on the
+   photograph would shrink the target out from under the pointer. */
+.sx8a-door__go:active {
+  background: var(--clay-press);
+}
+
+/* ══ STACKED — phones, tablets, and anything under 1000 ══════════════════ */
+.sx8a-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.sx8a-eyebrow {
+  margin-bottom: clamp(1.8rem, 5vw, 2.6rem);
+}
+/* the strip keeps its true x inside the full-width frame, so her legs meet
+   the held crop exactly; the first half of the sentence stands beside her. */
+.sx8a-top {
+  display: grid;
+  grid-template-columns: calc(var(--sx8a-W) * 0.11) calc(var(--sx8a-W) * 0.3) minmax(0, 1fr);
+  column-gap: 0;
+  align-items: end;
+  margin-inline: auto;
+  width: calc(var(--sx8a-W) * 0.73);
+}
+.sx8a-top .sx8a-strip {
+  grid-column: 2;
+}
+.sx8a-top .sx8a-lead--a {
+  grid-column: 3;
+  padding-left: clamp(0.9rem, 3.4vw, 2.2rem);
+  padding-right: var(--sx8a-rail);
+  padding-bottom: 0.1em;
+  font-size: min(var(--sx8a-lead), 7.1vw);
+}
+/* on a phone the cut runs the full width of the screen, like the picture */
+.sx8a-cut {
+  margin-inline: calc(var(--sx8a-rail) * -1);
+}
+.sx8a-seam {
+  padding-block: clamp(1.1rem, 3.4vw, 2.2rem) clamp(1.4rem, 4vw, 2.6rem);
+}
+.sx8a-seam .sx8a-lead--b {
+  margin-top: clamp(0.9rem, 2.6vw, 1.6rem);
+}
+.sx8a-hold {
+  margin-inline: auto;
+}
+/* the held crop and the strip are full-bleed on a phone: break out of the rail */
+.sx8a-top,
+.sx8a-hold {
+  position: relative;
+  left: 50%;
+  translate: -50% 0;
+}
+.sx8a-body {
+  margin-top: clamp(2.2rem, 6vw, 3.4rem);
+}
+.sx8a-work {
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+.sx8a-door {
+  margin-top: clamp(3.4rem, 9vw, 5.5rem);
+}
+.sx8a-door__words {
+  padding-top: clamp(1.3rem, 4vw, 2rem);
+}
+.sx8a-door__plate {
+  margin: clamp(1.9rem, 5vw, 2.8rem) calc(var(--sx8a-rail) * -1) 0;
+}
+
+@media (min-width: 720px) {
+  .sx8a-door__plate {
+    margin-inline: 0;
+  }
+}
+
+/* ══ THE SPREAD — 1000 and up ═════════════════════════════════════════════
+   One grid, three columns: the middle column is exactly the held crop's width,
+   so the strip above can sit at its true x inside it and the two windows stay
+   in register. */
+@media (min-width: 1000px) {
+  .sx8a {
+    --sx8a-W: clamp(560px, 54vw, 1040px);
+  }
+  .sx8a-grid {
+    grid-template-columns: minmax(0, 1fr) calc(var(--sx8a-W) * 0.73) minmax(0, 1fr);
+    column-gap: var(--sx8a-gap);
+    grid-template-areas:
+      'eyebrow top  top'
+      'seam    seam seam'
+      'body    hold work'
+      'door    door door';
+  }
+  .sx8a-eyebrow {
+    grid-area: eyebrow;
+    align-self: start;
+    margin: 0;
+  }
+  .sx8a-top {
+    grid-area: top;
+    width: auto;
+    margin: 0;
+    left: auto;
+    translate: none;
+    grid-template-columns:
+      calc(var(--sx8a-W) * 0.11) calc(var(--sx8a-W) * 0.3) minmax(0, 1fr);
+  }
+  .sx8a-top .sx8a-lead--a {
+    font-size: var(--sx8a-lead);
+    padding-left: var(--sx8a-gap);
+    padding-right: 0;
+    max-width: 9.5em;
+  }
+  .sx8a-seam {
+    grid-area: seam;
+    padding-block: 0 clamp(1.8rem, 2.6vw, 3rem);
+  }
+  .sx8a-cut {
+    margin-inline: 0;
+  }
+  .sx8a-seam .sx8a-lead--b {
+    margin-top: clamp(1.2rem, 1.8vw, 2rem);
+    /* the second half begins where the photograph begins */
+    padding-left: calc((100% - var(--sx8a-W) * 0.73) / 2);
+  }
+  .sx8a-hold {
+    grid-area: hold;
+    left: auto;
+    translate: none;
+    margin: 0;
+  }
+  .sx8a-body {
+    grid-area: body;
+    align-self: start;
+    justify-self: end;
+    margin: 0;
+    text-align: right;
+  }
+  .sx8a-body p {
+    margin-left: auto;
+  }
+  .sx8a-work {
+    grid-area: work;
+    align-self: end;
+    margin: 0;
+  }
+  /* the second cut lies along the floor they stand on — directly under the held
+     crop — and the Yoga Mandala sentence hangs from it exactly as the second half
+     of the lead hangs from the first cut, beginning where the photograph begins */
+  .sx8a-door {
+    grid-area: door;
+    margin-top: 0;
+  }
+  .sx8a-door__words {
+    margin: 0;
+    padding-top: clamp(1.5rem, 2.2vw, 2.4rem);
+    padding-left: calc((100% - var(--sx8a-W) * 0.73) / 2);
+  }
+  .sx8a-door__words p {
+    max-width: 26em;
+  }
+  /* the widest frame in the stack: one on top, three holding, a row of four */
+  .sx8a-door__plate {
+    width: min(100%, 960px);
+    margin: clamp(2.2rem, 3.2vw, 3.4rem) auto 0;
+  }
+}
+
+/* ══ MOTION — opt-in through .is-live, so no-JS and reduced motion keep every
+   word and picture that is already painted. Transform and opacity only. ═══ */
+.sx8a.is-live [data-sx8a] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.1s var(--ease);
+  transition-delay: var(--sx8a-d, 0ms);
+}
+.sx8a.is-live [data-sx8a='fade'] {
+  transform: none;
+}
+.sx8a.is-live [data-sx8a='cut'] {
+  opacity: 1;
+  transform: scaleX(0);
+  transition: transform 1.4s var(--ease);
+  transition-delay: var(--sx8a-d, 0ms);
+}
+.sx8a.is-live [data-sx8a].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx8a.is-live [data-sx8a] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .sx8a-door__plate img,
+  .sx8a-door__go,
+  .sx8a-door__go svg {
+    transition: none;
+  }
+  .sx8a-door:hover .sx8a-door__plate img,
+  .sx8a-door:focus-within .sx8a-door__plate img {
+    transform: none;
+  }
+}
+
+/* ══ PREVIEW SCAFFOLD — not the section ═══════════════════════════════════ */
+.sx8a-page {
+  display: block;
+  background: var(--ground);
+}
+.sx8a-scaffold {
+  background: var(--ground-deep);
+  color: rgba(251, 247, 242, 0.78);
+  padding: clamp(7rem, 16vw, 11rem) 0 clamp(3rem, 7vw, 5rem);
+  font: 500 13px/1.5 var(--font-text);
+}
+.sx8a-scaffold--paper {
+  background: var(--ground);
+  color: var(--ink-soft);
+  padding: clamp(4rem, 9vw, 7rem) 0 60vh;
+}
+.sx8a-scaffold p {
+  margin: 0;
+}
+.sx8a-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}

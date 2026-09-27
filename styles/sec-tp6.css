@@ -1,0 +1,305 @@
+/* Final tp6 section. Every selector is namespaced .tp6- */
+
+/* ── 05 · RETREATS AND IMMERSIONS — surrounded ──────────────────────────────
+   Still state (no JS, reduced motion, or a viewport too short to hold the
+   clearing): the enclosed composition, laid out in flow — the two sentences
+   in the middle, the four frames pinwheeled round them. Live state
+   (.tp6-live, added by Tp6Motion): the same composition pinned for a run
+   about 1.6 viewports long, each frame sliding in from its own edge.
+
+   One unit, --tp6-u, scales the whole composition to whichever of the
+   viewport's width or height is tighter, so the clearing keeps its shape
+   from 1280x720 to 2560 wide. */
+
+.tp6 {
+  --tp6-u: min(1vw, 1.6svh);
+  --tp6-gap: calc(1.6 * var(--tp6-u));
+  --tp6-rail: var(--rail, clamp(1rem, 4.2vw, 4.25rem));
+  --tp6-chip: rgba(18, 32, 26, 0.9);
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-block: clamp(4rem, 9vw, 8rem);
+  overflow-x: clip;
+}
+
+.tp6-field {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, calc(40 * var(--tp6-u))) minmax(0, 1fr);
+  grid-template-rows: minmax(max-content, 1fr) auto minmax(max-content, 1fr);
+  gap: var(--tp6-gap);
+}
+
+/* ── the clearing ── */
+.tp6-clear {
+  grid-row: 2;
+  grid-column: 2;
+  align-self: center;
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding-block: calc(0.6 * var(--tp6-u));
+}
+
+/* the register mark, to the letter of the rest of the page, centred on the clearing */
+.tp6-eyebrow {
+  margin: 0 0 calc(1.2 * var(--tp6-u));
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.tp6-eyebrow-n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic);
+}
+.tp6-eyebrow-rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+.tp6-lead {
+  margin: 0 auto;
+  max-width: 44ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1rem, calc(1.45 * var(--tp6-u)), 1.7rem);
+  line-height: 1.4;
+  color: var(--ink-onPic-2);
+  text-wrap: balance;
+}
+
+.tp6-intent {
+  margin: calc(1.4 * var(--tp6-u)) auto 0;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, calc(2.2 * var(--tp6-u)), 2.75rem);
+  line-height: 1.14;
+  letter-spacing: -0.014em;
+  color: var(--ink-onPic);
+  text-wrap: balance;
+}
+.tp6-intent::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1px;
+  margin: 0 auto calc(1.1 * var(--tp6-u));
+  background: var(--sand);
+}
+
+/* ── the four frames, pinwheeled clockwise round the clearing ── */
+.tp6-fig {
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: #1c2c24;
+  aspect-ratio: 3 / 2;
+  will-change: transform;
+}
+.tp6-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--tp6-pos, 50% 50%);
+}
+
+/* top: above the clearing, its right edge just past the centre line */
+.tp6-fig--top {
+  grid-row: 1;
+  grid-column: 1 / 3;
+  justify-self: end;
+  align-self: end;
+  width: calc(30 * var(--tp6-u));
+  margin-right: calc(17 * var(--tp6-u));
+  aspect-ratio: 9 / 5;
+  z-index: 1;
+}
+/* right: flush to the clearing's right, standing up out of it */
+.tp6-fig--right {
+  grid-row: 1 / 3;
+  grid-column: 3;
+  justify-self: start;
+  align-self: end;
+  width: min(calc(40 * var(--tp6-u)), 100%);
+  margin-bottom: calc(6 * var(--tp6-u));
+  z-index: 2;
+}
+/* bottom: the top frame turned half a circle */
+.tp6-fig--bottom {
+  grid-row: 3;
+  grid-column: 2 / 4;
+  justify-self: start;
+  align-self: start;
+  width: calc(30 * var(--tp6-u));
+  margin-left: calc(17 * var(--tp6-u));
+  aspect-ratio: 9 / 5;
+  z-index: 3;
+}
+/* left: the right frame turned half a circle */
+.tp6-fig--left {
+  grid-row: 2 / 4;
+  grid-column: 1;
+  justify-self: end;
+  align-self: start;
+  width: min(calc(40 * var(--tp6-u)), 100%);
+  margin-top: calc(6 * var(--tp6-u));
+  z-index: 4;
+}
+
+/* the wall label, on its own chip at the corner that faces the clearing */
+.tp6-cap {
+  position: absolute;
+  margin: 0;
+  max-width: calc(100% - 1rem);
+  padding: 0.4rem 0.7rem 0.44rem;
+  background: var(--tp6-chip);
+  font: 400 clamp(0.72rem, 0.68rem + 0.14vw, 0.86rem) / 1.35 var(--font-text);
+  letter-spacing: 0.01em;
+  color: var(--ink-onPic-2);
+}
+.tp6-fig--top .tp6-cap {
+  right: 0;
+  bottom: 0;
+}
+.tp6-fig--right .tp6-cap {
+  left: 0;
+  bottom: 0;
+}
+.tp6-fig--bottom .tp6-cap {
+  left: 0;
+  top: 0;
+}
+.tp6-fig--left .tp6-cap {
+  right: 0;
+  top: 0;
+}
+
+/* ── narrow or upright screens: two frames above the clearing, two below ──
+   Still a pinwheel: top at the upper left, right stepping down at the upper
+   right, bottom stepping down at the lower right, left at the lower left.
+   The frame width is held to 30svh so the whole clearing fits a held phone
+   screen; where it cannot, the motion script leaves the section still. */
+@media (max-width: 899px), (max-aspect-ratio: 1/1) {
+  .tp6 {
+    --tp6-nw: min(56vw, 30svh);
+    --tp6-step: calc(var(--tp6-nw) / 1.5 * 0.86);
+  }
+  .tp6-field {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: space-between;
+    gap: clamp(1rem, 4.4vw, 1.75rem);
+  }
+  .tp6-clear {
+    grid-row: 2;
+    grid-column: 1;
+    padding-inline: var(--tp6-rail);
+    padding-block: 0;
+  }
+  .tp6-eyebrow {
+    margin-bottom: 0.9rem;
+  }
+  .tp6-lead {
+    max-width: 40ch;
+    font-size: clamp(0.98rem, 0.72rem + 1.1vw, 1.3rem);
+    line-height: 1.4;
+  }
+  .tp6-intent {
+    margin-top: 1rem;
+    max-width: 22ch;
+    font-size: clamp(1.25rem, 0.8rem + 2vw, 2.1rem);
+    line-height: 1.16;
+  }
+  .tp6-intent::before {
+    margin-bottom: 0.9rem;
+  }
+  .tp6-fig--top,
+  .tp6-fig--right,
+  .tp6-fig--bottom,
+  .tp6-fig--left {
+    grid-column: 1;
+    width: var(--tp6-nw);
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    align-self: start;
+  }
+  .tp6-fig--top {
+    grid-row: 1;
+    justify-self: start;
+  }
+  .tp6-fig--right {
+    grid-row: 1;
+    justify-self: end;
+    margin-top: var(--tp6-step);
+  }
+  .tp6-fig--bottom {
+    grid-row: 3;
+    justify-self: end;
+    margin-top: var(--tp6-step);
+  }
+  .tp6-fig--left {
+    grid-row: 3;
+    justify-self: start;
+  }
+  .tp6-fig .tp6-cap {
+    max-width: calc(var(--tp6-nw) * 0.74);
+    left: 0;
+    right: auto;
+    top: auto;
+    bottom: 0;
+  }
+}
+
+/* ── live: the composition held for the run ── */
+.tp6.tp6-live {
+  padding-block: 0;
+}
+.tp6-live .tp6-run {
+  height: 260svh;
+}
+.tp6-live .tp6-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+}
+.tp6-live .tp6-field {
+  height: 100%;
+}
+.tp6-live .tp6-intent {
+  opacity: 0;
+}
+
+/* ── verification route only: the grounds of the neighbours on /practice/ ── */
+.tp6-scaffold {
+  display: grid;
+  place-items: center;
+  min-height: 70svh;
+  padding: 6rem 1.25rem;
+  font: 500 14px/1.4 var(--font-text);
+  text-align: center;
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.tp6-scaffold--warm {
+  min-height: 120svh;
+  background: var(--ground-warm);
+}

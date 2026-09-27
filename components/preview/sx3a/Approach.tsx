@@ -1,258 +1,243 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { about } from '@/content/pranava';
-import { PLATES, TRANSMISSION, narrow, sizes, src, srcSet, wide } from './frames';
+import { Eyebrow } from '@/components/about-pranava/parts';
+import { PLATES, clipSrc, posterAvif, posterJpg, stillSet, stillSrc, type Plate } from './frames';
 
 /**
- * PRAṆAVA · §03 OUR APPROACH — concept A. PHOTOGRAPHY LEADS.
+ * PRAṆAVA · §03 OUR APPROACH, concept A. PHOTOGRAPHY LEADS.
  *
- * ┌─────────────────────────────────────────────────────────────────────────────────────┐
- * │ THE EVENT                                                                           │
- * │                                                                                     │
- * │ Three photographs stand on one drawn line and step up in size until the third        │
- * │ crosses the page margin and runs off the edge of the paper — and then the paper      │
- * │ ends, and the fourth frame, larger than all three and on dark ground, is the only    │
- * │ one that moves.                                                                     │
- * └─────────────────────────────────────────────────────────────────────────────────────┘
+ * THE EVENT
+ *   An open book whose gutter closes as you read. Tradition, Practice and Inquiry are each
+ *   argued by two photographs facing each other across a spine. With every spread the two
+ *   sides come closer: a wide gap, then a narrow one, then almost none, with the pictures
+ *   converging in size as well. Transmission is the one photograph laid ACROSS the spine.
+ *   The spine is placed where the student ends and the teacher begins, so the teacher's
+ *   hands cross the gutter. As the frame reaches the middle of the screen, the last
+ *   sliver of gutter inside it closes.
  *
- * THE CONTENT'S OWN ASYMMETRY IS THE BRIEF. The lead names three things and the list has
- * four. Tradition, Practice and Inquiry are ideas that can be handed to a reader;
- * Transmission is not an idea at all, and the client's sentence says why — "not simply
- * information that can be packaged and delivered. It has traditionally moved through
- * teacher, student, practice and lived experience." A still photograph can show a state.
- * It cannot show a passage. So the three are stills and the fourth is a clip: the one term
- * whose MEDIUM differs from the other three, which is the asymmetry made visible instead
- * of described. Three of a kind and one that is not — never four of anything.
+ * WHERE THE MOVE CAME FROM (see NOTES in preview-sx3a.css for the full research record)
+ *   · Walker Evans, American Photographs (1938). One plate per spread, meant to be read
+ *     in sequence, with meaning made by what faces what. The pairs here are built that way:
+ *     each one says something neither picture says alone.
+ *   · Alexey Brodovitch, Harper's Bazaar. The single picture BLED ACROSS THE GUTTER of a
+ *     double-page spread, and the same pose repeated across a spread to make time
+ *     visible. Transmission is the bled spread; Tradition's recto is the repeated pose.
+ *   · The LIFE photo-essay formula, which casts pictures in roles: overall, interaction,
+ *     sequence, and the "signature image" that holds every element of the story in one
+ *     frame. Transmission is the signature image. The three pairs are the others.
+ *   · The look-in rule of editorial layout: subjects face INTO the spread, never off the
+ *     page. Every verso here looks toward the gutter.
  *
- * ══════════════════════════════════════════════════════════════════════════════════════
- * WHAT THE FIRST BUILD GOT WRONG, AND WHERE EACH FIX IS
+ * THE CONTENT'S OWN ASYMMETRY, KEPT. The lead names three things and the list has four. So
+ * three of the items are pairs and one is not. There are never four of anything side by
+ * side. Nothing here is a numbered panel, and the Transmission frame is the LARGEST
+ * picture in the section at every width. It is full-bleed below 720px, and nothing ever
+ * crosses its subject. Its crop is anchored to the top of the clip so both people are
+ * whole to the knee.
  *
- * 1. IT COST FIVE SCREENS. 4,465px at 1440 for ~136 words, because each of the three
- *    plates was given a full screen of its own and the triad therefore never existed as a
- *    triad: you could not see two of them at once, so a ramp of three sizes was something
- *    the reader had to remember rather than something they could see. The three plates now
- *    stand SIDE BY SIDE on one floor line — adjacency is the only way a size ramp is
- *    legible — and the section measures 2,223px at 1440: 2.47 screens, 16.3px of scroll
- *    per word, against 4.96 screens and 32.8px/word before. Half the scroll, the same four
- *    photographs, and reduced motion and JavaScript-off measure 2,223px too.
- *
- * 2. THE ESCALATION DID NOT REACH ITS STATED END. The claim was "growing until the page has
- *    no margin left"; the widest plate reached 44% of the viewport at 1440 and left 806px
- *    of margin, and at 390 plates 3 and 4 were both exactly 390px, so the ladder flatlined
- *    on the majority viewport. Now the run is laid from the drawn margin rightwards and the
- *    third plate runs off the GLASS at every width from 900 to 1600 — measured 40px past
- *    the edge at 900, 64px at 1440, 71px at 1600 — and past the drawn rule by 361px at
- *    2531, where an upright plate cannot reach the edge without outgrowing the screen. At
- *    390 the ramp is 46 / 66 / 88vw and the fourth is the only full-bleed frame: 390×519
- *    against plate 3's 343×458, so the ladder steps at every rung on a phone too.
- *
- * 3. THE CAPTION NARRATED THE DESIGN. "The ochre wall this section opens on" says nothing
- *    about yoga, the people or the teaching — it explains the layout, which is the
- *    portfolio device this brief names. It is now about the photograph, and every clause is
- *    checkable against the poster.
- *
- * 4. TWO OF THE THREE STILLS WERE NEAR-DUPLICATES — same pose, same room, same wall, and
- *    the two alt texts collided. Tradition is a new frame, and the three plates are now
- *    three orientations of a body: standing, inverted, folded.
- *
- * 6. THE INQUIRY FRAME WAS DESCRIBED FROM THE ARCHIVE NOTE AND NOT FROM THE PIXELS. Its
- *    alt called the white object "a long measuring stick" and the relay argument above
- *    was built on it. Enlarged off the 1920 derivative it is flat webbing with a metal
- *    slide buckle — a yoga belt. Both are corrected, and the correction is recorded in
- *    frames.ts rather than quietly swapped, because an invented fact about a photograph
- *    is still an invented fact.
- *
- * 5. `sizes` WAS WRITTEN AGAINST THE LAYOUT BOX AND IGNORED THE TRANSFORM. Fixed at the
- *    root in frames.ts: one number for the layout width, and `sizes` derived from it.
- * ══════════════════════════════════════════════════════════════════════════════════════
- *
- * THREE RESEARCHED TECHNIQUES, NAMED, AND WHERE EACH ONE IS:
- *
- *  1. PHOTOBOOK PACING. "You control reading speed with size and density." A run of plates
- *     on one line is read FAST — the eye crosses three frames in one movement — and that is
- *     the point: the three are a single gathering breath, and the fourth movement, which
- *     changes ground, medium and size at once, is the only place the page slows down.
- *
- *  2. THE WALKER EVANS LINK — adjacent plates joined by a graphical element sitting in the
- *     same place in each frame. Implemented three ways: all four are upright 3 : 4 frames of
- *     the same room (ochre wall, arched window, blue tie-dyed curtain), all three stills
- *     stand on one drawn floor line, and the section opens and closes on the same four
- *     walls.
- *
- *  3. BARTHES' ANCHORAGE vs RELAY. Anchorage is text telling you what to see in a picture.
- *     Relay is text and image each carrying what the other cannot. Every frame here is
- *     relay: an inherited shape held by more people than the frame can hold (Tradition never
- *     says "more than one person"); a line of bodies repeating into depth (Practice says
- *     "time", and this is what time looks like); a BELT round a foot and a BLOCK under it
- *     (Inquiry never mentions a prop — the picture supplies the shape being questioned
- *     rather than performed); hands taking another person's weight (Transmission never
- *     says "touch").
- *
- * THE STATIC LAYER CARRIES THE MECHANIC. Under `prefers-reduced-motion`, and with
- * JavaScript off entirely, the section is still three plates standing on a drawn line at
- * three sizes, the third crossing the page margin and leaving the paper, the ground turning
- * from paper to dark, and a fourth frame larger than all three. The clip is a layer on top
- * for readers who accept motion, never the idea.
- *
- * EVERY SENTENCE IS THE CLIENT'S, VERBATIM. The lead is split at its OWN full stops with a
- * lookbehind, so the three spans concatenate back to the sentence character for character.
- * Nothing is retyped, nothing is paraphrased, and no fact — no count, date, name, fee or
- * duration — appears that the client has not supplied.
- *
- * A server component: every word and every photograph is in the static HTML.
+ * Server component: every word, every photograph and every alt is in the static HTML.
+ * Sx3aMotion is the only client code, and every value it writes has a finished default in
+ * the stylesheet. With JavaScript off, or under reduced motion, the gutters are already
+ * at their final widths, the Transmission frame is already whole, and each clip is a still.
  */
 
-export function Approach() {
-  const lead = about.approach.lead.split(/(?<=\.)\s+/);
-  const [tradition, practice, inquiry, transmission] = about.approach.items;
+type Spread = {
+  key: 'tradition' | 'practice' | 'inquiry';
+  verso: Plate;
+  recto: Plate;
+  /** the verso slot's aspect (w/h) at 720px and up, then below it */
+  vAr: [number, number];
+  rAr: [number, number];
+  /** `sizes` for the stills: the width the CROPPED slot covers, not the slot's own */
+  vSizes?: string;
+  rSizes?: string;
+};
 
-  /* The four terms are a fixed, delivered list in content/pranava.ts. This guard exists
-     only so the section is typed against the array rather than against an assertion: if
-     the client's list ever shrinks, the section disappears rather than rendering an empty
-     plate or a placeholder — which is this project's content law. */
-  if (!tradition || !practice || !inquiry || !transmission) return null;
+const SPREADS: Spread[] = [
+  {
+    key: 'tradition',
+    verso: PLATES.tradVerso,
+    recto: PLATES.tradRecto,
+    vAr: [2 / 3, 2 / 3],
+    rAr: [3 / 2, 3 / 4],
+    vSizes: '(max-width: 719px) 42vw, min(43vh, 28vw, 427px)',
+    rSizes: '(max-width: 719px) 60vw, min(48vh, 32vw, 480px)',
+  },
+  {
+    key: 'practice',
+    verso: PLATES.pracVerso,
+    recto: PLATES.pracRecto,
+    vAr: [3 / 4, 3 / 4],
+    rAr: [2 / 3, 9 / 16],
+    vSizes: '(max-width: 719px) 33vw, min(30vh, 20vw, 298px)',
+  },
+  {
+    key: 'inquiry',
+    verso: PLATES.inqVerso,
+    recto: PLATES.inqRecto,
+    vAr: [4 / 3, 3 / 4],
+    rAr: [3 / 4, 3 / 4],
+    vSizes: '(max-width: 719px) 80vw, min(77vh, 51vw, 768px)',
+  },
+];
 
-  /* Term and frame zipped once, by literal index, so nothing downstream indexes an array
-     with a loop variable and then has to be told the result exists. */
-  const three = [
-    { item: tradition, frame: PLATES[0] },
-    { item: practice, frame: PLATES[1] },
-    { item: inquiry, frame: PLATES[2] },
-  ];
+function Photo({
+  plate,
+  ar,
+  side,
+  sizes,
+}: {
+  plate: Plate;
+  ar: [number, number];
+  side: 'verso' | 'recto';
+  sizes?: string | undefined;
+}) {
+  const style = {
+    '--ar': ar[0].toFixed(4),
+    '--ar-n': ar[1].toFixed(4),
+    '--op': plate.pos,
+    '--op-n': plate.posN,
+  } as CSSProperties;
+
+  let inner: ReactNode;
+  if (plate.kind === 'still') {
+    inner = (
+      <img
+        className="sx3a-plate__img"
+        src={stillSrc(plate)}
+        srcSet={stillSet(plate)}
+        sizes={sizes}
+        alt={plate.alt}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  } else {
+    /* The <img> is the poster and is never removed. The <video> above it has
+       preload="none", NO poster attribute and no src: Sx3aMotion attaches `data-src`
+       on approach and removes it again when the frame is well past. */
+    inner = (
+      <>
+        <picture>
+          <source type="image/avif" srcSet={posterAvif(plate)} />
+          <img
+            className="sx3a-plate__img"
+            src={posterJpg(plate)}
+            alt={plate.alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <video
+          className="sx3a-plate__film"
+          data-src={clipSrc(plate)}
+          muted
+          playsInline
+          loop
+          preload="none"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      </>
+    );
+  }
 
   return (
-    <section className="sx3a-sec" id="sx3a-approach" aria-labelledby="sx3a-mark">
-      {/* ── MOVEMENTS 0–3 · paper ───────────────────────────────────────────────── */}
-      <div className="sx3a-paper">
-        {/* The drawn page margin: two hairlines standing at the rail, spanning every
-            paper movement, so that "the third plate crosses the margin" is something a
-            reader SEES rather than something this file asserts. They stop where the paper
-            does, which is why the dark stage is a sibling and not a child. */}
-        <div className="sx3a-margin" aria-hidden="true" />
+    <figure className={`sx3a-plate sx3a-plate--${side}`} style={style} data-sx={side}>
+      <div className="sx3a-plate__ap">{inner}</div>
+    </figure>
+  );
+}
 
-        {/* The register mark is an <h2> because it is the only thing in the section that
-            IS a section title. The four terms sit under it at h3; marking the client's
-            prose as headings would put his sentences into the outline. */}
-        <h2 className="sx3a-eyebrow" id="sx3a-mark" data-sx="fade">
-          <span className="sx3a-eyebrow__n">03</span>
-          <span className="sx3a-eyebrow__rule" aria-hidden="true" />
-          Our approach
-        </h2>
+export function Approach() {
+  const { lead, items } = about.approach;
+  /* The lead split at its OWN full stops with a lookbehind, so the three spans
+     concatenate back to the client's sentence character for character. */
+  const lines = lead.split(/(?<=\.)\s+/);
+  const byName = (n: string) => {
+    const it = items.find((i) => i.name === n);
+    if (!it) throw new Error(`about.approach has no item named ${n}`);
+    return it;
+  };
+  const named: Record<Spread['key'], (typeof items)[number]> = {
+    tradition: byName('Tradition'),
+    practice: byName('Practice'),
+    inquiry: byName('Inquiry'),
+  };
+  const transmission = byName('Transmission');
+  const T = PLATES.trans;
 
-        {/* THE RUN. One line, three plates, bottoms on it, each larger than the last.
-            The lead sits in the air the two short plates leave above them — the void is
-            part of the composition rather than a gap in it, which is also what keeps the
-            section to one screen of paper. */}
-        <div className="sx3a-band">
-          <div className="sx3a-lead">
-            {lead.map((sentence, i) => (
-              <p
-                key={sentence}
-                data-sx="up"
-                style={{ '--sx3a-d': `${i * 110}ms` } as CSSProperties}
-              >
-                {sentence}
-              </p>
-            ))}
-          </div>
+  return (
+    <section className="sx3a" id="sx3a-approach" aria-labelledby="sx3a-h">
+      <div className="sx3a-rail">
+        {/* THE BOOK. One spine down the middle, from the opening to the fourth frame. */}
+        <div className="sx3a-book">
+          <span className="sx3a-spine" aria-hidden="true" />
 
-          {three.map(({ item, frame }, i) => (
-            /* Labelled by its term's heading, which lives further down the document in
-               the plate list. The picture and the paragraph are in separate rows of a
-               spread, so the binding is stated rather than left to proximity. */
-            <figure
-              key={item.name}
-              className={`sx3a-frame sx3a-frame--${i + 1}`}
-              aria-labelledby={`sx3a-n${i + 1}`}
-              data-sx="up"
-              style={
-                {
-                  '--w': wide(frame),
-                  '--wn': narrow(frame),
-                  '--z': frame.z,
-                  '--zo': frame.zo,
-                  '--sx3a-d': `${i * 90}ms`,
-                } as CSSProperties
-              }
-            >
-              <img
-                src={src(frame)}
-                srcSet={srcSet(frame)}
-                sizes={sizes(frame)}
-                alt={frame.alt}
-                loading="lazy"
-                decoding="async"
-              />
-            </figure>
-          ))}
-        </div>
-
-        {/* The plate list, below the line the plates stand on. */}
-        <div className="sx3a-terms">
-          {three.map(({ item }, i) => (
-            <div
-              className={`sx3a-said sx3a-said--${i + 1}`}
-              key={item.name}
-              data-sx="up"
-              style={{ '--sx3a-d': `${i * 90}ms` } as CSSProperties}
-            >
-              <h3 className="sx3a-name" id={`sx3a-n${i + 1}`}>
-                {item.name}
-              </h3>
-              <p className="sx3a-body">{item.body}</p>
+          {/* THE OPENING. A chapter opens on the recto and the verso is left blank, as Evans
+            left every verso blank. The register mark stands alone on the verso. */}
+          <header className="sx3a-open">
+            <div className="sx3a-open__verso" id="sx3a-h">
+              <Eyebrow n="03">Our approach</Eyebrow>
             </div>
-          ))}
+            <p className="sx3a-lead" data-sx="words">
+              {lines.map((l) => (
+                <span className="sx3a-lead__line" key={l}>
+                  {l}{' '}
+                </span>
+              ))}
+            </p>
+          </header>
+
+          {/* three spreads whose gutters narrow */}
+          {SPREADS.map((s) => {
+            const it = named[s.key];
+            const id = `sx3a-n-${s.key}`;
+            return (
+              <article
+                className={`sx3a-spread sx3a-spread--${s.key}`}
+                aria-labelledby={id}
+                key={s.key}
+              >
+                <div className="sx3a-pair">
+                  <Photo plate={s.verso} ar={s.vAr} side="verso" sizes={s.vSizes} />
+                  <Photo plate={s.recto} ar={s.rAr} side="recto" sizes={s.rSizes} />
+                </div>
+                <div className="sx3a-words" data-sx="words">
+                  <h3 className="sx3a-name" id={id}>
+                    {it.name}
+                  </h3>
+                  <p className="sx3a-body">{it.body}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
-      </div>
 
-      {/* ── MOVEMENT 4 · the paper ends here ────────────────────────────────────── */}
-      <div className="sx3a-dark">
-        <div className="sx3a-move-stage">
-          <div className="sx3a-move-said" data-sx="up">
-            {/* The largest word in the section, because it is the one term the lead does
-                not name. The three above it share a single size: the client gives them
-                equal billing and this does too. */}
-            <h3 className="sx3a-huge">{transmission.name}</h3>
-            <p className="sx3a-body">{transmission.body}</p>
-          </div>
-
+        {/* TRANSMISSION. Not a pair: one frame laid across the spine. */}
+        <article
+          className="sx3a-spread sx3a-spread--transmission"
+          aria-labelledby="sx3a-n-transmission"
+        >
           <figure
-            className="sx3a-move"
-            data-clip={TRANSMISSION.src}
-            style={
-              {
-                '--op': TRANSMISSION.pos,
-                '--op-n': TRANSMISSION.posNarrow ?? TRANSMISSION.pos,
-                '--z': TRANSMISSION.z,
-                '--zo': TRANSMISSION.zo,
-              } as CSSProperties
-            }
+            className="sx3a-cross"
+            data-sx="cross"
+            style={{ '--op': T.pos, '--op-n': T.posN } as CSSProperties}
           >
-            {/*
-              The <img> beneath IS the poster. The <video> carries NO `poster` attribute —
-              a poster is fetched even when `src` is never set, and three of them cost this
-              site 948 KB on every device once already. `preload="none"` and no `src` in the
-              markup mean nothing is fetched until Sx3aMotion attaches it on approach; it is
-              released again a screen past, and never attached at all under reduced motion,
-              under reduced data, with Data Saver on, or with JavaScript off. The still is a
-              complete answer in all of those cases, and it carries the alt text because the
-              video is decorative duplication of it.
-
-              AVIF first: 30 KB against 144 KB for the same frame, and the JPEG stays as the
-              fallback leg rather than as the only one.
-            */}
-            <div className="sx3a-move__frame">
+            <div className="sx3a-cross__ap">
               <picture>
-                <source srcSet={TRANSMISSION.stillAvif} type="image/avif" />
+                <source type="image/avif" srcSet={posterAvif(T)} />
                 <img
-                  className="sx3a-move__still"
-                  src={TRANSMISSION.stillJpg}
-                  alt={TRANSMISSION.alt}
+                  className="sx3a-plate__img"
+                  src={posterJpg(T)}
+                  alt={T.alt}
                   loading="lazy"
                   decoding="async"
                 />
               </picture>
               <video
-                className="sx3a-move__vid"
+                className="sx3a-plate__film"
+                data-src={clipSrc(T)}
                 muted
                 playsInline
                 loop
@@ -260,13 +245,17 @@ export function Approach() {
                 aria-hidden="true"
                 tabIndex={-1}
               />
+              {/* the last of the gutter. Closed (scaleX 0) unless Sx3aMotion opens it. */}
+              <span className="sx3a-seam" aria-hidden="true" />
             </div>
-            {/* Flush to the frame it names — a caption that floats hundreds of pixels from
-                its picture is not a caption, it is a stray line. And it describes what is
-                IN the frame, never the layout around it. */}
-            <figcaption className="sx3a-cap">{TRANSMISSION.caption}</figcaption>
           </figure>
-        </div>
+          <div className="sx3a-words sx3a-words--transmission" data-sx="words">
+            <h3 className="sx3a-name" id="sx3a-n-transmission">
+              {transmission.name}
+            </h3>
+            <p className="sx3a-body">{transmission.body}</p>
+          </div>
+        </article>
       </div>
     </section>
   );

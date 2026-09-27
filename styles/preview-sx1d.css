@@ -1,631 +1,333 @@
 /* ══════════════════════════════════════════════════════════════════════════════
    PREVIEW · sx1d — Praṇava About, HERO.  Owned solely by designer D.
-   EVERY selector in this file is namespaced `.sx1d-`. Nothing else may use it.
+   EVERY selector in this file is namespaced `.sx1d-` (or is `.sx1d` itself).
 
-   ────────────────────────────────────────────────────────────────────────────
-   THE SECTION AS AN EVENT
+   "THE WALLS ARE THE WORDS"
 
-   "THE THRESHOLD.  A doorway that is standing ajar opens as you come square
-    to it, and the light out of it reaches the words."
+   One photograph of the TTC hall with its walls taken away. The red floor still runs
+   back into its corner and five women still stand along it, a step deeper each; where the
+   plaster and the netting were there is only the page's green, and the words are written
+   on it. The class stands in front of the name — the four furthest heads cross the foot of
+   "Pranava" — and as the hero scrolls away the room swells about its far corner and rises
+   while the wall holds back, so they pass up through it.
 
-   You are at a wall. The wall is ink — flat `--ground-deep`, the same green
-   black the About page's own deep sections are painted in, dark from the very
-   first pixel. There is exactly one opening in it, and people are practising
-   on the other side.
+   THREE PLANES:  wall  (.sx1d-wall — eyebrow, h1, the two paragraphs, all on flat ground)
+                  room  (.sx1d-hall — floor and figures in ONE file, so they cannot slip)
+                  you
 
-   At rest you are standing to the LEFT of that opening, so you see it
-   foreshortened: part of the room is hidden behind the near cheek of the wall,
-   and the wall's own thickness shows as a lit band down the inside edge. Over
-   one short runway you come square to it. The hidden part comes back, the lit
-   reveal narrows to nothing, the room settles from its parallax, and the light
-   coming out across the wall reaches its full stretch — it stops short of the
-   words, always, because light that reached them would be a scrim.
+   CONTRAST IS A CONSTANT. No word on this section sits on a photograph. Cream #FBF7F2 on
+   --ground-deep #12201A is 15.79:1. The support paragraph is --ink-onDark-soft (0.72
+   alpha), and the house probe reads a colour's first three channels, so it reports that
+   paragraph at 15.79 — an overstatement. Measured directly instead: its glyph cores
+   render (186,187,182) on (18,32,26), 8.71:1; p5 over every glyph pixel, edges included,
+   7.19:1 at 1024×768, 7.52 at 390×844, 7.70 at 1440×900.
+   The only thing that ever lands on a glyph is a head, and a head is not a background —
+   it HIDES the pixel, so the probe's painted/unpainted diff excludes it and what it
+   measures is exactly the ink a reader can see.
 
-   Three planes and no more: WALL · OPENING · WORDS. No photograph is behind
-   the type anywhere on this route.
-
-   ────────────────────────────────────────────────────────────────────────────
-   WHAT ROUND 1'S CRITICS KILLED, AND WHERE EACH ONE IS FIXED
-
-   Both critics ranked this build's DARK GROUND and its DIRECTLY MEASURED
-   legibility as the things worth keeping, and both wanted almost everything
-   else gone. Each defect is fixed by removing its cause, not by tuning it.
-
-    1 · "The largest element on the page cannot be a wind chime." The near
-        plane was a photograph of a veranda — `pr-pbh-img_5586`, 554 KB at a
-        1920 derivative, composited at 0.18, dimmed to a maximum of 105/255,
-        upscaled 1.32× at 390. THE PHOTOGRAPH IS GONE. The ground is ink. A
-        colour cannot be a wind chime, cannot be upscaled and costs 0 bytes.
-
-    2 · "pr-mov-img_5906 in any role at all." Gone, and with it every byte of
-        video on the route — see components/preview/sx1d/media.ts for the
-        survey of the other fifteen clips and why none of their first frames
-        stands alone either.
-
-    3 · "A sticky runway that reduced motion freezes instead of collapsing."
-        The runway now belongs to `.is-live`, which only exists when motion is
-        allowed — see `ThresholdMotion.tsx`. Reduced motion and no-JavaScript
-        both get exactly one viewport, and `--p` rests at 1, which is the
-        OPEN door. The static reader is given the payoff, not the set-up.
-
-    4 · "Any hero longer than about 1.2 viewports." One screen plus a 12svh
-        runway: 1008px at 1440×900, and 1.12 viewports at 390, 768, 1024,
-        1280, 1440, 2531 and 2560 alike. The table is in page.tsx.
-
-    5 · "Text that travels off the left viewport edge at full opacity."
-        Nothing in the type block translates horizontally at any value of
-        `--p`, at any viewport. Grep this file: `var(--p)` appears only inside
-        the opening and the wash.
-
-    6 · "D's frozen type scale — 72px h1 and 15px body at both 1440 and 2531."
-        Every size here is a clamp, and the support paragraph measures 16.3px
-        at 390, 20.7px at 1440 and 22.4px at 2531 — above the house
-        benchmark's 18.72 rather than 20% under it. The display line is
-        `about.hero.sub`, not the `<h1>` — `components/about-pranava/NOTES.md`
-        records that decision for this exact page: "An `<h1>` is a rank, not a
-        font-size."
-
-    7 · The two diagonal construction hairlines that narrated the section's own
-        perspective. Deleted. One line is left — the threshold — and it holds
-        the opening and the type block on the same datum.
-
-   ────────────────────────────────────────────────────────────────────────────
-   AND FOUR MORE, FOUND BY SAMPLING THIS BUILD RATHER THAN BY A CRITIC
-
-    8 · Below 900px the opening ended at the rail, so it was a rectangle of
-        photograph with wall on all four sides of it — a PLATE LYING ON THE
-        WALL, the one reading this design claims to avoid, and which the wide
-        tier avoids only because the opening bleeds off the top there. It now
-        bleeds by exactly the gutter and is cut by the screen's right edge.
-        The extra width goes into `--door` (0.60 → 0.68), so the height and
-        the section's own height are unchanged: 945px at 390 and 1147px at 768
-        before and after.
-
-    9 · `.sx1d-open__in` sat above `__leaf`, so the room's inner falloff was
-        painted across the near cheek of the wall. Sampled at 1440×900, p=0,
-        y=400: 31,43,36 → 14,26,21 in one pixel at x=934, recovering to the
-        wall's own 18,32,26 by x=1030. That is the aperture's rectangle drawn
-        on the wall by the design itself. It is now z-index 1, under the panel.
-
-   10 · `.sx1d-wash` ended at the opening's left edge, which is also where the
-        radial is brightest, so the falloff was sliced at full strength. The
-        box now reaches the opening's RIGHT edge with the gradient anchored to
-        its left, and the opening covers what runs beneath it.
-
-   11 · The alt said "Practitioners … their hands … on mats". One is inside
-        the aperture at all eight viewports. See components/preview/sx1d/
-        media.ts, which also corrects a claim about which objects the crop
-        excludes.
-
-   ────────────────────────────────────────────────────────────────────────────
-   CONTRAST IS A CONSTANT BY CONSTRUCTION, NOT A TUNED GRADIENT
-
-   Cream `#FBF7F2` on `--ground-deep #12201A` is 15.79:1 before anything else
-   happens. The only thing that ever lands on the ground under the words is the
-   wash, and the wash is `--sand` at a maximum alpha of 0.085 — and its strong
-   end is at the opening, a clear gap away from the type's right edge. Sampled
-   at 1440×900, p=0, y=400, the wall runs 18,32,26 out at the type and reaches
-   31,43,36 at the opening's edge: cream on that brightest wall value is
-   13.8:1. The floor is therefore a bound, not a measurement of one viewport.
-   Directly measured across 151 painted runs at eight viewports × five scroll
-   stops, the worst 5th percentile inside the hero is 15.76:1.
-   Sand is ornament and never carries text (DESIGN-SYSTEM §1); it is used here
-   for the wash, the threshold line and the lit reveal, all of which are
-   ornament.
-
-   The house probe excludes any run more than 25% covered by a fixed or sticky
-   box and this stage is sticky, so `0 FAIL` from it is a pass over an empty
-   sample. The real numbers are measured by glyph mask and recorded in
-   app/preview/sx1d/page.tsx.
+   How much a head may hide is borrowed from the one mass-market product that does this to
+   a legible string: Apple's Lock Screen depth effect switches itself off when the subject
+   would cover more than about half the height of the clock. MEASURED per letter, at rest,
+   by diffing the render with and without the room: the most any glyph of "Pranava" loses
+   is 26% of its ink (the first "a"), and no head rises more than 45% of that glyph's
+   height (768×1024; 38% on the wide stage, identical 1024 → 2560). The P is never
+   touched, and "About", the eyebrow and both paragraphs are never touched at all.
    ══════════════════════════════════════════════════════════════════════════════ */
 
 .sx1d {
+  position: relative;
   display: block;
   background: var(--ground-deep);
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   THE GEOMETRY TABLE.  Everything in the section comes off these.
-   ───────────────────────────────────────────────────────────────────────────── */
-.sx1d-thr {
-  /* THE DEFAULT IS THE FINISHED STATE. 1 = square to the door, open. The
-     island re-points this at `--sx1d-p` only when it adds `.is-live`. */
-  --p: 1;
-
-  /* the capped, CENTRED room. `max-width` without the centring arithmetic is
-     invisible at 1440 and hundreds of pixels wrong at 2531; that shipped on
-     this site once. `--gut` is the same cap expressed as a gutter, so an
-     absolutely positioned plane lands on the same edge the flow content does. */
-  --room: min(120rem, 93vw);
-  --gut: max(var(--rail), calc((100% - var(--room)) / 2));
-  --gap: clamp(2rem, 7vw, 11rem);
-
-  /* THE OPENING IS A FIXED RATIO, NOT TWO INDEPENDENT LENGTHS. Derived from
-     `max(30vw, 42svh)` it came out 0.51 at 1440 and 0.63 at 2531, and because
-     a cover crop's left edge moves with the aperture's ratio, the frame's one
-     flaw — a folding chair, a bamboo pole and a red bag in source x ≈ 0–0.36 —
-     appeared on the wide screen and not on the laptop. That is the class of
-     bug this project keeps re-learning. One ratio here; and see `__img` for
-     why the crop no longer depends on it at all. */
-  --door: 0.5;
-  /* how far it bleeds ABOVE the stage. It is cut by the top of the screen
-     because you are close to it — a doorway you can see all of is a picture
-     of a doorway. It is also what buys the aperture its height, and therefore
-     its width, at the fixed ratio above. */
-  --over: clamp(0.75rem, 8svh, 6rem);
-  /* how much of the opening the near cheek of the wall hides at rest */
-  --leaf: 41%;
-  /* the room's parallax across the approach, as a fraction of the IMAGE
-     ELEMENT's own width. It is POSITIVE on purpose: the element's right edge
-     sits flush with the aperture's, so it may travel right, where the aperture
-     clips it, and never left, where it would expose a strip of ground. At
-     p = 0 it stands 2.5% of 168% = 4.2% of the aperture to the right; at
-     p = 1 it is at rest. No edge is exposed at any viewport — arithmetic. */
-  --shift: 2.5%;
-  --reach: clamp(6rem, 19vw, 26rem);
-
-  --head: clamp(4rem, 10svh, 7.5rem);
-  --cill: clamp(2.4rem, 9svh, 8rem);
-  --runway: clamp(4rem, 12svh, 10rem);
-
-  position: relative;
-  background: var(--ground-deep);
   color: var(--ink-onPic);
-}
+  /* the room bleeds past the section's foot and to the right on phones; both are cut
+     here, and `clip` (not `hidden`) makes no scroll container, so nothing can scroll it */
+  overflow: clip;
 
-/* THE WHOLE OF THE MOTION CONTRACT, IN THREE RULES.
-   Without `.is-live` there is no runway, no sticky stage and no scroll-driven
-   value — one viewport, door open. With it, and only above a viewport height
-   that can hold a sticky stage, the runway appears and `--p` starts at 0. */
-.sx1d-thr.is-live {
+  /* scroll-linked progress. It RESTS at 0 — the finished composition — and only the
+     island's `is-live` points it at the live value. */
+  --p: 0;
+
+  /* the phone-first geometry, all derived from ONE length: the room's width. 150svh
+     keeps a landscape phone's room one screen tall instead of three. The name is a fixed
+     fraction of the room, so the heads land on the same letters at 320 and at 899. */
+  --sx1d-hall: min(140vw, calc(100vw + 14rem), 150svh);
+  --sx1d-name: calc(var(--sx1d-hall) * 0.15); /* "Pranava" */
+}
+.sx1d.is-live {
   --p: var(--sx1d-p, 0);
-}
-@media (min-height: 700px) {
-  /* THE RUNWAY IS A BOX, NOT PADDING, AND THAT IS NOT A STYLE CHOICE. A sticky
-     child is constrained to its containing block's CONTENT box, so
-     `padding-bottom` on the section adds scroll length that the sticky stage
-     cannot use — it measured `position: sticky, top: 0px` and travelled with
-     the page at every scroll value. An element gives the stage somewhere to
-     go. (`body { overflow-x: clip }` is innocent here: the same travel was
-     measured with it forced back to `visible`.) */
-  .sx1d-thr.is-live::after {
-    content: '';
-    display: block;
-    height: var(--runway);
-  }
-  .sx1d-thr.is-live .sx1d-stage {
-    position: sticky;
-    top: 0;
-  }
-}
-/* belt and braces: if the class ever lands on a viewport the island refuses to
-   drive, the section is the finished state rather than a frozen start. */
-@media (max-height: 699px) {
-  .sx1d-thr.is-live {
-    --p: 1;
-  }
 }
 
 /* ── the stage ────────────────────────────────────────────────────────────── */
 .sx1d-stage {
   position: relative;
-  overflow: clip;
-  min-height: max(32rem, 100svh);
+  max-width: 60rem;
+  margin-inline: auto;
+  /* the pill is fixed and ~5.3rem deep at every width; the first word clears it */
+  padding: calc(5.4rem + clamp(1.25rem, 5vw, 2.5rem)) var(--rail) clamp(3rem, 9vw, 4.5rem);
   display: flex;
   flex-direction: column;
-  padding: var(--head) var(--gut) var(--cill);
 }
 
-/* ── the light out of the opening ─────────────────────────────────────────────
-   Shaped by the opening and anchored to it, so it is a wedge of light from a
-   source rather than a global dim over a photograph. It grows as the door
-   opens, which is the one thing the motion does that is about the words. */
-.sx1d-wash {
-  position: absolute;
-  z-index: 0;
-  pointer-events: none;
-  /* RADIAL, NOT LINEAR, and that is not decoration. A linear gradient in a
-     box has four hard edges, and at 1440 the box's bottom edge was plainly
-     visible as a horizontal seam across the wall. A radial falls off on both
-     axes, so the light has no edges — which is what light has. */
-  background: radial-gradient(
-    120% 62% at 100% 54%,
-    rgba(246, 217, 193, 0.085),
-    rgba(246, 217, 193, 0.034) 38%,
-    rgba(246, 217, 193, 0.01) 62%,
-    rgba(246, 217, 193, 0) 82%
-  );
-  transform: scale(calc(0.58 + var(--p) * 0.42));
-  transform-origin: 100% 50%;
-}
-
-/* ── the threshold ────────────────────────────────────────────────────────────
-   One hairline across the whole wall, dying out at both ends so it reads as a
-   floor line and not as a diagram. The opening stands on it; the type block
-   sits on it. It is the only element that touches both. */
-.sx1d-cill {
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  bottom: var(--cill);
-  height: 1px;
-  pointer-events: none;
-  background: linear-gradient(
-    to right,
-    rgba(246, 217, 193, 0) 0%,
-    rgba(246, 217, 193, 0.42) 14%,
-    rgba(246, 217, 193, 0.42) 90%,
-    rgba(246, 217, 193, 0) 100%
-  );
-}
-
-/* ── the opening ──────────────────────────────────────────────────────────── */
-.sx1d-open {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  overflow: clip;
-  background: #0b1310;
-}
-.sx1d-open__img {
-  position: absolute;
-  /* THE CROP IS THE SAME PICTURE AT EVERY VIEWPORT, AND THAT IS ARITHMETIC.
-     `object-fit: cover` crops on whichever axis is short, so the visible slice
-     of the source moves every time the aperture's ratio moves — which is how
-     the folding chair got into the 2531 crop while staying out of the 1024
-     one. So the element is given the SOURCE'S OWN RATIO (`aspect-ratio` with
-     `height: auto`), which leaves cover nothing to do: element x maps to
-     source x one for one. The element is then 168% of the aperture, hung 68%
-     off its left edge, so the aperture can only ever see source x from
-     68/168 = 0.405 to 1.000 — at 320, 390, 768, 1024, 1280, 1440, 2531 and
-     2560 alike. The chair ends at 0.31 and the bamboo pole at 0.36.
-
-     The global `img { max-width: 100% }` caps the 168% back to the aperture
-     and leaves a strip of ground down one side of the picture. It cost twenty
-     minutes to find. */
-  left: -68%;
-  top: -10%;
-  width: 168%;
-  max-width: none;
-  height: auto;
-  aspect-ratio: 3024 / 4032;
-  transform: translate3d(calc((1 - var(--p)) * var(--shift)), 0, 0);
-  will-change: transform;
-}
-
-/* THE NEAR CHEEK OF THE WALL. Not a door leaf — the wall itself, foreshortened
-   because you are standing to one side of the opening. Its colour is the
-   wall's colour, so what a reader sees is an opening that is narrower than it
-   will be, not a panel sliding about. */
-.sx1d-open__leaf {
-  position: absolute;
-  z-index: 2;
-  /* THE LEFT, and it is not arbitrary. You are standing to the left of the
-     opening — the words are — so the part of the room you cannot yet see is
-     the part nearest you, behind the near cheek of the wall. It also means the
-     slot you are given at rest is the RIGHT of the crop, which is where the
-     practitioner's head and her hands on the block are; the left of the crop,
-     which is mat and floor, is what arrives as you come square. A reader who
-     never scrolls still gets the subject. */
-  inset: 0 auto 0 0;
-  width: var(--leaf);
-  /* FLAT WALL COLOUR, AND THAT SURVIVED BEING CHALLENGED. A version of this
-     carried a linear gradient so the cheek would pick up the wash and the
-     wall would run into it with no edge at all. Measured at 1440×900, p=0, it
-     was worse, not better: the wash is a radial that the runway SCALES, so at
-     rest it is a pool about the opening's middle, while a linear gradient on
-     the panel is the same at every height. At y=400 the seam went from
-     13/11/10 to 3/2/2 — and at y=250, where the pool has died, it went from
-     nothing to a 17/13/12 step the other way. Trading one seam for two is not
-     a fix. So the cheek is flat wall colour, and where the pool reaches it the
-     cheek reads 13/11/10 darker: a plane turning away from the light, which is
-     what it is, and which closes to zero as you come square. */
-  background: var(--ground-deep);
-  transform: translate3d(calc(var(--p) * -100%), 0, 0);
-  will-change: transform;
-}
-/* the wall's thickness, catching the room's light on its inner face. It is
-   what tells you this is a hole through something rather than a rectangle
-   printed on it, and it closes to nothing as you come square. */
-.sx1d-open__reveal {
-  position: absolute;
-  inset: 0 0 0 auto;
-  width: clamp(9px, 2.2vw, 30px);
-  transform: scaleX(calc(1 - var(--p)));
-  transform-origin: 100% 50%;
-  background: linear-gradient(
-    270deg,
-    rgba(246, 217, 193, 0.34),
-    rgba(246, 217, 193, 0.1) 52%,
-    rgba(246, 217, 193, 0)
-  );
-}
-/* the room's light falling off toward the edges of its own opening. An opening
-   does not cast a shadow OUTWARD onto the wall it is cut through — a plate
-   lying on the wall would, and that is the whole difference between the two
-   readings. Static: the rule is about animating box-shadow, not having one. */
-/* MEASURED, AND IT WAS WRONG. This sat at z-index 3, above `__leaf`, so its
-   inset falloff was painted over the near cheek of the wall as well as over
-   the room — and the cheek is supposed to BE the wall. Sampled at 1440×900,
-   p=0, y=400: the wall runs 21,34,28 → 31,43,36 as the wash approaches the
-   opening and then STEPS to 14,26,21 at x=934, recovering to the wall's exact
-   18,32,26 by x=1030. A 17/17/15 step down a straight vertical line is a
-   rectangle announcing itself — the plate-lying-on-the-wall tell this design
-   claims to avoid, drawn by the design itself. The light belongs to the ROOM,
-   so it goes below the wall: z-index 1, under `__leaf`'s 2 and over the
-   photograph. At p=0 the cheek is now flat wall colour with no edge, and the
-   only thing marking the opening is the lit reveal, which is the point. */
-.sx1d-open__in {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  pointer-events: none;
-  box-shadow:
-    inset 0 0 clamp(2rem, 5vw, 5.5rem) rgba(5, 12, 9, 0.5),
-    inset 0 -1px 0 rgba(246, 217, 193, 0.26),
-    inset -1px 0 0 rgba(246, 217, 193, 0.1);
-}
-
-/* ── the words ────────────────────────────────────────────────────────────── */
-.sx1d-type {
+/* ── the wall: eyebrow ────────────────────────────────────────────────────── */
+.sx1d-eyebrow {
   position: relative;
   z-index: 3;
-  flex: 0 0 auto;
-  max-width: min(62rem, 100%);
-}
-.sx1d-eyebrow {
   margin: 0;
-  font-family: var(--font-text), system-ui, sans-serif;
-  font-size: clamp(0.74rem, 0.68rem + 0.16vw, 0.92rem);
-  line-height: 1.6;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--ink-onPic-2);
-}
-@media (min-width: 900px) {
-  .sx1d-eyebrow {
-    letter-spacing: 0.17em;
-  }
-}
-.sx1d-h1 {
-  margin: clamp(0.38rem, 1svh, 0.9rem) 0 0;
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 500;
-  font-size: clamp(1.18rem, 1rem + 0.8vw, 2.35rem);
-  line-height: 1.06;
-  letter-spacing: 0.012em;
-  color: var(--ink-onPic);
-}
-/* the one rule in the type block: it separates the page's LABEL from the
-   page's SENTENCE, which is the whole reason the h1 is set small. Sand. */
-.sx1d-tick {
-  display: block;
-  width: clamp(2.2rem, 4.4vw, 4.6rem);
-  height: 1px;
-  margin: clamp(0.66rem, 2.1svh, 1.9rem) 0 clamp(0.72rem, 2.3svh, 2.1rem);
-  background: rgba(246, 217, 193, 0.55);
-}
-/* THE DISPLAY LINE. `about.hero.sub`, and it is the largest thing on the page:
-   80.8px at 1440×900 against the house hero's 81.6, 89.6px at 2531×1140. The
-   `min()` inside the clamp is what keeps a wide-and-short viewport honest —
-   at 1280×720 it resolves on the height term, 69.3px, instead of running the
-   block off the bottom of the screen. */
-.sx1d-line {
-  margin: 0;
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 300;
-  font-size: clamp(1.95rem, 0.55rem + min(5vw, 8.4svh), 5.6rem);
-  line-height: 1.035;
-  letter-spacing: -0.014em;
-  text-wrap: pretty;
-  color: var(--ink-onPic);
-}
-.sx1d-support {
-  margin: clamp(0.85rem, 2.5svh, 2.4rem) 0 0;
-  max-width: 44ch;
-  font-family: var(--font-text), system-ui, sans-serif;
-  font-size: clamp(1.02rem, 0.9rem + 0.44vw, 1.4rem);
-  line-height: 1.62;
-  color: var(--ink-onPic-2);
-}
-
-/* ═══ NARROW — up to 899px ══════════════════════════════════════════════════
-   The wall is the same wall; you are simply further from the opening, so it
-   sits below the words with the threshold under it rather than beside them.
-   The opening takes whatever height is left, with a floor, so a short phone
-   grows the stage rather than crushing the picture. */
-.sx1d-open {
-  flex: 0 0 auto;
-  /* THE OPENING IS CUT BY THE SCREEN'S RIGHT EDGE, and that is the whole
-     narrow-tier fix. Round 2 ended the aperture at the rail, so on a phone it
-     was a 179×299 rectangle of photograph floating on ink with wall on three
-     sides of it — a PLATE LYING ON THE WALL, which is the exact reading this
-     design says it avoids, and which it avoids on the wide tier only because
-     the opening bleeds off the TOP there. Measured at 390×844 before the fix:
-     the picture's four edges were all inside the viewport.
-
-     So the aperture is widened by exactly the gutter and pulled back over it.
-     Its right edge lands on the viewport's right edge at every narrow width,
-     so the opening runs out of the screen the way the wide tier's runs out of
-     the top: you are close to it and standing to its left. The added width is
-     the gutter and nothing else, so the door's HEIGHT is unchanged — 390×844
-     still has 295px of opening in the 305px the type leaves, and the stage
-     does not grow. `--door` moves from 0.60 to 0.68 to absorb it. */
-  width: calc(clamp(8.5rem, 46vw, 15rem) + var(--gut));
-  aspect-ratio: var(--door);
-  /* `auto` on the top pushes it down onto the threshold; the negative right
-     margin is the bleed. Whatever height is left over becomes the gap between
-     the words and the doorway rather than a hole under it. */
-  margin: auto calc(-1 * var(--gut)) 0 auto;
-}
-.sx1d-wash {
-  left: 0;
-  right: 0;
-  bottom: calc(var(--cill) - 8%);
-  height: clamp(13rem, 42svh, 26rem);
-  background: radial-gradient(
-    78% 100% at 78% 100%,
-    rgba(246, 217, 193, 0.08),
-    rgba(246, 217, 193, 0.03) 40%,
-    rgba(246, 217, 193, 0) 78%
-  );
-  transform: scale(calc(0.58 + var(--p) * 0.42));
-  transform-origin: 78% 100%;
-}
-/* a portrait aperture on a phone is wider than it is tall relative to the
-   source, so the crop moves up into the bodies rather than sitting on the
-   floor. Set deliberately and looked at — this site has shipped a hero with
-   the teacher out of shot once already. */
-@media (max-width: 899px) {
-  .sx1d-thr {
-    /* the near cheek hides less on a phone, where the aperture is narrow in
-       absolute pixels and 41% of it would be a slot rather than a view */
-    --leaf: 33%;
-    /* A SQUARER OPENING. A 0.50 door on a 390px screen is 150px wide with
-       half the stage's width empty beside it. 0.68 makes it 201px — and it is
-       0.68 rather than 0.60 because the aperture now also carries the gutter
-       it bleeds over, so the extra width goes into the RATIO and not into the
-       height. Because the crop is set by the element's overhang and not by
-       `cover`, widening the ratio costs nothing horizontally: the left edge is
-       still source x = 0.405 at every width. */
-    --door: 0.68;
-  }
-  /* VERTICALLY THE CROP IS CHOSEN, NOT INHERITED. The element is 2.24 × the
-     aperture's WIDTH tall, so a wider aperture sees less of the source's
-     height and the offset has to move with it: at 0.68 an offset of −48%
-     puts the visible slice at source y 0.315 → 0.972. That is the figure from
-     the hem of the curtain down to her hand on the block, and it drops the
-     band of bare wall that −30% left across the top. Rendered and looked at,
-     not derived and hoped for. */
-  .sx1d-open__img {
-    top: -48%;
-  }
-}
-
-/* ═══ WIDE — 900px and up ══════════════════════════════════════════════════ */
-@media (min-width: 900px) {
-  .sx1d-stage {
-    justify-content: flex-end;
-    /* the type column stops where the opening begins, by reserving the
-       opening's own width plus the gap. One expression, no magic number. */
-    /* the type column stops where the opening begins. `--open-w` is the
-       aperture's width expressed the only way it can be expressed in a
-       `calc()` — the height it is derived from, times the ratio. */
-    padding-right: calc(var(--gut) + var(--open-w) + var(--gap));
-  }
-  .sx1d-thr {
-    /* the aperture's width, expressed the only way a `calc()` can express it:
-       the height it is derived from, times the ratio. `max(32rem, 100svh)` and
-       not `100svh`, so that on a viewport where the stage has grown past one
-       screen the reserve grows with it and the type cannot walk into the
-       doorway. */
-    --open-w: calc((max(32rem, 100svh) + var(--over) - var(--cill)) * var(--door));
-  }
-  .sx1d-open {
-    position: absolute;
-    right: var(--gut);
-    top: calc(-1 * var(--over));
-    bottom: var(--cill);
-    width: auto;
-    aspect-ratio: var(--door);
-    margin: 0;
-    flex: none;
-  }
-  /* THE LIGHT RUNS UNDER THE DOOR, and that is a measured correction. The box
-     used to END at the opening's left edge, and because the radial's bright
-     point is that same edge, the falloff was sliced off at full strength: at
-     1440×900, y=400, the wall read 25,37,31 → 31,43,36 approaching x=934 and
-     then dropped to the wall's own 18,32,26 in one pixel. A 13/11/10 step down
-     a dead-straight 900px vertical line is a box edge, and a box edge is the
-     one thing light does not have — the same defect the round-1 notes record
-     finding when this gradient was linear.
-     So the box now reaches the opening's RIGHT edge and the gradient is
-     anchored to the opening's LEFT edge with `calc(100% - var(--open-w))`.
-     The falloff continues past the point where it is cut, and the opening —
-     opaque, z-index 1 — covers the part that runs beneath it. Re-sampled: the
-     wall runs 18,32,26 unbroken through the cheek at y=750, and the only
-     transition left anywhere on the wall is the lit reveal. */
-  .sx1d-wash {
-    left: auto;
-    right: var(--gut);
-    top: 0;
-    bottom: calc(var(--cill) - 6%);
-    height: auto;
-    width: calc(var(--reach) + var(--open-w));
-    background: radial-gradient(
-      var(--reach) 58% at calc(100% - var(--open-w)) 52%,
-      rgba(246, 217, 193, 0.085),
-      rgba(246, 217, 193, 0.034) 36%,
-      rgba(246, 217, 193, 0.01) 60%,
-      rgba(246, 217, 193, 0) 80%
-    );
-    transform: scale(calc(0.58 + var(--p) * 0.42));
-    transform-origin: calc(100% - var(--open-w)) 50%;
-  }
-}
-
-/* 320px is the floor and it is a HEIGHT problem, not a width one: four pieces
-   of type and a picture do not fit in 568px, so the stage grows past the
-   viewport and the runway is suppressed (see the max-height rule above). The
-   section is 758px tall there — still the shortest hero in the round. */
-@media (max-width: 400px) {
-  .sx1d-thr {
-    /* the FLOOR is the navigation pill, not taste: at 320x568 9.5svh resolves
-       to 54px and the pill's lower edge is at 68, so the eyebrow's first line
-       was printed underneath it. 5rem clears it at the shortest viewport this
-       site supports. */
-    --head: clamp(5rem, 9.5svh, 5.5rem);
-    --cill: clamp(2rem, 7svh, 4.5rem);
-  }
-}
-
-/* ── focus ────────────────────────────────────────────────────────────────────
-   Nothing in the hero is interactive, but the navigation pill sits over it and
-   a cream ring inside a dark halo is the treatment the site uses on a reversed
-   ground. Never `outline: none`. */
-.sx1d :focus-visible {
-  outline: 2px solid var(--ink-onPic);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 5px rgba(5, 12, 9, 0.92);
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   GROUND, NOT DESIGN.
-
-   The brief asks for enough page beneath the hero to judge the hero's spacing
-   honestly. On the real route the section immediately below this one is
-   `SECTION.apr-s--deep.apr-what` — a DEEP ground — so the band below is deep
-   too, and what it shows is the actual seam this hero has to make: ink to ink,
-   with the threshold line the only thing between them. The sentences are the
-   client's first two Introduction lines, set plainly. The Introduction is
-   another designer's section and nothing here makes a claim on it.
-   ══════════════════════════════════════════════════════════════════════════ */
-.sx1d-ground {
-  position: relative;
-  z-index: 1;
-  background: var(--ground-deep);
-  color: var(--ink-onPic);
-  padding-block: clamp(4.5rem, 12vw, 9.5rem);
-}
-.sx1d-ground__inner {
-  max-width: calc(78rem + 2 * var(--rail));
-  margin-inline: auto;
-  padding-inline: var(--rail);
-}
-.sx1d-ground__note {
-  margin: 0 0 clamp(1.6rem, 3.4vw, 2.6rem);
-  font-family: var(--font-text), system-ui, sans-serif;
-  font-size: clamp(0.72rem, 0.66rem + 0.16vw, 0.88rem);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--ink-onPic-2);
+  /* on a phone it takes two lines; balanced, it breaks after "Culture", not before
+     a lone "Studies" */
+  text-wrap: balance;
 }
-.sx1d-ground p:not(.sx1d-ground__note) {
-  margin: 0 0 clamp(1rem, 2.2vw, 1.6rem);
-  max-width: 46ch;
-  font-family: var(--font-text), system-ui, sans-serif;
-  font-size: clamp(1.02rem, 0.9rem + 0.44vw, 1.4rem);
-  line-height: 1.62;
+/* sand is ornament, never text (DESIGN-SYSTEM §1) — this is the one thing it may be */
+.sx1d-eyebrow::before {
+  content: '';
+  flex: none;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the wall: the name ───────────────────────────────────────────────────── */
+.sx1d-h {
+  position: relative;
+  z-index: 1; /* BEHIND the room */
+  margin: clamp(1.1rem, 4.5vw, 1.8rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
   color: var(--ink-onPic);
+}
+.sx1d-h__about {
+  display: block;
+  font-size: clamp(1.6rem, 7vw, 3rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.sx1d-h__name {
+  display: block;
+  font-size: var(--sx1d-name);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  /* the P's left side-bearing, so its stem — not its box — sits on the rail */
+  margin-left: -0.045em;
+}
+
+/* ── the room ─────────────────────────────────────────────────────────────── */
+.sx1d-hall {
+  position: relative;
+  z-index: 2; /* IN FRONT of the name */
+  width: var(--sx1d-hall);
+  /* from the viewport's own left edge, less 6vw, so the far woman's chair is on screen
+     and the near woman is cut only at her back leg */
+  margin-left: calc(-1 * var(--rail) - 6vw);
+  /* THE OCCLUSION, DERIVED: the highest head in the file is 14.8% down a 3:2 frame, i.e.
+     0.099 of the room's WIDTH below its top; the name's baseline sits ~0.07em above its
+     line box's foot. Pulling the room up by both, plus 0.19em, puts the head-tops ~0.19em
+     above the baseline — about a third of the x-height — at every width. */
+  margin-top: calc(-0.099 * var(--sx1d-hall) - 0.26 * var(--sx1d-name));
+  /* on a phone the room is followed by words, so its floor fades out beneath it rather
+     than stopping on a line; on the wide stage the section's own edge cuts it instead */
+  -webkit-mask-image: linear-gradient(to bottom, #000 64%, transparent 94%);
+  mask-image: linear-gradient(to bottom, #000 64%, transparent 94%);
+  transform-origin: 14% 26%; /* the far corner: the dolly pivots where the room ends */
+}
+.sx1d-hall__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── the wall: the two paragraphs ─────────────────────────────────────────── */
+.sx1d-copy {
+  position: relative;
+  z-index: 3;
+  margin-top: 0;
+}
+.sx1d-sub {
+  margin: 0;
+  max-width: 24em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: clamp(1.4rem, 5.6vw, 2.1rem);
+  line-height: 1.22;
+  letter-spacing: -0.012em;
+  color: var(--ink-onPic);
+  text-wrap: balance;
+}
+.sx1d-support {
+  margin: 1.15em 0 0;
+  max-width: 34em;
+  font: 400 clamp(1rem, 0.94rem + 0.36vw, 1.18rem) / 1.62 var(--font-text);
+  color: var(--ink-onDark-soft);
+  text-wrap: pretty;
+}
+
+/* a short phone (320×568, or any landscape phone) spends less on the pill's clearance */
+@media (max-height: 640px) {
+  .sx1d-stage {
+    padding-top: calc(5.4rem + 0.5rem);
+  }
+  .sx1d-h {
+    margin-top: 0.7rem;
+  }
+}
+
+/* the two paragraphs side by side on a portrait tablet, which keeps the section inside
+   one screen and a tenth (measured 1,121px at 768×1024) instead of ~1.3 */
+@media (min-width: 600px) {
+  .sx1d-copy {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: start;
+  }
+  .sx1d-support {
+    margin: 0.35em 0 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE WIDE STAGE — landscape screens from 900px.
+
+   Everything is placed in `cqw` of ONE box, so the relationship between the heads and
+   the letters is identical at 1024, 1440 and 2531: the box is the composition, and the
+   screen only decides how big it is.
+
+   Its width is min(100%, 160svh, 135rem):
+     · 160svh keeps it about one screen tall on short, wide screens — 2531×1140 gets a
+       1824px stage, not a 2531px one. Measured section heights: 978px at 1440×900
+       (1.09), 788 at 1280×720 (1.09), 1232 at 2531×1140 (1.08), 1454 at 2560×1440 (1.01);
+     · 135rem = 2160px caps the room at 75% of it = 1620 CSS px, the source's own width,
+       so no desktop tier is ever an upscale;
+     · margin-inline: auto centres it. A capped box that is not centred reads right at
+       1440 and hundreds of pixels off at 2531 (DESIGN-SYSTEM §3).
+   ══════════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 900px) and (min-aspect-ratio: 5/4) {
+  .sx1d-stage {
+    /* content-box, so the aspect ratio is the COMPOSITION's and --sx1d-t0 is added on top:
+       a constant clearance for the fixed pill, which does not scale with the stage */
+    --sx1d-t0: 1.75rem;
+    box-sizing: content-box;
+    max-width: none;
+    width: min(100%, 160svh, 135rem);
+    aspect-ratio: 100 / 66;
+    padding: var(--sx1d-t0) 0 0;
+    display: block;
+    container-type: inline-size;
+  }
+
+  .sx1d-eyebrow {
+    position: absolute;
+    left: 4cqw;
+    top: calc(var(--sx1d-t0) + 13.2cqw - 2.6rem);
+    /* the house register mark is 11.5px; on a 2160px stage it is allowed to grow a little */
+    font-size: clamp(11.5px, 0.62cqw, 13.5px);
+    letter-spacing: 0.19em;
+  }
+
+  .sx1d-h {
+    position: absolute;
+    left: 4cqw;
+    top: calc(var(--sx1d-t0) + 13.2cqw);
+    margin: 0;
+  }
+  .sx1d-h__about {
+    font-size: 4.6cqw;
+  }
+  /* 13.5cqw: wide enough that FOUR heads pass under it (pink, black, maroon, red), and
+     the near woman's, the largest, stands clear to its right */
+  .sx1d-h__name {
+    font-size: 13.5cqw;
+  }
+
+  /* Heads in this file, as fractions of the room: tops at y 0.148–0.190, and
+     x 0.127–0.165 · 0.230–0.272 · 0.317–0.359 · 0.463–0.515 · 0.625–0.735.
+     The name's baseline is 0.79em below its line top and its x-height 0.477em (measured
+     in the render), so with the name's line top at 13.2 + 4.6 = 17.8cqw its baseline is
+     at 28.47cqw and its x-height starts at 22.03cqw. A room top of 18.8cqw puts the two
+     highest heads (0.148 and 0.153 of 50cqw) at 26.2 and 26.45cqw, about a third of the
+     way up the x-height. MEASURED per letter by diffing the render with and without the
+     room, identical at 1024, 1280, 1440, 2531 and 2560: r 18% of its ink hidden, first a
+     21% (to 38% of its height), n 7%, second a 2%, v 0%, last a 12%, P never. */
+  .sx1d-hall {
+    position: absolute;
+    left: 0;
+    top: calc(var(--sx1d-t0) + 18.8cqw);
+    width: 75cqw;
+    margin: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* on the plaster wall: right of the near woman (she ends at 65cqw) and above the
+     floor, which meets that wall at ~49.8cqw here */
+  .sx1d-copy {
+    position: absolute;
+    left: 66.5cqw;
+    top: calc(var(--sx1d-t0) + 13.4cqw);
+    width: 29.5cqw;
+    margin: 0;
+    display: block;
+  }
+  .sx1d-sub {
+    font-size: clamp(1.2rem, 2.2cqw, 3rem);
+  }
+  .sx1d-support {
+    margin: 1.2em 0 0;
+    font-size: clamp(1rem, 1.28cqw, 1.45rem);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE WALK IN — only with `is-live`, which only exists when motion is allowed.
+   `--p` runs 0 → 1 across the section's own height. The room rises 3.5cqw and swells 7%
+   about its far corner, so the near end comes towards you and the far end stays put; the
+   wall drifts DOWN 5cqw, i.e. it lags the page — it is further away. Net: the heads climb
+   ~8cqw through the name by the time the section has gone. Transforms only.
+   ══════════════════════════════════════════════════════════════════════════════ */
+.sx1d.is-live .sx1d-hall {
+  transform: translate3d(0, calc(var(--p) * -3.5cqw), 0) scale(calc(1 + var(--p) * 0.07));
+  will-change: transform;
+}
+.sx1d.is-live .sx1d-wall {
+  transform: translate3d(0, calc(var(--p) * 5cqw), 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sx1d.is-live .sx1d-hall,
+  .sx1d.is-live .sx1d-wall {
+    transform: none;
+  }
+}
+
+/* ── the ground below: NOT design, a stand-in for the Introduction ────────── */
+.sx1d-after {
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: clamp(4.4rem, 10vw, 9rem);
+  min-height: 110svh;
+}
+.sx1d-after__in {
+  max-width: calc(46rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+.sx1d-after__in p {
+  margin: 0 0 1.2em;
+  font: 400 clamp(1rem, 0.94rem + 0.36vw, 1.18rem) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+.sx1d-after__in p:first-child {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 1rem + 2.7vw, 3.2rem);
+  line-height: 1.12;
+  color: var(--ink);
 }

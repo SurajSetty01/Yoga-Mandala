@@ -3,146 +3,207 @@
 import { useEffect } from 'react';
 
 /**
- * The section's only client code, and it is now 1 kB of IntersectionObserver.
+ * The section's only client code. Everything it touches has a finished default in the
+ * stylesheet, so with no JavaScript the section is complete: the pin is CSS, every word and
+ * every photograph is in the static HTML, and the centre is its own first frame, standing
+ * still.
  *
- * THERE IS NO SCROLL LISTENER, NO requestAnimationFrame AND NO SCRUBBED VALUE HERE. Round
- * one drove five custom properties off `scrollY` to run a stack of sheets; that mechanic
- * cost 23-35% of the document's height, hid every body paragraph behind a photograph at
- * 390, and left nothing behind when `prefers-reduced-motion` was on. What this file does
- * now cannot do any of that, because nothing it touches is layout, geometry or content:
+ * It does three things.
  *
- *   1. adds `.sx3b--live` when motion is allowed, which is the ONLY thing that arms the
- *      reveals in the stylesheet. Reduced motion, or no JavaScript at all, and the section
- *      renders finished: same boxes, same document height, same words, nothing hidden.
- *   2. gives each block an `.is-in` on first approach — opacity and transform only.
- *   3. attaches the clip's `src` on approach and drops it a screen past, AND ONLY ABOVE
- *      1000px.
+ *   1. THE PICTURE STARTS TO MOVE WHEN TRANSMISSION LANDS ON IT. The clip's `src` is attached
+ *      as the reader reaches Inquiry (so it has buffered by the time it is wanted), it plays
+ *      once the Transmission plate is well onto the screen, and it pauses and fades back to
+ *      the still if the reader scrolls back up — every state change has its inverse. It is
+ *      released (`src` removed, `load()` to cancel the fetch) half a screen past the section
+ *      or a screen and a half before it.
+ *   2. THE THREE TERMS LEAN IN. At the widths where the picture stands at the centre, each
+ *      card sits closest to it when the card is in the middle of the screen and eases
+ *      outward, by at most the page gutter, as it travels to either edge. One custom
+ *      property per card, feeding a transform.
+ *   3. THE BUTTON. Plays or pauses the clip, and a choice made with it is final until the
+ *      reader makes another: scrolling never overrides it. Under reduced motion nothing
+ *      plays on its own, and this button is how a reader can choose to see it move.
  *
- * THE VIDEO GATE IS A WEIGHT DECISION, NOT A WIDTH ONE. There is exactly one encode of
- * `pr-mov-img_5681` — 1080x1920, 10.5s, ~2.46 Mbps, 3.15 MB — and no smaller variant on
- * disk. Round one shipped it to a phone, where it was 3.15 MB of a 4.04 MB page, painted
- * into a 308x405 box. `public/media/` is outside this design's remit, so until a second
- * encode exists the clip is simply not fetched below 1000px: the poster frame is the
- * picture there, and the phone pays 25 KB of AVIF for it. The gate is re-evaluated on
- * resize, so dragging a window narrow releases the clip rather than keeping it resident.
+ * The rules this obeys are the ones this site learned by shipping their opposites: one
+ * passive scroll listener that only raises a flag; every read of scrollY and every write in
+ * one requestAnimationFrame; geometry measured on load, resize and ResizeObserver only;
+ * transform and opacity only; the reader's scroll position never written to.
  */
 export function Sx3bMotion() {
   useEffect(() => {
     const section = document.querySelector<HTMLElement>('.sx3b');
     if (!section) return;
-
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const run = section.querySelector<HTMLElement>('.sx3b-run');
+    /* the plate's <li>, not the plate: the plate is sticky, so its box is wherever it
+       is currently held, while the <li> is where the landing begins in the document */
+    const land = section.querySelector<HTMLElement>('.sx3b-land');
     const video = section.querySelector<HTMLVideoElement>('.sx3b-video');
-    /* the clip is the only thing on the page heavy enough to be worth a breakpoint */
-    const wide = window.matchMedia('(min-width: 1000px)');
+    const btn = section.querySelector<HTMLButtonElement>('.sx3b-toggle');
+    const cards = [...section.querySelectorAll<HTMLElement>('.sx3b-card')];
+    if (!run || !land || !video || !btn) return;
 
-    let revealIo: IntersectionObserver | null = null;
-    let nearIo: IntersectionObserver | null = null;
-    let near = false;
-    let attached = false;
-    let running = false;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    /* the same query the stylesheet uses for the centred arrangement */
+    const centred = matchMedia('(min-width: 1280px) and (min-aspect-ratio: 3/2)');
 
-    /* a 3.15 MB single-encode clip is not a trade a metered or slow connection wants, and
-       the browser will tell you so if you ask. `saveData` and `effectiveType` are behind an
-       optional chain because Safari implements neither. */
+    /* a 2 MB clip is not a trade a metered or slow connection wants. Safari implements
+       neither property, hence the optional chain; there the clip simply plays. */
     const thin = () => {
-      const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } })
-        .connection;
+      const c = (
+        navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }
+      ).connection;
       if (!c) return false;
       return c.saveData === true || /^(slow-)?2g$|^3g$/.test(c.effectiveType ?? '');
     };
 
+    /* null until the reader uses the button; after that their choice wins */
+    let choice: 'play' | 'pause' | null = null;
+    let attached = false;
+    let near = false;
+    let landed = false;
+
     const attach = () => {
-      if (!video || attached || !near || !wide.matches || mq.matches || thin()) return;
+      if (attached) return;
       attached = true;
       video.src = video.dataset.src ?? '';
-      video.classList.add('is-on');
-      void video.play().catch(() => {});
     };
-
     const detach = () => {
-      if (!video || !attached) return;
+      if (!attached) return;
       attached = false;
-      video.classList.remove('is-on');
       video.pause();
       video.removeAttribute('src');
       /* load() after removing src is what actually cancels an in-flight fetch */
       video.load();
+      section.classList.remove('sx3b--moving');
     };
 
-    const start = () => {
-      if (running || mq.matches) return;
-      running = true;
-      section.classList.add('sx3b--live');
-
-      /* Opacity and transform on the block itself — never a clip-path. Chromium computes an
-         IntersectionObserver's rect AFTER clips, so an observed element clipped to zero
-         reports ratio 0, never fires, and stays invisible for ever. That shipped as a blank
-         page on this project once. */
-      revealIo = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (!e.isIntersecting) continue;
-            e.target.classList.add('is-in');
-            revealIo?.unobserve(e.target);
-          }
-        },
-        { rootMargin: '0px 0px -10% 0px', threshold: 0.04 },
-      );
-      section.querySelectorAll('[data-rv]').forEach((el) => revealIo?.observe(el));
-
-      /* Attached on approach, released when a screen past, in either direction — 90% of the
-         viewport each way, so 810px at 1440.
-
-         VERIFIED, AND THE OBVIOUS CHECK IS THE WRONG ONE. `video.currentSrc` does NOT go
-         back to "" in Chromium after the attribute is removed and `load()` runs: it keeps
-         the last resolved URL for the life of the element, so a probe that reads
-         currentSrc reports a clip as still attached for ever and this release looks
-         broken. The attributes that do move, measured at 1440 with a spacer appended below
-         the section so the page can actually scroll past it: at 175px past, src=
-         "/media/clips/pr-mov-img_5681.mp4", class "is-on", paused false, networkState 1,
-         readyState 4; at 2175px past, src=null, "is-on" gone, paused true, networkState 0
-         (NETWORK_EMPTY), readyState 0 — the fetch is cancelled and the element is empty.
-         This preview route is 529px shorter than that threshold at its own foot, which is
-         why the spacer is needed to see it at all. */
-      nearIo = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            near = e.isIntersecting;
-            if (near) attach();
-            else detach();
-          }
-        },
-        { rootMargin: '90% 0px 90% 0px' },
-      );
-      nearIo.observe(section);
+    const label = () => {
+      const playing = attached && !video.paused;
+      btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-label', playing ? 'Pause the clip' : 'Play the clip');
     };
 
-    const stop = () => {
-      running = false;
-      section.classList.remove('sx3b--live');
-      revealIo?.disconnect();
-      revealIo = null;
-      nearIo?.disconnect();
-      nearIo = null;
-      detach();
-      /* belt and braces: the stylesheet only hides a block while `.sx3b--live` is on, so
-         removing the class is already enough — but a block that was mid-transition keeps
-         its class rather than flashing back. */
-      section.querySelectorAll('[data-rv]').forEach((el) => el.classList.add('is-in'));
+    const wanted = () => {
+      if (choice === 'pause') return false;
+      if (choice === 'play') return true;
+      if (reduce.matches || thin()) return false;
+      return near && landed;
     };
 
-    const onPref = () => (mq.matches ? stop() : start());
-    const onWide = () => (wide.matches ? attach() : detach());
+    const sync = () => {
+      if (wanted()) {
+        attach();
+        if (video.paused) void video.play().catch(() => label());
+      } else if (attached && !video.paused) {
+        video.pause();
+      }
+      label();
+    };
 
-    onPref();
-    mq.addEventListener('change', onPref);
-    wide.addEventListener('change', onWide);
+    /* The picture only swaps to the clip once frames are actually arriving, so a slow
+       fetch shows the still rather than a black box. */
+    const onPlaying = () => {
+      section.classList.add('sx3b--moving');
+      label();
+    };
+    const onPause = () => {
+      section.classList.remove('sx3b--moving');
+      label();
+    };
+    video.addEventListener('playing', onPlaying);
+    video.addEventListener('pause', onPause);
+
+    const onClick = () => {
+      const playing = attached && !video.paused;
+      choice = playing ? 'pause' : 'play';
+      sync();
+    };
+    btn.addEventListener('click', onClick);
+    btn.hidden = false;
+    label();
+
+    /* ── geometry: measured, never read inside the frame loop ─────────────── */
+    let runTop = 0;
+    let runBottom = 0;
+    let plateTop = 0;
+    let centres: number[] = [];
+    const measure = () => {
+      const y = scrollY;
+      const r = run.getBoundingClientRect();
+      runTop = r.top + y;
+      runBottom = r.bottom + y;
+      plateTop = land.getBoundingClientRect().top + y;
+      /* the card's untransformed box: the lean is on its inner block, not on the <li> */
+      centres = cards.map((c) => {
+        const b = c.getBoundingClientRect();
+        return b.top + y + b.height / 2;
+      });
+    };
+
+    const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
+    let lean = false;
+
+    let queued = false;
+    const frame = () => {
+      queued = false;
+      const y = scrollY;
+      const vh = innerHeight || 1;
+
+      /* in reach: a screen and a half ahead of the run, or half a screen past it */
+      near = y + vh * 1.5 > runTop && y < runBottom + vh * 0.5;
+      /* the plate has come more than a quarter of the way up the screen */
+      landed = y + vh * 0.74 > plateTop;
+      /* buffer while Inquiry is being read, so the clip is ready when it is wanted */
+      const soon = y + vh * 1.9 > plateTop;
+
+      if (!near && choice !== 'play') detach();
+      else if (soon && choice !== 'pause' && !reduce.matches && !thin()) attach();
+      sync();
+
+      if (lean) {
+        cards.forEach((card, i) => {
+          const side = card.dataset.sx3bSide === '1' ? 1 : -1;
+          const d = clamp(Math.abs((centres[i] ?? 0) - (y + vh / 2)) / vh, 0, 1);
+          card.style.setProperty('--sx3b-lean', (side * d * d).toFixed(4));
+        });
+      }
+    };
+    const request = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(frame);
+    };
+
+    const setMode = () => {
+      lean = !reduce.matches && centred.matches;
+      section.classList.toggle('sx3b--live', !reduce.matches);
+      if (!lean) for (const c of cards) c.style.removeProperty('--sx3b-lean');
+      measure();
+      request();
+    };
+
+    const ro = new ResizeObserver(() => {
+      measure();
+      request();
+    });
+    ro.observe(run);
+
+    addEventListener('scroll', request, { passive: true });
+    addEventListener('resize', setMode);
+    reduce.addEventListener('change', setMode);
+    centred.addEventListener('change', setMode);
+    setMode();
 
     return () => {
-      mq.removeEventListener('change', onPref);
-      wide.removeEventListener('change', onWide);
-      stop();
+      removeEventListener('scroll', request);
+      removeEventListener('resize', setMode);
+      reduce.removeEventListener('change', setMode);
+      centred.removeEventListener('change', setMode);
+      ro.disconnect();
+      btn.removeEventListener('click', onClick);
+      video.removeEventListener('playing', onPlaying);
+      video.removeEventListener('pause', onPause);
+      detach();
     };
   }, []);
 

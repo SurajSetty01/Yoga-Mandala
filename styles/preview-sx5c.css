@@ -1,0 +1,585 @@
+/* preview-sx5c — owned solely by /preview/sx5c/. Every selector is .sx5c-*; no other file
+   may declare one, and this file declares nothing outside that prefix.
+
+   ══════════════════════════════════════════════════════════════════════════
+   §05 THE PRAṆAVA JOURNEY — FOUR NAMES THAT OPEN.
+
+   Each door's name is set at the size of a door, and the name IS the door:
+   the word is cut where it parts (Le|arn, Prac|tice, He|al, In|sights), and
+   as the reader reaches it the two halves slide apart like a pair of leaves,
+   and the room that door leads to is standing in the gap. The two rooms that
+   are running now (Learn, Practice) move; the two the client calls
+   "evolving" and "growing" (Heal, Insights) are still.
+
+   THE PAGE IS SET LIKE A CHAPTER OPENING, not like a list:
+     · the room is the SINKAGE, the tall space above a chapter title, and
+       the name drops to its foot, standing ON the room's bottom edge;
+     · the door's sentence is the PLATE'S CAPTION: beneath the plate, its top
+       a fixed distance below the name's baseline (the anchored-sidenote rule:
+       a note keeps to its reference line, never to the page's corner);
+     · the folio HANGS outside the caption's measure;
+     · the caption's measure is held to ~46 characters (Butterick: 45–90);
+     · all four plates are credited ONCE, after the last door.
+
+   STATIC IS COMPLETE. The stylesheet's default is every door OPEN
+   (--sx5c-p 1). No JavaScript, reduced motion, or a script that fails
+   leaves four open doors with four rooms, four names and four captions.
+   Motion only ever holds shut a door the reader has not reached yet.
+
+   Everything animated is transform or opacity, written through ONE custom
+   property per door (--sx5c-p) from one rAF. Hover and focus add a second
+   (--sx5c-h, registered so it can transition) and the door opens to the
+   larger of the two.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@property --sx5c-h {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.sx5c {
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding-block: clamp(4.4rem, 10vw, 9rem) clamp(5rem, 12vw, 10rem);
+  overflow-x: clip;
+
+  /* the About page's reading scale, restated so the preview stands alone */
+  --sx5c-read: clamp(0.98rem, 0.9rem + 0.34vw, 1.2rem);
+  --sx5c-small: 11px;
+
+  /* THE ROOM. Height is bounded by the viewport so a whole door (room, name,
+     caption) is on screen at once; width is the 2:3 of a portrait plate. */
+  --sx5c-rh: clamp(19rem, min(58svh, 40vw), 46rem);
+  --sx5c-rw: calc(var(--sx5c-rh) * 0.6667);
+
+  /* THE NAME. Solved from the widest open door, not guessed: "Practice" and
+     "Insights" run ~3.72em in this face and tracking, and an OPEN door is the
+     word plus the room plus two jambs, which must fit the rail. One size for
+     all four: the short names leave the page open beside them. */
+  --sx5c-railw: min(100vw - 2 * var(--rail), 92rem);
+  --sx5c-F: clamp(3.4rem, calc((var(--sx5c-railw) - var(--sx5c-rw)) / 3.86), 16.5rem);
+
+  /* the jamb: open, a name stands this far off its room, never on it */
+  --sx5c-gap: calc(var(--sx5c-F) * 0.05);
+  /* baseline → caption. Clears the descender of the g in "sights" (0.26em),
+     and is the same under all four doors so the four captions keep one rule. */
+  --sx5c-drop: max(1.6rem, calc(var(--sx5c-F) * 0.28));
+  /* the caption's measure: 24em of Inter ≈ 46 characters */
+  --sx5c-measure: 24em;
+}
+
+.sx5c-rail {
+  /* capped AND centred: a max-width without margin-inline:auto is 462px off-axis at 2531 */
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.sx5c-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── the register mark, the site's own object ─────────────────────────── */
+.sx5c-mark {
+  margin: 0 0 clamp(2.4rem, 6vw, 5rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.sx5c-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic);
+}
+.sx5c-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the four openings ────────────────────────────────────────────────── */
+.sx5c-doors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  row-gap: clamp(5rem, 15svh, 10rem);
+}
+
+.sx5c-door {
+  /* 1 = open. The static page is the open page. */
+  --sx5c-p: 1;
+  --sx5c-q: max(var(--sx5c-p), var(--sx5c-h));
+  position: relative;
+}
+
+.sx5c-link {
+  position: relative;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 2px;
+}
+.sx5c-link:focus-visible {
+  outline: 2px solid var(--ink-onDark);
+  outline-offset: 10px;
+  box-shadow: 0 0 0 12px rgba(0, 0, 0, 0.35);
+}
+/* focus opens the door, so a keyboard reader never meets a closed one */
+.sx5c-door:focus-within {
+  --sx5c-h: 1;
+}
+
+/* ── the stage: [half] [room] [half] over [caption] ───────────────────── */
+.sx5c-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto var(--sx5c-rw) auto;
+  grid-template-rows: auto auto;
+  row-gap: var(--sx5c-drop);
+  align-items: end;
+  justify-content: start;
+}
+.sx5c-door[data-align='end'] .sx5c-stage {
+  justify-content: end;
+}
+
+.sx5c-half {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 330;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 0;
+  font-size: var(--sx5c-F);
+  line-height: 0.74;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  color: var(--ink-onDark);
+  /* baseline ON the threshold: the box's bottom edge is the alphabetic baseline */
+  text-box: trim-both cap alphabetic;
+  will-change: transform;
+}
+/* the tracking belongs between letters, not after the last one; without this the
+   right half starts a hair late and the joined word shows a seam */
+.sx5c-half--a {
+  grid-column: 1;
+  margin-right: calc(0.035em + var(--sx5c-gap));
+}
+.sx5c-half--b {
+  grid-column: 3;
+  margin-left: var(--sx5c-gap);
+}
+
+.sx5c-room {
+  position: relative;
+  grid-row: 1;
+  grid-column: 2;
+  display: block;
+  width: var(--sx5c-rw);
+  height: var(--sx5c-rh);
+}
+
+.sx5c-plate {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  background: #0c1712;
+}
+.sx5c-img,
+.sx5c-vid,
+.sx5c-plate picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.sx5c-img,
+.sx5c-vid {
+  object-fit: cover;
+  object-position: var(--op, 50% 50%);
+  /* the room settles as it is uncovered: 1.1 → 1 */
+  transform: scale(calc(1.1 - 0.1 * var(--sx5c-q)));
+  transform-origin: 50% 70%;
+}
+.sx5c-vid {
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+.sx5c-vid.is-on {
+  opacity: 1;
+}
+
+/* THE LEAVES: the ground itself, standing in front of the room. Each is half the
+   room plus a pixel of overlap, so no hairline of photograph shows through the
+   join while the door is shut. */
+.sx5c-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(50% + 1px);
+  background: var(--ground-deep);
+  will-change: transform;
+}
+/* the leaves trail the letters by a beat (e2 starts at q 0.08), so the ink of a
+   glyph that overhangs its own box (the t of "tice" does, by ~0.03em) has always
+   left the join before the photograph appears in it. Measured on the first build:
+   without the lag the probe found one 2.49:1 pixel on that t at 1440×900. */
+.sx5c-stage {
+  --sx5c-e2: max(0, (var(--sx5c-q) - 0.08) / 0.92);
+}
+.sx5c-leaf--a {
+  left: 0;
+  transform: translateX(calc(-100% * var(--sx5c-e2)));
+}
+.sx5c-leaf--b {
+  right: 0;
+  transform: translateX(calc(100% * var(--sx5c-e2)));
+}
+
+/* THE PLATEMARK. An intaglio plate leaves the rectangle of its own edges pressed
+   into the paper around the image; a shut room shows only that. A lintel and two
+   jambs in hairline, stopping short of the name, so the name is the threshold of a
+   drawn doorway and the long field of ground above it reads as a door that is shut,
+   not as a gap. It fades as the leaves part. */
+.sx5c-plate::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--sx5c-F) * 0.9);
+  border: 1px solid var(--rule-onDark);
+  border-bottom: 0;
+  opacity: calc(1 - 1.6 * var(--sx5c-e2));
+  pointer-events: none;
+}
+
+/* the join, drawn above the word while the door is shut: a hairline dropping
+   from the lintel to exactly where the name will part */
+.sx5c-seam {
+  position: absolute;
+  z-index: 1;
+  left: calc(50% - 0.5px);
+  top: 0;
+  bottom: calc(var(--sx5c-F) * 0.9);
+  width: 1px;
+  background: var(--rule-onDark);
+  opacity: calc(1 - 2.5 * var(--sx5c-q));
+}
+
+/* THE HALVES lead the inner edges of the leaves, so a letter never stands on the
+   photograph: the right edge of "Prac" is always a jamb's width plus the leaves'
+   lag ahead of the left leaf's edge, never behind it. */
+.sx5c-half--a {
+  transform: translateX(calc((var(--sx5c-rw) / 2 + var(--sx5c-gap)) * (1 - var(--sx5c-q))));
+}
+.sx5c-half--b {
+  transform: translateX(calc((var(--sx5c-rw) / 2 + var(--sx5c-gap)) * -1 * (1 - var(--sx5c-q))));
+}
+
+/* ── the plate's caption ──────────────────────────────────────────────── */
+.sx5c-note {
+  position: relative;
+  grid-row: 2;
+  grid-column: 2 / 4;
+  justify-self: start;
+  align-self: start;
+  /* the caption's own line length must never widen the name's columns: with its
+     intrinsic width contained, it takes the room-plus-second-half it spans and no
+     more, then holds its measure inside that */
+  contain: inline-size;
+  width: min(100%, var(--sx5c-measure));
+  display: grid;
+  font-size: var(--sx5c-read);
+}
+/* THE HANGING FOLIO: outside the measure, level with the first line, in the space
+   under the first half of the name. Set at the caption's own size and line-height,
+   so its baseline is the first line's baseline without any nudging. */
+.sx5c-folio {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  margin-right: 0.85em;
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 14;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1em;
+  line-height: 1.55;
+  font-variant-numeric: oldstyle-nums;
+  color: var(--ink-onDark-soft);
+}
+/* INTER, NOT FRAUNCES, and this was rendered before it was decided. Two of these
+   sentences carry Sādhana and Prāṇāyāma, and Fraunces has no precomposed ā: at this
+   size the macrons landed on the NEXT letter ("Sad̄hana"). DESIGN-SYSTEM §1 records the
+   same failure on the client's name. Inter sets all four marks in place, and a text
+   face under a display face is the scale this section is built on anyway. */
+.sx5c-body {
+  display: block;
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 1em;
+  line-height: 1.55;
+  color: var(--ink-onDark);
+  text-wrap: pretty;
+}
+.sx5c-go {
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.95rem;
+  font: 600 var(--sx5c-small) / 1 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+}
+.sx5c-go__rule {
+  display: block;
+  width: 2.2rem;
+  height: 1px;
+  background: var(--sand);
+  transform-origin: 0 50%;
+  transition: transform 0.5s var(--ease);
+}
+/* the rule grows by 60% of its 2.2rem from its left end, so the label and the
+   arrow step right by exactly that (1.32rem) and the rule never runs under the
+   word. The first build scaled the rule alone and it overlapped the label by 12px. */
+.sx5c-go__t,
+.sx5c-go__arw {
+  display: block;
+  transition: transform 0.5s var(--ease);
+}
+.sx5c-link:hover .sx5c-go__rule,
+.sx5c-link:focus-visible .sx5c-go__rule {
+  transform: scaleX(1.6);
+}
+.sx5c-link:hover .sx5c-go__t,
+.sx5c-link:focus-visible .sx5c-go__t {
+  transform: translateX(1.32rem);
+}
+.sx5c-link:hover .sx5c-go__arw,
+.sx5c-link:focus-visible .sx5c-go__arw {
+  transform: translateX(calc(1.32rem + 0.7rem));
+}
+
+/* THE PLATES' PROVENANCE, ONCE, after the last door, the way a book lists its
+   illustrations. Printed under each door it would read as a second line of four
+   different sentences. */
+.sx5c-cap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: clamp(4rem, 10svh, 7rem) 0 0;
+  font: 500 var(--sx5c-small) / 1.5 var(--font-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.sx5c-cap::before {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 1px;
+  background: var(--sand);
+  opacity: 0.7;
+  transform: translateY(-3px);
+}
+
+.sx5c-ghost {
+  visibility: hidden;
+}
+@media (min-width: 900px) {
+  .sx5c-ghost {
+    display: none;
+  }
+}
+
+/* ══ NARROW: the door turned on its side ══════════════════════════════════
+   There is no width for two halves to stand either side of a room, so the door
+   opens VERTICALLY: the word's first half rises above the room and its second
+   half drops below it, resuming exactly where the first half stopped, a word
+   interrupted by a plate and continued. The continuation is aligned by a hidden
+   copy of the first half inside the second (.sx5c-ghost), so it holds with no
+   script. The caption follows as a block, which is where an anchored sidenote
+   falls back to when there is no margin to stand in.
+
+   Two stages, so a letter never crosses the photograph: the halves part over
+   the still-shut leaves first (q 0 → 0.45), and only then do the leaves slide
+   up and down to uncover the room between them (q 0.35 → 1). */
+@media (max-width: 899.98px) {
+  .sx5c {
+    --sx5c-F: min(22.5vw, 11rem);
+    /* the halves stand above and below the room here, so no jamb; and the ghost
+       prefix aligns the second half only if nothing is added beside it */
+    --sx5c-gap: 0px;
+  }
+  .sx5c-stage,
+  .sx5c-door[data-align='end'] .sx5c-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    row-gap: clamp(0.9rem, 3vw, 1.4rem);
+    justify-content: stretch;
+    --sx5c-e1: min(1, var(--sx5c-q) / 0.45);
+    --sx5c-e2: max(0, (var(--sx5c-q) - 0.35) / 0.65);
+  }
+  .sx5c-half,
+  .sx5c-room,
+  .sx5c-note {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .sx5c-half {
+    justify-self: start;
+  }
+  .sx5c-half--a {
+    margin-right: 0;
+    transform: translateY(calc(var(--sx5c-shift, 0px) * (1 - var(--sx5c-e1))));
+  }
+  .sx5c-half--b {
+    transform: translateY(calc(var(--sx5c-shift, 0px) * -1 * (1 - var(--sx5c-e1))));
+  }
+  .sx5c-room {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    max-height: 72svh;
+  }
+  .sx5c-img,
+  .sx5c-vid {
+    object-position: var(--op-n, var(--op, 50% 50%));
+  }
+  .sx5c-leaf {
+    left: 0;
+    right: 0;
+    width: auto;
+    height: calc(50% + 1px);
+  }
+  .sx5c-leaf--a {
+    top: 0;
+    bottom: auto;
+    transform: translateY(calc(-100% * var(--sx5c-e2)));
+  }
+  .sx5c-leaf--b {
+    top: auto;
+    bottom: 0;
+    transform: translateY(calc(100% * var(--sx5c-e2)));
+  }
+  .sx5c-seam {
+    display: none;
+  }
+  /* shut, the joined word lies across the MIDDLE of the room here, so the drawn
+     doorway breaks around it: lintel and jambs above the cap line, jambs and sill
+     below the baseline. --sx5c-cap is the measured cap height (Motion sets it; the
+     frame only shows while Motion is running, so the fallback is never seen). */
+  .sx5c-plate::after,
+  .sx5c-plate::before {
+    --sx5c-break: calc(50% + var(--sx5c-cap, calc(var(--sx5c-F) * 0.7)) / 2 + 0.7rem);
+    /* the break is shaped for the word, so the doorway goes as the word leaves it
+       (the halves part first here, before the leaves move) */
+    opacity: calc(1 - 1.25 * var(--sx5c-e1));
+  }
+  .sx5c-plate::after {
+    bottom: var(--sx5c-break);
+  }
+  .sx5c-plate::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: var(--sx5c-break);
+    border: 1px solid var(--rule-onDark);
+    border-top: 0;
+    pointer-events: none;
+  }
+  /* the folio cannot hang into a 21px gutter, so it takes a column of its own */
+  .sx5c-note {
+    contain: none;
+    width: auto;
+    max-width: 34rem;
+    margin-top: clamp(0.6rem, 3vw, 1.2rem);
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 0.85em;
+  }
+  .sx5c-folio {
+    position: static;
+    grid-row: 1 / span 2;
+    margin: 0;
+  }
+  .sx5c-body,
+  .sx5c-go {
+    grid-column: 2;
+  }
+}
+
+/* ── hover: a door you point at opens the rest of the way ─────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .sx5c-door {
+    transition: --sx5c-h 0.9s var(--ease);
+  }
+  .sx5c-door:hover {
+    --sx5c-h: 1;
+  }
+}
+
+/* ── REDUCED MOTION: four doors, open, still: the finished page ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .sx5c-door {
+    --sx5c-p: 1 !important;
+    transition: none;
+  }
+  .sx5c-vid {
+    display: none;
+  }
+}
+
+/* ── preview scaffold only: the neighbours' grounds, labelled ─────────── */
+.sx5c-scaffold {
+  padding-block: clamp(3.5rem, 9vw, 6rem);
+  background: var(--ground-warm);
+  color: var(--ink-soft);
+  font: 500 13px/1.5 var(--font-text);
+}
+.sx5c-scaffold--paper {
+  background: var(--ground);
+  padding-block: clamp(4rem, 12vw, 8rem) 60svh;
+}
+.sx5c-scaffold p {
+  margin: 0;
+}
+.sx5c-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}

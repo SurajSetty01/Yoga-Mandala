@@ -1,8 +1,8 @@
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
-import { Masthead } from '@/components/heal/Masthead';
-import { Areas } from '@/components/heal/Areas';
-import { Enquiry } from '@/components/heal/Enquiry';
+import { Th1Notice } from '@/components/heal/th1/Notice';
+import { Th2Areas } from '@/components/heal/th2/Areas';
+import { Th3Ask } from '@/components/heal/th3/Ask';
 
 /**
  * PRAṆAVA — HEAL.  `/heal/`, and deliberately a short page.
@@ -12,38 +12,22 @@ import { Enquiry } from '@/components/heal/Enquiry';
  * a simple page saying this area is being developed. It will eventually connect with
  * Pranava Svasthya and related work."
  *
- * Simple means not pretending to content that does not exist. It does not mean generic.
- *
  * WHAT EXISTS: four area names (`heal.areas`), the name they will be gathered under
  * (`heal.svasthya`), one sentence about the relationship between them (`heal.note`), one
  * line describing the area (About §7's fourth door) and one visitor intent (Blueprint §3).
- * That is the entire supply. There is no description of Yoga Therapy, Ayurveda, Nutrition
- * or Women's Wellness anywhere in the Blueprint, the About document or the Website brief,
- * and this is the one page in the site where inventing one could actually hurt somebody.
+ * Nothing on this page describes a service, states a benefit, implies clinical capability
+ * or offers a consultation, and no frame shows therapy or a body being treated.
  *
- * So nothing on this page describes a service, states a benefit, implies clinical
- * capability or offers a consultation. What it does is name what will be here, draw the
- * join that has not been made, and open the one channel that works.
+ *   —   paper   th1  the standing notice: held for a screen while the view tilts up
+ *                    out of a grove to a palm crown; "evolving" never settles its weight
+ *   01  warm    th2  a tree seat's rim traced in the photograph and projected down into
+ *                    a plan; the ring stops short, the four names round it, Svasthya at
+ *                    the centre
+ *   02  paper   th3  the message is the striker: the enquiry plate hangs from a chime's
+ *                    cord and swings when struck
  *
- *   —   paper   the client's own line for this area, at the size of the page
- *   01  warm    four names reaching for a name they have not joined yet
- *   02  paper   the caveat before the link, and the link
- *
- * THREE THINGS THIS PAGE DOES THAT NO OTHER PAGE ON THE SITE DOES, all three of them
- * consequences of what it holds rather than decoration:
- *
- *  · It carries NO PHOTOGRAPH. The media audit covers 1,211 frames and 256 clips and there
- *    is not one image of therapy, consultation, assessment or a clinical setting in any of
- *    them. Borrowing an asana frame to stand in for therapy would be a health claim made
- *    in pictures, which is the same error as making one in words and harder to notice.
- *  · It never goes dark. Every other Praṇava page alternates paper and the reversed ground;
- *    this one stays on paper end to end, because the page's whole argument is that it is
- *    quiet, not that it is impressive.
- *  · It runs NO JAVASCRIPT. There is no client island, no scroll listener and no reveal.
- *    Under prefers-reduced-motion it is byte-for-byte the same page, because there is
- *    nothing to reduce.
- *
- * See components/heal/NOTES.md.
+ * Each section's styles live in styles/sec-th<n>.css; the shared register mark is in
+ * styles/heal.css. See each component's header for its reduced-motion state.
  */
 export const metadata = {
   title: 'Heal',
@@ -56,9 +40,9 @@ export default function HealPage() {
     <>
       <SiteNav light />
       <main className="hl" id="top">
-        <Masthead />
-        <Areas />
-        <Enquiry />
+        <Th1Notice />
+        <Th2Areas />
+        <Th3Ask />
       </main>
       <SiteFooter />
     </>

@@ -1,0 +1,301 @@
+/* Final tl2 section. Every selector is namespaced .tl2- */
+
+/* ══ /learn/ 01 · WHAT STRUCTURED LEARNING MEANS ══════════════════════════════
+   The movement advances only while you read.
+
+   1. The refusal (teach.open), first and largest, beside the tool before practice:
+      a stick laid along a mat. intro[4] answers it underneath.
+   2. The eight practices down one rule, a clip waiting beside them. It plays only
+      while the reader moves through the list (components/learn/tl2/Tl2Reader.tsx),
+      each practice lights as it crosses the reading line, and the rule fills to it.
+
+   Start states exist only under `.tl2.is-live`, which only the reader adds and only
+   when motion is allowed. No JavaScript, or reduced motion: all eight lit, the rule
+   full, the clip's pane its still.
+
+   Measured on #F2E9DE: --ink 14.9:1 · --ink-soft 6.4:1 (the unlit practices) ·
+   --forest 9.3:1 · --forest-mid 6.7:1 · the caption, --ink-soft at 12px, 6.4:1.
+   Type never fades; only the clip does.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tl2 {
+  --tl2-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  /* the clip's pane is sized by its width; its height follows at 16:9 */
+  --tl2-pane-w: clamp(6.25rem, min(34vw, 39svh), 15rem);
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding: clamp(4.5rem, 12svh, 9.5rem) 0 clamp(3rem, 8svh, 6.5rem);
+  /* clip, not hidden: `hidden` would make this a scroll container and kill the sticky pane */
+  overflow-x: clip;
+}
+.tl2-in {
+  width: min(100% - 2 * var(--tl2-rail), 92rem);
+  margin-inline: auto;
+}
+
+/* ── 1 · the refusal ─────────────────────────────────────────────────────── */
+
+.tl2-refuse {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  grid-template-areas:
+    'no no'
+    'tool yes';
+  gap: clamp(1.6rem, 4svh, 2.4rem) clamp(1rem, 3.5vw, 1.6rem);
+  align-items: start;
+}
+
+.tl2-no {
+  grid-area: no;
+  margin: 0;
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 0.9rem + 3.3vw, 3.7rem);
+  line-height: 1.09;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.tl2-stress {
+  font-style: italic;
+  color: var(--forest);
+}
+
+.tl2-tool {
+  grid-area: tool;
+  margin: 0;
+}
+.tl2-tool img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: 52% 62%;
+  background: var(--sandstone);
+}
+.tl2-cap {
+  margin: 0.65rem 0 0;
+  font: 400 12px/1.45 var(--font-text);
+  color: var(--ink-soft);
+  max-width: 34ch;
+}
+
+.tl2-yes {
+  grid-area: yes;
+  margin: 0;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.02rem, 0.86rem + 0.72vw, 1.62rem);
+  line-height: 1.42;
+  color: var(--ink);
+}
+.tl2-yes::before {
+  content: '';
+  display: block;
+  width: clamp(18px, 3vw, 38px);
+  height: 1px;
+  margin-bottom: clamp(0.8rem, 2svh, 1.3rem);
+  background: var(--brass);
+}
+
+/* ── 2 · over time ───────────────────────────────────────────────────────── */
+
+.tl2-time {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--tl2-pane-w);
+  grid-template-areas:
+    'lead lead'
+    'prompt prompt'
+    'list pane';
+  column-gap: clamp(1rem, 4vw, 4.5rem);
+  margin-top: clamp(4rem, 13svh, 9.5rem);
+}
+
+.tl2-lead {
+  grid-area: lead;
+  margin: 0 0 clamp(1.3rem, 4svh, 2.6rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.9rem, 1rem + 4vw, 4.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.026em;
+  color: var(--ink);
+}
+
+.tl2-prompt {
+  grid-area: prompt;
+  margin: 0 0 clamp(0.6rem, 2svh, 1.2rem);
+  font: 600 12px/1.35 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+
+/* the column carries the room the sticky pane needs to stay centred while the
+   last practice reaches the reading line */
+.tl2-col {
+  grid-area: list;
+  padding-bottom: clamp(2.5rem, 12svh, 9rem);
+}
+.tl2-list {
+  position: relative;
+  padding-left: clamp(1.15rem, 3vw, 2.6rem);
+}
+
+/* the one rule, and what has been read of it */
+.tl2-track {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+}
+.tl2-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--forest);
+  transform-origin: 50% 0;
+}
+.tl2.is-live .tl2-fill {
+  transform: scaleY(0);
+}
+
+.tl2-eight {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tl2-one {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.55rem, 1.4vw, 1.2rem);
+  padding-block: clamp(0.8rem, 3.6svh, 2rem);
+}
+/* the mark each practice leaves on the rule once it has been read */
+.tl2-one::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * clamp(1.15rem, 3vw, 2.6rem) - 3.5px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--forest);
+  transform: translateY(-50%);
+}
+.tl2-n {
+  flex: none;
+  min-width: 2.1ch;
+  font: 600 11px/1 var(--font-text);
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--forest);
+  transform: translateY(-0.2em);
+}
+.tl2-t {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.1rem, 0.78rem + 1.85vw, 2.4rem);
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* unread: quieter, never faint. --ink-soft holds 6.4:1 on this ground, so the
+   probe's number is true in every state. Colour and transform only. */
+.tl2.is-live .tl2-one::before {
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.55s var(--ease);
+}
+.tl2.is-live .tl2-n,
+.tl2.is-live .tl2-t {
+  color: var(--ink-soft);
+  transition: color 0.6s var(--ease);
+}
+.tl2.is-live .tl2-one.is-lit::before {
+  transform: translateY(-50%) scale(1);
+}
+.tl2.is-live .tl2-one.is-lit .tl2-n {
+  color: var(--forest);
+}
+.tl2.is-live .tl2-one.is-lit .tl2-t {
+  color: var(--ink);
+}
+
+/* the clip's pane, held beside the list while it is read */
+.tl2-pane {
+  grid-area: pane;
+  align-self: start;
+  position: sticky;
+  top: max(5.5rem, calc(50svh - var(--tl2-pane-w) * 0.8889));
+  margin: 0;
+  width: var(--tl2-pane-w);
+}
+.tl2-win {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  background: var(--sandstone);
+}
+.tl2-poster,
+.tl2-vid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tl2-vid {
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.tl2-vid.is-on {
+  opacity: 1;
+}
+
+/* ── wide: the refusal beside its still; the pane beside the list ─────────── */
+
+@media (min-width: 900px) {
+  .tl2 {
+    --tl2-pane-w: min(39.4svh, 24.75rem);
+  }
+
+  .tl2-refuse {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'tool no'
+      'tool yes';
+    column-gap: clamp(2rem, 5vw, 6.5rem);
+    row-gap: clamp(1.6rem, 4svh, 3rem);
+  }
+  .tl2-tool {
+    max-width: 30rem;
+  }
+  .tl2-yes {
+    align-self: end;
+  }
+
+  .tl2-time {
+    grid-template-areas:
+      'lead pane'
+      'prompt pane'
+      'list pane';
+    grid-template-rows: auto auto 1fr;
+    column-gap: clamp(2rem, 6vw, 7rem);
+  }
+  .tl2-col {
+    padding-bottom: clamp(6rem, 22svh, 14rem);
+  }
+}

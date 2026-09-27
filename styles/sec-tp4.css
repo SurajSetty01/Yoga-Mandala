@@ -1,0 +1,259 @@
+/* Final tp4 section. Every selector is namespaced .tp4- */
+
+/* ══ 03 · PRAYATNA AND RELATED OFFERINGS — THE SENTENCE STRUNG LIKE A MALA ══════════════
+   A wall rope runs off the bottom of its photograph and keeps going as a hairline. It
+   threads the client's door sentence, folding back at every line end, and is tied off
+   after the bare name. The six practices are the big beads; the grammar sits ON the
+   thread at reading size, because the grammar is what makes six words one sentence.
+
+   Every bead is an inline-block with the ground behind it, so the thread (an SVG under
+   the text, drawn by components/practice/tp4/Thread.tsx) disappears into each word and
+   shows only between them. The backing MUST be the section's own ground.
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+.tp4-pra {
+  /* The values the shared Ask and Cap read from `.pc`, so the section renders the same
+     on its own preview route as on /practice/. Same numbers as styles/practice.css. */
+  --pc-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --pc-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+  --pc-hair: rgba(193, 97, 60, 0.5);
+
+  --tp4-term: clamp(1.7rem, 0.95rem + 2.9vw, 3.3rem);
+  --tp4-gram: clamp(1.08rem, 0.9rem + 0.72vw, 1.6rem);
+  --tp4-name: clamp(3rem, 1.4rem + 5.2vw, 6.6rem);
+  /* sand as ornament only: a hairline, never text */
+  --tp4-thread: rgba(246, 217, 193, 0.82);
+  --tp4-rope: #6b3a33;
+
+  position: relative;
+  padding-block: clamp(4.4rem, 8vw, 7rem);
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  overflow-x: clip;
+}
+
+/* capped AND centred: max-width without margin-inline:auto pins left at 2531 */
+.tp4-rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* The thread's coordinate space. It is a size container so the sentence's first-line
+   indent can be written in the same units as the rope column it has to clear. */
+.tp4-mala {
+  position: relative;
+  container-type: inline-size;
+  --tp4-ropew: 42cqw;
+  --tp4-gap: 1rem;
+  --tp4-pad: clamp(1.35rem, 3.6cqw, 3.6rem);
+}
+
+/* ── the two ropes ──────────────────────────────────────────────────────── */
+.tp4-pics {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  display: grid;
+  grid-template-columns: var(--tp4-ropew) minmax(0, 1fr);
+  column-gap: var(--tp4-gap);
+  row-gap: 1rem;
+}
+.tp4-row {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+.tp4-pra .tp4-row img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: 50% 60%;
+}
+
+/* The window shows the top-left quarter of pr-ttc-dsc_0493 (x 0-50%, y 0-46.7%): the
+   image is laid at twice the window's width and the window is cut to 480:672. */
+.tp4-rope {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 480 / 672;
+}
+.tp4-pra .tp4-rope img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  max-width: none;
+  height: auto;
+}
+.tp4-cap {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+}
+.tp4-cap .pc-cap {
+  margin: 0;
+}
+
+/* ── the thread ─────────────────────────────────────────────────────────── */
+.tp4-thread {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.tp4-thread rect,
+.tp4-thread polygon {
+  fill: var(--tp4-thread);
+  transform-box: fill-box;
+}
+.tp4-thread .tp4-taper {
+  fill: url(#tp4-taper);
+}
+.tp4-t0 {
+  stop-color: var(--tp4-rope);
+}
+.tp4-t1 {
+  stop-color: var(--tp4-thread);
+}
+.tp4-thread path,
+.tp4-thread circle {
+  fill: none;
+  stroke: var(--tp4-thread);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
+/* ── the sentence ───────────────────────────────────────────────────────── */
+.tp4-str {
+  position: relative;
+  z-index: 1;
+  margin: clamp(1.4rem, 3vw, 2.6rem) 0 0;
+  padding-inline: var(--tp4-pad);
+  /* the first line starts past the rope column, so the thread can turn into it */
+  text-indent: calc(var(--tp4-ropew) + var(--tp4-gap) - var(--tp4-pad));
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: var(--tp4-term);
+  line-height: 1.75;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+
+/* every bead: a word with the ground behind it, which the thread passes behind */
+.tp4-b,
+.tp4-o,
+.tp4-g {
+  display: inline-block;
+  text-indent: 0;
+  white-space: nowrap;
+  background: var(--ground-deep);
+}
+
+/* the six practices — the large beads. Inter, because Sādhana and Prāṇāyāma carry
+   macrons and a dot below that Fraunces mis-sets (DESIGN-SYSTEM §1). */
+.tp4-b {
+  padding-inline: 0.1em;
+  margin-inline: 0.22em;
+  line-height: 1.14;
+}
+
+/* the grammar — small beads at reading size, full cream, never a whisper */
+.tp4-open,
+.tp4-g,
+.tp4-p {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--tp4-gram);
+  letter-spacing: 0;
+  color: var(--ink-onPic-2);
+}
+/* The opening carries the ground across its own spaces, so the thread stays hidden inside
+   "Develop a sustained practice through" and shows only either side of the phrase. */
+.tp4-open {
+  background: var(--ground-deep);
+}
+.tp4-o {
+  padding-inline: 0.17em;
+  line-height: 1.3;
+}
+.tp4-g {
+  padding-inline: 0.2em;
+  margin-inline: 0.34em;
+  line-height: 1.3;
+}
+.tp4-p {
+  margin-left: 0.05em;
+}
+
+/* ── the knot: the bare name, and the one honest mark under it ─────────────── */
+.tp4-end {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(1.6rem, 3.6vw, 3.2rem);
+  padding-inline: var(--tp4-pad);
+}
+.tp4-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--tp4-name);
+  line-height: 1;
+  letter-spacing: -0.024em;
+  color: var(--ink-onPic);
+}
+.tp4-name__b {
+  display: inline-block;
+  padding-inline: 0.08em;
+  margin-left: -0.08em;
+  background: var(--ground-deep);
+}
+.tp4-blurb {
+  margin: 1.2rem 0 0;
+  max-width: 42ch;
+  font: 400 var(--pc-read) / 1.62 var(--font-text);
+  color: var(--ink-onPic-2);
+}
+.tp4-end .pc-ask {
+  margin-top: clamp(1.5rem, 3vw, 2.4rem);
+}
+
+/* ── wide: the rope stands at the left of the band and drops past it ──────── */
+@media (min-width: 900px) {
+  .tp4-mala {
+    --tp4-ropew: clamp(11rem, 21cqw, 19rem);
+    --tp4-gap: clamp(2rem, 4.2cqw, 4rem);
+  }
+  .tp4-rope {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+  .tp4-row {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .tp4-pra .tp4-row img {
+    aspect-ratio: 2 / 1;
+    object-position: 50% 70%;
+  }
+  .tp4-cap {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+  }
+  /* the knot goes to the far corner: the rope is top-left, the name bottom-right */
+  .tp4-end {
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+  }
+}

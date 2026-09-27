@@ -1,523 +1,470 @@
-/* preview-sx1b — owned solely by /preview/sx1b/. Every selector begins `sx1b-`.
-   The prefix was grepped across styles/, components/ and app/ before a line was written:
-   two namespace collisions have already broken live pages on this project (`.in`, `.ab-`). */
+/* preview-sx1b — owned solely by /preview/sx1b/. No other file may declare these selectors.
+   Every selector carries the `sx1b-` prefix; there is no bare two-letter class anywhere.
 
-/* ══════════════════════════════════════════════════════════════════════════════
-   PRAṆAVA · ABOUT — HERO, concept sx1b.
+   ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA · ABOUT — HERO, concept sx1b.  THE BOOK THAT OPENS AS IT IS READ.
 
-   THE MECHANIC — THE STILL CENTRE.
-   Two standing walls of photographs shear past each other — the left wall rising, the
-   right wall falling — while the page's name and its one sentence do not move at all,
-   and a clay hairline lengthens beneath the sentence until it spans the whole gap the
-   two walls are holding open. You are not scrolling past a picture; you are standing
-   still in the one place on the page that is not moving.
+   The name stands above a folded book on the floor of the section. Its first leaf is open
+   and already moving (study). Scrolling swings the second leaf out from behind the first
+   (practice), then the third from behind the second (transmission), and each noun in the
+   sentence is struck in brass as its leaf opens. At the end the book stands open in a
+   zigzag, the stage lets go, and the supporting paragraph is beneath it.
 
-   The section's own sentence calls Praṇava "a space for the study, practice and
-   transmission" of these traditions. A space is what two walls make, and the name of
-   the place stands in it while the practice goes past on both sides. That is the whole
-   argument, and it is made in one screen.
+   TWO NUMBERS DRIVE ALL OF IT: --o2 and --o3, written by HeroMotion.tsx. Every angle,
+   shade, shift, shadow and underline below is a calc() of those two, and they feed only
+   `transform` and `opacity`. Their DEFAULT IS 1 — the book open — and the closed start
+   state is scoped to `.js` under `prefers-reduced-motion: no-preference`, so a reader with
+   scripting off or motion reduced gets the finished section, not a frozen first frame.
 
-   ONE SCREEN, PLUS A FIFTH — and every pixel of the fifth is paid for. MEASURED.
-   The section is 100svh with motion off and 120svh with it on: one screen of composition
-   and 20svh of runway — 180px at 1440×900, 228px at 2531×1140, 169px at 390×844. Across
-   that runway both walls move linearly with scroll and in exact opposition — rendered
-   transform read back quarter by quarter, left then right: 0/0, -27/+27, -54/+54, -81/+81,
-   -108/+108px against a 108px travel at 1440×900; -34/+34 … -137/+137 at 2531×1140;
-   -21/+21 … -84/+84 at 390×844 — and the rule lengthens with them (98 → 209 → 321 → 432 →
-   544px at 1440). Screenshots differenced quarter by quarter change 46.9% / 46.9% / 47.1% /
-   47.7% of the pixels at 1440×900, 34.9 / 34.8 / 35.1 / 35.1% at 2531×1140 and 45.4 / 45.3 /
-   45.2 / 46.9% at 390×844: there is no quarter of this runway in which the screen stands
-   still. The previous version of this section was 230svh and its centre was byte-identical
-   for the first half of it. The fix was to cut the runway to a fifth of a screen and make
-   the centre move across all of it — not to slow the walls.
-
-   And the centre really is still: the h1's viewport-relative top is 225.5px at 1440 at
-   every one of the five stops, 329.5px at 2531, 494.4px at 390. Nothing in the channel
-   moves by a pixel while the walls shear past it.
-
-   HOW IT IS DRIVEN — native CSS scroll-driven animation, and NO JavaScript anywhere.
-   `view-timeline-name` is declared on the section; the walls and the rule reference it by
-   name from inside the sticky stage. This matters for three reasons:
-
-     1. A `view()` timeline on the walls themselves would never progress — they live
-        inside a `position: sticky` stage, so their box does not move in the scrollport.
-        The timeline has to be named on the SCROLLING ancestor and referenced by the
-        descendants.
-     2. `animation-range: contain 0% contain 100%` IS the pinned run, with no magic
-        number. For a subject taller than the scrollport, `contain` spans exactly the
-        interval during which the subject covers the scrollport — for a 120svh section
-        with a 100svh sticky stage that is scroll 0 → scroll 20svh, which is precisely
-        the interval during which the stage is pinned. `cover` would have started the
-        page a third of the way into the animation.
-     3. It runs off the main thread and needs no script, so the route ships none. The
-        JS-disabled render and the JS-enabled render are the same pixels.
-
-   WITH MOTION OFF the section is 100svh — measured at 900px at 1440×900, 844px at 390×844
-   and 1140px at 2531×1140, with a runway of exactly ZERO. Both walls sit at their rest
-   position, which is a composed position and not a start position; the rule is drawn at
-   full length (544 / 347 / 496px, the same as the end of the motion run); every word and
-   every photograph is present. Nothing whatever is reachable only through motion, and a
-   reduced-motion reader is never handed a screen of scrolling during which nothing changes.
-
-   WITH JAVASCRIPT OFF it is the same page to the pixel. There is no script on this route
-   outside the shared navigation — the shear is a native CSS scroll-driven animation, so it
-   still runs. Rendered with scripting off and on at 1440×900 and compared: same 1080px
-   section, the same four files chosen across the eight cell boxes, the same alt on the
-   same four of them, same rule width, exactly one h1, and no image without an alt.
-
-   THE CELL IS ONE CROP AT EVERY WIDTH. Rendered cell aspect measured at all eight
-   viewports: 0.775 / 0.776 / 0.778 / 0.780 / 0.780 / 0.780 / 0.780 / 0.780 at 320×568,
-   390×844, 768×1024, 1024×768, 1280×720, 1440×900, 2531×1140 and 2560×1440. A 0.5%
-   spread, from rounding the wall's width to device pixels — so each `alt` in frames.ts
-   describes one picture rather than a family of them.
-
-   COLOUR. Every value below is a measured token from design/DESIGN-SYSTEM.md, on the
-   ground it is actually used on:
-     --ink      #241D18 on --ground #FBF7F2 = 15.6:1
-     --ink-soft #5C5049 on --ground         =  7.30:1
-     --forest   #22452F on --ground         = 10.04:1
-     --clay     #C1613C — 3.90:1, ORNAMENT ONLY. It is a hairline here and nothing else.
-   NO TEXT SITS ON A PHOTOGRAPH ANYWHERE IN THIS SECTION, at any viewport, at any scroll
-   position. The channel is paper between the walls on the wide layout, and a full-bleed
-   paper band beneath them on the narrow one — a band, edge to edge, with no radius and no
-   shadow, because a rounded plate floating over photographs reads as a modal.
-
-   AND THE STANDARD PROBE CANNOT SEE ANY OF IT — read this before quoting a result.
-   `tools/contrast-probe.mjs` treats every `position: fixed|sticky` box wider than 40px as
-   an overlay and skips any text more than 25% covered by one. This section's stage IS
-   sticky and IS the viewport, so every glyph on the route is skipped. RE-RUN at all seven
-   standard sizes with `--scroll-to .sx1b-hero`, every one of them prints exactly:
-
-     1 painted text runs sampled at 320x568 — 0 FAIL      (and 390×844, 768×1024,
-     1024×768, 1280×720, 1440×900, 2560×1440 — the same one run at each)
-
-   That one run is `"Preview ground · the Introduction follow"`, the scaffolding note BELOW
-   the section. Not one glyph of the hero is in the sample. It is a pass over an empty
-   sample, and it is not a pass.
-
-   MEASURED DIRECTLY instead, with the glyph-mask algorithm both critics describe — paint,
-   paint the text transparent, diff, and sample the GROUND at the glyph's own pixels — and
-   the overlay test narrowed to the navigation pill alone, so the sticky stage is measured
-   rather than skipped: 200 painted glyph runs over 8 viewports × 5 scroll stops — 320×568,
-   390×844, 768×1024, 1024×768, 1280×720, 1440×900, 2531×1140, 2560×1440 — 0 FAIL.
-   The worst 5th percentile anywhere is 7.30:1 and the worst SINGLE core pixel anywhere is
-   also 7.30:1, because the ground under every glyph on this page is the same paper at
-   every pixel: that number is `--ink-soft` on `--ground`, and it is the support paragraph.
-   There is no photograph under any glyph at any viewport at any scroll position, so the
-   ratio here is a property of the markup rather than of the crop — which is the only
-   version of this claim worth making.
-
-   TWO NOTES ON THAT MEASUREMENT, because both of them moved the number and someone
-   re-running it will hit them:
-
-     · The FOREGROUND has to be the declared ink, not the rendered pixel. Reading the
-       painted pixel back measures the antialiasing: at 14.4px the same support paragraph
-       reports 3.98:1 that way, against 7.30:1 correctly measured and 7.3:1 from the house
-       probe on the identical colour pair. The ground is what gets sampled, not the type.
-     · `next dev` injects a dark circular indicator at the bottom-left of every route
-       (`<nextjs-portal>`). It is not in the static export and not part of this section,
-       but at 320×568 it sits ON the support paragraph and drags that one run to 1.33:1.
-       It is hidden for the measurement. Nothing in this section is under it.
-   ══════════════════════════════════════════════════════════════════════════════ */
+   THE GEOMETRY IS SOLVED, NOT NUDGED. A leaf is --w wide and --h tall. The open book is
+   three leaves at plus/minus --phi, so its projected width is 3 * w * cos(phi) — and --w is
+   the smaller of (the height the scene can give it * the page ratio) and (the scene's width
+   / 3 * cos(phi)). Container-query units make that one expression hold at every viewport
+   with no breakpoint doing arithmetic: the book always fits both ways.
+   ══════════════════════════════════════════════════════════════════════════ */
 
 .sx1b-page {
-  position: relative;
   background: var(--ground);
+}
+
+.sx1b {
+  /* the final zigzag: each leaf plus/minus phi from the picture plane */
+  --phi: 19deg;
+  /* the second leaf's start: standing back off the first leaf's edge, so the object
+     reads as a book that opens from the very first screen */
+  --ajar: 64deg;
+  /* the third leaf's start: folded flat behind the second */
+  --fold: 177deg;
+  /* page width / height */
+  --ratio: 0.62;
+  --wmax: 34rem;
+  --gapT: clamp(1.1rem, 3.2svh, 2.75rem);
+  --gapB: clamp(1.6rem, 7svh, 4.5rem);
+
+  /* FINISHED by default. See the header. */
+  --o2: 1;
+  --o3: 1;
+
+  --sx1b-wall: var(--ground-warm);
+  --sx1b-floor: var(--sandstone);
+  --sx1b-max: 96rem;
+  --sx1b-read: clamp(0.98rem, 0.93rem + 0.34vw, 1.2rem);
+
+  position: relative;
+  background: var(--sx1b-floor);
   color: var(--ink);
-
-  /* Two steps and two whispers. The hero has one shout and it is the h1.
-     The h1's 1440 value (94.56px) is deliberate: the house hero caps at 81.6px, and this
-     is a page title of two words rather than a sentence, so it carries 1.16× that — not
-     the 2.03× a sibling concept took. It is capped at 7rem so 2531 grows by 18% rather
-     than blowing out to 131px. */
-  --sx1b-h1: clamp(2.55rem, 1.5rem + 4.9vw, 7rem);
-  --sx1b-sub: clamp(1.02rem, 0.95rem + 0.55vw, 1.45rem);
-  --sx1b-read: clamp(0.95rem, 0.9rem + 0.35vw, 1.2rem);
-  --sx1b-small: clamp(0.71rem, 0.7rem + 0.1vw, 0.82rem);
-
-  --sx1b-gutter: clamp(1.35rem, 4.2vw, 2.75rem);
-
-  /* clay at half alpha is what DESIGN-SYSTEM §1 reserves it for: a hairline, never text. */
-  --sx1b-hair: rgba(193, 97, 60, 0.5);
-  --sx1b-hair-soft: rgba(36, 29, 24, 0.13);
 }
 
-/* ── the section ──────────────────────────────────────────────────────────────
-   STATIC-FIRST. The base height is ONE SCREEN. The 120svh is granted only inside the
-   motion block below, so a reader with prefers-reduced-motion is handed exactly one
-   viewport and the page moves straight on to what follows. */
-.sx1b-hero {
+@media (prefers-reduced-motion: no-preference) {
+  .js .sx1b {
+    --o2: 0;
+    --o3: 0;
+  }
+  /* two leaves to open and a held end: a little under two screens of runway */
+  .js .sx1b-track {
+    height: 290svh;
+  }
+}
+
+.sx1b-track {
   position: relative;
-  height: 100svh;
-  background: var(--ground);
-
-  /* clip, NOT hidden. `overflow: hidden` would make this element a scroll container and
-     the sticky stage inside it would then stick to a scrollport that never scrolls — it
-     would silently stop being sticky. `overflow: clip` clips without creating one. */
-  overflow: clip;
-
-  view-timeline-name: --sx1b-corridor;
-  view-timeline-axis: block;
-
-  --sx1b-travel: 12svh;                       /* how far each wall moves, in opposition */
-  --sx1b-wall: clamp(8rem, 26vw, 30rem);      /* one wall's width */
-  --sx1b-gap: 0.55rem;
-
-  /*
-   * THE CELL IS ONE ASPECT EVERYWHERE, AND THAT IS THE POINT OF THE REVISION.
-   *
-   * The previous version sized the run with a max() — two cells at the chosen aspect, OR a
-   * taller box when the window needed more run than two cells provided — and let
-   * `grid-auto-rows: 1fr` stretch the cells to fill it. MEASURED, that made the crop wander:
-   * 0.775 at 320×568, 0.727 at 390×844, 0.694 at 1024×768, 0.664 at 2560×1440. Every `alt`
-   * on this route then had to be true of a family of different pictures.
-   *
-   * Here the cell height is derived from the wall's width and nothing else, so the aspect is
-   * 0.78 at every viewport in both layouts — re-measured below. The window is covered not by
-   * stretching the cells but by giving each wall MORE of them: see the run.
-   */
-  --sx1b-cellH: calc(var(--sx1b-wall) / 0.78);
 }
 
+/* ── the stage: pinned natively, never hijacked ─────────────────────────── */
 .sx1b-stage {
   position: sticky;
   top: 0;
   height: 100svh;
-  overflow: clip;
+  min-height: 34rem;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding-top: clamp(5.9rem, 8svh + 2.9rem, 8.75rem);
+  background: var(--sx1b-wall);
+  /* the floor bleeds to both edges of the screen; nothing is allowed to scroll sideways */
+  overflow-x: clip;
+}
 
-  /* A capped container that is NOT centred is 462px wrong at 2531. That shipped once.
-     The cap exists so the walls do not grow into landscape panels on a 2560 screen:
-     beyond 1600px the corridor stops widening and the extra width becomes page margin,
-     which is a composition. The previous version let the channel absorb it and left 767px
-     of empty cream inside a centred type block. */
-  max-width: 100rem;
+/* THE MEASURE, AND IT IS CENTRED. max-width without margin-inline:auto is invisible at
+   1440 and hundreds of px off-axis at 2531 — that shipped once on this site. */
+.sx1b-rail {
+  width: 100%;
+  max-width: calc(var(--sx1b-max) + 2 * var(--rail));
   margin-inline: auto;
+  padding-inline: var(--rail);
+}
 
+/* ── the words ──────────────────────────────────────────────────────────── */
+.sx1b-top {
+  position: relative;
+  z-index: 2;
   display: grid;
-  grid-template-columns: var(--sx1b-wall) minmax(0, 1fr) var(--sx1b-wall);
+  row-gap: clamp(0.9rem, 2.2svh, 1.6rem);
+  align-items: end;
+}
+@media (min-width: 900px) {
+  .sx1b-top {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 6rem);
+  }
+}
+
+.sx1b-eyebrow {
+  margin: 0 0 clamp(0.8rem, 1.8svh, 1.35rem);
+  display: flex;
   align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  /* 7.27 on cream, and still above 6.5 on the warm wall */
+  color: var(--forest-mid);
+}
+.sx1b-eyebrow__rule {
+  flex: none;
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
 }
 
-/* ── the two walls ────────────────────────────────────────────────────────────
-   Each wall is a fixed window; the run inside it is taller than the window and is parked
-   centred in it, so neither extreme of the travel can expose paper behind it. */
-.sx1b-wall {
-  position: relative;
-  overflow: clip;
-  align-self: stretch;
-}
-/* EACH RUN IS FOUR CELLS OF TWO PHOTOGRAPHS, ALTERNATING — A B A B — AND THAT IS WHAT
-   MAKES THE WALL A WALL.
-
-   The previous version gave each wall two cells and parked both runs against the top of
-   their window. The rising wall then had 68px of run below the window and travelled 108,
-   and the FALLING wall had nothing above it at all, so it opened `travel` of bare paper
-   above itself on every scroll. The stylesheet claimed that opening happened inside the
-   top fade and so was never an edge. MEASURED, that claim was false: at 1440×900 at the
-   end of the runway the right wall's top edge sat at y=108 while the 18% fade had already
-   decayed to alpha 0.33, and the column at x=1250 stepped from (245,241,235) at y=105 to
-   (163,183,143) at y=110 — a hard horizontal rule across the wall, plainly visible in the
-   render. A fade deep enough to hide it would have had to reach 5× the travel, 540px of a
-   900px wall.
-
-   So the fix is not a deeper fade. There is simply always another photograph where the
-   paper used to be. Each wall alternates its two frames, and the run extends a full cell
-   PAST the window in the direction that wall travels:
-
-     the rising wall   parks at the top      and has three cells of run below the window
-     the falling wall  parks one cell HIGH   and has a whole cell above the window
-
-   Nothing but the inter-cell seam — the same 0.55rem seam that is visible inside every
-   wall anyway — ever appears at either edge, at any scroll position, at any viewport.
-
-   PROVED TWO WAYS. Geometrically, from the rendered boxes: at 1440×900 the left run is
-   0→1944 in a 900 window and the right is -488→1456, so at full travel they are -108→1836
-   and -380→1564 and both still cover 0→900. At 390×844 the walls are 442 tall, the runs
-   0→1019 and -256→763, and at full travel -84→935 and -172→847. At 320×568 the walls are
-   199 tall, the runs 0→840 and -211→628. Every one of those has the window strictly
-   inside the run at both ends of the range. And empirically, by scanning a column down
-   each wall in the rendered PNG for runs of ground-coloured pixels: at 1440×900 the only
-   bands of 6px or more anywhere inside either wall are 9px seams — 480–489 on both walls
-   at rest, and 372–381 / 861–870 on the left against 588–597 on the right at the end of
-   the runway, which is the two seams having moved apart by 216px. At 390×844 the same
-   scan returns a single 6px seam per wall. Before this change the same scan at 1440×900
-   found the right wall's top edge as a step from (245,241,235) to (163,183,143) in 5px.
-
-   It costs NOTHING to transfer. The repeats are the same two URLs, so the browser fetches
-   four files and paints eight boxes; measured media transfer is identical before and after.
-   The repeated cells carry `alt=""` and `aria-hidden`, so a reader using a screen reader
-   still hears each photograph described exactly once.
-
-   AND THE SEAMS CROSS. At rest the left wall's seam sits one cell down from the top of the
-   window and the right wall's sits one cell up from where its own run begins; as you
-   scroll, the left seam climbs and the right seam descends, so two identical marks pass
-   each other either side of type that has not moved at all. That is the mechanic, stated
-   in the plainest possible terms. */
-.sx1b-run {
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  display: grid;
-  grid-auto-rows: var(--sx1b-cellH);
-  gap: var(--sx1b-gap);
-  /* Parked at translate 0, which is a composed resting position for both walls rather than
-     a start position — that is what makes the no-animation state a finished picture. */
-  transform: translate3d(0, 0, 0);
-}
-.sx1b-wall--r .sx1b-run {
-  top: calc(-1 * (var(--sx1b-cellH) + var(--sx1b-gap)));
-}
-
-.sx1b-cell {
-  position: relative;
+.sx1b-title {
   margin: 0;
-  overflow: clip;
-  background: var(--ground-warm);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: clamp(2.9rem, 1.2rem + 6vw, 9rem);
+  line-height: 0.92;
+  letter-spacing: -0.028em;
+  color: var(--ink);
 }
-.sx1b-cell > img {
+
+.sx1b-sub {
+  margin: 0;
+  max-width: 27ch;
+  padding-bottom: 0.3em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.12rem, 0.92rem + 0.95vw, 2.05rem);
+  line-height: 1.26;
+  letter-spacing: -0.006em;
+  color: var(--ink);
+}
+
+/* Each noun is struck as its leaf opens. The first leaf is open from the first screen, so
+   its noun is struck from the first screen. The bar sits below the descenders of y and p. */
+.sx1b-noun {
+  position: relative;
+  white-space: nowrap;
+  --u: 1;
+}
+.sx1b-noun::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.14em;
+  height: max(2px, 0.07em);
+  background: var(--brass);
+  transform: scaleX(var(--u));
+  transform-origin: 0 50%;
+}
+.sx1b-noun[data-n='2'] {
+  --u: var(--o2);
+}
+.sx1b-noun[data-n='3'] {
+  /* struck while its leaf is visibly swinging, not while it is still folded out of sight */
+  --u: clamp(0, (var(--o3) - 0.55) / 0.45, 1);
+}
+
+/* ── the scene: a wall, a floor, and the book standing on it ───────────── */
+.sx1b-sceneRail {
+  position: relative;
+  display: flex;
+  min-height: 0;
+}
+.sx1b-scene {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  container-type: size;
+}
+/* The sizing lives one level INSIDE the container, because container-query units used on
+   the container itself resolve against the container's own ancestor. */
+.sx1b-set {
+  --w: max(
+    4rem,
+    min(
+      calc((100cqh - var(--gapT) - var(--gapB)) * var(--ratio)),
+      calc(100cqw / (3 * cos(var(--phi)))),
+      var(--wmax)
+    )
+  );
+  --h: calc(var(--w) / var(--ratio));
+  /* the open book's projected width */
+  --W: calc(3 * var(--w) * cos(var(--phi)));
+
+  /* the three hinges. a1 turns the first leaf off the picture plane as the book opens;
+     a2 and a3 are each leaf's angle RELATIVE to the leaf it hangs from. */
+  --a1: calc(var(--phi) * var(--o2));
+  --a2: calc(var(--ajar) + (-2 * var(--phi) - var(--ajar)) * var(--o2));
+  --a3: calc(var(--fold) + (2 * var(--phi) - var(--fold)) * var(--o3));
+  /* keep the book centred on its floor while it grows: a lone leaf stands in the middle,
+     and the whole book ends in the middle */
+  /* The third leaf lies folded BEHIND the second for the first ~55% of its travel, so
+     anything that should track how much of it the reader can SEE runs on this instead. */
+  --o3v: clamp(0, (var(--o3) - 0.55) / 0.45, 1);
+  --shift: calc((1 - (var(--o2) + var(--o3v)) / 2) * (var(--W) - var(--w)) / 2);
+  /* Where the book stands. On a landscape screen height is what binds the leaf, so there is
+     no spare room and the book stands a gap above the stage's foot. On a phone WIDTH binds
+     it, and the height left over is shared out - 45% of it beneath the book - so the book
+     stands in the middle of its floor instead of on the bottom edge under a void. */
+  --lift: max(0px, calc((100cqh - var(--gapT) - var(--gapB) - var(--h)) * var(--liftShare, 0.45)));
+  --base: calc(var(--gapB) + var(--lift));
+
+  position: absolute;
+  inset: 0;
+}
+
+.sx1b-floor {
+  position: absolute;
+  left: -100vw;
+  right: -100vw;
+  bottom: calc(-1 * var(--gapB) - 1px);
+  height: calc(var(--gapB) + var(--base) + var(--h) * 0.17);
+  background: var(--sx1b-floor);
+  box-shadow: 0 -1px 0 rgba(36, 29, 24, 0.07);
+}
+
+.sx1b-book {
+  position: absolute;
+  left: 50%;
+  bottom: var(--base);
+  width: var(--W);
+  height: var(--h);
+  margin-left: calc(var(--W) / -2);
+  perspective: calc(var(--h) * 4.6);
+  perspective-origin: 50% 38%;
+}
+
+.sx1b-shadow {
+  position: absolute;
+  left: -7%;
+  right: -7%;
+  bottom: calc(var(--h) * -0.075);
+  height: calc(var(--h) * 0.15);
+  background: radial-gradient(closest-side, rgba(36, 29, 24, 0.3), rgba(36, 29, 24, 0));
+  transform: scaleX(calc(0.38 + 0.62 * (var(--o2) + var(--o3v)) / 2));
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+
+/* ── the leaves ────────────────────────────────────────────────────────── */
+.sx1b-leaf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--w);
+  height: var(--h);
+  transform-style: preserve-3d;
+  transform-origin: 0 50%;
+}
+.sx1b-leaf--1 {
+  transform: translateX(var(--shift)) rotateY(var(--a1));
+}
+.sx1b-leaf--2 {
+  left: 100%;
+  transform: rotateY(var(--a2));
+}
+.sx1b-leaf--3 {
+  left: 100%;
+  transform: rotateY(var(--a3));
+}
+
+.sx1b-face,
+.sx1b-back {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.sx1b-face {
+  overflow: hidden;
+  background: var(--ground);
+  box-shadow: inset 0 0 0 1px rgba(36, 29, 24, 0.1);
+}
+/* the reverse of the paper: the same sheet, unprinted */
+.sx1b-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(90deg, #dccdb2, #ebe0cb);
+  box-shadow: inset 0 0 0 1px rgba(36, 29, 24, 0.12);
+}
+/* the crease: a fold throws a little shadow into the leaf that turns away from it */
+.sx1b-leaf--2 > .sx1b-face::before,
+.sx1b-leaf--3 > .sx1b-face::before {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  inset: 0 auto 0 0;
+  width: 9%;
+  background: linear-gradient(90deg, rgba(36, 29, 24, 0.14), rgba(36, 29, 24, 0));
+  pointer-events: none;
+}
+
+.sx1b-plate {
+  position: absolute;
+  top: calc(var(--w) * 0.06);
+  left: calc(var(--w) * 0.06);
+  right: calc(var(--w) * 0.06);
+  bottom: calc(var(--w) * 0.18);
+  overflow: hidden;
+  background: #d8cfc2;
+}
+.sx1b-plate picture {
+  display: contents;
+}
+.sx1b-plate img,
+.sx1b-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
   object-position: var(--sx1b-op, 50% 50%);
 }
+.sx1b-video {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.sx1b-video.is-on {
+  opacity: 1;
+}
 
-/* The walls are cut off at the top and the bottom of the stage rather than framed there:
-   they fade into the paper, so each reads as a wall continuing past the screen rather
-   than a rectangle pasted onto it. The top fade is also what keeps the navigation pill
-   off a photograph. Paper-coloured gradients, not masks — no support caveat. Their depths
-   are the 18%/14% the run-height guarantee above is written against. */
-.sx1b-wall::after {
-  content: '';
+/* The folio: the leaf's number and the noun it stands for, in the paper margin under the
+   plate. Ink and forest, never brass: a leaf turned away from the light is shaded by up to
+   0.22, and brass on shaded cream measures under 4.5. Ink stays above 9, forest above 5.8. */
+.sx1b-folio {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
   z-index: 2;
-  background:
-    linear-gradient(to bottom, var(--ground) 0, rgba(251, 247, 242, 0) 18%),
-    linear-gradient(to top, var(--ground) 0, rgba(251, 247, 242, 0) 14%);
-}
-
-/* ── the still centre ─────────────────────────────────────────────────────────
-   LEFT-ALIGNED, on one axis, because that is this site's voice: the house hero sets its
-   eyebrow, headline, lede and actions flush to `--rail` at the left of the frame. The
-   previous version of this section centred a display stack over a flush-left paragraph,
-   which is two typographic systems in one four-item column. */
-.sx1b-channel {
-  position: relative;
-  z-index: 3;
-  padding-inline: clamp(1.75rem, 4.4vw, 4.5rem);
-  padding-block: clamp(1rem, 2vw, 1.8rem);
-  background: var(--ground);
-  text-align: left;
-}
-
-.sx1b-eyebrow {
+  left: calc(var(--w) * 0.06);
+  right: calc(var(--w) * 0.06);
+  bottom: 0;
+  height: calc(var(--w) * 0.18);
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
   margin: 0;
-  font-size: var(--sx1b-small);
-  font-weight: 500;
-  letter-spacing: 0.17em;
+  font: 600 clamp(9.5px, calc(var(--w) * 0.038), 13px) / 1 var(--font-text);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--forest);            /* 10.04:1 on cream */
+  color: var(--ink);
+  white-space: nowrap;
 }
-
-.sx1b-h1 {
-  margin: 0.8rem 0 0;
+.sx1b-folio__n {
   font-family: var(--font-display);
   font-optical-sizing: auto;
-  font-weight: 460;
-  font-size: var(--sx1b-h1);
-  line-height: 0.93;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-/* Two words, two lines, one axis — roman then italic, which is the house hero's own
-   move ("Yoga is vast. / No one holds it all."). Stacking is a composition decision, not
-   a consequence of the measure: it holds at 320 and at 2560 alike. */
-.sx1b-h1 span { display: block; }
-.sx1b-h1 .sx1b-h1__b {
-  font-weight: 560;
   font-style: italic;
-  letter-spacing: -0.028em;
+  font-weight: 500;
+  font-size: 1.3em;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--forest);
 }
 
-.sx1b-sub {
-  margin: clamp(0.95rem, 1.8vw, 1.5rem) 0 0;
-  max-width: 31ch;
-  font-size: var(--sx1b-sub);
-  line-height: 1.34;
-  letter-spacing: -0.005em;
-  color: var(--ink);
-  text-wrap: pretty;
+/* Light from the left. A leaf whose face turns right (a positive absolute angle) turns away
+   from it and darkens; one turning left stays lit. Capped at 0.22 — see the folio. */
+.sx1b-shade {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(36, 29, 24, 0.95), rgba(36, 29, 24, 0.7));
+  opacity: var(--sh, 0);
+  pointer-events: none;
+}
+.sx1b-leaf--1 > .sx1b-face .sx1b-shade {
+  --sh: clamp(0, sin(var(--a1)) * 0.9, 0.22);
+}
+.sx1b-leaf--2 > .sx1b-face .sx1b-shade {
+  --sh: clamp(0, sin(calc(var(--a1) + var(--a2))) * 0.9, 0.22);
+}
+.sx1b-leaf--3 > .sx1b-face .sx1b-shade {
+  --sh: clamp(0, sin(calc(var(--a1) + var(--a2) + var(--a3))) * 0.9, 0.22);
 }
 
-/* THE MEASURE THE WALLS HOLD OPEN. It grows from a mark at the type's left axis to the
-   full width of the gap as the walls shear, and it is the centre's share of the runway:
-   with the walls it is what makes every scroll position on this page different from every
-   other one. Ornament — clay, at a hairline. Its default state is DRAWN, so with no
-   animation the composition is finished rather than waiting. */
-.sx1b-rule {
-  width: min(100%, 34rem);
-  height: 1px;
-  margin: clamp(1.2rem, 2.2vw, 1.9rem) 0;
-  border: 0;
-  background: var(--sx1b-hair);
-  transform: scaleX(1);
-  transform-origin: 0 50%;
-}
-
-.sx1b-support {
-  margin: 0;
-  max-width: 42ch;
-  font-size: var(--sx1b-read);
-  line-height: 1.66;
-  color: var(--ink-soft);          /* 7.30:1 on cream */
-}
-
-/* ══════════════════════════════════════════════════════════════════════════════
-   THE MOTION. Everything below is transform only, driven by the named view timeline.
-   It is gated twice: once on support, once on the reader's stated preference. Outside
-   those gates the rules above are already the finished page.
-   ══════════════════════════════════════════════════════════════════════════════ */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    /* one screen of composition plus a fifth of a screen of runway */
-    .sx1b-hero { height: 120svh; }
-
-    /* LONGHANDS, NOT THE SHORTHAND, and this is not style — `animation: linear both` is
-       ambiguous: `linear` and `both` are each simultaneously a valid keyframes-name and a
-       valid keyword, and Chromium resolved the pair as a name plus one keyword, leaving the
-       timing function at its initial `ease` and the fill at its initial `none`. Measured on
-       the rendered transform, that shipped two defects at once: the walls travelled 44px of
-       their 108 in the first quarter of the runway and 4px in the last quarter — an
-       ease-out is a dead zone at the end of a scroll-driven range — and at the exact end of
-       the range the fill dropped and both walls snapped back to zero. Written out, progress
-       is linear in scroll and the end state holds. */
-    .sx1b-wall--l .sx1b-run,
-    .sx1b-wall--r .sx1b-run,
-    .sx1b-rule {
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-iteration-count: 1;
-      animation-timeline: --sx1b-corridor;
-      animation-range: contain 0% contain 100%;
-    }
-    .sx1b-wall--l .sx1b-run { animation-name: sx1b-rise; will-change: transform; }
-    .sx1b-wall--r .sx1b-run { animation-name: sx1b-fall; will-change: transform; }
-    .sx1b-rule { animation-name: sx1b-draw; }
-  }
-}
-
-@keyframes sx1b-rise {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, calc(-1 * var(--sx1b-travel)), 0); }
-}
-@keyframes sx1b-fall {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, var(--sx1b-travel), 0); }
-}
-@keyframes sx1b-draw {
-  from { transform: scaleX(0.18); }
-  to   { transform: scaleX(1); }
-}
-
-/* ── narrow viewports ─────────────────────────────────────────────────────────
-   A three-column corridor with a readable channel between the walls does not exist at
-   390px. Below 860 the SAME two walls stand side by side across the full width, still
-   shearing past each other on the same axis and in the same directions, and the channel
-   becomes a full-bleed band of paper beneath them: edge to edge, square-cornered, no
-   shadow, carrying the same left-aligned type at the page gutter. It is a sheet across
-   the foot of the corridor, not a card floating over a gallery.
-
-   The cell keeps very nearly the same aspect it has everywhere else — 0.727 at 390 against
-   0.780 at 2531 — so the crop a phone gets is the crop a 2531 gets, and one `alt` is true
-   of both. At 390 each cell is 194 × 267 CSS px: a photograph, not the 33px ribbon the
-   previous version left at this width. */
-@media (max-width: 859px) {
-  .sx1b-hero {
-    --sx1b-travel: 10svh;
-    --sx1b-gap: 0.4rem;
-    /* Same rule as the wide layout — the cell's height comes from the wall's width, so the
-       crop is the same 0.78 a 2560 screen gets. The wall here is half the viewport. */
-    --sx1b-cellH: calc(50vw / 0.78);
-  }
-  .sx1b-stage {
-    max-width: none;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: minmax(0, 1fr) auto;
-    align-items: stretch;
-    column-gap: 2px;
-  }
-  .sx1b-wall--l { grid-area: 1 / 1 / 2 / 2; }
-  .sx1b-wall--r { grid-area: 1 / 2 / 2 / 3; }
-  .sx1b-channel { grid-area: 2 / 1 / 3 / 3; }
-
-  /* The bottom fade is wrong once the band sits under the walls — the band's own edge is
-     the cut. The top fade stays at 18% and is now only ever doing the job it should have
-     been doing all along: keeping the navigation pill off a photograph. It is no longer
-     load-bearing for the travel, because the wall continues above itself. */
-  .sx1b-wall::after {
-    background: linear-gradient(to bottom, var(--ground) 0, rgba(251, 247, 242, 0) 18%);
-  }
-
-  .sx1b-channel {
-    border-top: 1px solid var(--sx1b-hair-soft);
-    padding-inline: var(--sx1b-gutter);
-    padding-block: clamp(1.25rem, 4.6vw, 2rem) clamp(1.4rem, 5vw, 2.2rem);
-  }
-  /* 41 characters of uppercase at 0.17em will not sit on one line in a 357px measure, and a
-     two-line eyebrow above a two-line masthead is three stacked rules where there should be
-     one. The tracking gives it back the 20px it needs. */
-  .sx1b-eyebrow { letter-spacing: 0.12em; }
-  .sx1b-sub { max-width: 34ch; }
-  .sx1b-support { max-width: none; }
-  .sx1b-rule { margin-block: clamp(0.95rem, 3.4vw, 1.4rem); width: 100%; }
-}
-
-/* At 568px of height the band has to give the walls something to be, so the leading and
-   the steps between the four blocks tighten. Nothing is removed. */
-@media (max-width: 859px) and (max-height: 700px) {
-  .sx1b-page {
-    --sx1b-read: 0.9rem;
-    --sx1b-sub: 1.02rem;
-  }
-  .sx1b-h1 { margin-top: 0.55rem; }
-  .sx1b-sub { margin-top: 0.7rem; line-height: 1.28; }
-  .sx1b-support { line-height: 1.55; }
-  .sx1b-rule { margin-block: 0.8rem; }
-  .sx1b-channel { padding-block: 1rem 1.15rem; }
-}
-
-/* ── the ground below, so the hero's spacing can be judged against something ──
-   Preview scaffolding only. It is not part of the section. */
-.sx1b-after {
+/* ── the coda: the paragraph the open book stands over ─────────────────── */
+.sx1b-coda {
   position: relative;
+  padding-block: clamp(2.2rem, 5svh, 4rem) clamp(4.5rem, 11vw, 9rem);
+}
+.sx1b-support {
+  margin: 0 auto;
+  max-width: 34rem;
+  font: 400 var(--sx1b-read) / 1.62 var(--font-text);
+  color: var(--ink);
+}
+
+/* ── portrait screens: width binds the book, so the leaves grow taller and the fold
+   deepens to spend the height instead of leaving it as a void above the floor ──────── */
+@media (max-aspect-ratio: 4/5) {
+  .sx1b {
+    --phi: 26deg;
+    --ratio: 0.5;
+    --liftShare: 0.36;
+  }
+}
+
+/* ── phones: a steeper fold and taller leaves still ───────────────────── */
+@media (max-width: 719px) {
+  .sx1b {
+    --phi: 34deg;
+    --ratio: 0.43;
+    --gapB: clamp(1.4rem, 5svh, 2.6rem);
+    --liftShare: 0.32;
+  }
+  .sx1b-coda {
+    padding-top: 0.75rem;
+  }
+}
+
+/* A leaf narrower than ~120px cannot hold TRANSMISSION in tracked capitals inside its
+   margin (measured: clipped at 320). Lower case, untracked, it fits with room. */
+@media (max-width: 420px) {
+  .sx1b-folio {
+    left: calc(var(--w) * 0.045);
+    right: calc(var(--w) * 0.03);
+    gap: 0.3em;
+    font-size: 9.5px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .sx1b-folio__n {
+    font-size: 1.15em;
+  }
+}
+
+/* ── preview scaffolding (not part of the section) ─────────────────────── */
+.sx1b-after__paper,
+.sx1b-after__deep {
+  min-height: 60svh;
+  padding: clamp(3rem, 7vw, 6rem) var(--rail);
+}
+.sx1b-after__paper {
   background: var(--ground);
-  padding: clamp(5rem, 14vh, 11rem) clamp(1.25rem, 4vw, 4.5rem) clamp(7rem, 20vh, 14rem);
 }
-.sx1b-after__inner {
-  max-width: 44rem;
-  margin-inline: auto;
-  text-align: center;
+.sx1b-after__deep {
+  background: var(--ground-deep);
 }
+/* right-aligned so the dev-tools badge (bottom-left, dev only) never sits on it */
 .sx1b-after__note {
-  margin: 0;
-  font-size: var(--sx1b-small);
-  letter-spacing: 0.14em;
+  max-width: 96rem;
+  margin: 0 auto;
+  text-align: right;
+  font: 600 11px/1.4 var(--font-text);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-.sx1b-after__line {
-  width: 1px;
-  height: clamp(3rem, 9vh, 6rem);
-  margin: 1.6rem auto 0;
-  background: var(--sx1b-hair-soft);
+.sx1b-after__note--deep {
+  color: rgba(251, 247, 242, 0.78);
 }
-
-/* NO FOCUS RULE HERE, DELIBERATELY. This section contains no link and no button — the only
-   focusable things on the route belong to <SiteNav>, and a `.sx1b-page a:focus-visible`
-   rule (0,2,1) would out-specify the site's own `:focus-visible` (0,1,0) and quietly
-   restyle the navigation's focus ring on this route only. A preview concept has no business
-   changing how a shared component looks; the global treatment in app/globals.css §focus
-   already covers every focusable element on the page. */

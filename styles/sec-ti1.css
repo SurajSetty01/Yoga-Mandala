@@ -1,0 +1,303 @@
+/* Final ti1 section. Every selector is namespaced .ti1- */
+
+/* ══ INSIGHTS · MASTHEAD — THE SENTENCE PUTS DOWN ROOTS ═══════════════════════
+   The lede's stem sits on a hairline bough; its four nouns hang from that bough
+   on hairlines of increasing length, the fourth longest, beside a man sitting
+   under a banyan whose own aerial roots hang behind him.
+
+   ROOT GEOMETRY, all in the roots' own ems (each noun is exactly one line):
+     row i's top    = --ti1-l0 + i * --ti1-pitch        below the bough
+     row i's indent = (3 - i) * --ti1-step              deeper = further left
+   so every hairline passes to the LEFT of every word above it and never
+   crosses one. The font size is bound to 8.4vw so "and exploration." (the
+   widest row, at indent 0) always fits the column on one line.
+
+   Stacked below 1024px: the portrait frame first, under the pill, melting into
+   the ground; then the words. From 1024px: the landscape frame is laid on the
+   right of the ground, height-bound so a 1620 derivative is never upscaled,
+   its left third faded into the ground.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ti1 {
+  --ti1-hair: rgba(246, 217, 193, 0.6); /* --sand as a hairline: ornament, never text */
+  --ti1-stem: clamp(2.15rem, 1rem + 2.9vw, 4.4rem);
+
+  position: relative;
+  isolation: isolate;
+  display: block;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  overflow: clip;
+}
+
+/* ── the photograph ─────────────────────────────────────────────────────── */
+.ti1-fig {
+  position: relative;
+  z-index: 0;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 5 / 6;
+  max-height: 64svh;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0, #000 74%, transparent 100%);
+}
+.ti1-fig picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ti1-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
+}
+
+/* ── the column ─────────────────────────────────────────────────────────── */
+.ti1-rail {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2 * var(--page), 78rem);
+  margin-inline: auto;
+  padding-block: clamp(0.25rem, 2vw, 1.5rem) clamp(3.5rem, 12vw, 5rem);
+}
+.ti1-col {
+  max-width: 40rem;
+}
+
+.ti1-h1 {
+  margin: 0 0 clamp(1.1rem, 2.2vw, 1.6rem);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-onPic);
+}
+.ti1-h1__rule {
+  flex: none;
+  width: 30px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the sentence ───────────────────────────────────────────────────────── */
+.ti1-lede {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  letter-spacing: -0.024em;
+  color: var(--ink-onPic);
+}
+.ti1-stem {
+  position: relative;
+  display: block;
+  padding-bottom: 0.3em;
+  font-size: var(--ti1-stem);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+/* the bough: runs out of the column toward the tree and thins away */
+.ti1-stem::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(100% + var(--page));
+  height: 1px;
+  background: linear-gradient(90deg, var(--ti1-hair) 0, var(--ti1-hair) 50%, rgba(246, 217, 193, 0) 100%);
+  transform-origin: 0 50%;
+}
+
+.ti1-roots {
+  --ti1-l0: 0.62em;
+  --ti1-pitch: 1.36em;
+  --ti1-step: 0.6em;
+  --ti1-row: 1.08em;
+  --ti1-reach: 0.3em; /* how far a hairline runs past its row's top, toward the letters */
+
+  position: relative;
+  display: block;
+  font-size: min(var(--ti1-stem), 8.4vw);
+  font-style: italic;
+  font-variation-settings: 'SOFT' 40;
+  line-height: var(--ti1-row);
+}
+.ti1-root {
+  position: relative;
+  display: block;
+  height: var(--ti1-row);
+  margin-top: calc(var(--ti1-pitch) - var(--ti1-row));
+  padding-left: calc((3 - var(--i)) * var(--ti1-step));
+  white-space: nowrap;
+}
+.ti1-root:first-child {
+  margin-top: var(--ti1-l0);
+}
+.ti1-hair {
+  position: absolute;
+  left: calc((3 - var(--i)) * var(--ti1-step));
+  bottom: calc(100% - var(--ti1-reach));
+  width: 1px;
+  height: calc(var(--ti1-l0) + var(--i) * var(--ti1-pitch) + var(--ti1-reach));
+  background: var(--ti1-hair);
+  transform-origin: 50% 0;
+}
+.ti1-noun {
+  display: inline-block;
+}
+
+/* ── what is not here yet, said to the reader ───────────────────────────── */
+.ti1-notice {
+  margin-top: clamp(2rem, 4.5vw, 3rem);
+  padding-top: clamp(1rem, 2vw, 1.4rem);
+  border-top: 1px solid var(--rule-onDark);
+  max-width: 34rem;
+}
+.ti1-now {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 0.98rem + 0.8vw, 1.7rem);
+  line-height: 1.24;
+  letter-spacing: -0.016em;
+  color: var(--ink-onPic);
+}
+.ti1-then {
+  margin: 0;
+  font: 400 clamp(1rem, 0.95rem + 0.3vw, 1.14rem) / 1.62 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.ti1-q {
+  font-style: italic;
+  color: var(--ink-onPic);
+  quotes: '\201C' '\201D';
+}
+
+/* ══ ≥1024 · the ground and the tree side by side ═════════════════════════ */
+@media (min-width: 1024px) {
+  .ti1 {
+    min-height: clamp(44rem, 100svh, 64rem);
+    display: flex;
+    flex-direction: column;
+  }
+  /* height-bound: the section never exceeds 64rem (1024px), so the landscape
+     frame covers this box at ≤ 1.5 × 1024 = 1536 css px, under its 1620 file */
+  .ti1-fig {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(56vw, 1620px);
+    max-height: none;
+    aspect-ratio: auto;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, 0.35) 14%, #000 32%);
+    mask-image: linear-gradient(90deg, transparent 0, rgba(0, 0, 0, 0.35) 14%, #000 32%);
+  }
+  .ti1-img {
+    object-position: 54% 40%;
+  }
+  .ti1-rail {
+    flex: 1;
+    width: min(100% - 2 * var(--page), 78rem);
+    padding-block: clamp(7.5rem, 17svh, 10rem) clamp(3.5rem, 8svh, 5.5rem);
+  }
+  .ti1-col {
+    max-width: min(42vw, 40rem);
+  }
+  .ti1-stem::after {
+    width: calc(100% + clamp(3rem, 9vw, 11rem));
+  }
+}
+
+/* Wide screens: at 56vw the box is nearly as wide as the frame itself, so the
+   low brick wall at its left (the frame's one unattractive band) came into
+   full view. A narrower box crops harder, and the crop is taken from the left,
+   which puts the wall inside the fade and keeps the man whole. */
+@media (min-width: 1800px) {
+  .ti1-fig {
+    width: 72rem;
+  }
+  .ti1-img {
+    object-position: 72% 40%;
+  }
+}
+
+/* ══ motion: once, on arrival, finished inside 2.4s ═══════════════════════ */
+@media (prefers-reduced-motion: no-preference) {
+  .ti1-img {
+    animation: ti1-settle 2.2s var(--ease) both;
+  }
+  .ti1-stem::after {
+    animation: ti1-bough 1s var(--ease) 0.15s both;
+  }
+  .ti1-hair,
+  .ti1-noun {
+    animation-duration: calc(0.8s + var(--i) * 0.2s);
+    animation-delay: calc(0.5s + var(--i) * 0.17s);
+    animation-timing-function: cubic-bezier(0.3, 0.55, 0.18, 1);
+    animation-fill-mode: both;
+  }
+  .ti1-hair {
+    animation-name: ti1-grow;
+  }
+  .ti1-noun {
+    animation-name: ti1-drop;
+  }
+  .ti1-notice {
+    animation: ti1-rise 0.7s var(--ease) 1.6s both;
+  }
+}
+
+@keyframes ti1-settle {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ti1-bough {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes ti1-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes ti1-drop {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * (var(--ti1-l0) + var(--i) * var(--ti1-pitch))));
+  }
+  35% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ti1-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

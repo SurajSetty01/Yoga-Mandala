@@ -1,0 +1,806 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   sx4d — PRAṆAVA · ABOUT · §04 HOW WE TEACH · concept D (spatial)
+
+   A FLOOR FIVE DAYS DEEP.
+
+   One immersion — Prabhava, 2–6 October 2023 — laid out the way its own camera
+   recorded it. Each photograph stands on the row of the day it was taken; the
+   rows run away from the reader one day at a time; within a row the frames
+   stand in the order they were shot. Seven of them carry practices as flags.
+   Scrolling walks the floor: each day comes up to meet the reader and drops
+   away beneath, until the pictures run out and the eighth flag is left standing
+   on bare floor past the last day of the course.
+
+   THE PROJECTION IS CSS. The stage exposes two numbers — `--cam`, how far into
+   the week the eye stands, and `--camx`, how far it has leaned sideways — and
+   every object carries its own world position (`--x` across, `--z` into the
+   page, `--h` standing height, `--w` width, all in units of the eye's height
+   above the floor). One-point perspective is then three lines of calc():
+
+       d      = z − cam + (Zb − 3)           distance ahead of the eye
+       foot   = horizon + (X·lat, F) / d     where it touches the floor
+       scale  = Zb / d                       (boxes are laid out at d = Zb)
+
+   Zb is how far the eye stands from the first row: 3 on a landscape screen,
+   4.4 on a portrait one. Vertical is tied to the stage's HEIGHT (F), lateral to
+   its WIDTH (lat), so a tall phone and a wide monitor both fill with floor
+   without either squashing a photograph: a frame's own width is always
+   h·ratio·F/d.
+
+   THE FLAGS are the one thing NOT projected in size: they stand on their frames
+   at a constant, legible size, the way a map sets a far town's name at the same
+   size as a near one — and, like a map, a narrow screen collapses the far ones
+   to their numerals during the walk (level of detail) and opens them as they
+   come near.
+
+   With no JavaScript, and under reduced motion, `--cam` is 0 and the reader
+   gets the whole floor from its front edge — every row, every photograph, all
+   eight practices legible. That is the composed state, not a fallback.
+
+   Animated: transform and opacity only. The only per-frame write is two
+   custom properties on the stage.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* the walk's flag lift: registered so it can ease (see THE WALK, under the flags) */
+@property --sx4d-lift {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 12;
+}
+
+.sx4d {
+  --sx4d-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --sx4d-mid: clamp(1.1rem, 0.98rem + 1vw, 1.72rem);
+  --sx4d-max: 92rem;
+  --sx4d-pad: clamp(4.4rem, 10vw, 9rem);
+  /* the wall is the section's ground; the floor is a step deeper, as the floors in
+     every one of these halls are darker than their walls */
+  --sx4d-wall: var(--ground-warm);
+  --sx4d-floor-far: #ece0cf;
+  --sx4d-floor-near: #e5d6c1;
+  --sx4d-hair: rgba(36, 29, 24, 0.12);
+
+  position: relative;
+  background: var(--sx4d-wall);
+  color: var(--ink);
+  /* only x is clipped — the sticky stage must keep its scrolling ancestor */
+  overflow-x: clip;
+}
+
+/* focus on paper: an ink ring in a cream halo (the global one is cream-on-dark) */
+.sx4d :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark, the page's own object ──────────────────────────── */
+.sx4d-mark {
+  margin: 0 0 clamp(1.6rem, 3.4vw, 2.7rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx4d-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx4d-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--brass);
+}
+.sx4d-mark--dark {
+  color: var(--ink-onPic-2);
+}
+.sx4d-mark--dark .sx4d-mark__n {
+  color: var(--ink-onPic);
+}
+.sx4d-mark--dark .sx4d-mark__rule {
+  background: var(--sand);
+}
+
+/* ── the head: the lead, and the sentence it answers ───────────────────── */
+.sx4d-head {
+  max-width: calc(var(--sx4d-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding: var(--sx4d-pad) var(--rail) clamp(2.4rem, 5vw, 4.2rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: clamp(2rem, 5vw, 5rem);
+}
+.sx4d-head .sx4d-mark {
+  grid-column: 1 / -1;
+}
+.sx4d-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.3rem, 1.2rem + 4.8vw, 6.4rem);
+  line-height: 1;
+  letter-spacing: -0.022em;
+  max-width: 12ch;
+}
+.sx4d-open {
+  margin: clamp(1.2rem, 2.4vw, 1.8rem) 0 0;
+  font-size: var(--sx4d-read);
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 36ch;
+}
+@media (min-width: 900px) {
+  .sx4d-head {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    align-items: end;
+  }
+  .sx4d-open {
+    margin: 0 0 0.45em;
+  }
+}
+
+/* ══ THE STAGE ═════════════════════════════════════════════════════════════ */
+
+.sx4d-track {
+  position: relative;
+}
+.sx4d-live .sx4d-track {
+  /* 5.6 units of walk at ~62svh a unit, plus the screen the stage itself fills */
+  height: 450svh;
+}
+
+.sx4d-stage {
+  position: relative;
+  height: 100svh;
+  min-height: 34rem;
+  max-height: 90rem;
+  overflow: hidden;
+  container-type: size;
+  container-name: sx4d;
+  background: var(--sx4d-wall);
+
+  /* THE HORIZON — a length, so a short screen keeps room above it for the prompt */
+  --vpY: max(24cqh, 13rem);
+  /* Zb — how far the eye stands from the first row. 3 on a landscape screen; a
+     portrait screen stands further back (see NARROW), which weakens the perspective
+     so the far rows are not crushed into the top of a tall, thin floor. The world's
+     own depths never change: the eye is simply moved back by Zb − 3. */
+  --Zb: 3;
+  /* pk — the frames' standing height, as a multiple of the world's. 1.5 on a
+     landscape screen: a practice frame stands at 0.69 of the eye's height, so the
+     front row's photographs are nearly half the stage tall and grow as they come on.
+     The media are the point; at 1 they read as thumbnails on a floor. */
+  --pk: 1.5;
+  /* lat — lateral focal length, as a multiple of the stage's WIDTH: at d = 3, X = ±1
+     lands at ±57%, so the front row's outermost frames stand half off the stage and
+     the far rows, narrowed by perspective, still have room for their flags. */
+  --latk: 1.7;
+}
+/* Declared on the children, not the stage: a custom property's var() references are
+   resolved where it is declared, so an F computed on the stage would never see the
+   Zb that a narrow screen sets on the children. */
+.sx4d-stage > * {
+  /* F — vertical focal length, chosen so the front row's feet (d = Zb) stand at 90%
+     of the stage: vpY + F/Zb = 90cqh. */
+  --F: calc(var(--Zb) * (90cqh - var(--vpY)));
+  --lat: calc(var(--latk) * 100cqw);
+  /* read by the island: during the walk a flag far off shows only its numeral */
+  --lod: 1;
+}
+.sx4d-live .sx4d-stage {
+  position: sticky;
+  top: 0;
+}
+
+/* the floor: everything below the horizon */
+.sx4d-floor,
+.sx4d-rays {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: var(--vpY);
+}
+.sx4d-floor {
+  background: linear-gradient(var(--sx4d-floor-far), var(--sx4d-floor-near));
+  border-top: 1px solid rgba(36, 29, 24, 0.22);
+}
+.sx4d-rays {
+  width: 100%;
+  height: calc(100% - var(--vpY));
+  pointer-events: none;
+}
+.sx4d-rays line {
+  stroke: var(--sx4d-hair);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* the eye's own point on the horizon; every projected object hangs off it */
+.sx4d-origin {
+  position: absolute;
+  left: 50%;
+  top: var(--vpY);
+  width: 0;
+  height: 0;
+}
+
+/* ── the days: a line across the floor at the front of each day's row ────── */
+.sx4d-day {
+  --d: max(0.5, var(--z) - var(--cam) + var(--Zb) - 3);
+  position: absolute;
+  left: -50cqw;
+  top: 0;
+  width: 100cqw;
+  height: 1px;
+  background: rgba(112, 85, 21, 0.4);
+  transform: translate3d(0, calc(var(--F) / var(--d)), 0);
+  opacity: clamp(0, (var(--d) / var(--Zb) - 0.77) / 0.13, 1);
+}
+/* the day's name: brass on a chip of the floor, above the frames. A name, not a
+   picture label, so it goes when its line goes — and it is solid until then. */
+.sx4d-day--name {
+  left: calc(-50cqw + var(--rail) - 0.4em);
+  width: auto;
+  height: auto;
+  /* it lies on the floor at the front of its row: over its own row's frames and the
+     rows behind, UNDER any nearer frame — a photograph closer to the reader hides a
+     farther day's name the way it hides that day's pictures */
+  z-index: var(--drank, 1);
+  padding: 0.3em 0.4em 0.25em;
+  background: var(--sx4d-floor-far);
+  font: 600 11px/1 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  white-space: nowrap;
+  transform: translate3d(0, calc(var(--F) / var(--d) - 100% - 2px), 0);
+  opacity: 1;
+}
+
+/* ── the photographs ──────────────────────────────────────────────────────
+   A plate is laid out at the size it has at d = Z0 (F/3 per unit) and scaled by
+   3/d, so the box is only re-laid on resize and every frame of the walk is a
+   transform. Its FOOT is on the floor; its left edge is at X − w/2. */
+.sx4d-list,
+.sx4d-crowd {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sx4d-item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+.sx4d-plate,
+.sx4d-tag,
+.sx4d-post {
+  --d: max(0.5, var(--z) - var(--cam) + var(--Zb) - 3);
+  --across: calc((var(--x) - var(--camx)) * var(--lat) / var(--d));
+  --left: calc(var(--across) - var(--w) * var(--pk) * var(--F) / var(--d) / 2);
+  --top: calc((1 - var(--h) * var(--pk)) * var(--F) / var(--d));
+  /* the post's fade (a frame overrides it: see PASSING A FRAME) */
+  --fade: clamp(0, (var(--d) / var(--Zb) - 0.735) / 0.14, 1);
+}
+.sx4d-plate {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  width: calc(var(--w) * var(--pk) * var(--F) / var(--Zb));
+  height: calc(var(--h) * var(--pk) * var(--F) / var(--Zb));
+  /* PASSING A FRAME. Once its foot has left the bottom of the stage, a frame is laid
+     down: it tips back about its own foot, face up, and sweeps out through the bottom
+     of the stage as a foreshortened plane on the floor the reader is walking over. The
+     days behind the reader become the ground. Transform only - no frame is ever half
+     transparent over another, which is what an opacity fade did at this scale. `--lay`
+     runs 0 → 1 between d = 0.88 Zb and 0.72 Zb; the perspective is the eye's own
+     distance at layout scale (F), shortened a little so the tip reads. Once edge-on it
+     is simply switched off. */
+  --lay: clamp(0, (0.88 - var(--d) / var(--Zb)) / 0.16, 1);
+  --fade: clamp(0, (var(--d) / var(--Zb) - 0.715) / 0.012, 1);
+  transform-origin: 0 0;
+  transform: translate3d(var(--left), var(--top), 0) scale(calc(var(--Zb) / var(--d)))
+    translate(50%, 100%) perspective(calc(var(--F) * 0.6)) rotateX(calc(var(--lay) * 86deg))
+    translate(-50%, -100%);
+  opacity: var(--fade);
+  /* doubled so a day's name can stand between two ranks */
+  z-index: calc(2 * var(--rank));
+  background: #d9cbb6;
+  box-shadow: 0 1px 0 rgba(36, 29, 24, 0.2);
+}
+.sx4d-plate picture {
+  display: contents;
+}
+.sx4d-img,
+.sx4d-loop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sx4d-loop {
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+.sx4d-loop.is-playing {
+  opacity: 1;
+}
+
+/* a frame's shadow on the floor, so it STANDS rather than floats. Drawn inside the
+   plate's own box so it scales with it. */
+.sx4d-plate::after {
+  content: '';
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  top: 100%;
+  height: 10%;
+  max-height: 22px;
+  background: radial-gradient(closest-side, rgba(36, 29, 24, 0.24), rgba(36, 29, 24, 0));
+  pointer-events: none;
+}
+
+/* ── the post: the one practice with no photograph under it ─────────────── */
+.sx4d-post {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5px;
+  height: calc(var(--h) * var(--pk) * var(--F) / var(--Zb));
+  transform-origin: 0 0;
+  transform: translate3d(var(--across), var(--top), 0) scaleY(calc(var(--Zb) / var(--d)));
+  opacity: var(--fade);
+  background: var(--brass);
+}
+.sx4d-post::after {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: calc(100% - 3px);
+  width: 20px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(36, 29, 24, 0.3), rgba(36, 29, 24, 0));
+}
+
+/* ── the flags ────────────────────────────────────────────────────────────
+   Each practice is a paper flag standing on its frame's top edge, set at a
+   CONSTANT size — the way a map labels a far town at the same size as a near
+   one — so the last, a week away, is as legible as the first. The chip owns its
+   ground: ink on it is 15.6:1 whatever photograph is behind. */
+.sx4d-tag {
+  --stem: 12px;
+  --inset: 0.62em;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  width: max-content;
+  max-width: 14em;
+  padding: 0.4em 0.7em 0.46em var(--inset);
+  font: 500 clamp(0.84rem, 0.8rem + 0.2vw, 0.98rem) / 1.28 var(--font-text);
+  color: var(--ink);
+  background: var(--ground);
+  border: 1px solid rgba(36, 29, 24, 0.16);
+  border-radius: 2px;
+  box-shadow: 0 6px 16px -8px rgba(36, 29, 24, 0.4);
+  /* held inside the stage: a flag whose frame is leaving at the side slides along the
+     edge rather than being cut by it */
+  transform: translate3d(
+    clamp(calc(-50cqw + var(--tagmin, 0.5rem)), var(--tagx, var(--left)), calc(50cqw - 100% - 0.5rem)),
+    calc(var(--top) - 100% - var(--stem)),
+    0
+  );
+  z-index: calc(100 + var(--rank));
+  transition:
+    background-color 0.35s var(--ease),
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    opacity 0.3s var(--ease),
+    visibility 0s linear 0s;
+}
+/* A flag is never half-transparent over a photograph: the island hides it outright
+   once its frame starts to go, so no glyph is ever measured against a mix. */
+.sx4d-item.is-past .sx4d-tag {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s var(--ease),
+    visibility 0s linear 0.3s;
+}
+.sx4d-tag::after {
+  content: '';
+  position: absolute;
+  left: var(--inset);
+  top: 100%;
+  width: 1px;
+  height: calc(var(--stem) + 1px);
+  background: var(--brass);
+}
+.sx4d-tag__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.92em;
+  color: var(--brass);
+  font-variant-numeric: lining-nums;
+}
+/* STEMS. A flag stands 12px above its frame unless, in the composed view, it would
+   touch a nearer flag — then it stands taller. Found by placing the flags nearest-first
+   and raising each until it touched nothing already placed (1024x768 through 2560x1440),
+   and kept as one table: a taller stem on a larger screen costs nothing. */
+.sx4d-item[data-n='3'] .sx4d-tag {
+  --stem: 18px;
+}
+.sx4d-item[data-n='4'] .sx4d-tag,
+.sx4d-item[data-n='5'] .sx4d-tag {
+  --stem: 48px;
+}
+.sx4d-item[data-n='7'] .sx4d-tag {
+  --stem: 30px;
+}
+
+/* the post's flag rides the post itself: its stem is the post, continued */
+.sx4d-item--post .sx4d-tag {
+  --stem: 52px;
+  z-index: 190;
+  margin-left: calc(-1 * var(--inset));
+}
+.sx4d-item--post .sx4d-tag::after {
+  width: 1.5px;
+}
+
+/* THE LANDSCAPE FLOOR has its own tables, because its frames stand taller and a near
+   frame's flag now rises into the rows behind it. Each table is ONE solve over a set of
+   screens: the flags are placed nearest first, and each is given the least stem at which,
+   on every screen in the set at once, it touches no flag already placed and neither of
+   the words on the wall (and, in the walk, stays clear of the navigation pill).
+     walk            1024x768 → 2560x1440, 900x1000 → 1280x1024
+     composed, tall  1440x900, 1536x864, 1600x900, 1680x1050, 1440x1100, 1920x1080,
+                     2531x1140, 2560x1440
+     composed, short 1024x768, 1280x720, 1366x768, 1280x800, 1600x800, 1100x850,
+                     1280x1024, 1200x1000, 1100x1000
+     composed, square 820x1000, 850x1000, 900x1000, 1000x1000, 1000x1100 */
+@container sx4d not (max-aspect-ratio: 4 / 5) {
+  /* THE WALK. A far flag is a numeral on a tall stake, raised clear of the open flags
+     in front of it; when its row comes near it opens and is LOWERED to stand 12px over
+     its frame. The lift is a registered number, so it eases rather than jumps, and the
+     stem is a 1px line scaled to it: transform only. 01 and 02 open at the first step. */
+  .sx4d-live .sx4d-item[data-n] .sx4d-tag {
+    --sx4d-lift: 12;
+    --stem: calc(var(--sx4d-lift) * 1px);
+    transition:
+      background-color 0.35s var(--ease),
+      color 0.35s var(--ease),
+      border-color 0.35s var(--ease),
+      opacity 0.3s var(--ease),
+      visibility 0s linear 0s,
+      --sx4d-lift 0.55s var(--ease);
+  }
+  .sx4d-live .sx4d-tag::after {
+    height: 1px;
+    transform: scaleY(calc(var(--sx4d-lift) + 1));
+    transform-origin: 0 0;
+  }
+  .sx4d-live .sx4d-item.is-far[data-n='4'] .sx4d-tag {
+    --sx4d-lift: 26;
+  }
+  .sx4d-live .sx4d-item.is-far[data-n='5'] .sx4d-tag {
+    --sx4d-lift: 64;
+  }
+  .sx4d-live .sx4d-item.is-far[data-n='6'] .sx4d-tag {
+    --sx4d-lift: 62;
+  }
+  .sx4d-live .sx4d-item.is-far[data-n='7'] .sx4d-tag {
+    --sx4d-lift: 43;
+  }
+  .sx4d-live .sx4d-item--post[data-n] .sx4d-tag {
+    --sx4d-lift: 52;
+  }
+  /* 04 is the leftmost practice: it opens beside 03, so it hangs outward, toward the
+     edge of the floor, from its frame's right-hand corner */
+  .sx4d-live .sx4d-item[data-n='4'] .sx4d-tag {
+    --tagx: calc(var(--left) + var(--w) * var(--pk) * var(--F) / var(--d) - 100%);
+  }
+  .sx4d-live .sx4d-item[data-n='4'] .sx4d-tag::after {
+    left: auto;
+    right: var(--inset);
+  }
+  /* the composed floor, all eight open: frames at 1.5 */
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n] .sx4d-tag {
+    --stem: 12px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='3'] .sx4d-tag {
+    --stem: 34px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='5'] .sx4d-tag {
+    --stem: 73px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='8'] .sx4d-tag {
+    --stem: 62px;
+  }
+}
+/* the composed floor on a short or squarish screen, frames at 1.1 (see below) */
+@container sx4d (min-aspect-ratio: 801 / 1000) and ((max-height: 819px) or (max-aspect-ratio: 13 / 10)) {
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='3'] .sx4d-tag {
+    --stem: 24px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='4'] .sx4d-tag {
+    --stem: 58px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='5'] .sx4d-tag {
+    --stem: 56px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='6'] .sx4d-tag {
+    --stem: 14px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='7'] .sx4d-tag {
+    --stem: 29px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='8'] .sx4d-tag {
+    --stem: 53px;
+  }
+}
+/* …and about as tall as it is wide, frames at 0.9 */
+@container sx4d (min-aspect-ratio: 801 / 1000) and (max-aspect-ratio: 1 / 1) {
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n] .sx4d-tag {
+    --stem: 12px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='4'] .sx4d-tag {
+    --stem: 22px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='5'] .sx4d-tag {
+    --stem: 19px;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='8'] .sx4d-tag {
+    --stem: 52px;
+  }
+}
+
+/* LEVEL OF DETAIL, as a map labels: during the walk a flag more than 1.45 times the
+   first row's distance away is shown as its numeral alone, and opens as its row comes
+   near. Only in the live walk — the composed floor is laid out to hold all eight open.
+   The words stay in the accessibility tree either way. */
+.sx4d-item.is-far .sx4d-tag {
+  gap: 0;
+  padding-right: var(--inset);
+}
+.sx4d-item.is-far .sx4d-tag__t {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* the flag nearest ahead of the reader. Cream on forest: 10.04:1. */
+.sx4d-item.is-near .sx4d-tag {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #fbf7f2;
+}
+.sx4d-item.is-near .sx4d-tag__n {
+  color: #fbf7f2;
+}
+
+/* ── words on the wall ─────────────────────────────────────────────────── */
+.sx4d-prompt {
+  position: absolute;
+  left: var(--rail);
+  bottom: calc(100cqh - var(--vpY) + 1.1rem);
+  z-index: 300;
+  margin: 0;
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--sx4d-mid);
+  line-height: 1.22;
+  color: var(--ink);
+}
+.sx4d-cap {
+  position: absolute;
+  right: var(--rail);
+  bottom: calc(100cqh - var(--vpY) + 1.1rem);
+  z-index: 300;
+  margin: 0;
+  max-width: 30ch;
+  font: 500 11px/1.55 var(--font-text);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+/* The caption's second home. On a screen little wider than it is tall, or narrower,
+   the wall has room for the prompt and nothing else, so the caption is read in the head,
+   before the floor, instead. Only one of the two is ever displayed. */
+.sx4d-note {
+  display: none;
+  grid-column: 1 / -1;
+  margin: clamp(1.2rem, 3vw, 1.6rem) 0 0;
+  max-width: 34ch;
+  font: 500 11px/1.55 var(--font-text);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+@media (max-aspect-ratio: 6 / 5) {
+  .sx4d-cap {
+    display: none;
+  }
+  .sx4d-note {
+    display: block;
+  }
+}
+
+/* ── the foot: the sentence the walk arrives at ────────────────────────── */
+/* the floor runs on under the closing sentence: the stage releases onto more floor */
+.sx4d-foot {
+  background: var(--sx4d-floor-near);
+}
+.sx4d-foot__rail {
+  max-width: calc(var(--sx4d-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding: clamp(3rem, 7vw, 6rem) var(--rail) var(--sx4d-pad);
+}
+.sx4d-close {
+  margin: 0 0 0 auto;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx4d-mid);
+  line-height: 1.34;
+  color: var(--ink);
+}
+
+/* THE COMPOSED FLOOR ON A SHORT OR SQUARISH SCREEN. With no walk, every flag is open at
+   once, and below ~820px of stage (or on a stage little wider than it is tall) there is
+   not the room between the horizon and the front row for eight of them over frames this
+   tall: the frames stand at 1.1 instead. The walk keeps 1.5, because there the far flags
+   are numerals until they come near. Declared before NARROW, which overrides it. */
+@container sx4d (min-aspect-ratio: 801 / 1000) and ((max-height: 819px) or (max-aspect-ratio: 13 / 10)) {
+  .sx4d:not(.sx4d-live) .sx4d-stage > * {
+    --pk: 1.1;
+  }
+}
+/* and on a stage about as tall as it is wide, smaller again and spread wider, so the
+   rows have the width to stand apart in */
+@container sx4d (min-aspect-ratio: 801 / 1000) and (max-aspect-ratio: 1 / 1) {
+  .sx4d:not(.sx4d-live) .sx4d-stage > * {
+    --pk: 0.9;
+    --latk: 2;
+  }
+}
+
+/* ══ NARROW ═════════════════════════════════════════════════════════════════ */
+@container sx4d (max-aspect-ratio: 4 / 5) {
+  .sx4d-stage > * {
+    --Zb: 4.4;
+    --pk: 0.8;
+    --latk: 2.3;
+    /* read by the island: flags far off collapse to their numeral */
+    --lod: 1;
+  }
+  /* on a narrow floor a flag is centred on its frame, not hung from its left edge:
+     three flags to a row have to share 390px */
+  .sx4d-tag {
+    --tagx: calc(var(--across) - 50%);
+    --inset: 0.55em;
+    max-width: 8.6em;
+    font-size: 0.8rem;
+  }
+  .sx4d-tag::after {
+    left: 50%;
+  }
+  .sx4d-item--post .sx4d-tag {
+    margin-left: 0;
+  }
+  /* the days' names turn on their side and keep a 1.6rem margin of their own down the
+     left edge, which no flag may enter: on a floor this narrow a flag clamped to the edge
+     would otherwise sit on a name */
+  .sx4d-tag {
+    --tagmin: 1.7rem;
+  }
+  .sx4d-day--name {
+    left: calc(-50cqw + 0.2rem);
+    padding: 0.4em 0.3em;
+    writing-mode: vertical-rl;
+    transform: translate3d(0, calc(var(--F) / var(--d) - 100% - 2px), 0) rotate(180deg);
+  }
+  /* the composed floor, taller than the screen (below): same frames, more floor */
+  .sx4d:not(.sx4d-live) .sx4d-stage > * {
+    --pk: 0.4;
+    --latk: 2.9;
+  }
+  /* its stems, solved the same way as the landscape table (320x568, 390x844) */
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='5'] .sx4d-tag {
+    --stem: 11.6cqh;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='7'] .sx4d-tag {
+    --stem: 10.6cqh;
+  }
+  .sx4d:not(.sx4d-live) .sx4d-item[data-n='8'] .sx4d-tag {
+    --stem: 8.9cqh;
+  }
+}
+
+/* The composed (static) floor on a portrait screen is TALLER than the screen: there is
+   no walk to bring the far rows near, so the floor itself is given the height to hold
+   all eight flags apart. Scrolled past like any picture. */
+@media (max-aspect-ratio: 4 / 5) {
+  .sx4d:not(.sx4d-live) .sx4d-stage {
+    height: 175svh;
+    max-height: none;
+    --vpY: 14rem;
+  }
+}
+@media (max-aspect-ratio: 4 / 5) and (max-width: 359px) {
+  .sx4d:not(.sx4d-live) .sx4d-stage {
+    height: 215svh;
+  }
+  .sx4d .sx4d-tag {
+    font-size: 0.75rem;
+    max-width: 8.2em;
+  }
+}
+
+/* ══ REDUCED MOTION ═════════════════════════════════════════════════════════
+   The motion island never runs, so `--cam` stays 0, the track keeps its natural
+   height and nothing is sticky. The loops are never attached. */
+@media (prefers-reduced-motion: reduce) {
+  .sx4d-tag {
+    transition: none;
+  }
+  .sx4d-loop {
+    display: none;
+  }
+}
+
+/* ── the neighbours, drawn only so the seams are judged honestly ────────── */
+.sx4d-before {
+  background: var(--ground);
+  padding: clamp(5rem, 11vw, 9rem) 0 clamp(4rem, 9vw, 7rem);
+}
+.sx4d-before__rail,
+.sx4d-after__rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+.sx4d-before__line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.62rem, 1.02rem + 2.7vw, 3.7rem);
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  max-width: 22ch;
+}
+.sx4d-after {
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding: clamp(5rem, 11vw, 9rem) 0 70svh;
+}

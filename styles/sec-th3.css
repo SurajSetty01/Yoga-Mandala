@@ -1,0 +1,350 @@
+/* Final th3 section. Every selector is namespaced .th3- */
+
+/* ══ /heal/ 02 · ASKING ABOUT IT — THE MESSAGE IS THE STRIKER ═════════════════
+   Brass chimes hang from the section's top edge (pr-pbh-img_5586). The line of
+   their wooden striker disc is drawn on out of the photograph, and the enquiry
+   plate hangs from it, carrying the prefilled message. A strike (arrival,
+   hover, focus, tap) swings the plate a few degrees about the disc and
+   crossfades to pr-pbh-img_5585, where the disc has turned edge-on.
+
+   GEOMETRY. Both frames are 3:4. Each <img> is wider than its box and pinned
+   bottom-left, so the box shows the left part of the frame with the striker on
+   the box's centre line:
+     5586  disc centre x 0.355, bottom y 0.90   → width 1/0.71 = 140.85%
+     5585  sail centre x 0.325, bottom y 0.92   → width 1/0.65 = 153.85%
+   With the rest image 1.4085 box-widths wide (so 1.878 tall), the disc's
+   lower edge sits 0.10 × 1.878 = 0.1878 box-widths above the box's bottom.
+   The hanger starts exactly there: it is the pivot, and the cord's top.
+   Everything is in container units of the axis, so the join holds at any
+   width without script.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.th3 {
+  --th3-pad: clamp(4.5rem, 9vw, 8rem);
+  --th3-drop: clamp(2.25rem, 4vw, 3.4rem);
+  --th3-knot: 0.1878;
+  --th3-cream: #fbf7f2;
+
+  position: relative;
+  padding-block: var(--th3-pad) calc(var(--th3-pad) * 1.05);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* Capped AND centred: max-width alone pins the column left at 2531. */
+.th3-rail {
+  max-width: calc(76rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.th3-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(2.2rem, 7vw, 3.4rem);
+}
+
+/* ── the invitation ─────────────────────────────────────────────────────── */
+.th3-say {
+  min-width: 0;
+}
+.th3-lead {
+  margin: 0;
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.8rem, 0.9rem + 3.3vw, 4.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.026em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* ── the axis: chimes, line, plate ──────────────────────────────────────── */
+.th3-axis {
+  container-type: inline-size;
+  width: min(100%, 34rem);
+  min-width: 0;
+}
+
+.th3-chime {
+  --th3-pw: 80cqw;
+  position: relative;
+  width: var(--th3-pw);
+  aspect-ratio: 0.8;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #c9cdc3;
+}
+.th3-img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  max-width: none;
+  height: auto;
+}
+.th3-img--rest {
+  width: 140.85%;
+}
+.th3-img--struck {
+  width: 153.85%;
+  opacity: 0;
+}
+
+/* The pivot is the top of this box, at the disc's lower edge. */
+.th3-hang {
+  --th3-pw: 80cqw;
+  position: relative;
+  z-index: 1;
+  margin-top: calc(var(--th3-pw) * var(--th3-knot) * -1);
+  padding-top: calc(var(--th3-pw) * var(--th3-knot) + var(--th3-drop));
+  transform-origin: 50% 0;
+  pointer-events: none;
+}
+.th3-cord {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  margin-left: -0.5px;
+  /* down across the parapet, out of the photograph, into the plate's eye */
+  height: calc(var(--th3-pw) * var(--th3-knot) + var(--th3-drop) + 1.05rem + 6px);
+  background: rgba(36, 29, 24, 0.82);
+}
+
+.th3-plate {
+  position: relative;
+  pointer-events: auto;
+  padding: clamp(2.5rem, 4vw, 3.1rem) clamp(1.3rem, 3.4vw, 2.3rem) clamp(1.25rem, 2.6vw, 1.8rem);
+  border-radius: 6px;
+  background: var(--forest);
+  color: var(--th3-cream);
+  text-align: center;
+  box-shadow: 0 22px 44px -30px rgba(18, 32, 26, 0.6);
+  transition: background-color 0.3s var(--ease);
+}
+.th3-plate:hover,
+.th3-plate:focus-within {
+  background: var(--forest-deep);
+}
+/* the punched eye the line ties into */
+.th3-eye {
+  position: absolute;
+  top: 1.05rem;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: var(--ground);
+  box-shadow: inset 0 1px 2px rgba(18, 32, 26, 0.45);
+}
+
+.th3-intent {
+  margin: 0 0 1.35rem;
+  font: 500 clamp(0.84rem, 0.8rem + 0.18vw, 0.95rem) / 1.35 var(--font-text);
+  letter-spacing: 0.01em;
+  color: rgba(251, 247, 242, 0.88);
+}
+.th3-opens {
+  margin: 0 0 0.6rem;
+  font: 600 11px/1.3 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: rgba(251, 247, 242, 0.78);
+}
+.th3-msg {
+  margin: 0 auto clamp(1.4rem, 3vw, 1.9rem);
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.32rem, 1rem + 1.15vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--th3-cream);
+  text-wrap: balance;
+}
+
+.th3-go {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding-top: 1.05rem;
+  border-top: 1px solid rgba(251, 247, 242, 0.24);
+  font: 600 clamp(0.98rem, 0.93rem + 0.28vw, 1.12rem) / 1.2 var(--font-text);
+  letter-spacing: 0.005em;
+  color: var(--th3-cream);
+  text-decoration: none;
+}
+/* the whole plate is the link's hit area */
+.th3-go::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+}
+/* The ring goes round the plate, not the words: on the stretched layer, ink
+   on paper, with the paper-side halo the rest of the heal page uses. */
+.th3-go:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: none;
+}
+.th3-go:focus-visible::after {
+  outline: 2px solid #241d18;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+.th3-arw {
+  flex: none;
+  transition: transform 0.35s var(--ease);
+}
+.th3-plate:hover .th3-arw,
+.th3-go:focus-visible .th3-arw {
+  transform: translateX(4px);
+}
+
+/* ── the notes, after the route ─────────────────────────────────────────── */
+.th3-notes {
+  min-width: 0;
+  max-width: 40ch;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(36, 29, 24, 0.14);
+  font: 400 clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+.th3-notes p {
+  margin: 0 0 0.8rem;
+}
+.th3-notes p:last-child {
+  margin-bottom: 0;
+}
+.th3-link {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(193, 97, 60, 0.6);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.th3-link:hover {
+  text-decoration-color: var(--forest);
+}
+.th3-link:focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the strike ─────────────────────────────────────────────────────────── */
+@keyframes th3-swing {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: cubic-bezier(0.2, 0.75, 0.4, 1);
+  }
+  10% {
+    transform: rotate(3.2deg);
+  }
+  27% {
+    transform: rotate(-2.3deg);
+  }
+  44% {
+    transform: rotate(1.5deg);
+  }
+  61% {
+    transform: rotate(-0.85deg);
+  }
+  77% {
+    transform: rotate(0.4deg);
+  }
+  90% {
+    transform: rotate(-0.12deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+@keyframes th3-ring {
+  0% {
+    opacity: 0;
+  }
+  9% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.th3.is-struck .th3-hang {
+  animation: th3-swing 2.9s cubic-bezier(0.37, 0, 0.63, 1) both;
+}
+.th3.is-struck .th3-img--struck {
+  animation: th3-ring 2.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Reduced motion: nothing swings or nudges. The frame still answers hover and
+   focus, by opacity alone. */
+@media (prefers-reduced-motion: reduce) {
+  .th3.is-struck .th3-hang,
+  .th3.is-struck .th3-img--struck {
+    animation: none;
+  }
+  .th3-arw {
+    transition: none;
+  }
+  .th3-plate:hover .th3-arw,
+  .th3-go:focus-visible .th3-arw {
+    transform: none;
+  }
+  .th3-img--struck {
+    transition: opacity 0.45s linear;
+  }
+  .th3-axis:has(.th3-plate:hover, .th3-go:focus-visible) .th3-img--struck {
+    opacity: 1;
+  }
+}
+
+/* ── two columns: words left, the hanging axis right ────────────────────────
+   The photograph is pulled up through the section's top padding so the chimes
+   hang from the join with the band above. The notes settle at the foot of the
+   words column, beside the plate. */
+@media (min-width: 960px) {
+  .th3-grid {
+    grid-template-columns: minmax(0, 1fr) clamp(26rem, 38vw, 38rem);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'say axis'
+      'notes axis';
+    column-gap: clamp(3rem, 7vw, 8rem);
+    row-gap: 3rem;
+  }
+  .th3-say {
+    grid-area: say;
+  }
+  .th3-lead {
+    max-width: 12.5ch;
+  }
+  .th3-axis {
+    grid-area: axis;
+    width: 100%;
+    margin-top: calc(var(--th3-pad) * -1);
+  }
+  .th3-notes {
+    grid-area: notes;
+    align-self: end;
+  }
+  .th3-chime {
+    aspect-ratio: 0.72;
+  }
+}
+
+.th3-keep {
+  white-space: nowrap;
+}

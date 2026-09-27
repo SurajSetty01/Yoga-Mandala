@@ -1,0 +1,226 @@
+/* Final th2 section. Every selector is namespaced .th2- */
+
+/* /heal/ 01 · the seat, drawn from above. See components/heal/th2/Areas.tsx.
+   --th2-cx/cw/cy/ch: the crop of the 1620x1080 frame, in the frame's own pixels. Every
+   position below (the plate, the drop lines, the plan's size and centre, the note) is
+   computed from them, so the plan stays exactly under the photographed rim at every tier. */
+.th2-areas {
+  --th2-g: clamp(16px, 4.2vw, 4.25rem);
+  --th2-cx: 358;
+  --th2-cw: 720;
+  --th2-cy: 250;
+  --th2-ch: 640;
+  position: relative;
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-block: clamp(4.5rem, 9vw, 8rem);
+  overflow-x: clip;
+}
+@media (min-width: 640px) {
+  .th2-areas { --th2-cx: 120; --th2-cw: 1150; --th2-cy: 180; --th2-ch: 740; }
+}
+@media (min-width: 1024px) {
+  .th2-areas { --th2-cx: 0; --th2-cw: 1620; --th2-cy: 170; --th2-ch: 680; }
+}
+
+.th2-rail {
+  width: min(100% - 2 * var(--th2-g), 88rem);
+  margin-inline: auto;
+}
+
+.th2-fig { margin: 0; }
+
+/* ── the photograph, cropped by an oversized plate so the overlay keeps frame pixels ── */
+.th2-photo {
+  position: relative;
+  overflow: clip;
+  aspect-ratio: var(--th2-cw) / var(--th2-ch);
+  background: #cdbfae;
+  view-timeline: --th2p block;
+}
+.th2-plate {
+  position: absolute;
+  width: calc(1620 / var(--th2-cw) * 100%);
+  left: calc(var(--th2-cx) / var(--th2-cw) * -100%);
+  top: calc(var(--th2-cy) / var(--th2-ch) * -100%);
+  aspect-ratio: 3 / 2;
+}
+.th2-img,
+.th2-trace {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.th2-trace { overflow: visible; }
+
+.th2-arc {
+  fill: none;
+  stroke: var(--clay);
+  stroke-width: 3;
+  stroke-linecap: butt;
+}
+
+/* Projection lines: construction, not object. Thin, forest, the same in all three pieces. */
+.th2-proj {
+  stroke: var(--forest-mid);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.6;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.th2-proj--p { stroke: var(--forest); opacity: 0.7; }
+
+.th2-drop {
+  position: relative;
+  height: clamp(36px, 5vw, 72px);
+  view-timeline: --th2d block;
+}
+.th2-drop__l {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  margin-left: -0.5px;
+  background: var(--forest-mid);
+  opacity: 0.6;
+  transform-origin: 50% 0;
+}
+.th2-drop__l--l { left: calc((450.6 - var(--th2-cx)) / var(--th2-cw) * 100%); }
+.th2-drop__l--r { left: calc((984.4 - var(--th2-cx)) / var(--th2-cw) * 100%); }
+
+/* ── the plan: ring r=200 in a 490 viewBox, so 122.5% of the rim's width ── */
+.th2-plan {
+  position: relative;
+  view-timeline: --th2r block;
+}
+.th2-plansvg {
+  display: block;
+  overflow: visible;
+  width: calc(533.8 / var(--th2-cw) * 122.5%);
+  margin-left: calc(
+    (717.5 - var(--th2-cx)) / var(--th2-cw) * 100% - 533.8 / var(--th2-cw) * 61.25%
+  );
+}
+
+.th2-ring {
+  fill: none;
+  stroke: var(--clay);
+  stroke-width: 2;
+  stroke-linecap: butt;
+}
+.th2-origin { fill: var(--clay); }
+
+.th2-name {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 25px;
+  font-weight: 560;
+  letter-spacing: 0.01em;
+  fill: var(--forest);
+}
+@media (max-width: 639px) {
+  /* The plan is ~320px across on a phone; 28 units keeps the names at ~18px. */
+  .th2-name { font-size: 28px; font-weight: 600; }
+}
+.th2-sv {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 60px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  fill: var(--forest);
+}
+
+.th2-note {
+  margin: clamp(1.75rem, 4vw, 2.5rem) auto 0;
+  max-width: 22ch;
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.6rem);
+  line-height: 1.35;
+  color: var(--ink);
+  text-wrap: balance;
+}
+@media (min-width: 1024px) {
+  /* Beside the plan, level with its equator, in the space under the second seat. */
+  .th2-note {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    left: calc(
+      (717.5 - var(--th2-cx)) / var(--th2-cw) * 100% + 533.8 / var(--th2-cw) * 61.25% +
+        clamp(1.5rem, 3vw, 3.5rem)
+    );
+    right: 0;
+    margin: 0;
+    max-width: 19ch;
+    text-align: left;
+  }
+}
+
+.th2-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── the drawing happens with the scroll; without support, or with reduced motion, it is
+      simply drawn. Base styles above are the finished state. ── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .th2-arc {
+      stroke-dasharray: 1 1;
+      animation: th2-draw linear both;
+      animation-timeline: --th2p;
+      animation-range: entry 45% cover 42%;
+    }
+    .th2-proj--p {
+      animation: th2-drop linear both;
+      animation-timeline: --th2p;
+      animation-range: cover 42% cover 55%;
+    }
+    .th2-drop__l {
+      animation: th2-drop linear both;
+      animation-timeline: --th2d;
+      animation-range: cover 25% cover 42%;
+    }
+    .th2-proj--r {
+      animation: th2-drop linear both;
+      animation-timeline: --th2r;
+      animation-range: entry 8% entry 38%;
+    }
+    .th2-origin {
+      animation: th2-fade linear both;
+      animation-timeline: --th2r;
+      animation-range: entry 30% entry 42%;
+    }
+    .th2-ring {
+      stroke-dasharray: 1 1;
+      animation: th2-draw linear both;
+      animation-timeline: --th2r;
+      animation-range: entry 40% cover 50%;
+    }
+  }
+}
+@keyframes th2-draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes th2-drop {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes th2-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

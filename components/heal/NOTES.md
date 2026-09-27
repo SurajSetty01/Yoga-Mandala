@@ -1,5 +1,10 @@
 # Praṇava — Heal
 
+> **Superseded (2026-09).** The three sections below were rebuilt as th1 (`components/heal/th1/`),
+> th2 (`th2/`) and th3 (`th3/`), which do carry photographs and, in th1 and th3, a client island.
+> Grounds still run paper · warm · paper. The brief, the empty-state reasoning and the content
+> limits recorded here still hold; the section designs described here no longer exist.
+
 `/heal/`. Three sections, no photographs, no JavaScript, and the page never goes dark.
 
 The brief is explicit about what this page is. `Context/new/Pranava Website.docx` §7:

@@ -1,0 +1,345 @@
+/* Final tl1 section. Every selector is namespaced .tl1- */
+
+/* ══ LEARN · MASTHEAD — THE FOCUS IS PULLED FROM THE WORD TO THE ROOM ═════
+   Opens on one photograph, edge to edge, out of focus under a pale veil, the
+   words the only sharp thing on it. Over one screen of scroll the room comes
+   sharp while the veil drops to the floor of the frame and becomes a paper
+   band, and the words settle into it beside the two routes.
+
+   The DEFAULT rules below are the finished state as a plain page (no JS, or
+   reduced motion): words on cream, the routes, then the room, sharp, full
+   width. The focus pull is layered on only for `.js` + motion allowed.
+   Only transform and opacity ever change on scroll; the blur is a static
+   filter on a 480px copy that the sharp frame fades in over.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.tl1 {
+  --tl1-rail: clamp(1.25rem, 4vw, 4.5rem);
+  --tl1-in: max(var(--tl1-rail), calc((100% - 101.25rem) / 2));
+  /* how much of the image box hangs off the left edge: 13.6% of the box is ~12% of
+     the frame, the door, the water dispenser and the bags. Only where the frame is
+     fitted by width; narrow viewports crop by object-position instead. */
+  --tl1-crop: 0%;
+  --tl1-pos: 54% 46%;
+  --tl1-shrink: 0.08;
+  position: relative;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.tl1-frame {
+  display: flex;
+  flex-direction: column;
+  padding-top: clamp(6rem, 14svh, 9rem);
+}
+
+/* ── the words and the routes ─────────────────────────────────────────── */
+.tl1-band {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.4rem, 3.4svh, 2.2rem);
+  padding: 0 var(--tl1-in) clamp(2rem, 5svh, 3.4rem);
+}
+
+.tl1-intent {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
+  line-height: 1.4;
+  color: var(--ink);
+}
+.tl1-intent span:first-child {
+  margin-left: -0.42em;
+}
+
+.tl1-h1 {
+  margin: clamp(0.3rem, 1svh, 0.7rem) 0 0;
+  font-weight: 400;
+}
+.tl1-word {
+  display: block;
+  margin-left: -0.04em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-variation-settings: 'SOFT' 30;
+  font-size: clamp(4.2rem, 22vw, 7.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.tl1-deck {
+  display: block;
+  max-width: 30ch;
+  margin-top: clamp(0.8rem, 2svh, 1.2rem);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(1.12rem, 1.75vw, 1.8rem);
+  line-height: 1.32;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+}
+
+.tl1-routes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.5rem;
+}
+.tl1-enq {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  background: var(--forest);
+  color: #fbf7f2;
+  font: 600 0.95rem/1 var(--font-text);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: background 0.3s var(--ease);
+}
+.tl1-enq:hover {
+  background: var(--forest-mid);
+}
+.tl1-enq:active {
+  background: var(--forest-deep);
+}
+.tl1-enq:focus-visible {
+  border-radius: 999px;
+}
+.tl1-to {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 48px;
+  font: 500 0.95rem/1.2 var(--font-text);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(36, 29, 24, 0.4);
+  text-underline-offset: 0.32em;
+  transition: text-decoration-color 0.25s var(--ease);
+}
+.tl1-to:hover {
+  text-decoration-color: currentColor;
+}
+.tl1-to svg {
+  flex: none;
+  transition: transform 0.3s var(--ease);
+}
+.tl1-to:hover svg {
+  transform: translateY(2px);
+}
+
+/* ── the room ─────────────────────────────────────────────────────────── */
+.tl1-fig {
+  margin: 0;
+}
+.tl1-lens {
+  position: relative;
+  overflow: clip;
+  height: clamp(300px, 58svh, 1000px);
+}
+.tl1-lens img {
+  position: absolute;
+  top: 0;
+  left: calc(-1 * var(--tl1-crop));
+  width: calc(100% + var(--tl1-crop));
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--tl1-pos);
+}
+.tl1-soft,
+.tl1-veil {
+  display: none;
+}
+
+.tl1-cap {
+  margin: 0;
+  padding: 0.85rem var(--tl1-in) clamp(2.6rem, 7svh, 4.5rem);
+  font: 400 0.8rem/1.45 var(--font-text);
+  color: var(--ink-soft);
+}
+.tl1-cap span {
+  display: block;
+  max-width: 62ch;
+}
+.tl1-prov {
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 1024px) {
+  .tl1 {
+    --tl1-crop: 13.6%;
+    --tl1-pos: 50% 42%;
+    --tl1-shrink: 0.16;
+  }
+  .tl1-band {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: clamp(2rem, 4vw, 5rem);
+  }
+  .tl1-say {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .tl1-h1 {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: clamp(2rem, 3.6vw, 4.5rem);
+    align-items: end;
+  }
+  .tl1-word {
+    font-size: clamp(7rem, 12.5vw, 13rem);
+  }
+  .tl1-deck {
+    max-width: 26ch;
+    margin-top: 0;
+    padding-bottom: 0.55rem;
+  }
+  .tl1-routes {
+    flex: none;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-bottom: 0.4rem;
+  }
+  .tl1-lens {
+    height: clamp(360px, 64svh, 1100px);
+  }
+}
+
+/* ══ THE FOCUS PULL ══════════════════════════════════════════════════════
+   The stage is two screens; the frame is held for one while --d and --s run
+   0 → 1, then leaves with the page. The band is laid at the bottom of the
+   frame in its FINISHED place and the words are lifted out of it at rest
+   (--tl1-lift, measured), so the moving thing lands exactly on its line.
+
+   Contrast holds in every frame: the veil's top edge descends ahead of the
+   words (both are linear in --d, the veil starts at the top of the frame and
+   ends at the band's top, the words start below the first and end below the
+   second), so every glyph is always over at least the 0.6 veil. Black under
+   that veil composites to ~#979593, 6.0:1 with --ink. All type is --ink.
+
+   Below 640px of height (a small phone, any phone on its side) a held frame
+   leaves the room a strip under the pill, so those screens keep the plain
+   finished page. The island still runs there, harmlessly, so a rotation
+   into the held layout picks the numbers up. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 640px) {
+  .js .tl1 {
+    --d: 0;
+    --s: 0;
+    --tl1-capH: 4.9rem;
+    --tl1-pos: 55% 50%;
+  }
+  .js .tl1-stage {
+    height: 200svh;
+  }
+  .js .tl1-frame {
+    position: sticky;
+    top: 0;
+    display: block;
+    height: 100svh;
+    padding-top: 0;
+    overflow: clip;
+  }
+
+  .js .tl1-fig {
+    position: absolute;
+    inset: 0;
+  }
+  /* narrow: the room is fitted above the band rather than behind it, so the class
+     is never under the paper at the end; its foot fades into the frame's cream. */
+  .js .tl1-lens {
+    position: absolute;
+    inset: 0 0 calc(var(--tl1-band, 42svh) - 3.5rem) 0;
+    height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+  }
+  .js .tl1-soft {
+    display: block;
+    filter: blur(clamp(9px, 1.3vw, 26px)) saturate(1.06);
+    transform: scale(1.1);
+  }
+  .js .tl1-sharp {
+    opacity: var(--s);
+    transform: scale(calc(1.035 - 0.035 * var(--s)));
+    will-change: opacity, transform;
+  }
+
+  .js .tl1-veil {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: rgba(251, 247, 242, 0.6);
+    transform: scaleY(calc(1 - (1 - var(--tl1-bandR, 0.42)) * var(--d)));
+    transform-origin: 50% 100%;
+    will-change: transform;
+  }
+
+  .js .tl1-band {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 3;
+    padding-top: clamp(1.2rem, 3.2svh, 2.2rem);
+    padding-bottom: calc(clamp(0.9rem, 2.4svh, 1.6rem) + var(--tl1-capH));
+    gap: clamp(1rem, 2.4svh, 1.6rem);
+  }
+  /* the floor the veil becomes: it only firms up over the last 40% of the settle */
+  .js .tl1-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(251, 247, 242, 0.9);
+    border-top: 1px solid var(--rule);
+    opacity: clamp(0, calc(var(--d) * 2.5 - 1.5), 1);
+  }
+  .js .tl1-say {
+    transform: translateY(calc(-1 * var(--tl1-lift, 26svh) * (1 - var(--d))))
+      scale(calc(1 - var(--tl1-shrink) * var(--d)));
+    transform-origin: 0 100%;
+  }
+
+  .js .tl1-cap {
+    position: absolute;
+    left: var(--tl1-in);
+    right: var(--tl1-in);
+    bottom: clamp(0.9rem, 2.4svh, 1.6rem);
+    z-index: 4;
+    padding: 0;
+    font-size: 0.74rem;
+    color: var(--ink);
+  }
+  .js .tl1-prov {
+    font-size: 0.68rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 640px) and (min-width: 1024px) {
+  .js .tl1 {
+    --tl1-capH: 2.6rem;
+    --tl1-pos: 50% 64%;
+  }
+  /* wide: the room runs behind the band, whose floor is the photograph's own */
+  .js .tl1-lens {
+    inset: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .js .tl1-cap span {
+    display: inline;
+  }
+  .js .tl1-prov::before {
+    content: ' · ';
+  }
+}

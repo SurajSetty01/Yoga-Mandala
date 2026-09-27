@@ -1,0 +1,293 @@
+/* Final tl7 section. Every selector is namespaced .tl7- */
+
+/* ── 07 · Begin where you are — a place is taken ─────────────────────────────────────
+   One grid, the same at every width, sized in container units so the window and the
+   row keep their proportion to each other from 320 to the 1620 cap:
+
+       row 1   the call, full width
+       row 2   the row of places, upper part
+       row 3   the row's lower part   │ the window's top overlaps it here
+       row 4   lead + routes          │ the window's foot drops beside them
+
+   The window stands in front of the row's near end, flush with its right edge, and a
+   seam of the ground on its top and left edges lifts it off the photograph.
+   ──────────────────────────────────────────────────────────────────────────────────── */
+
+.tl7 {
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-block: clamp(4rem, 11svh, 8.5rem) clamp(3.5rem, 9svh, 6.5rem);
+}
+
+.tl7-in {
+  container-type: inline-size;
+  max-width: 101.25rem; /* 1620: the ceiling of the row's derivatives */
+  margin-inline: auto;
+  padding-inline: var(--page);
+  box-sizing: border-box;
+}
+
+.tl7-stage {
+  /* narrow */
+  --winW: 44cqi;
+  --winH: calc(var(--winW) * 16 / 9);
+  --stripH: 58cqi;
+  --over: 27cqi;
+  --gap: 4cqi;
+  --seam: max(5px, 1.3cqi);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--winW);
+  grid-template-rows: auto calc(var(--stripH) - var(--over)) var(--over) auto;
+  column-gap: var(--gap);
+}
+
+/* ── the call ── */
+.tl7-call {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin: 0 0 0.32em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 12cqi;
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.tl7-call__w {
+  display: inline-block;
+}
+
+/* ── the row of places ── */
+.tl7-row {
+  grid-column: 1 / -1;
+  grid-row: 2 / 4;
+  height: var(--stripH);
+  overflow: hidden;
+  background: #d9d6d0;
+}
+.tl7-row__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 80%;
+}
+
+/* ── the window at the near end ── */
+.tl7-win {
+  grid-column: 2;
+  grid-row: 3 / 5;
+  align-self: start;
+  position: relative;
+  z-index: 1;
+  width: var(--winW);
+  height: var(--winH);
+  margin: 0;
+}
+.tl7-win__in {
+  position: absolute;
+  inset: 0;
+  padding: var(--seam) 0 0 var(--seam);
+  background: var(--ground-warm);
+}
+.tl7-win__f {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #cfc6ba;
+}
+.tl7-win__poster,
+.tl7-win__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 55%;
+  display: block;
+}
+.tl7-win__vid {
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+.tl7[data-film] .tl7-win__vid {
+  opacity: 1;
+}
+
+.tl7-win__btn {
+  position: absolute;
+  left: 0.7rem;
+  bottom: 0.7rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 247, 242, 0.18);
+  background: rgba(var(--shade), 0.74);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: #fbf7f2;
+  cursor: pointer;
+}
+.tl7-win__btn:hover {
+  background: rgba(var(--shade), 0.88);
+}
+.tl7-win__btn:focus-visible {
+  outline: 2px solid #fbf7f2;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(var(--shade), 0.9);
+}
+
+/* ── lead and routes, beside the window's foot ── */
+.tl7-foot {
+  grid-column: 1;
+  grid-row: 4;
+  padding-top: clamp(1rem, 4.5cqi, 1.5rem);
+}
+.tl7-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: max(1.05rem, 5.6cqi);
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+.tl7-acts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: clamp(1.1rem, 6cqi, 1.6rem);
+}
+
+.tl7-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.9rem;
+  padding: 0 1.35rem;
+  border-radius: 999px;
+  background: var(--forest);
+  color: #fbf7f2;
+  font: 600 14px/1 var(--font-text);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: background-color 0.2s var(--ease);
+}
+.tl7-cta svg {
+  transition: transform 0.25s var(--ease);
+}
+.tl7-cta:hover {
+  background: var(--forest-deep);
+}
+.tl7-cta:hover svg,
+.tl7-cta:focus-visible svg {
+  transform: translateX(3px);
+}
+
+.tl7-wa {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--forest);
+  text-decoration: none;
+}
+.tl7-wa__t {
+  font: 600 14px/1.2 var(--font-text);
+  letter-spacing: 0.01em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.tl7-wa__n {
+  font: 400 13px/1.2 var(--font-text);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+.tl7-wa:hover .tl7-wa__t {
+  text-decoration-thickness: 2px;
+}
+
+.tl7-cta:focus-visible,
+.tl7-wa:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+  border-radius: 999px;
+}
+.tl7-wa:focus-visible {
+  border-radius: 4px;
+}
+
+/* ── wide: the call on one line, the routes side by side ── */
+@container (min-width: 700px) {
+  .tl7-stage {
+    --winW: 25cqi;
+    --stripH: 40cqi;
+    --over: 25cqi;
+    --gap: 3cqi;
+    --seam: max(6px, 0.7cqi);
+  }
+  .tl7-call {
+    font-size: 6.6cqi;
+    margin-bottom: 0.3em;
+  }
+  .tl7-row__img {
+    object-position: 50% 72%;
+  }
+  .tl7-foot {
+    padding-top: clamp(1.4rem, 2.6cqi, 2.6rem);
+  }
+  .tl7-lead {
+    font-size: clamp(1.5rem, 3cqi, 2.9rem);
+  }
+  .tl7-acts {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.9rem;
+    margin-top: clamp(1.4rem, 2.4cqi, 2.2rem);
+  }
+}
+
+/* ── the landing: armed only when motion is allowed and the script is running ── */
+.tl7[data-armed] .tl7-call__w {
+  opacity: 0;
+  transform: translateY(0.42em);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.1s var(--ease);
+}
+.tl7[data-armed][data-landed] .tl7-call__w {
+  opacity: 1;
+  transform: none;
+}
+.tl7[data-armed] .tl7-win__in {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.25s var(--ease) 0.4s;
+}
+.tl7[data-armed][data-landed] .tl7-win__in {
+  clip-path: inset(0 0 0 0);
+}
+.tl7[data-armed] .tl7-win__f > picture img {
+  transform: scale(1.06);
+  transform-origin: 50% 100%;
+  transition: transform 1.8s var(--ease) 0.4s;
+}
+.tl7[data-armed][data-landed] .tl7-win__f > picture img {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl7 *,
+  .tl7 *::before,
+  .tl7 *::after {
+    transition: none !important;
+  }
+}

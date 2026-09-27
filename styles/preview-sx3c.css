@@ -1,619 +1,532 @@
-/* ═══════════════════════════════════════════════════════════════════════════════
-   PREVIEW · sx3c — OUR APPROACH, set as a page of a book.
+/* preview-sx3c — owned solely by /preview/sx3c/. Every selector is .sx3c-*.
 
-   THE SECTION AS AN EVENT
-   A column of type holds ONE right edge all the way down — the lead sentence, then
-   three names standing against a hairline rule in the margin — until Transmission,
-   where the rule stops on a brass tick, the name crosses to the other side of the
-   gutter into the text itself, and the section's only photograph arrives in exactly
-   the column the words have just vacated. Below 900px the page is turned over rather
-   than flattened: the gutter goes to the right of the measure and every part of that
-   still happens, the picture crossing the rule's own line on its way off the page.
+   ═══════════════════════════════════════════════════════════════════════════════
+   OUR APPROACH — two leaves of a commented manuscript.
 
-   WHY THAT SHAPE. The client's lead names three things (tradition, practice,
-   inquiry) and the section has four items. Transmission is not a fourth peer; it is
-   what the other three move through. So it is the only one that does not get a
-   margin head, and the type does the argument: three names hold the edge, the
-   fourth leaves it.
+   Leaf I is a TEXT folio: the client's sentence is the mūla (root text) in the
+   centre of a ruled block, and Tradition, Practice and Inquiry are written into
+   the margins around it — each commentary beginning on the line of the word it
+   comments on. Leaf II has the same rules, the same margins and the same centre,
+   and its root is a photograph: a tissue lifts off a teacher's hand at a
+   student's back, and Transmission is written around that instead.
 
-   RESEARCH → IMPLEMENTATION (each one is load-bearing, not decoration)
-   · Tufte-CSS marginalia proportions (text ~60% / margin ~36%) and its documented
-     failure mode — marginalia that collide or vanish below ~760px. Both tracks here
-     are explicit, and the whole thing collapses to one column at 900px with the
-     rule and the outdent preserved rather than dropped.
-   · HANGING PUNCTUATION, hand-set. `hanging-punctuation: last` is Safari-only, so
-     the lead's three full stops are wrapped and pulled with a negative margin. The
-     result is optical margin alignment: the three NOUNS — tradition, practice,
-     inquiry — end on the rule, and the three margin heads below stand on the same
-     rule. The sentence and the structure share one edge, which is the whole idea.
-   · `text-wrap: balance` on display lines, `text-wrap: pretty` on body paragraphs
-     (kills orphans on the last lines only).
-   · `font-optical-sizing: auto` — Fraunces' opsz axis is loaded by the root layout,
-     and the margin heads (~58px) and the lead (~25px) genuinely want different
-     stroke weights.
-   · FIRST-BASELINE ALIGNMENT via `align-items: baseline` inside a `subgrid` row, so
-     each margin head sits on its paragraph's first baseline the way a marginal head
-     sits in a book. Subgrid is Baseline 2023; the fallback repeats the track list.
-   · SCROLL-DRIVEN CSS (`view-timeline` + `animation-timeline`) draws the rule. No
-     scroll listener, no rAF, no JavaScript at all for it. Firefox still ships it
-     behind a flag, so it is inside `@supports` and every browser that lacks it gets
-     the rule fully drawn — which is also what reduced motion gets, and what a
-     reader with JS off gets. The composition is complete without the draw; the
-     draw is a grace note, never the idea.
+   THE RESEARCH, AND WHAT EACH PIECE BECAME
+   · Jain / Sanskrit commentary layouts (Jainpedia, "How to read a Jain
+     manuscript"). Tri-pāṭha: "top and bottom marginal spaces are … reserved for
+     [commentary], with the main text in the centre". Pañca-pāṭha: "all four
+     margins are used for the commentary". → ≥1180px is the four-sided form;
+     720–1179 keeps the root with one commentary beside it and two below; under
+     720 it is the three-part form. Nothing is hidden behind a toggle, which is
+     what Tufte CSS does to its sidenotes below 760px.
+   · The text block is bounded by "thin … double lines … filled with red colour"
+     (D'source, Jain manuscript layout study) that "extend the full height of the
+     extant page", with "a matching pair of red-filled circles which stand in the
+     margins" (manuscriptevidence.org). → .sx3c-rule, .sx3c-disc. Clay, which is
+     ornament-only on this site (3.90:1) and never carries a letter here.
+   · Margins in the proportion "2:1:2:1 from the right fore-edge to the upper edge
+     to the left fore-edge to the foot edge" (same study). → --sx3c-side is ~1.8×
+     --sx3c-hm at desktop.
+   · The folio's title "at the top of the left-hand margin" (Jainpedia). → the
+     register mark sits inside leaf I's head margin, not above the section.
+   · The Talmud page's anchoring (Liebman, "Talmud CSS"; The Talmud Blog): the
+     central text in the largest type, "the commentaries wrap around and embrace
+     the center", each keyed to its lemma. → the root is set line by line on a
+     SUBGRID and each commentary's heading is baseline-aligned to the row holding
+     its own word. The pairing is exact at every desktop width because the row
+     is shared, not because a margin was tuned.
+   · The catchword — the first word of the next leaf printed at this leaf's foot.
+     → leaf I's only mention of Transmission.
+   · Tissue guards, the translucent interleaves bound in front of photographic
+     plates. → the plate's arrival: the tissue lifts as the plate rises.
 
-   MEDIA. Exactly one frame in the whole section, and it is a STILL — the first frame
-   of pr-mov-img_5681, a teacher speaking with his hands while a student holds a
-   supported headstand at the wall and three people sit watching. It ran as a silent
-   loop until this revision. The manifest calls that clip "Steady"; extracted at 0 / 2
-   / 5 / 8 s it is not — the camera drifts right and in for 10.5 s until the watchers
-   are outside the frame, the wall of A4 notices is the top half of the picture and a
-   black folding chair has arrived at the right. A crop cannot follow a moving camera,
-   so the clip is cut rather than gated or re-cropped: the caption is now true at every
-   width and every moment, and the section costs 665 KB everywhere instead of 3815 KB
-   from 1280 up. See components/preview/sx3c/Sx3cMotion.tsx.
-
-   The plate is a 1080×1200 window on the 1080×1920 still: full width, every person,
-   the teacher's crown down past the near mat. What it drops is the ~518px of tube
-   lamp, door head and A4 notices above them and the bare tile below — the bands a
-   1140px viewport was landing on whole.
-
-   Every selector is `.sx3c-`. Verified free before a line was written — two
-   namespace collisions have already broken live pages on this project.
-   ══════════════════════════════════════════════════════════════════════════════ */
+   THE ONE MEASUREMENT THE LAYOUT HANGS ON
+   On the desktop leaf the root column is --sx3c-cw wide and its six lines are
+   each --sx3c-L = cw/6 tall, so the root block is exactly SQUARE — and leaf II's
+   plate spans the same six rows in the same column. The photograph is the size
+   of the sentence it replaces, to the pixel, at every width.
+   ═══════════════════════════════════════════════════════════════════════════════ */
 
 .sx3c {
-  /* THE TWO TRACKS. Explicit, so the rule's x can be computed exactly rather than
-     guessed from a percentage, and so the measure is CAPPED: a book's measure does
-     not grow with the monitor. 33rem at the reader's 18px measures 60.8 characters
-     per line at 1440, and it is still 60.8 at 2531. The TYPE SCALE is capped for the
-     same reason — a 2560 monitor is not a reason to set a book at 80px. What grows
-     instead is the white around the block, which is what a page's margins are. */
-  --sx3c-marg: clamp(10rem, 30vw, 40rem);
-  --sx3c-gut: clamp(1.5rem, 3vw, 3.25rem);
-  --sx3c-meas: clamp(17rem, 51.5vw, 33rem);
-  --sx3c-block: calc(var(--sx3c-marg) + var(--sx3c-gut) + var(--sx3c-meas));
+  --sx3c-pad: clamp(4.4rem, 10vw, 9rem);
+  /* the leaf grows a little on a wide monitor — 88rem at 1440, 98rem at 2531 —
+     so the plate is a photograph there and not a stamp; the type scale follows it */
+  --sx3c-max: clamp(88rem, 62vw, 100rem);
 
-  /* THE MARGIN COLUMN IS THE PLATE, and there is no bleed any more. The plate used to
-     hang 93.6px further left than anything else in the section, so what `margin-inline:
-     auto` centred (the BLOCK) was not what a reader sees (the block PLUS the plate): the
-     composition sat 47px left of centre at 1440 and 52px at 2531 — measured gutters
-     168/262 and 672/776. Two reviewers found it independently and both were right. The
-     fix is not to nudge the block over. It is that the picture belongs in exactly the
-     column the words have just left — col 1, 432px at 1440 and 640px at 2531 — so left
-     gutter equals right gutter at every width AND the claim the section makes about
-     itself becomes true to the pixel. Widening that column from 24vw/25rem is the same
-     move: at 2531 the band was 1084px (42.8% of the screen), which is the narrowest use
-     of a wide monitor of the four concepts. It is now 1220px, and the extra 240px is all
-     photograph.
+  /* a leaf's margins. Head/foot, and the fore-edges ~1.8× that (2:1:2:1). */
+  --sx3c-hm: clamp(1.35rem, 3.2vw, 3.25rem);
+  --sx3c-out: clamp(0.8rem, 3.6vw, 3.75rem); /* leaf edge → the double rule   */
+  --sx3c-rw: 5px; /* the double rule: 1px line, 3px fill, 1px line            */
+  --sx3c-rg: clamp(0.85rem, 1.6vw, 1.6rem); /* the double rule → the text      */
+  --sx3c-side: calc(var(--sx3c-out) + var(--sx3c-rw) + var(--sx3c-rg));
+  --sx3c-cg: clamp(1.4rem, 3.2vw, 3.2rem);
 
-     THE MEASURE IS STILL CAPPED at 33rem — 46.5 characters at 1440 and 46.5 at 2531,
-     inside the home page's own 41–46. A wide monitor is not a reason to set a book at
-     80px; it is a reason to let the picture be bigger. */
-  /* THE RULE SITS OFF-CENTRE IN THE GUTTER, and that is measured rather than tidy.
-     Centred, the margin heads stood 22px clear of it at 1440 and read as floating
-     beside a line rather than standing against it. Held this close, the type leans
-     on the rule and the text column keeps the rest of the gutter as air. The floor
-     was 0.5rem and is now 0.72rem: at 390 the hung full stops reach 375px and the rule
-     sat at 378 — three pixels, which reads as a collision rather than a lean. It is
-     381.5 now, 6.5px of daylight, which is what the two-column layout gives them at
-     1440. */
-  --sx3c-lean: clamp(0.72rem, 1vw, 0.85rem);
-  /* the single-column indent: what the paragraphs stand back from the rule by */
-  --sx3c-in: clamp(0.95rem, 4.2vw, 1.5rem);
+  /* a commentary's heading size, named because the root's rows are aligned to it */
+  --sx3c-hs: clamp(1.4rem, 1.16rem + 0.7vw, 1.85rem);
 
-  /* which way the margin head opens. A TOKEN, not a second `clip-path` declaration:
-     the one-column override used to redeclare the property inside a media query, and
-     it tied the reveal rule on specificity (0,5,0 against 0,5,0) and won on source
-     order — so at 390 every head stayed clipped to zero and three names were missing
-     from the page. Source-order ties are how a start state silently becomes an end
-     state. One property, one declaration site, and the variable carries the change. */
-  --sx3c-clip: inset(0 0 0 100%);
-
-  --sx3c-body: clamp(1rem, 0.95rem + 0.26vw, 1.125rem);
-  --sx3c-name: clamp(2.15rem, 1.05rem + 3.35vw, 3.6rem);
-  --sx3c-lead: clamp(1.12rem, 0.7rem + 1.2vw, 1.55rem);
-  --sx3c-stand: clamp(1.35rem, 0.95rem + 1.35vw, 2.05rem);
+  /* clay as ORNAMENT: the rule and the disc. Nothing typeset in either. */
+  --sx3c-clay-line: rgba(193, 97, 60, 0.72);
+  --sx3c-clay-fill: rgba(193, 97, 60, 0.16);
+  --sx3c-edge: rgba(36, 29, 24, 0.08);
 
   position: relative;
-  background: var(--ground);
-  padding-block: clamp(3.5rem, 9vh, 7.5rem) 0;
-  /* the plate runs out past the text block; nothing may run out past the page */
+  padding-block: var(--sx3c-pad);
+  background: var(--ground-warm);
+  color: var(--ink);
   overflow-x: clip;
 }
 
-/* ── the register mark sits on the text block's own left edge ─────────────── */
+/* the capped measure, and it is CENTRED — a max-width without margin-inline:auto
+   is invisible at 1440 and hundreds of px off-axis at 2531. */
 .sx3c-rail {
-  width: var(--sx3c-block);
-  max-width: calc(100% - 2 * var(--page));
-  margin-inline: auto; /* DESIGN-SYSTEM §3.8 — a capped box must also be centred */
-  margin-bottom: clamp(2.5rem, 6vh, 5rem);
-}
-
-/* ══ THE SPINE — lead + three items, one rule ═════════════════════════════ */
-
-.sx3c-block {
-  position: relative;
-  width: var(--sx3c-block);
-  max-width: calc(100% - 2 * var(--page));
+  max-width: calc(var(--sx3c-max) + 2 * var(--rail));
   margin-inline: auto;
-  display: grid;
-  grid-template-columns: var(--sx3c-marg) var(--sx3c-gut) var(--sx3c-meas);
-  /* the rule is drawn against this element's own view progress */
-  view-timeline-name: --sx3c-read;
-  view-timeline-axis: block;
+  padding-inline: var(--rail);
 }
 
-/* THE RULE. Absolutely positioned rather than placed in the grid on purpose:
-   negative grid line numbers (`-1`) resolve against the EXPLICIT grid, and these
-   rows are implicit, so `grid-row: 1 / -1` would silently span one row. The block's
-   width is known to the pixel, so the gutter's centre is arithmetic. */
+/* ── a leaf ────────────────────────────────────────────────────────────────── */
+.sx3c-leaf {
+  /* the leaf is the query container, so every length inside it — the root column,
+     the root's size — is a share of THIS leaf's text block, not of the window. */
+  container-type: inline-size;
+  position: relative;
+  margin-inline: auto;
+  padding: var(--sx3c-hm) var(--sx3c-side);
+  background: var(--ground);
+  border: 1px solid var(--sx3c-edge);
+  border-radius: 2px;
+  box-shadow:
+    0 1px 2px rgba(36, 29, 24, 0.06),
+    0 34px 60px -44px rgba(36, 29, 24, 0.42);
+
+  /* the root: six lines, each L tall. Mobile first — a share of the block. */
+  /* "tradition." + its turnover indent is 5.9em, so 15cqi fills ~88% of the measure.
+     Capped at 3.1rem so the root does not SHRINK when the window widens past 720
+     (the two-column leaf opens at 48.9px). */
+  --sx3c-fs: min(15cqi, 3.1rem);
+  --sx3c-L: calc(var(--sx3c-fs) * 1.08);
+}
+.sx3c-leaf + .sx3c-leaf {
+  margin-top: clamp(1.25rem, 3.4vw, 3.5rem);
+}
+.sx3c-leaf--text {
+  /* the foot margin holds the catchword */
+  padding-bottom: max(var(--sx3c-hm), 3rem);
+}
+
+/* the double rules run the full height of the leaf, as on the folio */
 .sx3c-rule {
   position: absolute;
-  top: 0.55em;
+  top: 0;
   bottom: 0;
-  left: calc(var(--sx3c-marg) + var(--sx3c-lean));
-  width: 1px;
-  background: var(--rule);
-  transform-origin: 50% 0;
+  width: var(--sx3c-rw);
+  border-inline: 1px solid var(--sx3c-clay-line);
+  background: var(--sx3c-clay-fill);
 }
-
-/* the rule's terminal: the brass tick the site already uses under every caption.
-   It is where the margin stops having words in it. */
-.sx3c-tick {
+.sx3c-rule--l {
+  left: var(--sx3c-out);
+}
+.sx3c-rule--r {
+  right: var(--sx3c-out);
+}
+.sx3c-disc {
   position: absolute;
-  bottom: calc(-1 * clamp(1.6rem, 4vh, 3rem));
-  left: calc(var(--sx3c-marg) + var(--sx3c-lean));
-  width: 26px;
-  height: 1px;
-  margin-left: -13px;
-  background: var(--brass);
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: var(--clay);
+  box-shadow: 0 0 0 3px var(--ground);
+}
+.sx3c-disc--l {
+  left: calc(var(--sx3c-out) + var(--sx3c-rw) / 2 - 5.5px);
+}
+.sx3c-disc--r {
+  right: calc(var(--sx3c-out) + var(--sx3c-rw) / 2 - 5.5px);
 }
 
-/* ── the lead: three clauses, right-aligned, full stops hung ──────────────── */
-.sx3c-lead {
-  grid-column: 1;
-  margin: 0 0 clamp(2.75rem, 7vh, 5.5rem);
-  padding-right: 0;
-  text-align: right;
+/* ── the register mark, written as the folio's title in its head margin ───── */
+.sx3c-mark {
+  position: relative;
+  margin: 0 0 calc(var(--sx3c-hm) * 0.95);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx3c-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx3c-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+}
+
+/* ── the root ────────────────────────────────────────────────────────────── */
+.sx3c-root {
+  position: relative;
+  margin: 0;
+}
+p.sx3c-root {
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 400;
-  font-size: var(--sx3c-lead);
-  line-height: 1.34;
-  letter-spacing: -0.006em;
-  color: var(--forest); /* 10.04:1 on cream, measured */
+  font-size: var(--sx3c-fs);
+  line-height: var(--sx3c-L);
+  letter-spacing: -0.024em;
+  color: var(--ink);
 }
-.sx3c-lead__l {
+.sx3c-line {
   display: block;
-  text-wrap: balance;
+  white-space: nowrap;
 }
-.sx3c-lead__l + .sx3c-lead__l {
-  margin-top: 0.34em;
+/* the named word's line is a turnover line, indented as verse sets them */
+.sx3c-line--term {
+  padding-left: 1.05em;
 }
-/* HAND-SET HANGING PUNCTUATION. `hanging-punctuation: last` is Safari-only, so the
-   stop is pulled out of the measure by hand and the three nouns — tradition,
-   practice, inquiry — end on the rule instead of three full stops ending on it. */
-.sx3c-lead__stop {
-  margin-right: -0.3em;
+.sx3c-line--term em {
+  font-style: italic;
   color: var(--forest);
 }
 
-/* ── an item: a margin head and a paragraph, first baselines aligned ──────── */
-.sx3c-item {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: var(--sx3c-marg) var(--sx3c-gut) var(--sx3c-meas);
-  align-items: baseline;
+/* ── a commentary ────────────────────────────────────────────────────────── */
+.sx3c-gloss {
+  position: relative;
+  min-width: 0;
 }
-@supports (grid-template-columns: subgrid) {
-  .sx3c-item {
-    grid-template-columns: subgrid;
-  }
-}
-.sx3c-item + .sx3c-item {
-  margin-top: clamp(3.25rem, 8.5vh, 7rem);
-}
-
-.sx3c-name {
-  grid-column: 1;
-  margin: 0;
-  padding-right: 0;
-  text-align: right;
-  text-wrap: balance;
+.sx3c-lemma {
+  margin: 0 0 0.5rem;
   font-family: var(--font-display);
   font-optical-sizing: auto;
+  font-style: italic;
   font-weight: 400;
-  font-size: var(--sx3c-name);
-  line-height: 1;
-  letter-spacing: -0.022em;
-  color: var(--ink);
+  font-size: var(--sx3c-hs);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: var(--forest);
 }
+/* ON THE LINE OF ITS WORD.
+   A commentary that starts on the row holding its term is dropped by exactly the
+   distance between that row's baseline and its own heading's baseline, so the
+   two baselines are one line across the gutter.
 
-.sx3c-said {
-  grid-column: 3;
+   Fraunces' line metrics, measured in the browser: ascent 0.98em, descent 0.26em.
+   A baseline therefore sits at  line-height/2 + 0.36·font-size  in any line box:
+     the term's row   L/2 + 0.36·fs     (L = the row, fs = the root size)
+     the heading      1.1·hs/2 + 0.36·hs = 0.91·hs
+   Grid baseline alignment does not reach through the subgrid to the root's lines
+   (measured: the heading sat 33px high at 1440), so the offset is computed. */
+@media (min-width: 720px) {
+  .sx3c-gloss--onterm {
+    margin-top: calc(var(--sx3c-L) / 2 + 0.36 * var(--sx3c-fs) - 0.91 * var(--sx3c-hs));
+  }
+}
+.sx3c-gloss p {
   margin: 0;
-  font-size: var(--sx3c-body);
-  line-height: 1.66;
-  text-wrap: pretty;
+  max-width: 34rem;
+  font-family: var(--font-text);
+  font-size: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+  line-height: 1.62;
   color: var(--ink);
+  text-wrap: pretty;
+}
+.sx3c-gloss p + p {
+  margin-top: 0.9em;
 }
 
-/* ══ THE TURN — Transmission. The band under the fourth item changes paper. ══ */
+/* ── the catchword, at the foot of leaf I ────────────────────────────────── */
+.sx3c-catch {
+  position: absolute;
+  right: var(--sx3c-side);
+  bottom: calc(max(var(--sx3c-hm), 3rem) * 0.5 - 0.7em);
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--brass);
+}
 
-.sx3c-turn {
-  margin-top: clamp(4.5rem, 11vh, 9rem);
-  padding-block: clamp(3.25rem, 8vh, 6.5rem) clamp(3.5rem, 9vh, 7rem);
+/* ── the plate ───────────────────────────────────────────────────────────── */
+.sx3c-plate {
+  margin: 0;
+  overflow: hidden;
   background: var(--ground-warm);
 }
-.sx3c-turn .sx3c-block {
-  align-items: start;
-  view-timeline-name: none;
-}
-
-/* THE PLATE. It fills the margin column exactly: the box the three names stood in. */
-/* THE FIGURE SPANS THE WHOLE BLOCK so that it inherits the section's track list through
-   `subgrid` and the plate can be placed in column 1 — the margin, the box the three names
-   stood in — while "Transmission" sits in column 3 in the same row. The caption is the
-   figure's second row IN COLUMN 1, directly under its own picture. `align-self: start`
-   rather than the default stretch, or a tall text column drags the figure's rows apart. */
-.sx3c-fig {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  align-self: start;
-  margin: 0;
-  display: grid;
-  grid-template-columns: var(--sx3c-marg) var(--sx3c-gut) var(--sx3c-meas);
-}
-@supports (grid-template-columns: subgrid) {
-  .sx3c-fig {
-    grid-template-columns: subgrid;
-  }
-}
-.sx3c-plate {
-  grid-column: 1;
-  grid-row: 1;
-  position: relative;
-  /* CROPPED, DELIBERATELY, AND THE PREVIOUS BUILD WAS WRONG NOT TO BE. The source is
-     1080×1920 and it was shown whole, which reads as discipline until it is measured
-     band by band: the top 500px of the frame is a wall-mounted tube lamp, a door head,
-     a switch plate and two A4 notices, and the bottom ~360px is bare tile. The plate
-     was 896px tall in an 1140px viewport at 2531, so a scroll stop lands on one of
-     those bands and nothing else — the previous build's own s3 screenshot is 896px of
-     picture whose entire visible content is two mats and a floor. This project has
-     already rejected four frames for having a fan, a cooler, a folding chair or a
-     speaker stand as their actual subject; retaining 100% of a frame is not a virtue
-     when 45% of it is the room's fittings. The window kept is y 518→1718 of 1920 —
-     full width, every person, the teacher's crown to the near mat. */
-  aspect-ratio: 1080 / 1200;
-  /* a ground under the picture, so the box is never a white hole before it decodes */
-  background: var(--ground-deep);
-  overflow: clip;
-}
 .sx3c-plate__img {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
-  max-width: none;
   object-fit: cover;
-  /* 0.72 × (1920 − 1200) = 518px down from the top of the frame: the window is y 518→1718
-     of 1920. Full width — every person, including the three watching — the teacher's crown
-     down past the near mat. What it drops is the tube lamp, the door head, the switch plate
-     and the two A4 notices above them, and the bare tile below. */
-  object-position: 50% 72%;
+  /* y 55% of the spare height: the teacher's crown to the student's feet, no fans */
+  object-position: 50% 55%;
 }
-/* THE CAPTION SITS UNDER ITS OWN PICTURE, at every width, 12.8px below it — measured at
-   390, 768, 1024, 1440 and 2531 and identical at all five. It used to sit at the foot of
-   the TEXT column, level with the plate's foot across the gutter, which closed the corner
-   prettily and measured 43px from the picture horizontally and −16.5px vertically. A
-   caption belongs against its image; one that has to be traced across a gutter is a
-   caption the reader has to work for, and the standard this round set — captions 0–13px
-   from their frame — is a standard worth being the reference for rather than the exception
-   to. The corner it used to close is now paper, which is what a page's margin is. */
-.sx3c-cap {
-  grid-column: 1;
-  grid-row: 2;
-  margin: 0.8rem 0 0;
-  display: flex;
-  gap: 0.6em;
-  align-items: baseline;
-  font-size: 11px;
-  line-height: 1.5;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft); /* 6.48:1 on --ground-warm, computed then measured */
-}
-/* the caption is now as wide as the PLATE, not as the measure, so it sets to two lines from
-   1440 down. Balanced, because a two-line caption whose second line is the single word
-   WATCHING is an orphan, and this is the one place in the section where a line break is
-   decided by a box rather than by a sentence. It is its own element rather than an anonymous
-   flex item so that `text-wrap` has a block box to act on. */
-.sx3c-cap__t {
-  text-wrap: balance;
-}
-.sx3c-cap::before {
-  content: '';
-  flex: none;
-  width: 18px;
-  height: 1px;
-  background: var(--brass);
-  transform: translateY(-4px);
+/* the tissue guard — present only where it can be lifted (see the motion block) */
+.sx3c-tissue {
+  display: none;
 }
 
-/* the fourth name, on the far side of the gutter. This is the event. */
-.sx3c-say {
-  grid-column: 3;
-  grid-row: 1;
-  align-self: start;
-}
-.sx3c-say .sx3c-name {
-  display: block;
-  grid-column: auto;
-  padding-right: 0;
-  text-align: left;
-  margin-bottom: 0.5em;
-}
-/* THE PLATE HANGS FROM THE WORD. `line-height: 1` still leaves the difference between
-   Fraunces' ascender and its cap height above the T, so the picture's top edge sat
-   about 5px proud of the letter it is named by. `text-box: trim-start cap` removes
-   exactly that leading, and the plate's top edge and the cap line of "Transmission"
-   become one line across the gutter. Chrome 133+/Safari 18.2+; without it the 5px
-   stays and nobody can see it, which is what a progressive enhancement should cost. */
-@supports (text-box: trim-start cap alphabetic) {
-  .sx3c-say .sx3c-name {
-    text-box: trim-start cap alphabetic;
+/* ════ < 720 · TRI-PĀṬHA — the root, and its commentary written below it ════ */
+@media (max-width: 719.98px) {
+  /* the leaf comes closer to the edge of a phone; a sliver of the warm ground
+     either side is what keeps it a sheet of paper and not the page */
+  .sx3c-rail {
+    padding-inline: 10px;
+  }
+  .sx3c-block {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.9rem, 7vw, 2.4rem);
+  }
+  p.sx3c-root {
+    margin-bottom: 0.2rem;
+  }
+  .sx3c-gloss--c {
+    padding-top: clamp(1.9rem, 7vw, 2.4rem);
+    border-top: 1px solid var(--rule);
+  }
+  .sx3c-plate {
+    aspect-ratio: 1;
+    /* 303px at 390; held at 19.75rem (316px) above that, so widening the window
+       past 720 — where the plate becomes the two-column leaf's 317px — never shrinks it */
+    max-width: 19.75rem;
+  }
+  .sx3c-leaf--plate .sx3c-block {
+    gap: 1.6rem;
   }
 }
 
-/* the first sentence of Transmission is the turn of the whole section, so it is set
-   at display size and the rest at reading size. The fourth item reads differently
-   because it IS different. */
-.sx3c-stand {
-  margin: 0 0 1.15em;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-size: var(--sx3c-stand);
-  line-height: 1.26;
-  letter-spacing: -0.012em;
-  text-wrap: balance;
-  color: var(--forest);
-}
-.sx3c-rest {
-  margin: 0;
-  font-size: var(--sx3c-body);
-  line-height: 1.66;
-  text-wrap: pretty;
-  color: var(--ink);
-}
-.sx3c-rest + .sx3c-rest {
-  margin-top: 1em;
+/* ════ 720–1179 · the root with ONE commentary beside it, two beneath ════════ */
+@media (min-width: 720px) and (max-width: 1179.98px) {
+  .sx3c-leaf {
+    /* capped at 3.6rem so the root meets the desktop leaf's 58px at 1180 from
+       below — measured: 52 at 768, 57.6 from ~900 to 1179, 58.2 at 1180, 63 at 1280 */
+    --sx3c-fs: min(8.6cqi, 3.6rem);
+    /* the root column is as wide as its six rows are tall — square, like the
+       desktop leaf, so the plate in leaf II keeps the one crop that was checked.
+       6·L = 6.48em, which also clears "tradition." and its turnover indent (5.9em). */
+    --sx3c-cw: calc(var(--sx3c-L) * 6);
+  }
+  .sx3c-block {
+    display: grid;
+    grid-template-columns: var(--sx3c-cw) minmax(0, 1fr);
+    grid-template-rows: repeat(6, var(--sx3c-L)) auto auto;
+    column-gap: var(--sx3c-cg);
+  }
+  .sx3c-root {
+    grid-column: 1;
+    grid-row: 1 / span 6;
+  }
+  p.sx3c-root {
+    display: grid;
+    grid-template-rows: subgrid;
+  }
+  /* Tradition begins on the row that holds "tradition." */
+  .sx3c-leaf--text .sx3c-gloss--a {
+    grid-column: 2;
+    grid-row: 2 / 8;
+    align-self: start;
+  }
+  .sx3c-leaf--text .sx3c-gloss--b,
+  .sx3c-leaf--text .sx3c-gloss--c {
+    grid-row: 8;
+    margin-top: clamp(1.8rem, 4vw, 2.6rem);
+    padding-top: clamp(1.4rem, 3vw, 2rem);
+    border-top: 1px solid var(--rule);
+  }
+  .sx3c-leaf--text .sx3c-gloss--b {
+    grid-column: 1;
+  }
+  .sx3c-leaf--text .sx3c-gloss--c {
+    grid-column: 2;
+  }
+
+  /* leaf II: the plate in the root's six rows; the head at its top, the rest at its foot */
+  .sx3c-leaf--plate .sx3c-block {
+    grid-template-rows: repeat(6, var(--sx3c-L)) auto;
+  }
+  .sx3c-leaf--plate .sx3c-gloss--a {
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-self: start;
+  }
+  .sx3c-leaf--plate .sx3c-gloss--b {
+    grid-column: 2;
+    grid-row: 4 / -1;
+    align-self: end;
+  }
 }
 
-/* ══ MOTION ═══════════════════════════════════════════════════════════════════
-   Everything below is additive. With it removed the section is complete. */
+/* ════ ≥ 1180 · PAÑCA-PĀṬHA — the root in the centre, commentary on its sides ═ */
+@media (min-width: 1180px) {
+  .sx3c {
+    --sx3c-side: calc(var(--sx3c-hm) * 1.8);
+  }
+  .sx3c-leaf {
+    /* the root column, and six lines that make it exactly square */
+    --sx3c-cw: 40cqi;
+    --sx3c-L: calc(var(--sx3c-cw) / 6);
+    --sx3c-fs: calc(var(--sx3c-L) / 1.08);
+  }
+  .sx3c-rule--l {
+    left: calc(var(--sx3c-side) - var(--sx3c-rg) - var(--sx3c-rw));
+  }
+  .sx3c-rule--r {
+    right: calc(var(--sx3c-side) - var(--sx3c-rg) - var(--sx3c-rw));
+  }
+  .sx3c-disc--l {
+    left: calc(var(--sx3c-side) - var(--sx3c-rg) - var(--sx3c-rw) / 2 - 5.5px);
+  }
+  .sx3c-disc--r {
+    right: calc(var(--sx3c-side) - var(--sx3c-rg) - var(--sx3c-rw) / 2 - 5.5px);
+  }
+  .sx3c-block {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sx3c-cw) minmax(0, 1fr);
+    grid-template-rows: repeat(6, var(--sx3c-L)) auto;
+    column-gap: var(--sx3c-cg);
+  }
+  .sx3c-root {
+    grid-column: 2;
+    grid-row: 1 / span 6;
+  }
+  p.sx3c-root {
+    display: grid;
+    grid-template-rows: subgrid;
+  }
 
-/* the reveal: the margin heads open from the rule outward, because that is the edge
-   they belong to. The clip is on a CHILD — Chromium computes an
-   IntersectionObserver's rect AFTER clips, and an observed element clipped to zero
-   never fires. That shipped a blank page on this site once. */
-.sx3c-name__in {
-  display: inline-block;
-}
-.js .sx3c[data-sx3c-live] [data-sx3c='name'] .sx3c-name__in {
-  clip-path: var(--sx3c-clip);
-}
-.js .sx3c[data-sx3c-live] [data-sx3c='up'],
-.js .sx3c[data-sx3c-live] [data-sx3c='fade'] {
-  opacity: 0;
-}
-.js .sx3c[data-sx3c-live] [data-sx3c='up'] {
-  transform: translateY(20px);
+  /* Tradition, set flush towards the root, begins on the row of "tradition." */
+  .sx3c-leaf--text .sx3c-gloss--a {
+    grid-column: 1;
+    grid-row: 2 / -1;
+    align-self: start;
+    text-align: right;
+  }
+  .sx3c-leaf--text .sx3c-gloss--a p {
+    margin-left: auto;
+  }
+  /* Practice begins on the row of "practice." */
+  .sx3c-leaf--text .sx3c-gloss--b {
+    grid-column: 3;
+    grid-row: 4 / -1;
+    align-self: start;
+  }
+  /* Inquiry is written below the root — the foot of the tri-pāṭha */
+  .sx3c-leaf--text .sx3c-gloss--c {
+    grid-column: 2;
+    grid-row: 7;
+    margin-top: calc(var(--sx3c-L) * 0.55);
+    padding-top: calc(var(--sx3c-L) * 0.45);
+    border-top: 1px solid var(--rule);
+  }
+
+  /* leaf II — the same six rows, and a photograph in them */
+  .sx3c-leaf--plate .sx3c-block {
+    grid-template-rows: repeat(6, var(--sx3c-L));
+  }
+  .sx3c-leaf--plate .sx3c-gloss--a {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: start;
+    text-align: right;
+  }
+  .sx3c-leaf--plate .sx3c-gloss--a p {
+    margin-left: auto;
+  }
+  .sx3c-leaf--plate .sx3c-gloss--b {
+    grid-column: 3;
+    grid-row: 1 / -1;
+    align-self: end;
+  }
 }
 
-.js .sx3c [data-sx3c='up'].sx3c-on,
-.js .sx3c [data-sx3c='fade'].sx3c-on {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.85s var(--ease),
-    transform 1s var(--ease);
-  transition-delay: var(--sx3c-d, 0ms);
+/* the plate fills the root's rows exactly, wherever it has rows */
+@media (min-width: 720px) {
+  .sx3c-plate {
+    grid-row: 1 / span 6;
+    height: 100%;
+  }
 }
-.js .sx3c [data-sx3c='name'].sx3c-on .sx3c-name__in {
-  clip-path: inset(0 0 0 0);
-  transition: clip-path 0.95s var(--ease);
-  transition-delay: var(--sx3c-d, 0ms);
+@media (min-width: 720px) and (max-width: 1179.98px) {
+  .sx3c-plate {
+    grid-column: 1;
+  }
+}
+@media (min-width: 1180px) {
+  .sx3c-plate {
+    grid-column: 2;
+  }
 }
 
-/* THE RULE DRAWS ITSELF, in CSS, against the block's own view progress. No scroll
-   listener and no rAF exist on this page. `cover 64%` is where the block's foot
-   reaches the viewport foot at a typical window, so the rule is complete by the
-   time the reader is. Firefox still ships this behind a flag; it therefore gets the
-   rule fully drawn, which is the same state reduced motion gets. */
+/* ── motion: ONE event, and it is scroll-driven CSS ────────────────────────────
+   The tissue guard lifts off the plate as the plate rises into view, and is gone
+   by the time the plate's foot is on screen — so the whole photograph is never
+   seen veiled, only the part still arriving. Nothing else moves, and no text is
+   ever faded or moved by scroll: a reader (or a probe) stopping anywhere meets
+   every letter at full contrast.
+
+   An earlier pass also drew the clay rules down each leaf. Measured, it could not
+   work: with its range ending at `entry 100%` the drawn tip sits exactly at or
+   below the bottom of the viewport at every scroll position (it is invisible), and
+   with any later end it visibly lags — at 768×1024 leaf II's rule stopped 75px
+   short of its foot at a resting position, which reads as a rendering fault.
+   The rules are simply there, as they are on the folio.
+
+   Without scroll-driven animations, with reduced motion, and with JavaScript off,
+   the tissue is never rendered and the leaves are finished — which is the design. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .sx3c-rule {
-      animation: sx3c-draw linear both;
-      animation-timeline: --sx3c-read;
-      animation-range: cover 6% cover 64%;
+    .sx3c-plate {
+      position: relative;
+      view-timeline: --sx3c-plate block;
     }
-    @keyframes sx3c-draw {
-      from {
-        transform: scaleY(0);
-      }
-      to {
-        transform: scaleY(1);
-      }
+    .sx3c-tissue {
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: rgba(251, 247, 242, 0.9);
+      box-shadow:
+        0 1px 0 rgba(36, 29, 24, 0.14),
+        0 12px 22px -14px rgba(36, 29, 24, 0.4);
+      animation: sx3c-lift linear both;
+      animation-timeline: --sx3c-plate;
+      animation-range: entry 8% entry 100%;
     }
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .js .sx3c[data-sx3c-live] [data-sx3c],
-  .js .sx3c[data-sx3c-live] [data-sx3c='name'] .sx3c-name__in {
-    opacity: 1 !important;
-    transform: none !important;
-    clip-path: none !important;
+@keyframes sx3c-lift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-104%);
   }
 }
 
-/* ══ ONE COLUMN, ≤ 899px ══════════════════════════════════════════════════════
-   THE 51.5vw AND THE 29rem ARE BOTH MEASURED. At the first values I wrote, the text
-   column was 464px at 899 and 342px at 900: a reader who widened their window by one
-   pixel got a line a third shorter. That is the same defect a judge found on another
-   concept this round (345.6px at 1440 against 346.8px at 390), and it lives at every
-   breakpoint where a column count changes — which is why it is so easy to ship. The
-   two numbers are now tuned against each other so the column only ever grows:
-   280px at 320, 350 at 390, 464 from 600 to 899, 463.5 at 900, 527 at 1024, 528 from
-   1100 up. The step across the breakpoint is half a pixel.
-
-   Tufte-CSS's documented failure is marginalia that collide below ~760px or vanish
-   behind a toggle. Nothing vanishes here and nothing is flattened: the page is TURNED
-   OVER. The gutter moves to the right of the measure, the lead and the three names go
-   on holding one optical edge against the rule in it, the paragraphs go on standing
-   back from it, and Transmission goes on being the one term that crosses it. Every
-   part of the mechanic is present at 390; only its handedness changes, because 350px
-   cannot hold a 32px display margin AND a 41-character line and a reader on a phone
-   should get the argument, not a summary of it.
-
-   The measure is capped here too. A tablet at 768 would otherwise get a longer line
-   than a desktop at 1440 — the wrong way round, and a real bug found on this
-   project's other concepts. */
-@media (max-width: 899px) {
-  .sx3c-rail,
-  .sx3c-block {
-    width: min(100% - 2 * var(--page), 29rem);
-    max-width: none;
-  }
-  .sx3c-block {
-    display: block;
-  }
-  /* THE RULE STAYS IN A GUTTER, AND THE NAMES STAY RIGHT-ALIGNED AGAINST IT.
-     The previous build turned the rule to the far left and set every name flush left,
-     which meant the one thing this section is — a structure standing on a rule, then a
-     fourth term that crosses it — was simply absent at 390, the viewport most people
-     read on. A reviewer measured exactly that and they were right: there was no gutter
-     to cross. It is impossible to keep BOTH a margin track wide enough for 32px Fraunces
-     AND a 41-character measure inside 350px, which is Tufte-CSS's own documented failure
-     below ~760px. So the page is turned over instead of broken up: the gutter moves to
-     the RIGHT of the measure, 8px outside the block in the page margin, and everything
-     the two-column layout does against it is done against it here.
-
-       · the lead's three clauses are right-aligned with their full stops still hung, so
-         tradition / practice / inquiry end on one optical edge — the same edge the three
-         names below stand on. That shared edge is the whole idea and the old 390 threw
-         it away (`text-align: left`, `margin-right: 0`).
-       · the three names are right-aligned to it, and open from it outward — the same
-         `--sx3c-clip` value the two-column layout uses, so there is no second
-         declaration site and no source-order tie. The override that used to live here is
-         gone with it.
-       · the paragraphs stand BACK from the rule, exactly as they stand back across the
-         gutter at 1440.
-
-     THEN TRANSMISSION CROSSES IT, twice over and visibly: the name is the only one set
-     flush LEFT — it leaves the edge the other three hold and takes the far side of the
-     column — its paragraphs take back the strip the margin indent held, and the plate
-     runs from the block's left edge THROUGH the line the rule stood on and off the page.
-     The rule itself stops on the brass tick above all of it. */
-  .sx3c-rule {
-    top: 0.3em;
-    left: auto;
-    right: calc(-1 * var(--sx3c-lean));
-  }
-  .sx3c-tick {
-    left: auto;
-    right: calc(-1 * var(--sx3c-lean));
-    margin-left: 0;
-    margin-right: -13px;
-    bottom: calc(-1 * clamp(1.25rem, 3.5vh, 2.25rem));
-  }
-
-  .sx3c-lead {
-    margin-bottom: clamp(2.25rem, 6vh, 3.5rem);
-  }
-
-  .sx3c-item {
-    display: block;
-  }
-  .sx3c-item + .sx3c-item {
-    margin-top: clamp(2.5rem, 7vh, 4rem);
-  }
-  .sx3c-name {
-    margin-bottom: 0.42em;
-  }
-  /* ONLY the three bodies stand back, and they stand back from the RULE, which is now
-     on their right. The lead and the three heads are margin content and hold that edge
-     together. Transmission's paragraphs carry no such indent — the fourth term takes
-     back the strip the margin kept, which is the same event as the plate crossing the
-     rule, said in type. */
-  .sx3c-said {
-    padding-right: var(--sx3c-in);
-  }
-
-  .sx3c-turn .sx3c-block {
-    display: block;
-  }
-  .sx3c-fig {
-    display: block;
-  }
-  /* THE PICTURE CROSSES THE RULE. It starts on the block's own left edge — the one edge
-     this section has held from the eyebrow down — and runs right, over the line the three
-     names stood on, to the page edge. `margin-right: calc(50% - 50vw)` is that distance
-     exactly and arithmetically, whatever the block is: the block is centred, so its right
-     gap is (100vw − block) / 2, and 50% of the block minus 50vw is its negative. It is
-     not a full bleed: the left edge is kept, because the left edge is what the type kept.
-     `max-height` is a guard, not a crop target — at 390 the plate is 370 × 411 and the
-     cap never bites. */
-  .sx3c-plate {
-    margin-right: calc(50% - 50vw);
-    max-height: 86svh;
-  }
-  /* the caption goes on sitting under the picture's OWN left edge — same rule as the two
-     column layout, which is the point: a caption belongs against its image at every width,
-     never across a gutter from it and never floating in the paper below it. */
-  .sx3c-say {
-    margin-top: clamp(2rem, 5vh, 3rem);
-  }
-  .sx3c-say .sx3c-name {
-    margin-bottom: 0.4em;
-  }
-}
-
-/* on a real phone the name wants to be a shade smaller than the fluid curve gives,
-   or "Transmission" sets to two lines against a 350px measure */
-@media (max-width: 420px) {
-  .sx3c {
-    --sx3c-name: 2rem;
-  }
-}
-
-/* ── the honest neighbours, so spacing and the dark→paper turn read true ──── */
-.sx3c-above {
-  background: var(--ground-deep);
-  color: var(--ink-onDark);
+/* ── the harness: a stand-in for the next section ──────────────────────────── */
+.sx3c-next {
   min-height: 62svh;
-  display: grid;
-  align-content: end;
-  padding: 0 var(--page) clamp(3rem, 8vh, 6rem);
+  padding: clamp(3rem, 8vw, 6rem) var(--rail);
+  background: var(--ground);
+  border-top: 1px solid var(--rule);
 }
-/* deliberately more than one screen: the section must be judged with somewhere to
-   scroll past it, not as the last thing on the page. */
-.sx3c-below {
-  background: var(--ground-deep);
-  color: var(--ink-onDark);
-  min-height: 125svh;
-  display: grid;
-  align-content: start;
-  padding: clamp(3rem, 8vh, 6rem) var(--page) 0;
-}
-.sx3c-ghost {
-  width: min(100%, 44rem);
-  margin: 0;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-size: clamp(1.35rem, 1rem + 1.2vw, 2rem);
-  line-height: 1.3;
-  color: var(--ink-onDark-soft);
+.sx3c-next__label {
+  max-width: calc(var(--sx3c-max, 88rem));
+  margin: 0 auto;
+  font: 500 12px/1.4 var(--font-text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
 }

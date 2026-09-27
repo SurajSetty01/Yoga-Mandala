@@ -1,0 +1,410 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW sx6a — About §06 The Founder, concept A (photography leads).
+
+   One photograph of two handstands, cut through at the waist, with the
+   founder's sentence set in the cut. As the sentence turns at its comma, the
+   upper crop lifts once, off the teacher's arm to the feet. Every selector is
+   `.sx6a-`. Nothing here reaches outside this section and its two scaffold
+   bands. See components/preview/sx6a/Founder.tsx and frame.ts.
+
+   Ground: PAPER. §05 The Praṇava Journey above and §07 Faculty below are both
+   on the deep ground, and neighbours never share one.
+
+   Exactly one property is animated, `transform`, on one element, once per
+   crossing of one line.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx6a-page {
+  display: block;
+  background: var(--ground);
+}
+
+.sx6a-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── the section ─────────────────────────────────────────────────────────── */
+.sx6a {
+  /* the page's own reading scale (styles/about-pranava.css), repeated because
+     this preview does not sit inside `.apr` */
+  --sx6a-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --sx6a-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+  --sx6a-max: 92rem;
+
+  /* THE NAME. Inter, because a person's name is not where a display face gets
+     to mis-set a glyph (DESIGN-SYSTEM §1). Large enough to be the section's
+     title and no larger: the brief says this section must not dominate. */
+  --sx6a-name: clamp(2rem, 1.2rem + 3vw, 4.1rem);
+  --sx6a-by: clamp(1.15rem, 0.9rem + 1vw, 1.9rem);
+  --sx6a-lead: clamp(1.25rem, 0.98rem + 1.05vw, 2rem);
+
+  /* THE SENTENCE in the cut. Solved so that at 1440 its first half takes two
+     lines on the left and its second half three on the right, and capped so that
+     at 2531 it does not become a banner. */
+  --sx6a-say: clamp(1.6rem, 0.95rem + 2.75vw, 3.85rem);
+
+  /* ornament hairlines. Clay is 3.90:1 and never carries text; as a rule it is
+     exactly what DESIGN-SYSTEM §1 reserves it for. */
+  --sx6a-hair: rgba(193, 97, 60, 0.55);
+
+  position: relative;
+  padding-block: clamp(4.4rem, 10vw, 9rem) clamp(3.4rem, 7vw, 6.5rem);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* CENTRED. `max-width` without `margin-inline: auto` is invisible at 1440 and
+   hundreds of px off-axis at 2531. */
+.sx6a-rail {
+  max-width: calc(var(--sx6a-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the register mark: the site's own object, to the letter ─────────────── */
+.sx6a-mark {
+  margin: 0 0 clamp(1.4rem, 3vw, 2.4rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx6a-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx6a-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the masthead: name and role as ONE line across the whole measure ────────
+   The live section put its display type in five lines down the left and left
+   the right half empty. Here the name opens the line, the role closes it at the
+   right-hand rail, and a rule carries the eye between them, so the width is
+   used by one statement rather than by one column and a hole. */
+.sx6a-mast {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 2.2vw, 2rem);
+  margin-bottom: clamp(2rem, 4.4vw, 3.6rem);
+}
+.sx6a-mast__name {
+  margin: 0;
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  column-gap: 0.4em;
+}
+.sx6a-mast__by {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 340;
+  font-size: var(--sx6a-by);
+  line-height: 1.1;
+  color: var(--ink-soft);
+}
+.sx6a-mast__who {
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: var(--sx6a-name);
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+.sx6a-mast__rule {
+  flex: 1 1 3rem;
+  min-width: 2.5rem;
+  align-self: center;
+  height: 1px;
+  background: var(--sx6a-hair);
+}
+.sx6a-mast__role {
+  margin: 0;
+  flex: none;
+  font: 600 var(--sx6a-small)/1.3 var(--font-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── the biography: one sentence at display size, four in short columns ───── */
+.sx6a-bio__lead {
+  margin: 0 0 clamp(1.6rem, 3.2vw, 2.8rem);
+  max-width: 33em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 360;
+  font-size: var(--sx6a-lead);
+  line-height: 1.24;
+  letter-spacing: -0.006em;
+  color: var(--ink);
+}
+.sx6a-bio__cols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.6rem, 2.6vw, 2.8rem);
+}
+.sx6a-bio__cols p {
+  margin: 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--rule);
+  font: 400 var(--sx6a-read)/1.62 var(--font-text);
+  color: var(--ink);
+}
+
+/* ── the print: one photograph, cut once ───────────────────────────────────
+   On the desktop it stands on the page measure, the same edges as the name and
+   the columns above it, so the section is one column of things stacked rather
+   than things set side by side. On a phone it bleeds to both edges. */
+.sx6a-print {
+  /* desktop: the frame drawn at the band's width, from its left edge */
+  --sx6a-s: 1;
+  --sx6a-x: 0;
+
+  position: relative;
+  width: calc(100% - 2 * var(--rail));
+  max-width: var(--sx6a-max);
+  margin: clamp(3rem, 6.4vw, 5.6rem) auto 0;
+}
+
+.sx6a-band {
+  position: relative;
+}
+.sx6a-band--upper {
+  --sx6a-y0: var(--sx6a-u0);
+  --sx6a-y1: var(--sx6a-u1);
+}
+.sx6a-band--lower {
+  --sx6a-y0: var(--sx6a-l0);
+  --sx6a-y1: var(--sx6a-l1);
+}
+
+/* THE WINDOW. Its height is the cut's share of the frame's height: a padding
+   percentage resolves against the WIDTH, and the frame is 3:4, so the band is
+   (y1 − y0) × 4/3 of its own width, times the phone's enlargement. The
+   photograph inside is drawn at the band's width (or 1.45× it on a phone) and
+   moved up by y0 of its OWN height, which is what a translate percentage
+   resolves against. No script is needed to place either cut. */
+.sx6a-band__win {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: calc((var(--sx6a-y1) - var(--sx6a-y0)) * 133.3333% * var(--sx6a-s));
+  /* the wall's own colour, so an unloaded band reads as the room, not a hole */
+  background: #dcb27c;
+}
+.sx6a-band__img {
+  position: absolute;
+  top: 0;
+  left: calc(-100% * var(--sx6a-x) * var(--sx6a-s));
+  width: calc(100% * var(--sx6a-s));
+  max-width: none;
+  height: auto;
+  transform: translate3d(0, calc(-100% * var(--sx6a-y0)), 0);
+}
+
+/* THE LIFT. The upper crop rises by 0.09 of the frame: his hand and sleeve
+   (y 0.33–0.41) leave through the band's lower edge into the cut, and the feet
+   get the room the arm had. One transition, on transform, only once the script
+   has confirmed motion is wanted. */
+.sx6a-print.is-live .sx6a-band--upper .sx6a-band__img {
+  transition: transform 1.6s var(--ease);
+}
+.sx6a-print.is-lifted .sx6a-band--upper .sx6a-band__img {
+  transform: translate3d(0, calc(-100% * (var(--sx6a-y0) - var(--sx6a-lift))), 0);
+}
+
+/* CROP MARKS at the cut: a hairline in the margin on each side of each cut
+   edge, 6px clear of the picture, the way a trimmed print is marked. Ornament
+   only (clay), and only where there is a margin to put them in. */
+.sx6a-band--upper::after,
+.sx6a-band--lower::before {
+  --sx6a-tick: clamp(0.9rem, 1.8vw, 1.6rem);
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--sx6a-tick));
+  right: calc(-1 * var(--sx6a-tick));
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--sx6a-hair) 0 calc(var(--sx6a-tick) - 6px),
+    transparent calc(var(--sx6a-tick) - 6px) calc(100% - var(--sx6a-tick) + 6px),
+    var(--sx6a-hair) calc(100% - var(--sx6a-tick) + 6px)
+  );
+}
+.sx6a-band--upper::after {
+  bottom: 0;
+}
+.sx6a-band--lower::before {
+  top: 0;
+}
+
+/* ── the sentence, in the cut ──────────────────────────────────────────────
+   Its two halves follow the photograph's own geometry: the first half on the
+   left, under the student with the teacher at her side; the second on the
+   right, over the student on her own hands. The reader's eye crosses the
+   picture in the direction the sentence turns. */
+.sx6a-say {
+  margin: 0;
+  padding-block: clamp(1.7rem, 3.8vw, 3.4rem);
+}
+.sx6a-say__p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: var(--sx6a-say);
+  line-height: 1.08;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+.sx6a-say__a,
+.sx6a-say__b {
+  display: block;
+}
+.sx6a-say__a {
+  max-width: 12.6em;
+}
+.sx6a-say__b {
+  margin-top: 0.34em;
+  margin-left: auto;
+  max-width: 17.4em;
+}
+.sx6a-say__mark {
+  margin-left: -0.44em;
+}
+.sx6a-say__mark,
+.sx6a-say__b > span[aria-hidden] {
+  color: var(--forest);
+}
+
+/* ── the caption: what the frame shows, never who ───────────────────────── */
+.sx6a-cap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem 3rem;
+  padding-top: 0.95rem;
+}
+.sx6a-cap__where {
+  font: 600 12px/1.4 var(--font-text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx6a-cap__what {
+  max-width: 48ch;
+  font: 400 var(--sx6a-small)/1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* the lift's trigger region — empty, and never clipped (an observed element
+   that is clipped to nothing reports ratio 0 forever: DESIGN-SYSTEM §1) */
+.sx6a-line {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  top: var(--sx6a-line-top, 50%);
+  bottom: 0;
+  pointer-events: none;
+}
+
+/* ── widths ──────────────────────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .sx6a-bio__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: clamp(1.4rem, 3vw, 2rem);
+  }
+}
+
+@media (max-width: 899px) {
+  /* the masthead line breaks: name, then role under it, and the rule goes */
+  .sx6a-mast {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+  .sx6a-mast__rule {
+    display: none;
+  }
+}
+
+@media (max-width: 719px) {
+  /* A PHONE. The frame bleeds to both edges and is drawn 1.45× the screen's
+     width, its left edge at x 0.12, so the band holds x 0.12–0.81: the teacher's
+     hand, both students and the chair, and not the curtain or the plain wall. */
+  .sx6a-print {
+    --sx6a-s: var(--sx6a-ps);
+    --sx6a-x: var(--sx6a-px);
+    width: 100%;
+  }
+  .sx6a-band--upper::after,
+  .sx6a-band--lower::before {
+    display: none;
+  }
+  .sx6a-say,
+  .sx6a-cap {
+    padding-inline: var(--rail);
+  }
+  .sx6a-say__a,
+  .sx6a-say__b {
+    max-width: none;
+  }
+  .sx6a-bio__cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx6a-print .sx6a-band__img {
+    transition: none !important;
+  }
+}
+
+/* ── preview scaffold (not part of the design) ───────────────────────────── */
+.sx6a-scaffold {
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+  padding-block: clamp(7rem, 30svh, 16rem) clamp(2.4rem, 6svh, 4rem);
+  font: 400 14px/1.5 var(--font-text);
+}
+.sx6a-scaffold p {
+  margin: 0;
+}
+.sx6a-scaffold--after {
+  min-height: 130svh;
+  padding-block: clamp(3rem, 8svh, 5rem);
+}
+.sx6a-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8em;
+  padding: 0.18em 0.6em;
+  border: 1px solid var(--rule-onDark);
+  font: 600 11px/1.4 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+}

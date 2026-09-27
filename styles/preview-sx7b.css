@@ -1,0 +1,544 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   PREVIEW sx7b — About §07 Faculty, concept B: six rooms, one point of contact.
+
+   Every selector is namespaced .sx7b-. Two namespace collisions have already
+   flattened live pages on this project; there is no bare class in this file.
+
+   TWO LAYOUTS FROM ONE MARKUP.
+   · STATIC (the default: no JavaScript, reduced motion, viewports under 560px
+     tall). The six frames hang in rows, each box offset so its teaching hands
+     sit at the same height as every other in the row; a hairline runs through
+     that height behind the photographs and a ring sits on each pair of hands.
+     This is the finished state of the idea, not a fallback for it.
+   · LIVE (.sx7b--live, added by Motion.tsx). The run becomes a pinned stage
+     beside (desktop) or above (phone) the words, with one ring standing still
+     in it. Each room opens through that ring as an iris, placed so its
+     teaching hands land exactly inside it; the line becomes a point.
+
+   NO TEXT IS EVER INSIDE THE STICKY STAGE. tools/contrast-probe.mjs skips any
+   text overlapping a sticky box, so text in a pinned stage is never measured.
+   The words stay in normal flow beside it, or below it on a phone.
+
+   The ground is --ground-deep: §06 Founder sits on paper before this and §08
+   Seva on the warm ground after it, and the Prabhava room's pale walls read as
+   light against it without any frame, shadow or mount.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── preview scaffold (not the section) ─────────────────────────────────── */
+.sx7b-page {
+  background: var(--ground);
+}
+.sx7b-scaffold {
+  min-height: 62svh;
+  display: flex;
+  align-items: flex-end;
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.sx7b-scaffold--warm {
+  min-height: 90svh;
+  align-items: flex-start;
+  background: var(--ground-warm);
+}
+.sx7b-scaffold__in {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding: 7rem var(--rail) 3rem;
+}
+.sx7b-scaffold p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.sx7b-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.75rem;
+  padding: 0.18rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* ── the section ────────────────────────────────────────────────────────── */
+.sx7b {
+  position: relative;
+  padding-block: clamp(4.5rem, 9vw, 8.5rem);
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  /* only x is clipped: the stage bleeds to the viewport's right edge */
+  overflow-x: clip;
+}
+.sx7b :focus-visible {
+  outline: 2px solid var(--ink-onPic);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(var(--shade), 0.9);
+}
+
+.sx7b-run {
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: var(--rail);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'head'
+    'one'
+    'oneb'
+    'rail'
+    'two';
+}
+.sx7b-head {
+  grid-area: head;
+}
+.sx7b-one {
+  grid-area: one;
+  margin-top: clamp(1.4rem, 3vw, 2.2rem);
+}
+.sx7b-oneb {
+  grid-area: oneb;
+  margin-top: 0.9em;
+}
+.sx7b-rail {
+  grid-area: rail;
+  margin-block: clamp(2.8rem, 7vw, 5.5rem);
+}
+.sx7b-two {
+  grid-area: two;
+}
+
+/* ── type ───────────────────────────────────────────────────────────────── */
+.sx7b-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin: 0 0 clamp(1.3rem, 2.8vw, 2.2rem);
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.sx7b-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic);
+}
+.sx7b-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+.sx7b-lead {
+  margin: 0;
+  max-width: 11ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 1.3rem + 3.4vw, 4.9rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--ink-onDark);
+}
+.sx7b-body {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(1.02rem, 0.96rem + 0.25vw, 1.2rem);
+  line-height: 1.62;
+  color: var(--ink-onDark-soft);
+}
+.sx7b-prov {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: clamp(1.2rem, 2.4vw, 1.7rem) 0 0;
+  max-width: 44ch;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--ink-onDark-soft);
+}
+.sx7b-prov::before {
+  content: '';
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+.sx7b-close {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 1.05rem + 1.3vw, 2.35rem);
+  line-height: 1.24;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+  color: var(--ink-onDark);
+}
+.sx7b-close em {
+  font-style: italic;
+}
+
+/* ── the strip, STATIC: frames hung by their hands ──────────────────────────
+   Each box is tall enough for the highest and the lowest hand in the set, and
+   the picture inside it is dropped by (highest hand − this hand) × height, so
+   every pair of hands in a row lands at one y. The line and the rings are
+   drawn at that y. */
+.sx7b-stage {
+  position: relative;
+}
+.sx7b-thread {
+  display: none;
+}
+.sx7b-strip {
+  --sx7b-gap: clamp(14px, 1.7vw, 30px);
+  --sx7b-h: calc((100vw - 2 * var(--rail) - 2.2 * var(--sx7b-gap)) / 1.5);
+  --sx7b-ring: calc(var(--sx7b-h) * 0.15);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  row-gap: clamp(1.6rem, 4vw, 3rem);
+}
+.sx7b-f {
+  position: relative;
+  isolation: isolate;
+  flex: none;
+  width: calc(var(--ar) * var(--sx7b-h));
+  height: calc((1 + var(--sx7b-top) - var(--sx7b-bot)) * var(--sx7b-h));
+  margin: 0 calc(var(--sx7b-gap) / 2);
+}
+.sx7b-f::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: calc(var(--sx7b-gap) / -2);
+  right: calc(var(--sx7b-gap) / -2);
+  top: calc(var(--sx7b-top) * var(--sx7b-h));
+  height: 1px;
+  background: rgba(246, 217, 193, 0.62);
+}
+.sx7b-f__pic {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc((var(--sx7b-top) - var(--hy)) * var(--sx7b-h));
+  height: var(--sx7b-h);
+  overflow: hidden;
+  background: #0b1510;
+}
+.sx7b-f__pic picture {
+  display: contents;
+}
+.sx7b-f__img,
+.sx7b-f__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.sx7b-f__vid {
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+.sx7b-f__vid.is-on {
+  opacity: 1;
+}
+/* A ring on the hands: cream inside a dark halo, the site's focus-ring grammar, so it
+   holds on a pale wall and on a dark shirt alike. Ornament, never text. */
+.sx7b-f__ring {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--hx) * 100%);
+  top: calc(var(--sx7b-top) * var(--sx7b-h));
+  width: var(--sx7b-ring);
+  height: var(--sx7b-ring);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(251, 247, 242, 0.96),
+    inset 0 0 0 2.75px rgba(16, 12, 10, 0.34),
+    0 0 0 1px rgba(16, 12, 10, 0.42);
+}
+
+@media (min-width: 640px) {
+  .sx7b-strip {
+    --sx7b-h: calc((min(100vw, 1600px) - 2 * var(--rail) - 3.2 * var(--sx7b-gap)) / 2.86);
+  }
+}
+@media (min-width: 1024px) {
+  .sx7b-run {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: clamp(2.5rem, 6vw, 7rem);
+    grid-template-areas:
+      'head one'
+      'head oneb'
+      'rail rail'
+      '.    two';
+    align-items: end;
+  }
+  .sx7b-head {
+    align-self: end;
+  }
+  .sx7b-one {
+    margin-top: 0;
+  }
+  .sx7b-oneb {
+    align-self: start;
+  }
+  .sx7b-strip {
+    --sx7b-h: calc((min(100vw, 1600px) - 2 * var(--rail) - 6.3 * var(--sx7b-gap)) / 4.56);
+    --sx7b-ring: calc(var(--sx7b-h) * 0.17);
+    flex-wrap: nowrap;
+  }
+}
+
+/* ══ LIVE ═══════════════════════════════════════════════════════════════════
+   Only ever present when Motion.tsx has decided motion is welcome and the
+   viewport is at least 560px tall.
+
+   THE STAGE. A pinned window on the deep ground with one point P in it
+   (--sx7b-px/--sx7b-py, read by Motion.tsx) and a hairline thread through P.
+   Every room is a disc of radius --sx7b-R centred on P (set by Motion.tsx to
+   reach the stage's farthest corner), holding its plate so the plate's hands
+   sit at the disc's centre. Scaling the disc opens the iris; the plate inside
+   is counter-scaled about its hands, so the photograph stays put while the
+   aperture grows over it. */
+.sx7b--live {
+  padding-top: clamp(2rem, 5vw, 4rem);
+}
+.sx7b--live .sx7b-run {
+  --sx7b-travel: 440svh;
+  min-height: calc(100svh + var(--sx7b-travel));
+}
+.sx7b--live .sx7b-oneb {
+  margin-top: 0;
+}
+.sx7b--live .sx7b-stage {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  background: var(--ground-deep);
+  --sx7b-px: 0.5;
+  --sx7b-py: 0.5;
+  --sx7b-R: 100vmax;
+  --sx7b-ring: 52px;
+  --sx7b-ph: 80svh;
+}
+.sx7b--live .sx7b-thread {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--sx7b-py) * 100%);
+  height: 1px;
+  background: var(--rule-onDark);
+}
+.sx7b--live .sx7b-strip {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.sx7b--live .sx7b-f {
+  position: absolute;
+  left: calc(var(--sx7b-px) * 100% - var(--sx7b-R));
+  top: calc(var(--sx7b-py) * 100% - var(--sx7b-R));
+  width: calc(2 * var(--sx7b-R));
+  height: calc(2 * var(--sx7b-R));
+  margin: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  /* no ground of its own: the rooms before stay beneath, dimmed by an OPAQUE
+     overlay (never a translucent photograph), so the stack is layered, never a
+     double exposure */
+  transform-origin: 50% 50%;
+  visibility: hidden;
+}
+.sx7b--live .sx7b-f.is-in {
+  visibility: visible;
+  will-change: transform;
+}
+.sx7b--live .sx7b-f::before,
+.sx7b--live .sx7b-f__ring {
+  display: none;
+}
+.sx7b--live .sx7b-f__pic {
+  top: calc(var(--sx7b-R) - var(--hy) * var(--sx7b-ph));
+  left: calc(var(--sx7b-R) - var(--hx) * var(--ar) * var(--sx7b-ph));
+  right: auto;
+  width: calc(var(--ar) * var(--sx7b-ph));
+  height: var(--sx7b-ph);
+  transform-origin: calc(var(--hx) * 100%) calc(var(--hy) * 100%);
+}
+.sx7b--live .sx7b-f.is-in .sx7b-f__pic {
+  will-change: transform;
+}
+.sx7b-f__dim {
+  display: none;
+}
+.sx7b--live .sx7b-f__dim {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--ground-deep);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The point. The one thing on the stage that never moves: cream inside a dark
+   halo — the site's focus-ring grammar — so it holds on a pale wall and a dark
+   shirt alike. Ornament, never text. */
+.sx7b-point {
+  display: none;
+}
+.sx7b--live .sx7b-point {
+  display: block;
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--sx7b-px) * 100%);
+  top: calc(var(--sx7b-py) * 100%);
+  width: var(--sx7b-ring);
+  height: var(--sx7b-ring);
+  margin: calc(var(--sx7b-ring) / -2) 0 0 calc(var(--sx7b-ring) / -2);
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(251, 247, 242, 0.96),
+    inset 0 0 0 2.75px rgba(16, 12, 10, 0.3),
+    0 0 0 1px rgba(16, 12, 10, 0.38);
+}
+/* The thread, carried through the ring: two short horizontal ticks, so the
+   point still reads as a bead on the line once a room has covered the line
+   itself. Horizontal only — a vertical pair would make it a crosshair. */
+.sx7b--live .sx7b-point::before,
+.sx7b--live .sx7b-point::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(var(--sx7b-ring) * 0.42);
+  height: 1.5px;
+  margin-top: -0.75px;
+  background: rgba(251, 247, 242, 0.96);
+  box-shadow: 0 0 0 1px rgba(16, 12, 10, 0.34);
+}
+.sx7b--live .sx7b-point::before {
+  right: calc(100% + var(--sx7b-ring) * 0.12);
+}
+.sx7b--live .sx7b-point::after {
+  left: calc(100% + var(--sx7b-ring) * 0.12);
+}
+
+/* LIVE on a phone or tablet: the stage is the top 62% of the screen and the
+   words scroll up beneath it, read in the band below. The rail spans every row
+   so the stage stays pinned while they pass; its bottom margin ends the pin
+   exactly when the last sentence is sitting in that band. */
+@media (max-width: 1023.98px) {
+  .sx7b--live .sx7b-run {
+    --sx7b-travel: 400svh;
+    /* rows timed to the rooms: each step's centre crosses the reading band
+       (81svh) just after the room it belongs to has opened */
+    grid-template-rows: 125svh 115svh 135svh minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'one'
+      'oneb'
+      'two';
+  }
+  .sx7b--live .sx7b-rail {
+    grid-area: 1 / 1 / -1 / -1;
+    z-index: 2;
+    margin: 0 calc(-1 * var(--rail)) 38svh;
+    pointer-events: none;
+  }
+  .sx7b--live .sx7b-stage {
+    height: 62svh;
+    pointer-events: auto;
+    --sx7b-py: 0.48;
+    --sx7b-ph: min(54svh, 150vw);
+    --sx7b-ring: 46px;
+  }
+  .sx7b--live .sx7b-head {
+    padding-top: calc(62svh + 1.25rem);
+  }
+  .sx7b--live .sx7b-one,
+  .sx7b--live .sx7b-oneb {
+    align-self: center;
+    margin-top: 0;
+  }
+  .sx7b--live .sx7b-two {
+    align-self: center;
+  }
+  .sx7b--live .sx7b-lead {
+    font-size: clamp(2.1rem, 1.2rem + 3.6vw, 3.4rem);
+  }
+  .sx7b--live .sx7b-close {
+    font-size: clamp(1.3rem, 1rem + 1.4vw, 1.9rem);
+  }
+}
+
+/* LIVE on a desktop: the words are a column in normal flow, the stage is pinned
+   beside them and bleeds to the viewport's right edge. Its left edge is a
+   straight cut, not a fade: a feathered photograph reads as a smudge. */
+@media (min-width: 1024px) {
+  .sx7b--live .sx7b-run {
+    grid-template-columns: minmax(17rem, 4fr) minmax(0, 8fr);
+    /* rows timed to the rooms: each step's centre crosses the middle of the
+       screen just after the room it belongs to has opened (Motion.tsx C0..C_END
+       over 440svh of pin) — the closing sentence during the last room's hold */
+    grid-template-rows: 100svh 130svh 140svh minmax(0, 1fr);
+    grid-template-areas:
+      'head rail'
+      'one  rail'
+      'oneb rail'
+      'two  rail';
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+    align-items: stretch;
+  }
+  .sx7b--live .sx7b-rail {
+    grid-area: rail;
+    margin: 0 calc(-1 * var(--rail) - (100vw - min(100vw, 1600px)) / 2) 0 0;
+  }
+  .sx7b--live .sx7b-stage {
+    height: 100svh;
+    --sx7b-px: 0.44;
+    --sx7b-py: 0.47;
+    --sx7b-ph: min(80svh, 1180px);
+    --sx7b-ring: clamp(50px, 6.6svh, 86px);
+  }
+  .sx7b--live .sx7b-head {
+    align-self: start;
+    padding-top: 22svh;
+  }
+  .sx7b--live .sx7b-one,
+  .sx7b--live .sx7b-oneb {
+    align-self: center;
+  }
+  .sx7b--live .sx7b-two {
+    align-self: center;
+  }
+  .sx7b--live .sx7b-lead {
+    font-size: clamp(2.4rem, 1rem + 2.6vw, 4.2rem);
+  }
+  .sx7b--live .sx7b-close {
+    font-size: clamp(1.35rem, 0.9rem + 1vw, 2.05rem);
+  }
+}

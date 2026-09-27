@@ -1,0 +1,280 @@
+/* Final th1 section. Every selector is namespaced .th1- */
+
+/* ══ HEAL · THE STANDING NOTICE — THE VIEW TILTS UP ════════════════════════
+   The client's line at the size of the page, a tall window beside it. Held for
+   one screen of scroll while the window's view tilts up out of a grove and cuts
+   to a palm crown. "evolving" alone never settles its weight.
+
+   Default below is the STILL state (reduced motion, no JS, short landscape
+   phones): no held screen, the grove whole in the window, no crown. The held,
+   tilting stage is added only under the LIVE query further down — the same
+   query Th1Motion.tsx attaches under. Only transform and opacity move. */
+
+.th1 {
+  --th1-t: 0; /* the tilt, 0 → 1 */
+  --th1-c: 0; /* the cut to the crown, 0 → 1 */
+  --th1-r: 0; /* the crown's continued rise, 0 → 1 */
+  --th1-s0: 1.12; /* the grove's enlargement at the start: the whole group on its grass */
+  --th1-s1: 1.8; /* and at the top of the tilt: canopy, the sitters gone below */
+  --th1-x: 40%; /* the grove's column — the front sitter and the trunks behind her */
+  --th1-top: clamp(5.75rem, 9vw, 7rem); /* clear of the pill */
+  --th1-foot: clamp(1.25rem, 3vw, 2.5rem);
+
+  position: relative;
+  display: block;
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+.th1-stage {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: var(--th1-top) 0 var(--th1-foot);
+}
+
+/* Capped AND centred — max-width alone is left-pinned at 2531. */
+.th1-rail {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(76rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: start;
+  row-gap: clamp(1.4rem, 4vw, 2.2rem);
+  min-height: 0;
+}
+
+.th1-say {
+  min-width: 0;
+}
+
+/* The <h1> is the navigation's own label at label scale: a rank, not a size. */
+.th1-h1 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 600 11.5px/1 var(--font-text);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.th1-h1__rule {
+  flex: none;
+  width: 30px;
+  height: 1px;
+  background: var(--forest);
+}
+
+.th1-lede {
+  margin: clamp(1.1rem, 2.2vw, 1.8rem) 0 0;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 0.9rem + 4.2vw, 5rem);
+  line-height: 1.04;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* "evolving". The box is reserved at a middle weight by an invisible copy
+   (hidden from assistive tech by visibility), and the real word is laid over it,
+   centred, so its weight can move without the sentence ever re-wrapping: the
+   word thickens into the spaces either side of it and thins away from them. */
+.th1-ev {
+  position: relative;
+  display: inline-block;
+}
+.th1-ev::before {
+  content: attr(data-w);
+  visibility: hidden;
+  font-weight: 470;
+}
+.th1-ev__w {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--forest);
+  font-weight: 560;
+  font-variation-settings: 'SOFT' 60;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .th1-ev__w {
+    animation: th1-grow 6.5s var(--ease-io) infinite alternate;
+  }
+}
+@keyframes th1-grow {
+  from {
+    font-weight: 330;
+    font-variation-settings: 'SOFT' 0;
+  }
+  to {
+    font-weight: 610;
+    font-variation-settings: 'SOFT' 100;
+  }
+}
+
+/* ── the window ─────────────────────────────────────────────────────────── */
+.th1-fig {
+  position: relative;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  height: clamp(340px, 112vw, 560px);
+}
+.th1-win {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 3px;
+  background: var(--ground-warm);
+  isolation: isolate;
+}
+.th1-cam {
+  position: absolute;
+  inset: 0;
+}
+.th1-grove {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 50%;
+}
+.th1-crown {
+  display: none;
+}
+
+/* ── ≥900: the line and the window side by side, the line's foot on the
+   window's foot. The window's height answers to the screen, the rail and a
+   hard cap, and its width follows from its 0.62 shape. */
+@media (min-width: 900px) {
+  .th1-stage {
+    align-items: center;
+  }
+  .th1-rail {
+    grid-template-rows: none;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  .th1-lede {
+    max-width: none;
+  }
+  .th1-fig {
+    height: max(
+      380px,
+      min(calc(100vh - 11rem), 800px, calc(min(100vw - 2 * var(--rail), 76rem) * 0.645))
+    );
+    height: max(
+      380px,
+      min(calc(100svh - 11rem), 800px, calc(min(100vw - 2 * var(--rail), 76rem) * 0.645))
+    );
+    aspect-ratio: 0.62;
+  }
+  .th1-say {
+    padding-bottom: 0.15rem;
+  }
+}
+
+/* ══ LIVE: the held screen and the tilt ═════════════════════════════════════ */
+@media (prefers-reduced-motion: no-preference) and (min-height: 540px) {
+  .th1 {
+    --th1-run: 70vh;
+    height: calc(100vh + var(--th1-run));
+    height: calc(100svh + var(--th1-run));
+  }
+  .th1-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .th1-rail {
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100%;
+  }
+  .th1-fig {
+    height: 100%;
+    min-height: 240px;
+  }
+
+  /* A looking-up camera: the plane leans back as the view rises, so the trunks
+     converge toward the canopy. The cam overshoots the window so no edge shows. */
+  .th1-win {
+    perspective: 1100px;
+  }
+  .th1-cam {
+    inset: -7%;
+    transform: rotateX(calc(var(--th1-t) * 6deg));
+    transform-origin: 50% 60%;
+    will-change: transform;
+  }
+  /* The grove, hung from the top of its column and pushed in as it rises: at
+     t = 0 its foot sits on the window's foot (the group on its grass, trunks
+     above); by t = 1 its head is on the window's head and it has grown from
+     s0 to s1 about that head, so the sitters slide out below and the trunks
+     rise. Moving the picture DOWN and in is the view tilting UP. */
+  .th1-grove {
+    --th1-s: calc(var(--th1-s0) + (var(--th1-s1) - var(--th1-s0)) * var(--th1-t));
+    inset: auto;
+    top: 0;
+    left: 50%;
+    width: auto;
+    height: 100%;
+    max-width: none;
+    object-fit: fill;
+    transform-origin: var(--th1-x) 0;
+    transform: translateX(calc(-1 * var(--th1-x)))
+      translateY(calc((1 - var(--th1-t)) * (1 - var(--th1-s)) * 100%)) scale(var(--th1-s));
+    will-change: transform;
+  }
+  /* The cut. The crown arrives low on its trunk and keeps rising after it. */
+  .th1-crown {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 118%;
+    object-fit: cover;
+    object-position: 52% 50%;
+    opacity: var(--th1-c);
+    transform: translateY(calc((1 - var(--th1-r)) * -15.254%));
+    will-change: transform, opacity;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 540px) and (min-width: 900px) {
+  .th1 {
+    --th1-run: 85vh;
+  }
+  .th1-rail {
+    grid-template-rows: none;
+    height: auto;
+  }
+  .th1-fig {
+    min-height: 0;
+    height: max(
+      380px,
+      min(calc(100vh - 11rem), 800px, calc(min(100vw - 2 * var(--rail), 76rem) * 0.645))
+    );
+    height: max(
+      380px,
+      min(calc(100svh - 11rem), 800px, calc(min(100vw - 2 * var(--rail), 76rem) * 0.645))
+    );
+  }
+}

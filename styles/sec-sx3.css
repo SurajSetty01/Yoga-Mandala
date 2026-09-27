@@ -1,0 +1,527 @@
+/* sec-sx3: the final §03 Our Approach on /about/. Every selector is .sx3-*.
+   Base: concept sx3a (the book). Grafted: the lead's named terms set in forest
+   italic (from sx3c) and a play/pause control on every clip (from sx3b).
+
+   ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA §03 OUR APPROACH, CONCEPT A. PHOTOGRAPHY LEADS.
+
+   AN OPEN BOOK WHOSE GUTTER CLOSES AS YOU READ.
+   Tradition, Practice and Inquiry are each argued by two photographs that face
+   each other across one spine. Spread by spread, the two sides come closer:
+   the gutter narrows from --sx3-g1 to --sx3-g2 to --sx3-g3, and the two
+   pictures converge in height from 1 : 0.52, to 0.7 : 1, to 0.82 : 0.82.
+   Transmission is not a pair. It is one photograph laid ACROSS the spine, with
+   the spine placed where the student ends and the teacher begins, so the
+   teacher's hands cross the gutter. As the frame reaches the middle of the
+   screen, the last sliver of gutter inside it closes.
+
+   RESEARCH, AND WHAT EACH FINDING CHANGED
+   · Walker Evans, American Photographs (MoMA, 1938). Plates are sequenced to be
+     read in order, and meaning is made by juxtaposition. Evans paired a dock
+     worker with a minstrel bill. → Each of the first three ideas became a PAIR
+     whose two pictures say something neither says alone. Evans left the facing
+     pages blank, so the section opens with a blank verso and the lead on the
+     recto.
+   · Alexey Brodovitch, Harper's Bazaar 1934-58. He "bled single pictures across
+     double-page spreads", and repeated one pose across a spread to give it a
+     temporal feeling. → Transmission is the single picture bled across the
+     gutter. Tradition's recto is the repeated pose: one form in a row of bodies.
+   · The LIFE photo-essay formula (overall, medium, close-up, sequence,
+     interaction, signature image, clincher). The SIGNATURE image "summarises
+     the situation with all the key storytelling elements in one photo". → Of the
+     four, only Transmission is given a signature image: teacher, student and
+     practice in one frame. The pairs take the other roles: overall (the banyan),
+     sequence (the loop), interaction (listeners and the explained pose).
+   · Look-in: editorial layout turns subjects to face INTO the spread. → Every
+     verso was chosen or cropped so its subject faces the gutter.
+   · Rijksmuseum "Every Inch a Story" and scrollytelling (Snow Fall, vev.design's
+     picture-essay survey). The fixed image with story panels was REJECTED here:
+     it is a zoom into detail, and that is the move §02 directly above makes.
+
+   GROUNDS. §02 above is deep, so this section is paper. It holds no text on a
+   photograph, so no scrim anywhere.
+
+   Every scroll-linked value arrives as ONE custom property, written by
+   components/preview/sx3-sec/Sx3Motion.tsx inside a single rAF. Every one has a
+   FINISHED default here. With JavaScript off, or under reduced motion, the
+   Transmission frame is already whole and every plate is already in place.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx3-sec {
+  /* the three gutters, and the one that closes inside the fourth */
+  --sx3-g1: clamp(2.2rem, 9vw, 12rem);
+  --sx3-g2: clamp(1.3rem, 5vw, 7rem);
+  --sx3-g3: clamp(0.6rem, 2.2vw, 3rem);
+  /* the minimum space between a name and its paragraph, which the gutter can
+     never squeeze below; the third and fourth spreads sit on it */
+  --sx3-tgap: clamp(1.25rem, 3.2vw, 3rem);
+  /* where the spine crosses the Transmission frame: at the student's hip, where
+     the teacher's hands are. Measured on the clip's frames at 1s and 4s. */
+  --sx3-cross: 0.43;
+  --sx3-line: rgba(36, 29, 24, 0.2);
+  --sx3-pad: clamp(4.4rem, 10vw, 9rem);
+  --sx3-gap: clamp(3.75rem, 7vw, 6.75rem);
+
+  position: relative;
+  display: block;
+  padding-block: var(--sx3-pad);
+  background: var(--ground);
+  color: var(--ink);
+  /* the reveal slides and the recto-side bleed of the fourth frame never widen the page */
+  overflow-x: clip;
+}
+
+/* THE PAGE MEASURE, AND IT IS CENTRED. max-width without margin-inline:auto is
+   invisible at 1440 and hundreds of pixels off-axis at 2531. */
+.sx3-rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the opening ───────────────────────────────────────────────────────── */
+.sx3-open {
+  margin-bottom: clamp(3rem, 7vw, 6.5rem);
+}
+.sx3-open .apr-eyebrow {
+  margin-bottom: 1.5rem;
+}
+.sx3-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.85rem, 0.7rem + 3.3vw, 4.1rem);
+  line-height: 1.07;
+  letter-spacing: -0.016em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.sx3-lead__line {
+  display: block;
+}
+
+/* ── the book ──────────────────────────────────────────────────────────── */
+.sx3-book {
+  position: relative;
+  padding-bottom: var(--sx3-gap);
+}
+/* the spine. On a phone, name and paragraph are stacked across the middle of the
+   page, so a continuous line would strike through them. There the gutter's
+   line is drawn inside each pair instead (.sx3-pair::before). */
+.sx3-spine {
+  display: none;
+}
+
+.sx3-spread + .sx3-spread {
+  margin-top: var(--sx3-gap);
+}
+
+.sx3-spread--tradition { --g: var(--sx3-g1); }
+.sx3-spread--practice  { --g: var(--sx3-g2); }
+.sx3-spread--inquiry   { --g: var(--sx3-g3); }
+
+.sx3-pair {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--g) minmax(0, 1fr);
+  align-items: end;
+}
+.sx3-pair::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-0.5px);
+  background: var(--sx3-line);
+}
+.sx3-spread--practice .sx3-pair { align-items: start; }
+.sx3-spread--inquiry .sx3-pair  { align-items: center; }
+
+.sx3-plate {
+  margin: 0;
+  min-width: 0;
+}
+.sx3-plate--verso {
+  grid-column: 1;
+  justify-self: end;
+}
+.sx3-plate--recto {
+  grid-column: 3;
+  justify-self: start;
+}
+
+/* a phone: every plate is sized by its page, and each spread's smaller plate is 78% */
+.sx3-plate {
+  width: 100%;
+}
+.sx3-spread--tradition .sx3-plate--recto,
+.sx3-spread--practice .sx3-plate--verso {
+  width: 78%;
+}
+
+/* THE APERTURE CLIPS; THE FIGURE IS WHAT IS OBSERVED. An observed element that
+   clips to nothing never intersects, and that shipped a blank page on this site. */
+.sx3-plate__ap,
+.sx3-cross__ap {
+  position: relative;
+  overflow: hidden;
+  background: var(--ground-warm);
+}
+.sx3-plate__ap {
+  aspect-ratio: var(--ar-n, var(--ar));
+}
+.sx3-plate__img,
+.sx3-plate__film {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op-n, var(--op, 50% 50%));
+}
+.sx3-plate__ap picture,
+.sx3-cross__ap picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sx3-plate__film {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.sx3-plate__film.is-playing {
+  opacity: 1;
+}
+
+/* ── the words beneath each spread ───────────────────────────────────── */
+.sx3-words {
+  margin-top: clamp(1.4rem, 2.6vw, 2.3rem);
+}
+.sx3-name {
+  margin: 0 0 0.7rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 1.1rem + 2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+.sx3-body {
+  margin: 0;
+  max-width: 33rem;
+  font-family: var(--font-text);
+  font-size: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+/* ── Transmission: one frame across the spine ─────────────────────────── */
+.sx3-spread--transmission {
+  --tw: 87.72vw;
+}
+/* On a phone the frame bleeds off the RECTO edge, the teacher's side. Its left edge
+   is placed so the spine (the page centre) falls at --sx3-cross of its width:
+     left = 50vw - 0.43W and right = 100vw, so W = 50vw / 0.57 = 87.72vw. */
+.sx3-cross {
+  position: relative;
+  margin: 0;
+  width: var(--tw);
+  margin-left: calc(50% - var(--tw) * var(--sx3-cross));
+}
+.sx3-cross__ap {
+  aspect-ratio: 2 / 3;
+}
+.sx3-cross .sx3-plate__img,
+.sx3-cross .sx3-plate__film {
+  object-position: var(--op-n, var(--op, 50% 0%));
+}
+
+/* THE LAST OF THE GUTTER. Paper, the width of Inquiry's gutter, with the spine's
+   line through its middle. Closed (scaleX 0) by default: the finished state. */
+.sx3-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--sx3-cross) * 100%);
+  width: var(--sx3-g3);
+  background: var(--ground);
+  transform: translateX(-50%) scaleX(var(--sx3-open, 0));
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+.sx3-seam::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-0.5px);
+  background: var(--sx3-line);
+}
+
+/* ══ 720px and up: pages side by side, words either side of the spine ══════ */
+@media (min-width: 720px) {
+  .sx3-sec {
+    /* one height unit for every plate. Height-led, so a short laptop is not
+       handed a column of pictures taller than its screen. */
+    --sx3-u: min(64svh, 42vw, 40rem);
+    /* the fourth frame: nearly the height of the screen, and capped for tall ones */
+    --sx3-th: min(94svh, 93vw, 66rem);
+  }
+
+  .sx3-open {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sx3-g1) minmax(0, 1fr);
+    align-items: start;
+  }
+  .sx3-open__verso {
+    grid-column: 1;
+  }
+  .sx3-lead {
+    grid-column: 3;
+  }
+
+  .sx3-spine {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-0.5px);
+    background: var(--sx3-line);
+    pointer-events: none;
+  }
+  .sx3-pair::before {
+    content: none;
+  }
+
+  .sx3-plate,
+  .sx3-spread--tradition .sx3-plate--recto,
+  .sx3-spread--practice .sx3-plate--verso {
+    width: min(100%, calc(var(--h) * var(--ar)));
+  }
+  .sx3-plate__ap {
+    aspect-ratio: var(--ar);
+  }
+  .sx3-plate__img,
+  .sx3-plate__film {
+    object-position: var(--op, 50% 50%);
+  }
+
+  /* heights: the pairs converge. Big against small, then small against big, then equal. */
+  .sx3-spread--tradition .sx3-plate--verso { --h: var(--sx3-u); }
+  .sx3-spread--tradition .sx3-plate--recto { --h: calc(var(--sx3-u) * 0.5); }
+  .sx3-spread--practice .sx3-plate--verso  { --h: calc(var(--sx3-u) * 0.62); }
+  .sx3-spread--practice .sx3-plate--recto  { --h: var(--sx3-u); }
+  .sx3-spread--inquiry .sx3-plate          { --h: calc(var(--sx3-u) * 0.8); }
+
+
+
+  /* Where a page is full, the words straddle the spine beneath the pictures: the name
+     ends at it and the paragraph begins at it. From 1000px, Tradition and Practice
+     move their words up into the page beside the smaller plate instead (below). */
+  .sx3-words {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max(var(--g, 0px), var(--sx3-tgap)) minmax(0, 1fr);
+    align-items: baseline;
+  }
+  .sx3-name {
+    grid-column: 1;
+    justify-self: end;
+    margin: 0;
+    text-align: right;
+  }
+  .sx3-body {
+    grid-column: 3;
+    max-width: 31rem;
+  }
+
+  .sx3-spread--transmission {
+    --tw: calc(var(--sx3-th) * 0.75);
+    --g: var(--sx3-g3);
+  }
+  .sx3-cross__ap {
+    aspect-ratio: 3 / 4;
+  }
+  .sx3-cross .sx3-plate__img,
+  .sx3-cross .sx3-plate__film {
+    object-position: var(--op, 50% 0%);
+  }
+}
+
+/* ══ 1000px and up: Tradition and Practice become magazine spreads ══════════ */
+@media (min-width: 1000px) {
+  /* THE FIRST TWO SPREADS ARE MAGAZINE SPREADS. The tall plate owns one page; the other
+     page carries the words at its head and the small plate at its foot, both hugging
+     the spine. Tradition puts the tall plate on the verso; Practice mirrors it. The pair
+     wrapper dissolves so all three become cells of one grid about the spine. */
+  .sx3-spread--tradition,
+  .sx3-spread--practice {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--g) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: clamp(1.4rem, 2.4vw, 2.2rem);
+  }
+  .sx3-spread--tradition .sx3-pair,
+  .sx3-spread--practice .sx3-pair {
+    display: contents;
+  }
+  .sx3-spread--tradition .sx3-plate--verso { grid-column: 1; grid-row: 1 / 3; align-self: end; }
+  .sx3-spread--tradition .sx3-words        { grid-column: 3; grid-row: 1; align-self: start; }
+  .sx3-spread--tradition .sx3-plate--recto { grid-column: 3; grid-row: 2; align-self: end; }
+  .sx3-spread--practice .sx3-words         { grid-column: 1; grid-row: 1; align-self: start; justify-self: end; }
+  .sx3-spread--practice .sx3-plate--verso  { grid-column: 1; grid-row: 2; align-self: end; }
+  .sx3-spread--practice .sx3-plate--recto  { grid-column: 3; grid-row: 1 / 3; align-self: start; }
+
+  .sx3-spread--tradition .sx3-words,
+  .sx3-spread--practice .sx3-words {
+    margin: 0;
+    width: min(100%, 30rem);
+  }
+
+  .sx3-spread--tradition .sx3-words,
+  .sx3-spread--practice .sx3-words {
+    display: block;
+  }
+  .sx3-spread--tradition .sx3-name,
+  .sx3-spread--practice .sx3-name {
+    justify-self: auto;
+    margin: 0 0 0.7rem;
+    text-align: left;
+  }
+  .sx3-spread--tradition .sx3-body,
+  .sx3-spread--practice .sx3-body {
+    max-width: none;
+  }
+}
+
+/* ══ 1200px and up: the Transmission words move into the frame's own margin ══════
+   Left of the frame there is a whole verso of paper (347px at 1440, 520px at 2531).
+   The name and paragraph stand in it at the foot of the frame, like a caption set
+   beside a plate, so the fourth spread is ONE picture and its words on one screen. */
+@media (min-width: 1200px) {
+  .sx3-spread--transmission {
+    position: relative;
+  }
+  .sx3-spread--transmission .sx3-words {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: calc(50% - var(--tw) * var(--sx3-cross) - var(--sx3-tgap));
+    margin: 0;
+  }
+  /* justify-self applies in block layout too, and `end` would shrink the heading to its
+     text and push it right, off the paragraph's left edge */
+  .sx3-spread--transmission .sx3-name {
+    justify-self: auto;
+    margin: 0 0 0.7rem;
+    text-align: left;
+  }
+  .sx3-spread--transmission .sx3-body {
+    max-width: 26rem;
+  }
+}
+
+/* ══ the reveal. Opt-in through .is-live, which Sx3Motion adds only when motion is
+   allowed, so a reader whose JavaScript never arrives keeps everything painted. ══ */
+.sx3-sec.is-live [data-sx='verso'],
+.sx3-sec.is-live [data-sx='recto'],
+.sx3-sec.is-live [data-sx='words'],
+.sx3-sec.is-live [data-sx='cross'] {
+  opacity: 0;
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.15s var(--ease);
+}
+/* the two sides arrive from the outer edges and come to face each other */
+.sx3-sec.is-live [data-sx='verso'] { transform: translateX(-2.4vw); }
+.sx3-sec.is-live [data-sx='recto'] { transform: translateX(2.4vw); transition-delay: 90ms; }
+.sx3-sec.is-live [data-sx='words'] { transform: translateY(18px); transition-delay: 140ms; }
+.sx3-sec.is-live [data-sx].in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx3-sec.is-live [data-sx] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .sx3-seam {
+    transform: translateX(-50%) scaleX(0);
+  }
+  /* no clip plays under reduced motion unless the reader presses its button */
+  .sx3-plate__film {
+    transition: none;
+  }
+}
+
+/* ══ grafted from sx3c: each clause of the lead sets the term it names in forest
+   italic, so the three spreads below are read as the lead's own three words, and
+   the fourth, Transmission, is visibly the one the sentence leaves out. ══════ */
+.sx3-lead__term {
+  font-style: italic;
+  color: var(--forest);
+}
+
+/* ══ grafted from sx3b: every clip can be paused, and started. WCAG 2.2.2 (a loop
+   that runs longer than five seconds can be stopped), and the way a reader who asked
+   for reduced motion, or is on a phone where nothing attaches by itself, can choose
+   to see the picture move. Hidden until Sx3Motion runs: no JavaScript, no clip. ══ */
+.sx3-plate,
+.sx3-cross {
+  position: relative;
+}
+.sx3-toggle {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(251, 247, 242, 0.22);
+  border-radius: 50%;
+  background: rgba(var(--shade), 0.74);
+  color: var(--ground);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease);
+}
+.sx3-toggle[hidden] {
+  display: none;
+}
+.sx3-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.sx3-toggle__pause,
+.sx3-toggle.is-playing .sx3-toggle__play {
+  display: none;
+}
+.sx3-toggle.is-playing .sx3-toggle__pause {
+  display: block;
+}
+.sx3-sec .sx3-toggle:focus-visible {
+  outline: 2px solid var(--ground);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--shade), 0.92);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sx3-toggle:hover {
+    background: rgba(var(--shade), 0.9);
+  }
+}
+
+

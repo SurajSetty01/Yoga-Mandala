@@ -1,0 +1,221 @@
+/* sec-tl4 — Learn §03 Programme categories, FINAL. Every selector is namespaced .tl4-.
+   See components/learn/tl4/Forms.tsx for the event.
+
+   THE FINISHED STATE IS THE DEFAULT. `--q` is 1 on every item unless the island writes
+   otherwise, and every transform below is written so that q = 1 is the identity: the five
+   pictures packed shoulder to shoulder under the lintel. No JavaScript, or reduced motion,
+   gets exactly that. Only transform, box-shadow and the image's own scale ever change after
+   load; no box is ever resized. */
+
+.tl4-forms {
+  --tl4-rail: clamp(1rem, 4.2vw, 4.25rem);
+  /* 1620px: the widest derivative of three of the five frames */
+  --tl4-max: 101.25rem;
+  --tl4-seam: 2px;
+  position: relative;
+  background: var(--ground);
+  color: var(--ink);
+  padding-block: clamp(4.5rem, 11vw, 9.5rem) clamp(5.5rem, 12vw, 10.5rem);
+  /* x only: scattered figures may lean past the measure */
+  overflow-x: clip;
+}
+
+/* THE MEASURE, AND IT IS CENTRED. A container, so the band's height is a fraction of the
+   measure (cqw) and the band keeps its proportion from 900 to 2560. */
+.tl4-in {
+  width: min(100% - 2 * var(--tl4-rail), var(--tl4-max));
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+/* ── the sentence, in two parts that must stay touching ───────────────────────────── */
+.tl4-lead {
+  margin: 0;
+  max-width: 52ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.3vw, 2.35rem);
+  line-height: 1.28;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* The lintel: the rest of the sentence, on the one solid ground in the section. It never
+   moves; the forms travel beneath it. Above every figure, so a scattered one passes
+   behind it rather than across the words. */
+.tl4-lintel {
+  position: relative;
+  z-index: 8;
+  margin: clamp(1.1rem, 2.4vw, 2rem) 0 var(--tl4-seam);
+  padding: clamp(0.95rem, 1.7vw, 1.9rem) clamp(1.1rem, 2.6vw, 2.75rem);
+  background: var(--forest);
+  color: var(--ink-onDark);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.3vw, 2.35rem);
+  line-height: 1.22;
+  text-wrap: balance;
+}
+.tl4-lintel span {
+  display: block;
+  max-width: 52ch;
+}
+
+/* ── the hold ──────────────────────────────────────────────────────────────────────────
+   Wide screens tall enough to show the whole stage below the pill: the island adds
+   `is-held`, the stage sticks for 70% of a screen of scrolling, and the band closes while
+   the reader is looking at all of it. The page scrolls the whole time — position: sticky,
+   never a captured wheel. */
+.tl4-forms.is-held .tl4-in {
+  position: sticky;
+  top: var(--tl4-top, 6rem);
+}
+.tl4-forms.is-held .tl4-hold {
+  height: 70svh;
+}
+
+/* ── the band ──────────────────────────────────────────────────────────────────────── */
+.tl4-band {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--tl4-seam);
+}
+.tl4-it {
+  --q: 1;
+  position: relative;
+  min-width: 0;
+}
+/* portraits take the narrower cells, landscapes the broader: still five forms */
+.tl4-it--p {
+  flex: 0.9 1 0;
+}
+.tl4-it--l {
+  flex: 1.25 1 0;
+}
+
+.tl4-fig {
+  --k: calc(1 - var(--q));
+  transform: translate3d(calc(var(--sx, 0%) * var(--k)), calc(var(--sy, 0%) * var(--k)), 0)
+    scale(calc(1 - (1 - var(--ss, 1)) * var(--k)));
+  transform-origin: 50% 35%;
+}
+.tl4-forms.is-live .tl4-fig {
+  will-change: transform;
+}
+
+.tl4-ph {
+  height: 23cqw;
+  overflow: clip;
+  background: var(--ground-warm);
+  /* depth: a scattered figure casts a shadow; a packed one lies flat in the band */
+  box-shadow: 0 calc(var(--k) * 26px) calc(var(--k) * 52px) rgb(36 29 24 / calc(var(--k) * 0.24));
+}
+.tl4-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op);
+  /* the picture settles in its window as the window lands */
+  transform: scale(calc(1 + 0.16 * var(--k)));
+}
+
+.tl4-lbl {
+  margin: 0;
+  /* the end padding keeps a one-line name from running into its neighbour at 2560 */
+  padding: clamp(0.7rem, 1.1vw, 1.05rem) clamp(0.6rem, 1.2vw, 1.5rem) 0 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 1.75vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* Scattered: five sizes, five depths. Bigger is nearer, and nearer sits higher. Nothing
+   moves upward far enough to reach the lintel. */
+.tl4-it:nth-child(1) { --sx: -16%; --sy: 22%; --ss: 0.64; z-index: 2; }
+.tl4-it:nth-child(2) { --sx: -4%;  --sy: 10%; --ss: 0.9;  z-index: 5; }
+.tl4-it:nth-child(3) { --sx: 5%;   --sy: 34%; --ss: 0.56; z-index: 1; }
+.tl4-it:nth-child(4) { --sx: 10%;  --sy: 14%; --ss: 0.8;  z-index: 4; }
+.tl4-it:nth-child(5) { --sx: 20%;  --sy: 26%; --ss: 0.68; z-index: 3; }
+
+/* ── phones and small tablets: the band stands up ─────────────────────────────────────
+   Five across at 390 would be 70px each, a strip of stamps. So the band becomes a column
+   of pictures on the left, packed edge to edge under the lintel, each name set beside its
+   own picture. Scattered, the rows are pushed left and right at different sizes; the
+   column closes as each row reaches the middle of the screen. */
+@media (max-width: 899px) {
+  .tl4-band {
+    flex-direction: column;
+  }
+  .tl4-it--p,
+  .tl4-it--l {
+    flex: none;
+  }
+  .tl4-fig {
+    display: grid;
+    grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+    align-items: center;
+    transform-origin: 30% 50%;
+  }
+  .tl4-ph {
+    height: auto;
+    aspect-ratio: 1.35;
+  }
+  .tl4-it--p .tl4-ph {
+    aspect-ratio: 0.95;
+  }
+  .tl4-img {
+    object-position: var(--op-n);
+  }
+  .tl4-lbl {
+    padding: 0 0 0 clamp(0.85rem, 3.5vw, 1.5rem);
+    font-size: clamp(1.2rem, 4.4vw, 1.75rem);
+  }
+  .tl4-it:nth-child(1) { --sx: 10%;  --sy: 0%; --ss: 0.78; }
+  .tl4-it:nth-child(2) { --sx: -8%;  --sy: 0%; --ss: 0.88; }
+  .tl4-it:nth-child(3) { --sx: 13%;  --sy: 0%; --ss: 0.72; }
+  .tl4-it:nth-child(4) { --sx: -10%; --sy: 0%; --ss: 0.84; }
+  .tl4-it:nth-child(5) { --sx: 7%;   --sy: 0%; --ss: 0.76; }
+}
+@media (min-width: 600px) and (max-width: 899px) {
+  .tl4-fig {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .tl4-ph {
+    aspect-ratio: 1.6;
+  }
+  .tl4-it--p .tl4-ph {
+    aspect-ratio: 1.15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl4-it {
+    --q: 1 !important;
+  }
+}
+
+/* ── verification route only (/preview/tl4/): the neighbours' grounds ───────────────── */
+.tl4-scaffold {
+  display: grid;
+  place-items: center;
+  min-height: 70svh;
+  padding: 6rem 1.25rem;
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+  font: 500 14px/1.4 var(--font-text);
+  text-align: center;
+}
+.tl4-scaffold--long {
+  min-height: 120svh;
+}

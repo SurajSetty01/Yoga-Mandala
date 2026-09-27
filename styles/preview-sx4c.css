@@ -1,0 +1,554 @@
+/* preview-sx4c — How we teach, concept C. Owned solely by /preview/sx4c/.
+   Every selector is .sx4c- namespaced.
+
+   A ruled page that writes itself while five days pass in its margin.
+
+   THE GRID IS THE BOOK PAGE, and every part of the section is placed on it:
+     m  the margin      — marginalia: the course's side-head, five dated figures, a rule
+     g  the gutter      — where the ledger's numerals hang (a hanging indent)
+     t  the measure     — the prose at ~60 characters, the practices, the ledger
+     r  the fore-edge   — empty on purpose; only the eighth line's rule crosses it
+
+   The ledger is PURE CSS. Each line is sticky with its own `top`, all eight share one
+   containing grid area that ends at the hold row, and that end is what releases them
+   together. No property here is animated to build the list; the reader's scroll builds
+   it, which is why the section is the same with reduced motion and with no JavaScript.
+
+   Caveat taken from the pattern's own documentation: every stuck line permanently takes
+   a band off the top of the screen. So the ledger is set on ONE line per practice at a
+   size solved from the measure (never wraps, never guesses its height), and below
+   34rem of viewport height the stack is switched off altogether. */
+
+.sx4c {
+  --sx4c-ground: var(--ground-warm);
+  --sx4c-rule: rgba(36, 29, 24, 0.13);
+  --sx4c-clay: rgba(193, 97, 60, 0.62);
+
+  /* the pill: top clamp(.75rem,1.6vw,1.35rem) + its measured height + air */
+  --sx4c-dock0: calc(clamp(0.75rem, 1.6vw, 1.35rem) + 3.6rem + 0.7rem);
+
+  --sx4c-m: clamp(10.5rem, 14vw, 16.5rem);
+  --sx4c-g: clamp(1.75rem, 3.2vw, 4rem);
+  --sx4c-t: 52rem;
+  /* the numerals hang in the gutter and never past it: a hang wider than the gutter put
+     the ledger's opaque ground over the right edge of the margin's captions */
+  --sx4c-hang: calc(var(--sx4c-g) - 0.3rem);
+
+  --sx4c-leaf: 30svh;
+  --sx4c-hold: 22svh;
+
+  position: relative;
+  background: var(--sx4c-ground);
+  color: var(--ink);
+  padding-block: clamp(4.4rem, 10vw, 9rem) clamp(4.4rem, 9vw, 8.5rem);
+  /* x only. `overflow: hidden` would make this a scroll container and kill every sticky
+     line inside it; `clip` does not. The eighth line's rule is clipped here, at the
+     page's own edge. */
+  overflow-x: clip;
+}
+
+/* THE PAGE, CENTRED. A capped container with no margin-inline:auto reads right at 1440
+   and hundreds of px off at 2531 — shipped once on this site already. */
+.sx4c-page {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the head ──────────────────────────────────────────────────────────────── */
+.sx4c-head {
+  display: grid;
+  grid-template-columns: var(--sx4c-m) var(--sx4c-g) minmax(0, var(--sx4c-t)) minmax(0, 1fr);
+}
+.sx4c-head > .apr-eyebrow {
+  grid-column: 1 / -1;
+}
+
+/* The lead is a HANGING INDENT at display size: its first line starts at the margin's
+   edge, its second is indented to the measure, so the chapter title is already drawing
+   the grid the rest of the section is set on. */
+.sx4c-lead {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: clamp(2.75rem, 0.9rem + 7.4vw, 10rem);
+  line-height: 0.98;
+  letter-spacing: -0.032em;
+  color: var(--ink);
+}
+.sx4c-lead em {
+  display: block;
+  padding-left: calc(var(--sx4c-m) + var(--sx4c-g));
+  font-style: italic;
+  font-weight: 300;
+  color: var(--forest);
+}
+
+.sx4c-open {
+  grid-column: 3;
+  margin: clamp(2rem, 4.2vw, 3.6rem) 0 0;
+  max-width: 31em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.14rem, 0.95rem + 0.85vw, 1.72rem);
+  line-height: 1.42;
+  letter-spacing: -0.006em;
+  text-wrap: pretty;
+  color: var(--ink);
+}
+@supports ((initial-letter: 2) or (-webkit-initial-letter: 2)) {
+  .sx4c-open::first-letter {
+    -webkit-initial-letter: 2;
+    initial-letter: 2;
+    margin-right: 0.1em;
+    font-weight: 400;
+    color: var(--forest);
+  }
+}
+
+/* ── the course ────────────────────────────────────────────────────────────── */
+.sx4c-course {
+  /* the ledger's size is solved from the measure's real width, so no line can wrap */
+  container-type: inline-size;
+  --sx4c-col: min(var(--sx4c-t), 100cqi - var(--sx4c-m) - var(--sx4c-g));
+  --sx4c-fs: clamp(0.76rem, calc(var(--sx4c-col) / 21.6), 1.85rem);
+  --sx4c-lh: calc(var(--sx4c-fs) * 1.6);
+  --sx4c-fp: max(0.75rem, calc(var(--sx4c-fs) * 0.86));
+  --sx4c-ph: calc(var(--sx4c-fp) * 1.4 + 1.1rem);
+
+  display: grid;
+  grid-template-columns: var(--sx4c-m) var(--sx4c-g) minmax(0, var(--sx4c-t)) minmax(0, 1fr);
+  /* Row 2 is the prompt's row. The prompt spans to the grid's end (it is sticky), so it
+     does not size row 2 by itself — left `auto`, row 2 collapsed on phones and the first
+     large practice was drawn underneath the prompt's own opaque cap. It is given the
+     prompt's full height outright. */
+  grid-template-rows:
+    auto minmax(calc(var(--sx4c-dock0) + var(--sx4c-ph)), auto)
+    repeat(8, auto minmax(var(--sx4c-leaf), auto))
+    var(--sx4c-hold);
+  margin-top: clamp(1rem, 3vw, 2.5rem);
+  isolation: isolate;
+}
+
+/* The stem. It docks first and is the head of the ledger; its ::before is the cap that
+   covers the measure from the top of the screen down to it, so a large line sliding up
+   under the ledger is gone, not reappearing beneath the pill. The cap is exactly as tall
+   as the prompt's own top margin, so before it docks it covers nothing but that margin. */
+.sx4c-prompt {
+  grid-column: 3;
+  grid-row: 2 / -1;
+  align-self: start;
+  position: sticky;
+  top: var(--sx4c-dock0);
+  z-index: 5;
+  box-sizing: border-box;
+  height: var(--sx4c-ph);
+  margin: var(--sx4c-dock0) 0 calc(8 * var(--sx4c-lh)) calc(-1 * var(--sx4c-hang));
+  padding: 0 0 0 var(--sx4c-hang);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--sx4c-fp);
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  background: var(--sx4c-ground);
+  box-shadow: inset 0 -1px 0 var(--sx4c-rule);
+}
+.sx4c-prompt::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: calc(var(--sx4c-dock0) + 1px);
+  background: var(--sx4c-ground);
+}
+
+/* The large arrivals. aria-hidden echoes of the list; each ends exactly where its ledger
+   line begins, so the line follows it up and stops where it went under. */
+.sx4c-big {
+  grid-column: 3;
+  grid-row: var(--row);
+  align-self: end;
+  z-index: 2;
+  display: block;
+  padding: clamp(1.2rem, 2.4vw, 2rem) 0 0.18em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: clamp(2.15rem, 0.8rem + 5.2vw, 6.4rem);
+  line-height: 1.01;
+  letter-spacing: -0.026em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+/* The ledger. */
+.sx4c-ledger {
+  display: contents;
+}
+.sx4c-line {
+  grid-column: 3;
+  grid-row: var(--row) / -1;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--sx4c-dock0) + var(--sx4c-ph) + (var(--k) - 1) * var(--sx4c-lh));
+  z-index: 4;
+  box-sizing: border-box;
+  height: var(--sx4c-lh);
+  /* THE RELEASE. A sticky box may not leave its containing block, and all eight share
+     one — so without this, when the grid's end arrives every line is pushed to the same
+     last slot and they pile onto one another (they did, at 1440). Line k's margin box is
+     made to end (8 - k) lines above the grid's end, so the grid's end reaches all eight
+     at the same moment and the finished list leaves as one block. */
+  margin-bottom: calc((8 - var(--k)) * var(--sx4c-lh));
+  margin-left: calc(-1 * var(--sx4c-hang));
+  padding-left: var(--sx4c-hang);
+  list-style: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx4c-fs);
+  line-height: var(--sx4c-lh);
+  letter-spacing: -0.004em;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--sx4c-ground);
+  box-shadow: inset 0 -1px 0 var(--sx4c-rule);
+}
+/* The hanging numeral: it sits in the gutter, so every practice starts on one edge. */
+.sx4c-line__n {
+  display: inline-block;
+  width: var(--sx4c-hang);
+  margin-left: calc(-1 * var(--sx4c-hang));
+  padding-right: 0.72em;
+  box-sizing: border-box;
+  text-align: right;
+  font-size: 0.62em;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--forest);
+}
+/* "Continue learning beyond a single course": the only line whose rule does not stop at
+   the measure. It runs across the fore-edge and is clipped by the page itself. */
+.sx4c-line--on .sx4c-line__t::after {
+  content: '';
+  display: inline-block;
+  width: 100vw;
+  height: 1px;
+  margin-left: 0.55em;
+  vertical-align: 0.3em;
+  background: var(--sx4c-clay);
+}
+
+/* ── the margin ────────────────────────────────────────────────────────────── */
+.sx4c-side {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  margin-top: var(--sx4c-dock0);
+  padding-left: clamp(1rem, 1.6vw, 1.5rem);
+}
+.sx4c-side p {
+  margin: 0;
+}
+.sx4c-side__name {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1.15rem, 1rem + 0.4vw, 1.45rem);
+  line-height: 1.2;
+  color: var(--ink);
+}
+.sx4c-side__kind,
+.sx4c-side__span {
+  margin-top: 0.3rem !important;
+  font-size: 12.5px;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+.sx4c-side__span {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* The course's duration, drawn: one rule down the margin, from the side-head to the fifth
+   day, and no further. The eighth practice arrives where it has already ended. */
+.sx4c-spine {
+  grid-column: 1;
+  grid-row: 2 / 17;
+  justify-self: start;
+  width: 1px;
+  margin-top: var(--sx4c-dock0);
+  background: var(--sx4c-clay);
+}
+
+.sx4c-day {
+  grid-column: 1;
+  grid-row: var(--r) / span 3;
+  align-self: start;
+  position: relative;
+  z-index: 1;
+  margin: clamp(1.4rem, 2.6vw, 2.2rem) 0 0;
+  padding-left: clamp(1rem, 1.6vw, 1.5rem);
+}
+/* a tick from the rule to each day */
+.sx4c-day::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(0.55rem, 1vw, 0.95rem);
+  height: 1px;
+  background: var(--sx4c-clay);
+}
+.sx4c-day__frame {
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #d8cab6;
+}
+.sx4c-day__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The caption system. The TIME leads, set large in Fraunces figures, because it is the
+   thing that repeats down the margin — 13:37, 13:10, 13:18, 13:20, 14:08: five days at
+   one hour. The date follows in the register voice, then what the frame shows. */
+.sx4c-cap {
+  display: block;
+  margin-top: 0.75rem;
+}
+.sx4c-cap__when {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.7rem;
+  row-gap: 0.15rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--sx4c-rule);
+}
+.sx4c-cap__time {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 1.2rem + 0.8vw, 2.05rem);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--forest);
+}
+.sx4c-cap__date {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+.sx4c-cap__shows {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+/* ── the coda ──────────────────────────────────────────────────────────────── */
+.sx4c-coda {
+  --sx4c-plate: clamp(15rem, 31vw, 34rem);
+  display: grid;
+  grid-template-columns: minmax(0, var(--sx4c-plate)) var(--sx4c-g) minmax(0, 36rem) minmax(0, 1fr);
+  align-items: end;
+  margin-top: clamp(2rem, 5vw, 4.5rem);
+}
+.sx4c-plate {
+  grid-column: 1;
+  margin: 0;
+}
+/* the only element the island transforms; the figure around it is what is measured and
+   observed, and carries no clip */
+.sx4c-plate__grow {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  transform-origin: 0 0;
+  background: #d8cab6;
+}
+.sx4c-plate picture {
+  display: contents;
+}
+.sx4c-plate__img,
+.sx4c-plate__vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op, 50% 50%);
+}
+.sx4c-plate__vid {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.sx4c-plate__vid.is-on {
+  opacity: 1;
+}
+/* the loop point: a dissolve through the still beneath, which is the clip's first frame */
+.sx4c-plate__vid.is-on.is-dip {
+  opacity: 0;
+  transition-duration: 0.45s;
+}
+.sx4c-cap--plate {
+  max-width: 100%;
+}
+
+.sx4c-close {
+  grid-column: 3;
+  margin: 0;
+  padding-bottom: 0.2rem;
+  max-width: 21em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 0.95rem + 1.25vw, 2.3rem);
+  line-height: 1.26;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+  color: var(--ink);
+}
+
+/* ── one column ────────────────────────────────────────────────────────────── */
+@media (max-width: 719px) {
+  .sx4c {
+    --sx4c-hang: 1.75em;
+    --sx4c-leaf: 22svh;
+  }
+  .sx4c-head,
+  .sx4c-course,
+  .sx4c-coda {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sx4c-head > *,
+  .sx4c-open {
+    grid-column: 1;
+  }
+  .sx4c-lead em {
+    padding-left: 0.9em;
+  }
+  .sx4c-course {
+    --sx4c-col: 100cqi;
+  }
+  /* No gutter to hang into, so the numerals come inside the measure: the lines are
+     indented by the numeral's width instead of pulled out by it. */
+  .sx4c-prompt,
+  .sx4c-line {
+    grid-column: 1;
+    margin-left: 0;
+  }
+  .sx4c-prompt {
+    padding-left: 0;
+  }
+  .sx4c-line__n {
+    margin-left: calc(-1 * var(--sx4c-hang));
+  }
+  .sx4c-big {
+    grid-column: 1;
+  }
+  .sx4c-side {
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 0.5rem;
+    padding-left: 0;
+  }
+  .sx4c-spine {
+    display: none;
+  }
+  /* each day drops into the space after a ledger line, below the line itself, and
+     passes under the ledger like everything else in the measure */
+  .sx4c-day {
+    grid-column: 1;
+    grid-row: var(--rm);
+    width: min(62%, 15rem);
+    margin-top: calc(var(--sx4c-lh) + 1.6rem);
+    margin-bottom: 1rem;
+    padding-left: 0;
+  }
+  .sx4c-day::before {
+    display: none;
+  }
+  .sx4c-coda {
+    margin-top: 1rem;
+  }
+  .sx4c-plate,
+  .sx4c-close {
+    grid-column: 1;
+  }
+  .sx4c-plate {
+    width: min(100%, 26rem);
+  }
+  .sx4c-close {
+    margin-top: 2rem;
+  }
+}
+
+/* ── too short for a ledger ────────────────────────────────────────────────────
+   Below 34rem of height (a phone on its side) eight stuck lines would fill the screen.
+   The stack is switched off: the large arrivals go, and the practices stand in the
+   measure as an ordinary numbered list with the days beside them. Complete, and still. */
+@media (max-height: 34rem) {
+  .sx4c-prompt,
+  .sx4c-line {
+    position: static;
+  }
+  .sx4c-prompt::before {
+    display: none;
+  }
+  .sx4c-prompt {
+    margin-top: 1rem;
+  }
+  .sx4c-big {
+    display: none;
+  }
+  .sx4c-line {
+    height: auto;
+    white-space: normal;
+    padding-block: 0.3em;
+    line-height: 1.3;
+  }
+  .sx4c-course {
+    --sx4c-leaf: 0px;
+    --sx4c-hold: 0px;
+    grid-template-rows: auto auto repeat(8, 0 auto) 0;
+  }
+  .sx4c-line {
+    grid-row: var(--row);
+    margin-bottom: 0;
+  }
+  .sx4c-prompt {
+    margin-bottom: 0;
+  }
+}
+
+/* ── the stand-in above ────────────────────────────────────────────────────── */
+.sx4c-prev {
+  min-height: 46svh;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--rail) 2.5rem;
+  background: var(--ground);
+  border-bottom: 1px dashed var(--rule);
+}
+.sx4c-prev__label {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}

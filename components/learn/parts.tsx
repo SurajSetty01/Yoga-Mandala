@@ -102,9 +102,3 @@ export function Shot({
     />
   );
 }
-
-/** What the picture shows. No date and no place: the archive records neither, and a
- *  provenance line invented to look like one is the failure this project already had. */
-export function Says({ children }: { children: string }) {
-  return <p className="ln-says">{children}</p>;
-}

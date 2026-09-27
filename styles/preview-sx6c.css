@@ -1,0 +1,460 @@
+/* preview-sx6c — owned solely by /preview/sx6c/. Every selector is .sx6c-.
+
+   §06 THE FOUNDER, concept C — TYPE IS THE STRUCTURE.
+
+   A LEDGER, THEN A TISSUE. The biography is five sentences whose opening words hang to the
+   left of one vertical axis as marginal heads, the remainder running to its right at a
+   reading measure; the kicker is the ledger's first row. Then the section's one photograph
+   is uncovered by the translucent guard sheet the teacher's sentence is printed on: the
+   plate holds (sticky) while the tissue travels on with the page, and comes to rest over
+   the band of shade netting at the top of the frame, still carrying the plate's caption.
+
+   No JavaScript. The mechanic is `position: sticky`, so scripts-off gets all of it, and
+   `prefers-reduced-motion` gets the resting composition with nothing held. */
+
+.sx6c-page {
+  display: block;
+}
+
+.sx6c {
+  --sx6c-max: 92rem;
+  /* THE SCALE. Four voices and nothing between them: the name (display, Inter), the
+     tissue's sentence (display, Fraunces roman), the marginal heads (Fraunces italic) and
+     the reading text. Each step is ~1.5x the one below it at 1440, a modular scale rather
+     than four sizes chosen one at a time (Bringhurst §8.1). */
+  --sx6c-read: clamp(1rem, 0.94rem + 0.3vw, 1.19rem);
+  --sx6c-head: clamp(1.3rem, 0.92rem + 1.2vw, 2.1rem);
+  --sx6c-name: clamp(2.05rem, 1.05rem + 3.1vw, 4.4rem);
+  /* THE AXIS. Heads | text | outer margin, 9 : 13 : 3. The text column holds a 34em
+     measure — ~66 characters of Inter at every width, Bringhurst's ideal and inside
+     Butterick's 45–90 — and the outer margin is where a chronicle keeps its dates. */
+  --sx6c-gut: clamp(1.25rem, 2.6vw, 2.75rem);
+  --sx6c-cols: minmax(0, 9fr) minmax(0, 13fr) minmax(0, 3fr);
+  --sx6c-axis: calc((100% - 2 * var(--sx6c-gut)) * 9 / 25 + var(--sx6c-gut));
+
+  position: relative;
+  padding-block: clamp(5rem, 11vw, 9.5rem) clamp(5rem, 10vw, 8.5rem);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* A capped block is CENTRED — `max-width` alone is invisible at 1440 and hundreds of px off
+   at 2531. Every capped block in this section goes through this class or .sx6c-box. */
+.sx6c-rail {
+  max-width: calc(var(--sx6c-max) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the register mark: the About page's own object, to the letter ─────────── */
+.sx6c-reg {
+  margin: 0 0 clamp(2.2rem, 5vw, 4rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.sx6c-reg__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx6c-reg__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+  opacity: 0.6;
+}
+
+/* ── the title row: the kicker, split on the axis ─────────────────────────── */
+.sx6c-title {
+  margin: 0;
+}
+.sx6c-title__by {
+  display: block;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--sx6c-head);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink-soft);
+}
+/* Inter, never Fraunces, for a person's name — DESIGN-SYSTEM §1. */
+.sx6c-title__name {
+  display: block;
+  margin-top: 0.12em;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: var(--sx6c-name);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.sx6c-role {
+  margin: 1rem 0 0;
+  font: 600 clamp(0.72rem, 0.7rem + 0.12vw, 0.8rem) / 1.5 var(--font-text);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+
+/* ── the ledger ─────────────────────────────────────────────────────────── */
+.sx6c-ledger {
+  position: relative;
+  margin-top: clamp(2.6rem, 7vw, 5.5rem);
+}
+.sx6c-row {
+  margin: 0 0 clamp(1.5rem, 2.8vw, 2.5rem);
+}
+.sx6c-row:last-child {
+  margin-bottom: 0;
+}
+.sx6c-head {
+  display: block;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: var(--sx6c-head);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+/* ROW 1 IS A LEAD-IN, NOT A HEAD. The title above has just named him at display size; a
+   book whose chapter is titled with a name opens its text on that name in small capitals.
+   Inter, never Fraunces, for a person's name — DESIGN-SYSTEM §1. */
+.sx6c-row--name .sx6c-head {
+  font-family: var(--font-text);
+  font-style: normal;
+  font-weight: 600;
+  font-size: calc(var(--sx6c-read) * 0.84);
+  line-height: 1.72;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sx6c-body {
+  display: block;
+  font-family: var(--font-text);
+  font-size: var(--sx6c-read);
+  line-height: 1.72;
+  color: var(--ink-soft);
+  max-width: 34em;
+}
+.sx6c-shoulder {
+  display: none;
+}
+
+/* NARROW: THE HANGING INDENT. With no room for an axis, the heads hang out to the left of
+   the text block instead — the same structure turned through a right angle, and the rule
+   down the text's edge is the axis, still there. */
+@media (max-width: 899px) {
+  .sx6c-head {
+    margin-bottom: 0.4rem;
+  }
+  .sx6c-body {
+    padding-left: clamp(1rem, 5.5vw, 2rem);
+    border-left: 1px solid var(--rule);
+  }
+}
+
+/* WIDE: THE AXIS. One grid, three columns, one gutter; the heads ranged right against the
+   axis and the text ranged left from it, first baselines aligned across the gutter. */
+@media (min-width: 900px) {
+  .sx6c-title,
+  .sx6c-row {
+    display: grid;
+    grid-template-columns: var(--sx6c-cols);
+    column-gap: var(--sx6c-gut);
+    align-items: baseline;
+  }
+  .sx6c-title__by {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+  }
+  .sx6c-title__name {
+    grid-column: 2 / 4;
+    margin-top: 0;
+  }
+  .sx6c-role {
+    margin-left: var(--sx6c-axis);
+  }
+  .sx6c-head {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+    /* a head is two or three words and never wraps: the hung comma's negative margin
+       would otherwise make it one hair too wide for its own shrink-to-fit box */
+    white-space: nowrap;
+  }
+  .sx6c-body {
+    grid-column: 2;
+  }
+  /* OPTICAL MARGIN: a trailing comma hangs past the axis so the last LETTER of the head
+     meets it — right-aligned punctuation otherwise pulls the word visibly short. */
+  .sx6c-hang {
+    margin-right: -0.26em;
+  }
+  /* the chronicle's date, in the outer margin at the line it belongs to */
+  .sx6c-shoulder {
+    display: block;
+    grid-column: 3;
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-size: clamp(1rem, 0.9rem + 0.3vw, 1.2rem);
+    font-variant-numeric: oldstyle-nums;
+    letter-spacing: 0.04em;
+    color: var(--brass);
+  }
+  /* the axis itself, drawn once down the gutter from the first row to the last */
+  .sx6c-ledger::before {
+    content: '';
+    position: absolute;
+    top: 0.3em;
+    bottom: 0.4em;
+    left: calc(var(--sx6c-axis) - var(--sx6c-gut) / 2);
+    width: 1px;
+    background: var(--rule);
+  }
+}
+
+/* ══ THE PLATE AND ITS TISSUE ═══════════════════════════════════════════════
+   GEOMETRY, all of it solved from the plate's width `wp` and aspect `ar`:
+     plate     wp × hp, hp = wp / ar — 1.36:1 wide, 4:5 on a narrow container
+     tissue    height hv = hp + 2·ov — it overhangs the plate by ov top and bottom
+     band      how much of the plate's top the tissue still covers at rest:
+               max(rest·hp, 5.25rem) — the floor is the caption's own height, so the
+               caption printed at the tissue's lower edge always rests inside the band
+     lift      hp − band, the distance the tissue travels over the held plate
+     track     hv + lift, so the plate is released exactly as the tissue reaches the band
+     sentence  set at the foot of a box lift + 2·ov − gap tall, so that at rest it stands
+               `gap` above the plate's top edge
+
+   `rest` is 0.15 because of the frame: its top sixth is shade netting with nobody in it,
+   and the far figure's back begins at 18%. The tissue rests over the part of the picture
+   that is empty — and that the media audit calls its flaw.
+
+   The plate is held LOW, not centred, and is never taller than 64svh or (100svh − 19rem):
+   at rest the viewport has to hold the whole argument — the sentence above, the arches
+   below — in one frame, with the sentence clear of the pill. The 19rem is the pill, three
+   lines of the sentence, the gap and the foot, measured at the hard case, 1280×720.
+   Its width is solved against its container, never wider than the rail less 1.25rem each
+   side (so the sheet always shows past it) and never wider than 60rem — the widest the
+   archive's 1620px frame can be shown sharp. ═══════════════════════════════════════ */
+.sx6c-box {
+  max-width: calc(var(--sx6c-max) + 2 * var(--rail));
+  margin: clamp(4.5rem, 10vw, 8.5rem) auto 0;
+  padding-inline: var(--rail);
+  container-type: inline-size;
+}
+.sx6c-stage {
+  /* the aspects and focal points arrive inline from frame.ts; these are the fallbacks */
+  --sx6c-ar: var(--sx6c-arw, 1.36);
+  --sx6c-pos: var(--sx6c-posw, 50% 50%);
+  --sx6c-hmax: min(64svh, 100svh - 19rem);
+  --sx6c-wp: min(calc(var(--sx6c-hmax) * var(--sx6c-ar)), calc(100cqw - 2.5rem), 60rem);
+  --sx6c-hp: calc(var(--sx6c-wp) / var(--sx6c-ar));
+  --sx6c-ov: clamp(1rem, 3.2cqw, 3rem);
+  --sx6c-hv: calc(var(--sx6c-hp) + 2 * var(--sx6c-ov));
+  --sx6c-rest: 0.15;
+  --sx6c-band: max(calc(var(--sx6c-rest) * var(--sx6c-hp)), 5.25rem);
+  --sx6c-lift: calc(var(--sx6c-hp) - var(--sx6c-band));
+  --sx6c-gap: clamp(1.4rem, 2.8cqw, 2.6rem);
+  --sx6c-foot: clamp(1rem, 4svh, 3rem);
+  --sx6c-wv: min(100cqw, 76rem);
+
+  position: relative;
+  /* flow-root, or the plate's top margin collapses through the stage: the plate would then
+     start level with the tissue's edge instead of `ov` inside it, and under reduced motion
+     the whole stage would drop by the resting offset */
+  display: flow-root;
+  margin: 0;
+  height: calc(var(--sx6c-hv) + var(--sx6c-lift));
+}
+
+/* NARROW: a tall plate, and a sheet that runs to the edges of the screen. A 1.36 plate on a
+   phone is a 357×262 letterbox; the 4:5 crop of the same frame is 357×446, loses the
+   bolster stack at the left, and keeps both arches. */
+@container (max-width: 719px) {
+  .sx6c-stage {
+    --sx6c-ar: var(--sx6c-arn, 0.8);
+    --sx6c-pos: var(--sx6c-posn, 50% 50%);
+    --sx6c-wv: calc(100cqw + 2 * var(--rail));
+    --sx6c-wp: min(calc(var(--sx6c-hmax) * var(--sx6c-ar)), 100cqw);
+  }
+  .sx6c-tissue {
+    border-inline: 0;
+  }
+}
+
+/* THE TISSUE. Glassine is translucent, not transparent: the picture reads through it as
+   colour and shape, never as detail. Text on it therefore stands on a ground whose
+   luminance is bounded — 80% of a pale sheet over at most 20% of a blurred photograph —
+   which is the only reason a sentence may cross a picture's edge here. */
+.sx6c-tissue {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: var(--sx6c-wv);
+  height: var(--sx6c-hv);
+  translate: -50% 0;
+  padding: 0 clamp(1.1rem, 5cqw, 4.5rem);
+  /* the sheet's own body: a slow mottle of long fibres and a raking sheen, so that where it
+     lies over paper it reads as a sheet of glassine and not as an empty panel */
+  background:
+    linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0) 8%,
+      rgba(255, 255, 255, 0.22) 30%,
+      rgba(255, 255, 255, 0) 46%,
+      rgba(255, 255, 255, 0) 64%,
+      rgba(255, 255, 255, 0.14) 78%,
+      rgba(255, 255, 255, 0) 92%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006 0.045' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.31 0 0 0 0 0.26 0 0 0 0.085 -0.015'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    rgba(247, 244, 238, 0.8);
+  -webkit-backdrop-filter: blur(6px) saturate(0.8);
+  backdrop-filter: blur(6px) saturate(0.8);
+  border: 1px solid rgba(36, 29, 24, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 30px 46px -34px rgba(20, 14, 10, 0.5);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sx6c-tissue {
+    background: rgba(248, 245, 239, 0.9);
+  }
+}
+.sx6c-quote {
+  margin: 0;
+  height: calc(var(--sx6c-lift) + 2 * var(--sx6c-ov) - var(--sx6c-gap));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.sx6c-quote p {
+  margin: 0 auto;
+  max-width: 22em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: clamp(1.35rem, 0.8rem + 2.45cqw, 3rem);
+  line-height: 1.14;
+  letter-spacing: -0.016em;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+/* THE PLATE. Held low in the viewport while the tissue moves on up. */
+.sx6c-plate {
+  position: sticky;
+  z-index: 1;
+  top: calc(100svh - var(--sx6c-hp) - var(--sx6c-foot));
+  width: var(--sx6c-wp);
+  height: var(--sx6c-hp);
+  margin: var(--sx6c-ov) auto 0;
+  background: var(--ground-warm);
+}
+.sx6c-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* switched by the container query on the stage, never by a second rule on the image */
+  object-position: var(--sx6c-pos);
+}
+
+/* THE CAPTION, printed on the tissue as some old books printed a plate's caption on its
+   guard: it rides with the sheet, at its lower edge, centred on the plate and as wide as
+   it — or, where the plate is narrower than 20rem, as wide as the rail allows. */
+.sx6c-cap {
+  position: absolute;
+  z-index: 3;
+  /* anchored from the stage's FOOT, which is the plate's resting foot: `lift` above it is
+     the tissue's lower edge in both the held and the reduced-motion layouts */
+  bottom: calc(var(--sx6c-lift) + clamp(0.7rem, 1.6cqw, 1.1rem));
+  left: 50%;
+  translate: -50% 0;
+  width: max(var(--sx6c-wp), min(100%, 20rem));
+  display: grid;
+  gap: 0.3rem;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  line-height: 1.45;
+  /* full ink, not ink-soft: the standard probe cannot see text over a sticky element, and
+     measured directly ink-soft fell under 4.5:1 where the sheet crosses dark clothing
+     mid-lift. Ink holds >9:1 over the same pixels. */
+  color: var(--ink);
+}
+.sx6c-cap__where {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+
+/* REDUCED MOTION: nothing is held, and nothing is left over from holding it. The stage
+   becomes ordinary flow — the tissue as tall as its sentence needs, the plate pulled up
+   under its lower edge by the band — which is the resting composition exactly, without the
+   stretch of empty sheet the held version needs in order to cover the plate before it
+   lifts. */
+@media (prefers-reduced-motion: reduce) {
+  .sx6c-stage {
+    height: auto;
+  }
+  .sx6c-tissue {
+    position: relative;
+    height: auto;
+    padding-top: clamp(1.8rem, 5cqw, 4.2rem);
+    padding-bottom: calc(var(--sx6c-band) + var(--sx6c-gap));
+  }
+  .sx6c-quote {
+    height: auto;
+  }
+  .sx6c-plate {
+    position: relative;
+    top: auto;
+    margin-top: calc(-1 * var(--sx6c-band));
+  }
+}
+
+/* ── preview scaffold (not the section) ─────────────────────────────────── */
+.sx6c-scaffold {
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+}
+.sx6c-scaffold--above {
+  padding-block: clamp(7rem, 16vw, 11rem) clamp(3rem, 7vw, 5rem);
+}
+.sx6c-scaffold--below {
+  padding-block: clamp(3rem, 7vw, 5rem) clamp(12rem, 40vh, 22rem);
+}
+.sx6c-scaffold p {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+}
+.sx6c-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,467 @@
+/* Final te3 section. Every selector is namespaced .te3- */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EVENTS §02 · HEARING ABOUT THE NEXT ONE — the next frame is yours.
+
+   Two photographs of people seated still on grass, and between them a print
+   of the same size that is blank paper. As it arrives the reader's message
+   writes itself into it (wet clay drying to ink, word by word) and its
+   caption inks in. The whole print is the WhatsApp link.
+
+   GRID. Columns are sized to the frames' aspect ratios so every print in the
+   row is the same height without a script: 3fr for each 3:2 frame, and the
+   portrait's column. ≥1024 the portrait also spans the text row, so it rises
+   beside the words and the section is one block, not type over a strip.
+   Every figure is a subgrid, so the captions share one baseline row.
+
+   STILL IS COMPLETE. Nothing is hidden unless Te3Motion adds .te3-armed, and
+   it does that only off-screen with motion allowed.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.te3 {
+  --te3-pad: clamp(3.75rem, 8vw, 7rem);
+  --te3-gap: clamp(10px, 1.4vw, 22px);
+  --te3-hair: rgba(36, 29, 24, 0.14);
+  --te3-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  --te3-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+
+  position: relative;
+  padding-block: var(--te3-pad);
+  background: var(--ground-warm);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* the page measure — capped AND centred. Capped at 1620px, the masthead's band, so the
+   02 mark, the masthead's heading and its captions stand on one left edge at every width. */
+.te3-rail {
+  max-width: 1620px;
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.te3 :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark (the site's, rebuilt in this namespace) ─────────── */
+.te3-mark {
+  margin: 0 0 clamp(1.3rem, 2.6vw, 2rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.te3-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.te3-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: rgba(193, 97, 60, 0.55);
+}
+
+/* ── the stage ──────────────────────────────────────────────────────────── */
+.te3-stage {
+  display: grid;
+  column-gap: var(--te3-gap);
+  row-gap: 0;
+  /* phone: the pair, then the blank under it as the next frame */
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1.333fr);
+}
+
+.te3-lead {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin: 0 0 clamp(0.9rem, 2vw, 1.4rem);
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.55rem, 0.95rem + 1.75vw, 2.45rem);
+  line-height: 1.13;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.te3-body {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0 0 clamp(1.8rem, 3.4vw, 2.8rem);
+  max-width: 44ch;
+  font: 400 var(--te3-read) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* every print is a two-row subgrid: the window, then its caption */
+.te3-fig,
+.te3-next {
+  display: grid;
+  grid-template-rows: subgrid;
+  margin: 0;
+  min-width: 0;
+}
+.te3-fig--a {
+  grid-column: 1;
+  grid-row: 3 / span 2;
+}
+.te3-fig--tall {
+  grid-column: 2;
+  grid-row: 3 / span 2;
+}
+.te3-next {
+  grid-column: 1 / -1;
+  grid-row: 5 / span 2;
+  margin-top: var(--te3-gap);
+}
+.te3-alt {
+  grid-column: 1 / -1;
+  grid-row: 7;
+}
+
+.te3-fig__win {
+  grid-row: 1 / -2;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #d9cfc2;
+}
+.te3-fig--a .te3-fig__win {
+  aspect-ratio: 3 / 2;
+}
+/* the portrait's window takes whatever height its row(s) give it and the
+   photograph covers it; it never sizes a track itself */
+.te3-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.te3-fig--tall .te3-img {
+  position: absolute;
+  inset: 0;
+}
+
+.te3-cap {
+  grid-row: -2 / -1;
+  display: block;
+  padding-top: 0.75rem;
+  font: 400 var(--te3-small) / 1.45 var(--font-text);
+  color: var(--ink-soft);
+}
+/* on a phone the portrait's column is ~110px; its caption would be a column
+   of single words, so the two photographs go uncaptioned there (alts stay) */
+.te3-fig .te3-cap {
+  display: none;
+}
+
+/* ── THE NEXT FRAME ─────────────────────────────────────────────────────── */
+.te3-next {
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+.te3-paper {
+  grid-row: 1 / -2;
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  background-color: var(--ground);
+  border: 1px solid var(--te3-hair);
+  box-shadow:
+    0 1px 0 rgba(36, 29, 24, 0.05),
+    0 22px 44px -32px rgba(36, 29, 24, 0.45);
+  transition:
+    background-color 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+
+.te3-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 0 solid rgba(193, 97, 60, 0.6);
+}
+.te3-corner--tl {
+  top: 10px;
+  left: 10px;
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+.te3-corner--tr {
+  top: 10px;
+  right: 10px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+.te3-corner--bl {
+  bottom: 10px;
+  left: 10px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+.te3-corner--br {
+  bottom: 10px;
+  right: 10px;
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+.te3-paper__tag {
+  position: absolute;
+  top: clamp(16px, 2.2vw, 30px);
+  left: clamp(18px, 2.4vw, 34px);
+  font: 600 10.5px/1 var(--font-text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+
+.te3-msg {
+  position: absolute;
+  left: clamp(18px, 2.4vw, 34px);
+  right: clamp(18px, 2.4vw, 34px);
+  bottom: clamp(16px, 2.2vw, 30px);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 380;
+  font-size: clamp(1.15rem, 0.7rem + 1.3vw, 1.9rem);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.te3-w {
+  display: inline-block;
+}
+/* the caret says the sentence is a draft: it can be changed before it goes */
+.te3-caret {
+  display: inline-block;
+  width: 2px;
+  height: 0.92em;
+  margin-left: 0.14em;
+  vertical-align: -0.12em;
+  background: var(--clay-deep);
+}
+
+.te3-cap--next {
+  padding-top: 0.9rem;
+}
+/* the arrow is bound to the last word, so a wrapped label never leaves it
+   stranded at the far edge of the column */
+.te3-label {
+  display: block;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 0.85rem + 1.3vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+  clip-path: inset(-0.3em -0.3em -0.3em -0.3em);
+}
+.te3-label__end {
+  white-space: nowrap;
+}
+.te3-arw {
+  display: inline-block;
+  margin-left: 0.45em;
+  vertical-align: 0.14em;
+  color: var(--ink);
+  transition: transform 0.35s var(--ease);
+}
+.te3-arw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.te3-phone {
+  display: block;
+  margin-top: 0.35rem;
+  font: 400 var(--te3-small) / 1.45 var(--font-text);
+  color: var(--ink-soft);
+}
+
+.te3-next:hover .te3-paper,
+.te3-next:focus-visible .te3-paper {
+  background-color: color-mix(in srgb, var(--clay) 9%, var(--ground));
+  border-color: var(--ink);
+}
+.te3-next:hover .te3-arw,
+.te3-next:focus-visible .te3-arw {
+  transform: translateX(6px);
+}
+
+.te3-alt {
+  margin: 1.3rem 0 0;
+  max-width: 46ch;
+  font: 400 var(--te3-small) / 1.6 var(--font-text);
+  color: var(--ink-soft);
+}
+.te3-ilink {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(193, 97, 60, 0.55);
+  text-decoration-thickness: 1px;
+}
+.te3-ilink:hover {
+  text-decoration-color: var(--forest);
+}
+
+/* ── ≥760: the three prints in one row, blank in the middle ─────────────── */
+@media (min-width: 760px) {
+  .te3-stage {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 3fr) minmax(0, 1.333fr);
+  }
+  .te3-fig .te3-cap {
+    display: block;
+  }
+  .te3-fig--a {
+    grid-column: 1;
+    grid-row: 3 / span 2;
+  }
+  .te3-next {
+    grid-column: 2;
+    grid-row: 3 / span 2;
+    margin-top: 0;
+  }
+  .te3-fig--tall {
+    grid-column: 3;
+    grid-row: 3 / span 2;
+  }
+  .te3-alt {
+    grid-column: 2 / -1;
+    grid-row: 5;
+  }
+}
+
+/* ── ≥1024: the words sit over the landscape pair; the portrait rises ───── */
+@media (min-width: 1024px) {
+  .te3-stage {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 3fr) minmax(0, 1.9fr);
+  }
+  .te3-lead {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    margin-bottom: clamp(1.8rem, 3.2vw, 2.8rem);
+    padding-right: 1rem;
+  }
+  .te3-body {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+  }
+  .te3-fig--a {
+    grid-row: 2 / span 2;
+  }
+  .te3-next {
+    grid-row: 2 / span 2;
+  }
+  .te3-fig--tall {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+  }
+  .te3-alt {
+    grid-column: 2 / -1;
+    grid-row: 4;
+  }
+}
+
+/* ── the ink ────────────────────────────────────────────────────────────── */
+.te3-armed:not(.te3-inked) .te3-w {
+  opacity: 0;
+  filter: blur(6px);
+  color: var(--clay-deep);
+}
+.te3-armed:not(.te3-inked) .te3-caret,
+.te3-armed:not(.te3-inked) .te3-phone,
+.te3-armed:not(.te3-inked) .te3-paper__tag {
+  opacity: 0;
+}
+.te3-armed:not(.te3-inked) .te3-label {
+  clip-path: inset(-0.3em 100% -0.3em -0.3em);
+}
+.te3-armed:not(.te3-inked) .te3-arw path {
+  stroke-dashoffset: 1;
+}
+
+.te3-inked .te3-paper__tag {
+  transition: opacity 0.6s var(--ease) 0.05s;
+}
+.te3-inked .te3-label {
+  transition: clip-path 1.1s var(--ease) 0.1s;
+}
+.te3-inked .te3-arw path {
+  transition: stroke-dashoffset 0.6s var(--ease) 0.95s;
+}
+.te3-inked .te3-phone {
+  transition: opacity 0.7s var(--ease) 1.1s;
+}
+.te3-inked .te3-w {
+  transition:
+    opacity 0.55s var(--ease),
+    filter 0.8s var(--ease),
+    color 1.6s var(--ease);
+  transition-delay: calc(0.45s + var(--i) * 85ms);
+}
+.te3-inked .te3-caret {
+  transition: opacity 0.2s linear calc(0.45s + var(--n) * 85ms);
+  animation: te3-blink 1.05s steps(1, end) calc(0.8s + var(--n) * 85ms) 4;
+}
+@keyframes te3-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .te3-armed:not(.te3-inked) .te3-w,
+  .te3-armed:not(.te3-inked) .te3-caret,
+  .te3-armed:not(.te3-inked) .te3-phone,
+  .te3-armed:not(.te3-inked) .te3-paper__tag {
+    opacity: 1;
+    filter: none;
+    color: inherit;
+  }
+  .te3-armed:not(.te3-inked) .te3-label {
+    clip-path: none;
+  }
+  .te3-armed:not(.te3-inked) .te3-arw path {
+    stroke-dashoffset: 0;
+  }
+  .te3-paper,
+  .te3-arw,
+  .te3-inked .te3-w,
+  .te3-inked .te3-caret {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ── verification scaffold (app/preview/te3 only) ───────────────────────── */
+.te3-scaffold {
+  display: grid;
+  place-items: center;
+  min-height: 70svh;
+  padding: 6rem 1.25rem;
+  font: 500 14px/1.4 var(--font-text);
+  text-align: center;
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+}

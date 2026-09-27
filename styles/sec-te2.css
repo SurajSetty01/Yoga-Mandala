@@ -1,0 +1,367 @@
+/* Final te2 section. Every selector is namespaced .te2-
+
+   EVENTS 01 · What has happened here — a pile of prints, gone through by hand.
+
+   TWO LAYOUTS, ONE DOM.
+   · STATIC (the default: no script, reduced motion, or a window under 560px tall). The
+     prints lie spread loose on the deep ground, each a little askew, overlapping at the
+     edges, top print first and the blank card last. Complete without motion.
+   · LIVE (the @media block at the end). The run is tall and the stage is held; all seven
+     pieces of paper share one grid cell, so they are one pile. Te2Motion.tsx writes each
+     print's transform from scroll progress: it lifts, swings across and settles, scaled
+     down, onto the aside pile. The layout is CSS, so nothing shifts when the script lands.
+
+   PRINT GEOMETRY. A print is paper with the 3:2 frame inset by --te2-b on three sides and a
+   caption margin below. Every frame here is 1620 × 1080 on disk, so the live pile caps at
+   1240px wide: the 1620 file covers it at 1× and the 960 file on a phone at 2×. */
+
+.te2 {
+  --te2-b: clamp(7px, 0.85vw, 15px);
+  --te2-cap: clamp(2.35rem, 1.9rem + 1.3vw, 3.4rem);
+  --te2-max: calc(1240px + 35rem);
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-block: clamp(3.5rem, 7vw, 6rem) clamp(2.5rem, 5vw, 4rem);
+  overflow-x: clip;
+}
+
+.te2-stage {
+  max-width: calc(var(--te2-max) + 2 * var(--page));
+  margin-inline: auto;
+  padding-inline: var(--page);
+  box-sizing: border-box;
+}
+
+/* ── the head ─────────────────────────────────────────────────────────── */
+.te2-head {
+  max-width: 44rem;
+  margin-bottom: clamp(2.2rem, 4.5vw, 3.75rem);
+}
+
+/* the site's register mark, reversed: teal and clay cannot carry 11.5px on
+   the deep ground, so the mark goes cream and its accent is a sand rule */
+.te2-mark {
+  margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.te2-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic);
+}
+.te2-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+.te2-lead {
+  margin: 0;
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.28rem, 0.92rem + 1.45vw, 2.3rem);
+  line-height: 1.16;
+  letter-spacing: -0.018em;
+  color: var(--ink-onPic);
+  text-wrap: pretty;
+}
+
+.te2-hint {
+  display: none;
+  margin: 0;
+  align-items: center;
+  gap: 0.7rem;
+  font: 600 11px/1.3 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--sand);
+  transition: opacity 0.5s ease;
+}
+.te2-hint svg {
+  flex: none;
+}
+
+.te2-aside {
+  display: none;
+}
+
+/* ── the prints ───────────────────────────────────────────────────────── */
+.te2-pile {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 34rem;
+}
+.te2-print {
+  position: relative;
+  flex: 0 0 100%;
+  margin-bottom: -0.9rem;
+  transform: translate(var(--x), var(--y)) rotate(var(--r));
+  transform-origin: 50% 50%;
+}
+
+.te2-paper {
+  position: relative;
+  margin: 0;
+  background: var(--ground);
+  padding: var(--te2-b) var(--te2-b) 0;
+  border-radius: 1px;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.35),
+    0 16px 36px -12px rgba(0, 0, 0, 0.6);
+}
+/* the lifted shadow, faded in by --lift (0 at rest, 1 mid-swing): opacity only,
+   so a 1240px print does not repaint a blur every frame */
+.te2-paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: 0 46px 80px -14px rgba(0, 0, 0, 0.7);
+  opacity: var(--lift, 0);
+}
+
+.te2-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: #2b3a32;
+}
+
+.te2-cap {
+  margin: 0;
+  min-height: var(--te2-cap);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-block: 0.35rem;
+  box-sizing: border-box;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(0.86rem, 0.78rem + 0.34vw, 1.14rem);
+  line-height: 1.2;
+}
+.te2-cap__n {
+  flex: none;
+  font: 600 10.5px/1 var(--font-text);
+  font-style: normal;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--forest-mid);
+}
+.te2-cap__t {
+  min-width: 0;
+}
+
+/* the card under the sixth print: the same paper, nothing exposed on it */
+.te2-blank {
+  aspect-ratio: 3 / 2;
+  display: grid;
+  place-items: center;
+  background: var(--ground);
+  box-shadow: inset 0 0 0 1px rgba(36, 29, 24, 0.16);
+}
+.te2-blank__p {
+  margin: 0;
+  padding-inline: 1rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 0.8rem + 2.6vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+}
+
+/* ── provenance ───────────────────────────────────────────────────────── */
+.te2-prov {
+  max-width: calc(var(--te2-max) + 2 * var(--page));
+  margin: clamp(2.6rem, 5vw, 4rem) auto 0;
+  padding-inline: var(--page);
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  font: 600 11px/1.4 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.te2-prov__v {
+  color: var(--sand);
+}
+.te2-prov__v::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  width: 22px;
+  height: 1px;
+  margin: -2px 1.1rem 0 0;
+  background: var(--sand);
+}
+
+/* static spread, two across once there is room */
+@media (min-width: 760px) {
+  .te2-pile {
+    max-width: none;
+  }
+  .te2-print {
+    flex: 0 0 calc(50% + 0.6rem);
+    margin-inline: -0.3rem;
+    margin-bottom: -1.4rem;
+  }
+}
+
+/* ══ LIVE: the held stage and the one pile ═══════════════════════════════
+   The same query Te2Motion.tsx tests, plus scripting: without a script the
+   pile could never be gone through, so it stays spread. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 560px) and (scripting: enabled) {
+  .te2 {
+    --te2-step: 46svh;
+    --te2-pw: min(100%, calc((100svh - 25rem) * 1.3), 40rem);
+    padding-top: 0;
+  }
+  /* 6 lifts, plus 0.3 of a step at rest and 0.5 held on the card (Te2Motion) */
+  .te2-run {
+    height: calc(100svh + 6.8 * var(--te2-step));
+  }
+  .te2-stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'mark mark'
+      'lead lead'
+      'hint aside'
+      'pile pile';
+    align-content: center;
+    row-gap: clamp(0.8rem, 2.2vh, 1.5rem);
+    column-gap: 1rem;
+    padding-top: clamp(6.25rem, 12vh, 8rem);
+    padding-bottom: clamp(1rem, 3vh, 2rem);
+  }
+  .te2-head {
+    display: contents;
+  }
+  .te2-mark {
+    grid-area: mark;
+    margin: 0;
+  }
+  .te2-lead {
+    grid-area: lead;
+  }
+  .te2-hint {
+    grid-area: hint;
+    display: flex;
+    align-self: center;
+  }
+  /* the hint has done its job once the first print moves, and the flight
+     path crosses it */
+  .te2[data-te2-started='1'] .te2-hint {
+    opacity: 0;
+  }
+  .te2-cap {
+    transition: opacity 0.35s ease;
+  }
+  .te2-print[data-te2-cap='off'] .te2-cap {
+    opacity: 0;
+  }
+  .te2-aside {
+    grid-area: aside;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.4;
+    align-self: center;
+  }
+  .te2-pile {
+    grid-area: pile;
+    justify-self: center;
+    width: var(--te2-pw);
+    max-width: none;
+    margin: 0;
+    display: grid;
+  }
+  .te2-print {
+    grid-area: 1 / 1;
+    margin: 0;
+    will-change: transform;
+  }
+  .te2-prov {
+    margin-top: clamp(1rem, 2.5vw, 2rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 560px) and (scripting: enabled) and (min-width: 960px) {
+  .te2 {
+    --te2-step: 55svh;
+    --te2-pw: min(62vw, calc((100svh - 13.5rem) * 1.38), 1240px);
+  }
+  .te2-stage {
+    grid-template-columns: minmax(0, 1fr) var(--te2-pw);
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-areas:
+      'mark pile'
+      'lead pile'
+      'hint pile'
+      'aside pile';
+    align-content: stretch;
+    row-gap: 0;
+    column-gap: clamp(2.5rem, 4.5vw, 5rem);
+  }
+  .te2-mark {
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  }
+  .te2-hint {
+    margin-top: clamp(1.4rem, 3vh, 2.2rem);
+    align-self: start;
+  }
+  .te2-aside {
+    width: min(100%, 24rem);
+    align-self: end;
+    margin-bottom: clamp(1rem, 6vh, 4rem);
+  }
+  .te2-pile {
+    align-self: center;
+  }
+}
+
+/* ── the verification route's stand-ins for the neighbouring grounds ─── */
+.te2-scaffold {
+  background: var(--ground);
+  color: var(--ink-soft);
+  padding: 9rem var(--page) 3rem;
+  font: 500 13px/1.4 var(--font-text);
+}
+.te2-scaffold p {
+  margin: 0;
+}
+.te2-scaffold--below {
+  background: var(--ground-warm);
+  padding: 4rem var(--page) 24rem;
+}

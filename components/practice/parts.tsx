@@ -1,9 +1,7 @@
-import type { CSSProperties } from 'react';
 import { links } from '@/content/site';
-import { src, srcSet, type Clip, type Frame } from './frames';
 
 /**
- * The five objects every section of /practice/ shares. Continuity across the site is the
+ * The objects the sections of /practice/ share (Eyebrow, Cap, Ask). Continuity across the site is the
  * register mark, the tokens, the type scale and the caption system; the mechanics are what
  * differ from section to section and from page to page.
  */
@@ -33,116 +31,6 @@ export function Eyebrow({
       <span className="pc-eyebrow__rule" aria-hidden="true" />
       {children}
     </h2>
-  );
-}
-
-/**
- * One photograph.
- *
- * `sizes` is always explicit — a srcset with no sizes makes the browser assume 100vw, so a
- * phone pulls a 2560 derivative for a 120px window.
- *
- * BOTH crops travel with the element as custom properties and the stylesheet picks between
- * them at 719px. A portrait viewport crops a landscape frame hard, and this site has
- * already shipped a hero with the teacher out of shot because the mobile object-position
- * was left to the default (DESIGN-SYSTEM §1).
- */
-export function Shot({
-  frame,
-  sizes,
-  eager = false,
-  className,
-  alt,
-  style,
-}: {
-  frame: Frame;
-  sizes: string;
-  eager?: boolean;
-  className?: string;
-  /** override the frame's own description — "" for one picture described once nearby */
-  alt?: string;
-  style?: CSSProperties;
-}) {
-  return (
-    <img
-      className={className}
-      src={src(frame)}
-      srcSet={srcSet(frame)}
-      sizes={sizes}
-      width={frame.w}
-      height={frame.h}
-      alt={alt ?? frame.alt}
-      loading={eager ? 'eager' : 'lazy'}
-      decoding={eager ? 'sync' : 'async'}
-      style={
-        {
-          '--op': frame.pos,
-          '--op-n': frame.posNarrow ?? frame.pos,
-          ...style,
-        } as CSSProperties
-      }
-    />
-  );
-}
-
-/**
- * One silent loop over its own poster.
- *
- * THE CONTRACT, and every clause of it is a bug this site has already shipped:
- *  · `muted`, `playsInline`, `loop` — or it will not autoplay at all.
- *  · `preload="none"` and `data-src` rather than `src`: nothing is fetched until
- *    PracticeMotion decides the frame is worth the reader's data.
- *  · NO `poster` ATTRIBUTE. The <picture> above is never removed and the video stays at
- *    opacity 0 until it reports that it is genuinely running, so a poster would never be
- *    seen — but it would still be downloaded. Three of them cost 948 KB on every device
- *    on this site once already.
- *  · `aria-hidden` and `tabIndex={-1}`: the poster beneath carries the description, and
- *    the loop is the same picture moving. One description, not two.
- */
-export function Loop({
-  clip,
-  className = '',
-  imgClassName = '',
-  vidClassName = '',
-  eager = false,
-  alt,
-}: {
-  clip: Clip;
-  className?: string;
-  imgClassName?: string;
-  vidClassName?: string;
-  eager?: boolean;
-  alt?: string;
-}) {
-  const style = { '--op': clip.pos, '--op-n': clip.pos } as CSSProperties;
-  return (
-    <span className={`pc-loop ${className}`.trim()}>
-      <picture>
-        <source type="image/avif" srcSet={`/media/posters/${clip.id}.avif`} />
-        <img
-          className={imgClassName}
-          src={`/media/posters/${clip.id}.jpg`}
-          width={clip.w}
-          height={clip.h}
-          alt={alt ?? clip.alt}
-          loading={eager ? 'eager' : 'lazy'}
-          decoding={eager ? 'sync' : 'async'}
-          style={style}
-        />
-      </picture>
-      <video
-        className={`pc-vid ${vidClassName}`.trim()}
-        muted
-        playsInline
-        loop
-        preload="none"
-        tabIndex={-1}
-        aria-hidden="true"
-        disablePictureInPicture
-        data-src={`/media/clips/${clip.id}.mp4`}
-        style={style}
-      />
-    </span>
   );
 }
 

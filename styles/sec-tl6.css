@@ -1,0 +1,267 @@
+/* Final tl6 section. Every selector is namespaced .tl6-
+
+   05 · How to choose — four paths meet at one arrival.
+
+   GEOMETRY. On wide screens all four panels sit in ONE grid cell, each a full-stage-width
+   layer cut to its own quadrilateral by clip-path. Its head is its grid column and never
+   moves (the clause above it stays put and readable); its foot runs from that column
+   (--p: 0) to one quarter of the arrival's width (--p: 1). At 1 the four feet touch and
+   together are exactly the arrival's top edge, so the paths end on it.
+   Every coordinate is a length-percentage of the stage width, so it holds 820 → 2560 with
+   no script measuring anything: the script only writes --p.
+
+   Each photograph's box covers both where the panel starts and where its foot ends, so the
+   clip never runs past the picture.
+
+   --p defaults to 1: no script and reduced motion get the met state, the whole picture. */
+
+.tl6 {
+  --p: 1;
+  --g: clamp(12px, 1.7vw, 26px);
+  /* the arrival's share of the stage width, and so the width of the paths' meeting edge */
+  --B: 46%;
+  --H: clamp(22rem, 36vw, 40rem);
+  position: relative;
+  background: var(--ground);
+  color: var(--ink);
+  padding: clamp(4.5rem, 10vw, 8.5rem) var(--page) clamp(5rem, 11vw, 9.5rem);
+  overflow-x: clip;
+}
+
+.tl6-in {
+  max-width: 82.5rem;
+  margin-inline: auto;
+}
+
+.tl6-stage {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--g);
+}
+
+/* the sentence is one paragraph for a screen reader; its six parts are laid out by the grid */
+.tl6-sentence {
+  display: contents;
+}
+
+.tl6-lead {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: center;
+  margin: 0 0 clamp(1.5rem, 3.2vw, 2.8rem);
+  font: italic 400 clamp(1.75rem, 3vw, 2.9rem)/1.1 var(--font-display);
+  color: var(--forest);
+}
+
+.tl6-clause {
+  grid-row: 2;
+  align-self: end;
+  display: block;
+  padding: 0 0.35rem clamp(0.9rem, 1.6vw, 1.4rem);
+  font: 400 clamp(1.08rem, 1.45vw, 1.5rem)/1.28 var(--font-display);
+  color: var(--ink);
+  text-align: center;
+  text-wrap: balance;
+}
+.tl6-clause::before {
+  /* a brass stroke on the axis of each column: four heads, each over its own path */
+  content: '';
+  display: block;
+  width: 1px;
+  height: clamp(0.9rem, 1.6vw, 1.4rem);
+  margin: 0 auto 0.8rem;
+  background: var(--brass);
+}
+.tl6-clause--0 { grid-column: 1; }
+.tl6-clause--1 { grid-column: 2; }
+.tl6-clause--2 { grid-column: 3; }
+.tl6-clause--3 { grid-column: 4; }
+
+/* ── the four paths ─────────────────────────────────────────────────────────────── */
+
+.tl6-path {
+  --cw: calc((100% - 3 * var(--g)) / 4);
+  --l: calc(var(--i) * (var(--cw) + var(--g)));
+  --r: calc(var(--l) + var(--cw));
+  --bl: calc(50% - var(--B) / 2 + var(--i) * var(--B) / 4);
+  --br: calc(var(--bl) + var(--B) / 4);
+  grid-column: 1 / -1;
+  grid-row: 3;
+  position: relative;
+  height: var(--H);
+  clip-path: polygon(
+    var(--l) 0,
+    var(--r) 0,
+    calc(var(--r) + (var(--br) - var(--r)) * var(--p)) 100%,
+    calc(var(--l) + (var(--bl) - var(--l)) * var(--p)) 100%
+  );
+  /* the layer is the full stage; only the clipped quadrilateral is the panel */
+  background: transparent;
+  pointer-events: none;
+}
+
+.tl6-path__img {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: min(var(--l), var(--bl));
+  width: calc(max(var(--r), var(--br)) - min(var(--l), var(--bl)));
+  object-fit: cover;
+  object-position: var(--op);
+  background: var(--ground-warm);
+}
+
+/* ── the arrival ────────────────────────────────────────────────────────────────── */
+
+.tl6-arrival {
+  grid-column: 1 / -1;
+  grid-row: 4;
+  justify-self: center;
+  position: relative;
+  width: var(--B);
+  margin: 0;
+  /* the clip's lower 1080 × 500: paving and moving shade only, a threshold not a floor */
+  aspect-ratio: 1080 / 500;
+  overflow: clip;
+  background: var(--ground-warm);
+}
+.tl6-arrival picture {
+  display: contents;
+}
+.tl6-arrival__still,
+.tl6-arrival__clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  display: block;
+}
+.tl6-arrival__clip {
+  opacity: 0;
+  transition: opacity 0.9s var(--ease);
+}
+.tl6-is-playing .tl6-arrival__clip {
+  opacity: 1;
+}
+
+.tl6-resolve {
+  grid-column: 1 / -1;
+  grid-row: 5;
+  justify-self: center;
+  display: block;
+  max-width: 21ch;
+  margin-top: clamp(1.6rem, 3.4vw, 2.8rem);
+  font: 400 clamp(1.7rem, 3.1vw, 3rem)/1.12 var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--forest);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tl6-cta {
+  grid-column: 1 / -1;
+  grid-row: 6;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: clamp(1.4rem, 3vw, 2.2rem);
+  padding: 0.9rem 1.45rem;
+  border-radius: 999px;
+  background: var(--forest);
+  color: var(--ink-onDark);
+  font: 600 14px/1 var(--font-text);
+  text-decoration: none;
+  transition: background 0.3s var(--ease);
+}
+.tl6-cta:hover {
+  background: var(--forest-deep);
+}
+.tl6-cta:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+.tl6-cta svg {
+  transition: transform 0.35s var(--ease);
+}
+.tl6-cta:hover svg,
+.tl6-cta:focus-visible svg {
+  transform: translateX(4px);
+}
+
+/* ── phones: four short bands down one axis, tapering into the arrival ───────────── */
+
+@media (max-width: 819px) {
+  .tl6 {
+    /* how much each band's foot is drawn in, per side, at the met state */
+    --s: 3.5%;
+  }
+  .tl6-stage {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
+  }
+  .tl6-lead {
+    margin-bottom: 0.4rem;
+  }
+  .tl6-clause {
+    grid-column: 1;
+    padding: 1.1rem 0.5rem 0.8rem;
+  }
+  .tl6-clause::before {
+    height: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+  .tl6-clause--0 { grid-row: 2; }
+  .tl6-clause--1 { grid-row: 4; }
+  .tl6-clause--2 { grid-row: 6; }
+  .tl6-clause--3 { grid-row: 8; }
+  .tl6-path {
+    grid-column: 1;
+    height: clamp(7.5rem, 32vw, 11rem);
+    clip-path: polygon(
+      calc(var(--s) * var(--i) * var(--p)) 0,
+      calc(100% - var(--s) * var(--i) * var(--p)) 0,
+      calc(100% - var(--s) * (var(--i) + 1) * var(--p)) 100%,
+      calc(var(--s) * (var(--i) + 1) * var(--p)) 100%
+    );
+  }
+  .tl6-path--0 { grid-row: 3; }
+  .tl6-path--1 { grid-row: 5; }
+  .tl6-path--2 { grid-row: 7; }
+  .tl6-path--3 { grid-row: 9; }
+  .tl6-path__img {
+    left: 0;
+    width: 100%;
+    object-position: var(--op-n);
+  }
+  .tl6-arrival {
+    grid-row: 10;
+    grid-column: 1;
+    width: calc(100% - 8 * var(--s));
+  }
+  .tl6-resolve {
+    grid-row: 11;
+    grid-column: 1;
+  }
+  .tl6-cta {
+    grid-row: 12;
+    grid-column: 1;
+  }
+}
+
+/* ── preview route scaffold only (app/preview/tl6) ─────────────────────────────── */
+.tl6-scaffold {
+  padding: clamp(3.5rem, 8vw, 6rem) var(--page);
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+  font: 400 13px/1.5 var(--font-text);
+  text-align: center;
+}
+.tl6-scaffold p {
+  margin: 0;
+}
+.tl6-scaffold--below {
+  min-height: 100svh;
+}

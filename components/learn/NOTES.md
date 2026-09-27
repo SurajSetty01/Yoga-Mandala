@@ -1,5 +1,10 @@
 # Learn — the build
 
+> **Superseded.** The seven section components this file describes were replaced by
+> `components/learn/tl1`…`tl7` (styles in `styles/sec-tl1.css`…`sec-tl7.css`); see the
+> header of `app/learn/page.tsx` for what each now does. The content constraints recorded
+> below (no invented programme detail, no FAQ, nobody named) still hold.
+
 `/learn/` · `app/learn/page.tsx` · `styles/learn.css` · every selector under `.ln`.
 
 Visitor intent, the client's own words (Blueprint §3): **"I want structured education."**

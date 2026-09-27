@@ -1,9 +1,8 @@
 import { links, site } from '@/content/site';
 
 /**
- * The two shared objects on /heal/, and nothing else. This page has no photographs, no
- * client island and no data file — see components/heal/NOTES.md for why the absence of a
- * picture is a decision rather than a shortfall.
+ * The two shared objects on /heal/, and nothing else: the register mark (th2, th3) and the
+ * enquiry message and link (th3).
  */
 
 /**

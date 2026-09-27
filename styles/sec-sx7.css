@@ -1,0 +1,316 @@
+/* Final sx7 section. Every selector is namespaced .sx7- */
+/* ══════════════════════════════════════════════════════════════════════════
+   FINAL sx7 — About §07 FACULTY. "Eye level".
+   Base: preview sx7d. Grafts: the page's shared register mark (.apr-eyebrow,
+   as sx7c used it) and a sentence-case provenance line (as sx7a set it).
+
+   Seven photographs of one workshop, cut into eighteen equal prints, each
+   standpoint pinned to ONE eye-level line at its own vanishing point. As the
+   reader scrolls, each standpoint turns level about that point and the prints
+   become one room. The lead and the first sentence stand in the two bays the
+   room's silhouette leaves.
+
+   The only scroll-linked input is --sx7-p, written by Motion.tsx inside one
+   rAF. Its default here is 1, so no-JS and reduced motion are the finished,
+   level room. Every animated value is a transform or an opacity.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── the section ─────────────────────────────────────────────────────────── */
+.sx7-faculty {
+  --sx7-p: 1;
+  --sx7-hair: rgba(246, 217, 193, 0.8);
+  position: relative;
+  padding-block: clamp(4.4rem, 9vw, 8rem) clamp(4.4rem, 8vw, 7.5rem);
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  /* only x is clipped: a tilted print may reach past the viewport edge */
+  overflow-x: clip;
+}
+
+/* The room is capped at 1880 and CENTRED; the gutter lives inside the cap. */
+.sx7-frame {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(1880px + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* The room is a size container, so everything set in its bays is measured in
+   the same units as the stage itself: 1cqw = 1 stage unit. */
+.sx7-room {
+  position: relative;
+  container-type: inline-size;
+}
+
+.sx7-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 100 / 52.4;
+}
+
+/* HELD WHILE IT LEVELS — desktop only, and only when Motion.tsx has measured
+   that the whole room fits between the pill and the bottom of the screen. The
+   page keeps scrolling; the room simply stays in view for --sx7-hold of it. */
+.sx7-faculty.sx7-is-held .sx7-room {
+  position: sticky;
+  top: var(--sx7-top, 7rem);
+}
+.sx7-hold {
+  height: 0;
+}
+.sx7-faculty.sx7-is-held .sx7-hold {
+  height: var(--sx7-hold, 70svh);
+}
+
+/* ── the head: the top-left bay ─────────────────────────────────────────── */
+.sx7-head {
+  position: absolute;
+  z-index: 40;
+  left: 0;
+  top: 0;
+  width: 37cqw;
+}
+
+/* the register mark is the page's own .apr-eyebrow (dark); only its gap to the
+   lead is set here, in the stage's units, so the bay holds at every width */
+.sx7-head .apr-eyebrow {
+  margin: 0 0 1.5cqw;
+}
+
+.sx7-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 360;
+  font-size: 5.3cqw;
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  color: var(--ink-onPic);
+  text-wrap: balance;
+}
+
+/* ── the prints ─────────────────────────────────────────────────────────── */
+.sx7-piece {
+  position: absolute;
+  overflow: hidden;
+  background: #1b2c24;
+  transform-origin: var(--ox) var(--oy);
+  /* this standpoint's own share of the pass, eased (smoothstep) */
+  --t: clamp(0, (var(--sx7-p) - var(--s)) / 0.5, 1);
+  --e: calc(var(--t) * var(--t) * (3 - 2 * var(--t)));
+  transform: rotate(calc((var(--af) + (var(--a0) - var(--af)) * (1 - var(--e))) * 1deg));
+  /* a print laid over a print: a hairline edge and a shadow on the table side */
+  box-shadow:
+    0 0 0 1px rgba(8, 14, 11, 0.5),
+    0 16px 30px -18px rgba(0, 0, 0, 0.9);
+}
+.sx7-is-live .sx7-piece {
+  will-change: transform;
+}
+.sx7-piece img,
+.sx7-piece video {
+  position: absolute;
+  display: block;
+  max-width: none;
+  object-fit: cover;
+}
+.sx7-film {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+.sx7-film.sx7-is-on {
+  opacity: 1;
+}
+
+/* the eye-level line: the one thing every standpoint shares */
+.sx7-line {
+  position: absolute;
+  z-index: 30;
+  left: -1.2%;
+  right: -1.2%;
+  height: 1px;
+  background: var(--sx7-hair);
+  box-shadow: 0 1px 0 rgba(8, 14, 11, 0.4);
+  transform-origin: 0 50%;
+  transform: scaleX(clamp(0, var(--sx7-p) / 0.3, 1));
+  pointer-events: none;
+}
+/* On desktop the line is longer than the room: it runs the whole width of the
+   page, because the intention it stands for is larger than any one picture.
+   The room is centred, so the stage's 50% is the viewport's centre; the
+   section clips x. Phones keep it inside their scroller. */
+@media (min-width: 900px) {
+  .sx7-line {
+    left: calc(50% - 50vw);
+    right: calc(50% - 50vw);
+  }
+}
+/* each standpoint's own vanishing point, pinned on the line */
+.sx7-pin {
+  position: absolute;
+  z-index: 31;
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border: 1px solid var(--sx7-hair);
+  border-radius: 50%;
+  background: rgba(18, 32, 26, 0.6);
+  pointer-events: none;
+  opacity: clamp(0, var(--sx7-p) / 0.3, 1);
+}
+
+/* ── the first sentence: the bottom-right bay ───────────────────────────── */
+.sx7-first {
+  position: absolute;
+  z-index: 40;
+  left: 64.2cqw;
+  top: 37.4cqw;
+  width: 33cqw;
+  margin: 0;
+  font: 400 clamp(0.95rem, 1.22cqw, 1.22rem) / 1.6 var(--font-text);
+  color: var(--ink-onPic-2);
+}
+
+/* ── the close: the sentence the room illustrates ───────────────────────── */
+.sx7-close {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1.5rem 3rem;
+  margin-top: clamp(2.2rem, 4.4vw, 4.2rem);
+}
+.sx7-second {
+  margin: 0;
+  max-width: 27ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 370;
+  font-style: italic;
+  font-size: clamp(1.4rem, 0.95rem + 1.6vw, 2.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.008em;
+  color: var(--ink-onPic);
+}
+
+.sx7-cap {
+  margin: 0;
+  max-width: 36ch;
+  font: 500 13px/1.55 var(--font-text);
+  letter-spacing: 0.005em;
+  color: var(--ink-onDark-soft);
+}
+.sx7-cap span {
+  display: inline-flex;
+  gap: 0.8em;
+  align-items: baseline;
+}
+.sx7-cap span::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--sand);
+  transform: translateY(-4px);
+}
+
+.sx7-hint {
+  display: none;
+}
+
+.sx7-faculty :focus-visible {
+  outline: 2px solid #fbf7f2;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(8, 14, 11, 0.92);
+}
+
+/* ── narrow: the room becomes a panorama you pan with a thumb ────────────── */
+@media (max-width: 899px) {
+  .sx7-head,
+  .sx7-first {
+    position: static;
+    width: auto;
+  }
+  .sx7-head .apr-eyebrow {
+    margin-bottom: 1.2rem;
+  }
+  .sx7-lead {
+    font-size: clamp(2.3rem, 1rem + 6.4vw, 3.6rem);
+    max-width: 12ch;
+  }
+  .sx7-pan {
+    /* bleed to the viewport edges: the gutter is inside the scroller */
+    margin-inline: calc(-1 * var(--rail));
+    padding: 2.6rem var(--rail);
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(246, 217, 193, 0.5) transparent;
+  }
+  .sx7-stage {
+    width: 940px;
+  }
+  .sx7-hint {
+    display: flex;
+    justify-content: center;
+    gap: 0.8em;
+    margin: -1.6rem 0 1.4rem;
+    font: 500 11px/1.4 var(--font-text);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-onDark-soft);
+  }
+  .sx7-first {
+    max-width: 38ch;
+    margin-top: 0.4rem;
+    font-size: clamp(1rem, 0.94rem + 0.36vw, 1.12rem);
+  }
+  .sx7-close {
+    display: block;
+    margin-top: 2rem;
+  }
+  .sx7-cap {
+    margin-top: 1.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx7-piece {
+    transform: rotate(calc(var(--af) * 1deg));
+  }
+  .sx7-line {
+    transform: none;
+  }
+  .sx7-pin {
+    opacity: 1;
+  }
+  .sx7-film {
+    transition: none;
+  }
+}
+
+/* ── the verification route's scaffold (not the section) ─────────────────── */
+.sx7-scaffold {
+  padding: clamp(3.5rem, 8vw, 6rem) var(--rail);
+  background: var(--ground);
+  color: var(--ink-soft);
+  font: 400 13px/1.5 var(--font-text);
+  text-align: center;
+}
+.sx7-scaffold p {
+  margin: 0;
+}
+.sx7-scaffold__tag {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sx7-scaffold--below {
+  min-height: 115svh;
+  background: var(--ground-warm);
+}

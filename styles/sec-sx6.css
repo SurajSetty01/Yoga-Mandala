@@ -1,0 +1,404 @@
+/* Final sx6 section. Every selector is namespaced .sx6- */
+/* ═══════════════════════════════════════════════════════════════════════════
+   FINAL sx6 — About §06 THE FOUNDER.   "THE POINT THE ROOM VANISHES TO."
+
+   Two photographs of one row, taken from its two ends, drawn as the two walls
+   of one corridor. Each is placed so its own vanishing point sits on the
+   section's centre line (the zero-height .sx6-room box marks that point in
+   the flow), and cut along two of its own perspective lines — so every cut is
+   a line of the room, and the cut shape does not depend on how big the
+   picture is drawn. The biography descends the ceiling, the sentence opens
+   along the floor.
+
+   Every number that describes a photograph (vanishing points, cut slopes,
+   where a wall stops) comes from components/about-pranava/sx6/geometry.ts as an
+   inline custom property on .sx6-stage. This file only decides sizes.
+
+   THREE LAYOUTS, chosen by the section's own width (container queries):
+     wide    ≥ 1100   the walls reach the viewport's edges at any width
+     medium  700–1099 the same room, a sentence set for a tablet
+     narrow  < 700    steeper cuts, so a phone's walls are tall enough to see
+
+   Every selector is namespaced .sx6-. The one borrowed object is the page's
+   register mark (.apr-eyebrow), used exactly as the real page uses it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.sx6-founder {
+  position: relative;
+  background: var(--ground);
+  color: var(--ink);
+  container-type: inline-size;
+  /* the walls are drawn from boxes much wider than the screen; `clip` trims them to the
+     section without making it a scroll container, and never creates a horizontal scroll */
+  overflow-x: clip;
+  padding-block: clamp(4.5rem, 9vw, 8.5rem) clamp(4rem, 7vw, 7rem);
+}
+
+.sx6-stage {
+  position: relative;
+
+  /* ── wide: the room's four lines, and the hairlines that finish them ── */
+  --sx6-ul: var(--sx6-ul-w);
+  --sx6-dl: var(--sx6-dl-w);
+  --sx6-ur: var(--sx6-ur-w);
+  --sx6-dr: var(--sx6-dr-w);
+  --sx6-vk: var(--sx6-vk-w);
+  --sx6-alu: var(--sx6-alu-w);
+  --sx6-ald: var(--sx6-ald-w);
+  --sx6-aru: var(--sx6-aru-w);
+  --sx6-ard: var(--sx6-ard-w);
+  --sx6-klu: var(--sx6-klu-w);
+  --sx6-kld: var(--sx6-kld-w);
+  --sx6-kru: var(--sx6-kru-w);
+  --sx6-krd: var(--sx6-krd-w);
+
+  /* Each photograph is drawn just wide enough that the part of it between its vanishing
+     point and its outer edge reaches the viewport's edge: 5407's point is at 0.88 of its
+     width, 5416's at 0.24, so the right wall is drawn larger. Both are 1920px sources;
+     at 2531 the larger is 1.13 source px per CSS px. */
+  --sx6-wl: calc(50cqw / var(--sx6-vxl) * 1.03);
+  --sx6-wr: calc(50cqw / (1 - var(--sx6-vxr)) * 1.03);
+  /* where each wall stops short of the point */
+  --sx6-gl: calc(var(--sx6-wl) * var(--sx6-tl));
+  --sx6-gr: calc(var(--sx6-wr) * var(--sx6-tr));
+
+  /* the text */
+  --sx6-fs: clamp(16px, calc(13.2px + 0.3cqw), 18.5px);
+  --sx6-col: min(calc(44 * var(--sx6-fs)), calc(100cqw - 2 * var(--rail)));
+  /* the last paragraph is --sx6-w5 of the column; its lower corners must clear both walls,
+     and a centred block of width w clears them when it stands w / vk above the point */
+  --sx6-w5: 0.62;
+  --sx6-h5: calc(var(--sx6-w5) * var(--sx6-col) / var(--sx6-vk) + 2.6 * var(--sx6-fs));
+
+  /* the sentence: one design px of the floor, and the floor's depth */
+  --sx6-q: clamp(0.84px, calc(100cqw / 1440), 1.16px);
+  --sx6-qh: var(--sx6-qh-w);
+
+  --sx6-hair: rgba(112, 85, 21, 0.62); /* --brass, as a hairline */
+
+  padding-bottom: 0;
+}
+
+/* ── the head ──────────────────────────────────────────────────────────── */
+
+.sx6-head {
+  box-sizing: border-box;
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+.sx6-head .apr-eyebrow {
+  margin-bottom: clamp(2.2rem, 5cqw, 4rem);
+}
+
+/* ── the ceiling: who he is, and five sentences narrowing toward the point ── */
+
+.sx6-ceiling {
+  position: relative;
+  z-index: 1;
+  width: var(--sx6-col);
+  margin: 0 auto var(--sx6-h5);
+  text-align: center;
+}
+
+.sx6-by {
+  margin-bottom: clamp(2rem, 4.2cqw, 3.4rem);
+}
+.sx6-kicker {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+/* "Founded by" may be Fraunces; the name may not (DESIGN-SYSTEM §1 — a person's name is set
+   in Inter, the face that sets every character of it correctly). */
+.sx6-kicker__by {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 340;
+  font-size: clamp(1.15rem, calc(0.85rem + 0.7cqw), 1.6rem);
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+.sx6-kicker__name {
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(2.3rem, calc(1.1rem + 3.2cqw), 4.1rem);
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: var(--ink);
+}
+.sx6-role {
+  margin: 1.1rem 0 0;
+  font: 600 11.5px/1.5 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+
+.sx6-bio__p {
+  --k: 1;
+  margin: 0 auto;
+  font-size: calc(var(--sx6-fs) * var(--k));
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.sx6-bio__p + .sx6-bio__p {
+  margin-top: 0.8em;
+}
+/* GRAFT from sx6c: each later sentence opens on its own first words in italic Fraunces,
+   a register of entries rather than a grey funnel. Slightly larger than the Inter it leads,
+   and in full ink. */
+.sx6-bio__lead {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.14em;
+  line-height: 1;
+  letter-spacing: -0.006em;
+  color: var(--ink);
+}
+/* THE CEILING RECEDES. Each paragraph is a little smaller and a little narrower than the
+   one before, the way things on a ceiling shrink toward the point it vanishes to; the last
+   one stands in the mouth of the room, between the two walls. The floor below obeys the
+   same law the other way up. */
+/* GRAFT from sx6a/sx6b: the first sentence is a Fraunces lede, the widest thing on the
+   ceiling. */
+.sx6-bio__p--1 {
+  --k: 1.42;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 360;
+  line-height: 1.34;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  margin-bottom: 0.5em;
+}
+.sx6-bio__p--2 { --k: 1.1;  width: 94%; }
+.sx6-bio__p--3 { --k: 1.04; width: 85%; }
+.sx6-bio__p--4 { --k: 1;    width: 75%; }
+.sx6-bio__p--5 { --k: 0.96; width: calc(var(--sx6-w5) * 100%); }
+
+/* ── the room ──────────────────────────────────────────────────────────── */
+
+/* Zero height, in the flow, exactly at the vanishing point. It is NOT positioned, so the
+   walls inside take their static position (this point) for their top, and the stage for
+   their containing block (so `left: 50%` is the section's centre). */
+.sx6-room {
+  margin: 0;
+  height: 0;
+}
+.sx6-walls {
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 0;
+}
+.sx6-wall {
+  position: absolute;
+  aspect-ratio: 3 / 4;
+  background: var(--ground-warm);
+}
+.sx6-wall img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.sx6-wall--l {
+  width: var(--sx6-wl);
+  left: calc(var(--sx6-wl) * var(--sx6-vxl) * -1);
+  top: calc(var(--sx6-wl) * 4 / 3 * var(--sx6-vyl) * -1);
+  transform: translateX(calc((var(--sx6-we, 1) - 1) * 14cqw));
+}
+.sx6-wall--r {
+  width: var(--sx6-wr);
+  left: calc(var(--sx6-wr) * var(--sx6-vxr) * -1);
+  top: calc(var(--sx6-wr) * 4 / 3 * var(--sx6-vyr) * -1);
+  transform: translateX(calc((1 - var(--sx6-we, 1)) * 14cqw));
+}
+
+/* the four lines of the room, finished from each wall's tip to the point */
+.sx6-rays {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.sx6-ray {
+  --e: var(--sx6-ray-e, 1);
+  position: absolute;
+  left: 0;
+  top: -0.5px;
+  width: var(--len);
+  height: 1px;
+  background: var(--sx6-hair);
+  transform-origin: 0 50%;
+  /* drawn from the tip inward: the segment is scaled and slid so its far end stays put */
+  transform: rotate(calc(var(--a) * 1deg)) translateX(calc(var(--len) * (1 - var(--e))))
+    scaleX(var(--e));
+}
+.sx6-ray--lu { --a: var(--sx6-alu); --len: calc(var(--sx6-gl) * var(--sx6-klu)); }
+.sx6-ray--ld { --a: var(--sx6-ald); --len: calc(var(--sx6-gl) * var(--sx6-kld)); }
+.sx6-ray--ru { --a: var(--sx6-aru); --len: calc(var(--sx6-gr) * var(--sx6-kru)); }
+.sx6-ray--rd { --a: var(--sx6-ard); --len: calc(var(--sx6-gr) * var(--sx6-krd)); }
+
+.sx6-vp {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 1px solid var(--brass);
+  background: var(--ground);
+}
+
+/* the caption belongs to the photographs, so it sits under the left wall, not under the
+   sentence (a line centred under a quotation reads as its attribution). It follows the
+   sentence in the flow, and never rises above the left wall's lower edge where it passes
+   the rail. */
+.sx6-cap {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  max-width: calc(30ch + var(--rail));
+  margin: max(1.5rem, calc((50cqw - var(--rail)) * var(--sx6-dl) + 1.25rem - var(--sx6-qh) * var(--sx6-q))) 0 0;
+  padding-left: var(--rail);
+  font: 400 clamp(0.8rem, calc(0.74rem + 0.14cqw), 0.9rem) / 1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ── the floor: the sentence, sized by its distance from the point ──────── */
+
+.sx6-q {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  height: calc(var(--sx6-qh) * var(--sx6-q));
+  /* The whole floor scales about the vanishing point (this box's top centre IS the point).
+     Scaling about the point keeps every line on the floor's perspective — its baseline and
+     its size shrink together — so as the motion island winds --sx6-qe from 0 to 1 the
+     sentence comes out of the point toward the reader, line order intact, nothing crossing
+     anything. At rest, and with no script, --sx6-qe is 1. */
+  transform-origin: 50% 0;
+  transform: scale(var(--sx6-qe, 1));
+}
+.sx6-q p {
+  margin: 0;
+}
+.sx6-q__l {
+  --d: var(--dw);
+  --s: var(--sw);
+  position: absolute;
+  left: 50%;
+  top: calc((var(--d) - 0.86 * var(--s)) * var(--sx6-q));
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: calc(var(--s) * var(--sx6-q));
+  line-height: 1;
+  letter-spacing: -0.012em;
+  white-space: nowrap;
+  color: var(--ink);
+  transform: translateX(-50%);
+}
+.sx6-q--flat {
+  height: auto;
+  padding-top: 3rem;
+}
+.sx6-q--flat .sx6-q__l {
+  position: static;
+  display: inline;
+  font-size: clamp(1.6rem, calc(1rem + 2cqw), 3rem);
+  white-space: normal;
+  transform: none;
+}
+.sx6-q--flat p {
+  width: var(--sx6-col);
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ── medium ────────────────────────────────────────────────────────────── */
+
+@container (max-width: 1099px) {
+  .sx6-stage {
+    --sx6-q: clamp(0.86px, calc(100cqw / 900), 1.12px);
+    --sx6-qh: var(--sx6-qh-m);
+  }
+  .sx6-q__l {
+    --d: var(--dm);
+    --s: var(--sm);
+  }
+}
+
+/* ── narrow ────────────────────────────────────────────────────────────── */
+
+@container (max-width: 699px) {
+  .sx6-stage {
+    --sx6-ul: var(--sx6-ul-n);
+    --sx6-dl: var(--sx6-dl-n);
+    --sx6-ur: var(--sx6-ur-n);
+    --sx6-dr: var(--sx6-dr-n);
+    --sx6-vk: var(--sx6-vk-n);
+    --sx6-alu: var(--sx6-alu-n);
+    --sx6-ald: var(--sx6-ald-n);
+    --sx6-aru: var(--sx6-aru-n);
+    --sx6-ard: var(--sx6-ard-n);
+    --sx6-klu: var(--sx6-klu-n);
+    --sx6-kld: var(--sx6-kld-n);
+    --sx6-kru: var(--sx6-kru-n);
+    --sx6-krd: var(--sx6-krd-n);
+    /* drawn larger than the width strictly needs, so the walls show feet and legs rather
+       than a thumbnail of the whole row */
+    --sx6-wl: 87cqw;
+    --sx6-wr: 100cqw;
+    --sx6-q: clamp(0.9px, calc(100cqw / 390), 1.3px);
+    --sx6-qh: var(--sx6-qh-n);
+  }
+  .sx6-q__l {
+    --d: var(--dn);
+    --s: var(--sn);
+  }
+  .sx6-bio__p { --k: 1; }
+  .sx6-bio__p--1 { --k: 1.24; }
+  .sx6-bio__p--2,
+  .sx6-bio__p--3,
+  .sx6-bio__p--4 { width: 100%; }
+  .sx6-stage { --sx6-w5: 0.8; }
+  .sx6-cap {
+    max-width: none;
+    padding-right: var(--rail);
+  }
+}
+
+/* ── the preview's scaffold (not the section) ──────────────────────────── */
+
+.sx6-scaffold {
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+  padding: clamp(3.5rem, 8vw, 6rem) var(--rail);
+  font: 400 13px/1.5 var(--font-text);
+  text-align: center;
+}
+.sx6-scaffold p {
+  margin: 0;
+}
+.sx6-scaffold__tag {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+}
+.sx6-scaffold--below {
+  padding-block: clamp(5rem, 14vw, 10rem);
+}

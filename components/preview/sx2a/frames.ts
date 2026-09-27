@@ -1,201 +1,140 @@
 /**
- * §01's ONE photograph, and the four windows cut over it.
+ * The five pictures of concept A, "The mat's width", in the order the argument widens.
  *
- * ── ROUND 2: THE FRAME CHANGED, THE GEOMETRY DID NOT ──────────────────────────────────
+ * EVERY CHOICE BELOW WAS MADE BY RENDERING THE CROP IT WILL ACTUALLY BE SHOWN AT, then
+ * looking — not by reading pranava-stills.json. Two facts about the files decided most of it:
  *
- * Both critics landed on the same defect and it was the same one: the ladder was engineered
- * to unveil a blank wall. Measured on the old plate (pr-ttc-dsc_0274), 16px tiles, sd < 7
- * counted flat: the whole frame was 60.2% flat at detail 12.2, and the band window 4 ADDED —
- * the payoff, the top 28% nobody had seen — was 76.6% flat at detail 10.2. The mechanic's
- * reward was an empty upper wall. A ladder that opens onto less than it opened on is a
- * ladder pointed the wrong way.
+ *   · Every TTC still stops at 1620px. The only plate that goes full-bleed (V) is therefore
+ *     upscaled above 1620 CSS px — 1.56x at 2531. That was accepted because the frame is
+ *     the strongest single photograph in the venue and the only one whose subject is
+ *     practice with no mat in it at all; a 2560 frame from the PBH studio would have broken
+ *     the one place every other plate is in.
+ *   · The mat strip (I) is a CLIP, not a still: `pr-mov-img_5659`, portrait 1080x1920. A
+ *     strip 1:2.8 cut from a 9:16 source keeps 63% of the width, ~680 source px for a strip
+ *     that is never wider than 200 CSS px, so it is sharp at any density. It is the only
+ *     moving thing in the section, and that is the point: the practice on the mat moves,
+ *     and everything the argument widens into is still.
  *
- * The plate is now pr-ttc-dsc_0392, and the same probe over the same bands reads:
+ * A PLATE OPENS FROM ITS CENTRE. Each of II–V is first seen as a strip exactly as wide as
+ * plate I (the mat), then opens to its own width. So each frame's CENTRE had to hold a
+ * subject on its own — the strip a reader sees before the picture opens is not allowed to
+ * be a pillar or a patch of lawn. `pos` puts that subject on the plate's axis at the
+ * desktop ratio; `posNarrow` re-solves it for the phone ratio, which crops a landscape
+ * frame hard enough to lose the subject (DESIGN-SYSTEM §1 — this site shipped that once).
  *
- *                      whole frame        the band the payoff adds (top 28%)
- *   pr-ttc-dsc_0274    60.2% flat, det 12.2, sat 21.6    76.6% flat, det 10.2, sat 10.3
- *   pr-ttc-dsc_0392     3.2% flat, det 30.1, sat 36.3     1.8% flat, det 37.8, sat 28.6
+ * USAGE ON THE SITE, grepped before committing (components/, live routes only):
+ *   pr-mov-img_5659    unused anywhere
+ *   pr-ttc-dsc_0285_1  /learn/ only
+ *   pr-ttc-dsc_0347    unused on any live route
+ *   pr-ttc-dsc_0284_1  /contact/, /learn/, /practice/ — reused knowingly: it is the
+ *                      clearest frame of people studying in the archive, and every
+ *                      unused alternative carried a wall portrait or a TV screen
+ *   pr-ttc-dsc_0396    unused on any live route
+ * None of the five is on /about/, and none is `p13-img_0513` — §02's downward-dog line,
+ * which is why the mat strip is a standing fold with a strap and not a downward dog.
  *
- * And the ladder now gets denser at every rung, which is the thing the mechanic was always
- * claiming: the NEW band each window adds measures detail 18.8 → 30.5 → 32.7 → 37.8, and
- * flat tiles 6.3% → 5.0% → 0.8% → 1.8%. The last 28% of the photograph is its richest 28%.
- * For reference the home page's own hero — the site's quality benchmark — measures 41% flat
- * at chroma 27.2; this plate is 12.8× less flat and more saturated than the page's own hero.
- *
- * Critic 1 named two acceptable targets, "b's dsc_0396 (13% flat) or c's dsc_0302_1 (4%)".
- * Neither is used. pr-ttc-dsc_0392 measures 3.2% flat at detail 30.1 and saturation 36.3
- * against dsc_0396's 11.5 / 20.2 / 38.0 and dsc_0302_1's 4.2 / 26.3 / 20.6 — it is denser
- * than both, more saturated than dsc_0302_1 by 1.8×, and it is the only one of the three
- * that carries no borrowed weight: dsc_0302_1 is concept C's plate I and concept B's and D's
- * as well, and taking it would have handed the combiner one frame with three owners.
- *
- * It also settles the other half of the argument. Critic 1: "One chair-supported class on a
- * red oxide floor is not a picture of [a vast body of knowledge] … a mechanic that shows
- * that one room more and more fully argues the opposite of the sentence directly above it."
- * The room is gone. There is no hall, no red floor, no bolster, no block and no chair in
- * this section now. The photograph is five practitioners sitting still on a lawn under tall
- * trees — and the client's FIRST line is "Yoga is more than a practice on the mat", set over
- * a window in which there is no mat at all.
- *
- * WHY ONE PHOTOGRAPH, STILL. The client's last line is "not merely by collecting techniques,
- * but through a relationship between study, practice and experience." A section that answers
- * "vast" by dealing out five different frames is collecting techniques. This one refuses to,
- * and the refusal is visible in exactly one place: the sentence that IS a list — structured
- * learning, sustained practice, teacher education, continuing inquiry, community — is the
- * only sentence in the section with no photograph under it at all.
- *
- * WHY BOTTOM-ANCHORED. Every window ends on the same edge of the photograph — the near edge
- * of the grass — and opens UPWARD: 26%, 44%, 72%, all of it. The held edge is what makes the
- * mechanic legible without a diagram drawn beside it. The first build carried a 68×48px
- * outline-and-band thumbnail showing which slice you were being shown; both critics called it
- * a spec sheet narrating its own mechanism. It is gone. The geometry states itself: same
- * edge, more above it, every time. Both critics then measured the result — 26.0 / 44.0 /
- * 72.0 / 100.0% identical to three decimals at 390, 1024, 1440 AND 2531, horizontal coverage
- * 100.0% at all four, reduced-motion pixel diff 0.00–0.20% — and both named it this design's
- * best element. Not one number in it changes here. Only the file behind it does.
- *
- * THE CAPTIONS. Critic 2: "Jute mats on a red oxide floor, the edge of a bolster, a hand on
- * a wooden block" is the room-and-object inventory this project already rejected on C, and
- * "their raised legs cut off by the frame" narrates the crop — "name the practice, not the
- * furniture, and never the framing." Critic 1, separately: "The same photograph as the first
- * window, whole" performs the reader's recognition and so destroys the payoff it names.
- * Every caption below has been rewritten to the same rule: what is being DONE, at the scale
- * this window shows it. No object is catalogued. No caption mentions a frame, an edge, a
- * crop or another window. The convention's two words — Detail, Full frame — carry the
- * mechanism, because that is what a museum label does and it is the reader's own to notice.
- *
- * WHY THIS FRAME SURVIVED BEING LOOKED AT. Four frames have been rejected on this project
- * for having an air cooler, a speaker stand, a ceiling fan or a folding chair as their actual
- * subject, so this one was opened at 1100px and then at each of the four window heights
- * before it was kept. At 26%: five pairs of crossed legs and five hands resting open on the
- * knees, on grass. At 44%: all five, eyes closed, the tallest head exactly at the edge. At
- * 72%: the palm trunks, the hedge and the compound wall behind them. At 100%: the canopy.
- * The archive's own note on it — "the best balance of figures to setting in this run" — is
- * the reason it is the one that can carry an aperture. A hose crosses the grass behind the
- * group and a low building shows through the hedge; both are in the middle distance of a
- * garden and neither is ever the subject of a window. `minorsVisible` is false.
- * It is unused on the About page it belongs to; it appears once elsewhere on the site.
- *
- * The four forbidden ids (dsc_0209 / _0193 / _0215 / _0217) appear nowhere here.
- * NOBODY IS NAMED: the archive does not record who is in the frame and the client has
- * supplied no faculty names, so every description says what is happening.
+ * NOBODY IS NAMED. The archive does not record who is in which frame. Every alt says what
+ * is happening, which is what a reader who cannot see the picture needs.
  */
 
-/** The file, and the widths that actually exist on disk — verified by listing the folder. */
-export const PLATE = {
-  id: 'pr-ttc-dsc_0392',
-  widths: [480, 960, 1620],
-  /** the whole frame, 1620 × 1080 */
-  ratio: 1.5,
-} as const;
-
-/**
- * THE `sizes` STRING DESCRIBES THE BOX, NOT A WISH.
- *
- * The plate's CSS width is `min(100%, clamp(39rem, 38.5vw + 24.1rem, 85rem))`, so:
- *   ≤ 627px viewport  the plate is the viewport            → 100vw
- *   627 – 2531px      the slope runs                       → calc(38.5vw + 386px)
- *   ≥ 2531px          the 85rem ceiling binds              → 1360px
- * (the 39rem floor never wins above 627, where 100vw already takes over, so it
- * needs no clause of its own.)
- * Media queries rather than `min()`/`clamp()` inside `sizes`, which is honoured unevenly.
- *
- * Critic 2 measured the result and it is the reason to leave every character of it alone:
- * "resolves to 390 / 780 / 940 / 1360px and the rendered boxes measure 390 / 780 / 940 /
- * 1360px — four for four, max upscale anywhere 1.003." The ratio is unchanged (1.5) and the
- * width ladder is unchanged, so that contract holds exactly as measured on the new file.
- *
- * WHAT THE NEW PLATE COSTS, stated rather than hidden. Detail is bytes: a canopy does not
- * compress like a white wall. The same four <img> share one src, one srcSet and one sizes,
- * so the section is still ONE image request, but that request is 55 KB at 390 (was 20),
- * 218 KB at 1440 (was 66) and 583 KB at 2531 (was 167). At 1440 that is still 3.4× lighter
- * than the lightest of the other three concepts in this round (b 819 KB, c 745 KB, d 2851 KB)
- * and 13× lighter than d. Both critics asked for density over leanness in the same breath —
- * "45.9–53.6% coverage of one low-detail floor shot is thin in a way the coverage number
- * hides" — and this is what density costs. It is the trade, made deliberately and once.
- */
-export const PLATE_SIZES =
-  '(max-width: 627px) 100vw, (min-width: 2531px) 1360px, calc(38.5vw + 386px)';
-
-export type Rung = {
-  /** the share of the frame's HEIGHT this window shows, measured from the BOTTOM edge.
-   *  `null` is the one sentence with no window — the list, and the section's only pause. */
-  open: number | null;
-  /** index into about.intro. The client's five lines, in the client's order. */
-  line: number;
-  /** which of the two registers the sentence is spoken in. `say` opens, `close` lands, and
-   *  the three sentences between them are peers set identically. */
-  voice: 'say' | 'peer' | 'close';
-  /** the museum label's first line, the convention's own word */
-  what?: 'Detail' | 'Full frame';
-  /** what is being DONE, at the scale this window shows it. Never an object list, never a
-   *  reference to the crop, the frame, an edge or another window. */
-  of?: string;
-  /** describes WHAT THE WINDOW SHOWS, not what the whole photograph contains */
-  alt?: string;
+export type Still = {
+  id: string;
+  widths: number[];
+  /** object-position at the desktop plate ratio */
+  pos: string;
+  /** object-position at the phone plate ratio, set by looking, not by default */
+  posNarrow: string;
+  alt: string;
 };
 
-export const RUNGS: readonly Rung[] = [
-  /* 01 · THE SEAT. The bottom 26%: five pairs of crossed legs on grass, five hands resting
-     open on the knees, bare feet. Measured 6.3% flat at detail 18.8. There is no mat in it,
-     and the client's first line above it says Yoga is more than a practice on one. */
+export type Clip = {
+  id: string;
+  /** the <img> beneath the video IS the poster — no `poster` attribute anywhere */
+  still: string;
+  stillAvif: string;
+  src: string;
+  pos: string;
+  alt: string;
+};
+
+export const MAT: Clip = {
+  id: 'pr-mov-img_5659',
+  still: '/media/posters/pr-mov-img_5659.jpg',
+  stillAvif: '/media/posters/pr-mov-img_5659.avif',
+  src: '/media/clips/pr-mov-img_5659.mp4',
+  /* The clip is a fold that rises to standing with a dowel overhead; the standing half of
+     the loop sits at x≈0.45 of the frame. 58% puts her on the strip's axis once she is up,
+     keeps the dark mat and the strap in it throughout, and leaves the blown window and the
+     neighbour crouching at the left edge outside it. */
+  pos: '58% 50%',
+  alt: 'A woman in a pink top folds forward over a dark mat, a strap looped around her feet and a wooden block beside her.',
+};
+
+export const PLATES: Still[] = [
+  /* II · knowledge. The clearest "people studying" frame in the archive: a student in white
+     listening, notebook on her lap, in the open pavilion. Her strip is the frame's centre;
+     opening it adds the two women either side of her and the trees beyond the columns. */
   {
-    open: 0.26,
-    line: 0,
-    voice: 'say',
-    what: 'Detail',
-    of: 'Crossed legs on the grass, hands resting open on the knees.',
-    alt: 'Five pairs of crossed legs on a lawn, each with a hand resting open on the knee.',
+    id: 'pr-ttc-dsc_0285_1',
+    widths: [480, 960, 1620],
+    pos: '36% 50%',
+    posNarrow: '38% 50%',
+    alt: 'Three women sit on chairs in an open pavilion, one listening with her chin on her hand, another holding a notebook and pen, trees beyond the columns.',
   },
-
-  /* 02 · THE PRACTITIONERS. The bottom 44% — the same grass, and now all five of them, eyes
-     closed, sitting still; the tallest head sits exactly on the top edge. The added band
-     measures 5.0% flat at detail 30.5, against the old plate's 54.2% and 13.8. */
+  /* III · tradition, and contemporary practice. Four practitioners beneath the banyan: the
+     tree is the oldest thing on the site, and they are dressed for a class this year. Its
+     strip is the seated figure with her palms joined; opening it adds the two side-bends
+     that frame her, then the aerial roots. */
   {
-    open: 0.44,
-    line: 1,
-    voice: 'peer',
-    what: 'Detail',
-    of: 'Five practitioners sitting still, eyes closed.',
-    alt: 'Five practitioners sitting cross-legged in a line on a lawn with their eyes closed and their hands resting on their knees.',
+    id: 'pr-ttc-dsc_0347',
+    widths: [480, 960, 1620],
+    pos: '50% 55%',
+    posNarrow: '50% 60%',
+    alt: 'Four women practise beneath a banyan tree, two bending sideways with their arms overhead, one standing and one seated with her palms joined.',
   },
+  /* IV · the work — learning, practice, teacher education, inquiry, community. The whole
+     study circle in the pavilion. Same afternoon as plate II, seen from further back: the
+     motif comes back wider, which is the sequencing move this concept took from photobook
+     editing (a subject examined close, then recapitulated at a larger scale).
 
-  /* 03 · THE PLACE. The bottom 72%: the grove they are sitting in — palm trunks, a hedge, a
-     low building through it. The added band measures 0.8% flat at detail 32.7, the cleanest
-     band in the photograph. The line above it is the one about holding two things at once. */
+     IT REPLACED `pr-ttc-dsc_0280_1`, which rendered beautifully and was rejected on sight:
+     a framed portrait of an identifiable elder hangs on the pavilion wall at its left, and
+     at this plate's 2.24:1 ratio a 3:2 source has no horizontal lever to crop it out. An
+     unnamed portrait printed at the head of an About page reads as a claim of lineage the
+     client has not made. `_0278_1` has the same wall.
+
+     A foreground head sits at the bottom centre of this frame. At every desktop ratio the
+     plate is wider than 3:2, so `pos` Y is the lever: held at 0%, the head drops almost
+     entirely below the crop. The phone plate is near-square and shows the full height, so
+     there the head stays — as the seat the viewer occupies in the circle — but X is pushed
+     to 100%, which moves it into the bottom-left corner and puts the woman speaking and the
+     one writing beside her in the strip the plate opens from. At 30% the strip was the back
+     of a head. */
   {
-    open: 0.72,
-    line: 2,
-    voice: 'peer',
-    what: 'Detail',
-    of: 'Practice held outdoors, in the garden it happens in.',
-    alt: 'Five practitioners sitting on a lawn with palm trunks, a hedge and a low building in the garden behind them.',
+    id: 'pr-ttc-dsc_0284_1',
+    widths: [480, 960, 1620],
+    pos: '50% 0%',
+    posNarrow: '100% 50%',
+    alt: 'A study circle on chairs in an open pavilion, several people writing in notebooks while one woman speaks, trees beyond the columns.',
   },
-
-  /* 04 · THE PAUSE. The client's fourth line is the one that is a list — structured learning,
-     sustained practice, teacher education, continuing inquiry and community. It is the
-     section's only sentence with no photograph under it, and that is the argument: the
-     sentence that enumerates is the sentence the section refuses to illustrate by collecting.
-     Both critics measured the pause it makes — 309px against 188 and 166, a 1.85× breath
-     before the payoff — and it is kept to the pixel. */
-  { open: null, line: 3, voice: 'peer' },
-
-  /* 05 · ALL OF IT. 100%, and the reward lands on the client's thesis — "not merely by
-     collecting techniques, but through a relationship between study, practice and
-     experience." The band this window adds, the top 28% no earlier window contained, is the
-     canopy: 1.8% flat at detail 37.8, the densest 28% of the photograph. Nothing has been
-     enlarged — this is laid in at the SAME rendered width as the 26% window, so the grass at
-     its foot is the same grass at the same size on the screen. What changed is how much of
-     it the page is willing to show. */
+  /* V · the belief. Practice with no mat under it: a woman seated on grass, eyes closed,
+     four others behind her among the trees. The only full-bleed plate. Her head sits at
+     ~33% of the frame's height and her crossed legs at ~97%, so `pos` Y is held high —
+     at 50% the wide crop cut her at the eyebrows. */
   {
-    open: 1,
-    line: 4,
-    voice: 'close',
-    what: 'Full frame',
-    of: 'Five practitioners on a lawn, beneath trees at their full height.',
-    alt: 'Five practitioners sitting cross-legged on a lawn beneath tall trees, with a hedge and a low building in the garden behind them.',
+    id: 'pr-ttc-dsc_0396',
+    widths: [480, 960, 1620],
+    pos: '50% 20%',
+    posNarrow: '44% 40%',
+    alt: 'A woman sits cross-legged on grass with her eyes closed and her hands resting on her knees, four others seated behind her among the trees.',
   },
-] as const;
+];
 
-export const srcOf = () => `/media/stills/${PLATE.id}-${PLATE.widths[PLATE.widths.length - 1]}.webp`;
-export const srcSetOf = () => PLATE.widths.map((w) => `/media/stills/${PLATE.id}-${w}.webp ${w}w`).join(', ');
+export function srcOf(s: Still, w?: number): string {
+  const pick = w ? (s.widths.find((x) => x >= w) ?? s.widths[s.widths.length - 1]) : s.widths[s.widths.length - 1];
+  return `/media/stills/${s.id}-${pick}.webp`;
+}
+
+export function srcSetOf(s: Still): string {
+  return s.widths.map((w) => `/media/stills/${s.id}-${w}.webp ${w}w`).join(', ');
+}

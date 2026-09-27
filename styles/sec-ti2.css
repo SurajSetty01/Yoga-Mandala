@@ -1,0 +1,325 @@
+/* Final ti2 section. Every selector is namespaced .ti2- */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INSIGHTS 01 · THE KIND OF THINKING THAT WILL BE HERE — a reader's marks.
+
+   One reading column and a wide margin, the layout of a journal page. As each
+   passage crosses the reading line a brass wash is drawn behind its display
+   clause like a highlighter, a pencil bracket runs down the margin beside the
+   marked lines, and when the stroke ends the photograph that answers the clause
+   is uncovered in the margin, level with it.
+
+   THE FINISHED STATE IS THE DEFAULT. Everything below that hides or undraws is
+   scoped to `.ti2--armed`, which only Ti2Marks.tsx adds, and only when motion
+   is allowed. Transitions live on the `.is-marked` side only, so arming is
+   instant and marking is the one thing that animates.
+
+   THE MIXED LEADING. The quiet spans carry 1.62 and the display clause 1.1 of
+   its own size; each inline box brings its own half-leading and the line box
+   takes the largest, so lines never collide and the quiet text never inherits
+   the display face's tight leading. The paragraph's strut is the quiet size.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ti2 {
+  --ti2-read: clamp(1rem, 0.95rem + 0.42vw, 1.22rem);
+  --ti2-small: clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem);
+  --ti2-measure: 38rem;
+  --ti2-gap: clamp(2.5rem, 5vw, 5.5rem);
+  --ti2-margin: clamp(15rem, 24vw, 23rem);
+  /* the highlighter: a brass wash. Ink over it on paper composites to ~12:1 */
+  --ti2-wash: rgba(184, 140, 46, 0.3);
+  --ti2-stroke: cubic-bezier(0.45, 0.05, 0.4, 1);
+
+  position: relative;
+  background: var(--ground);
+  color: var(--ink);
+  padding-top: clamp(4rem, 9vw, 8rem);
+  /* deeper than the page's usual padding: the fixed translucent nav pill must not
+     sit over the last display line while the next section scrolls up (1.86:1 was
+     measured there before this padding existed) */
+  padding-bottom: clamp(7rem, 11vw, 9rem);
+  overflow-x: clip;
+}
+
+/* capped AND centred — max-width alone pins the block left at 2531 */
+.ti2-in {
+  max-width: calc(var(--ti2-measure) + var(--ti2-gap) + var(--ti2-margin) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* the global ring is cream in a dark halo; on paper it inverts */
+.ti2 :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the register mark ──────────────────────────────────────────────────── */
+.ti2-mark {
+  margin: 0 0 clamp(2.6rem, 6vw, 4.6rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.ti2-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.ti2-mark__rule,
+.ti2-folio__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: rgba(112, 85, 21, 0.6);
+}
+
+/* ── the pieces ─────────────────────────────────────────────────────────── */
+.ti2-set {
+  display: grid;
+  gap: clamp(4.5rem, 10vw, 9rem);
+}
+.ti2-piece {
+  display: grid;
+  grid-template-columns: minmax(0, var(--ti2-measure)) var(--ti2-margin);
+  grid-template-areas:
+    'folio .'
+    'text  fig';
+  column-gap: var(--ti2-gap);
+  row-gap: clamp(1rem, 1.6vw, 1.4rem);
+  align-items: start;
+}
+
+/* the running head: a rule and where the passage comes from. No numeral — the
+   section's own mark already carries "01", and a second "01" under it misreads */
+.ti2-folio {
+  grid-area: folio;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.75rem;
+}
+.ti2-folio__k {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.ti2-folio__a {
+  font: 500 var(--ti2-small) / 1.4 var(--font-text);
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(112, 85, 21, 0.6);
+  text-decoration-thickness: 1px;
+}
+.ti2-folio__a:hover {
+  text-decoration-color: var(--forest);
+}
+
+/* ── the paragraph and its mark ─────────────────────────────────────────── */
+.ti2-text {
+  grid-area: text;
+  position: relative;
+  min-width: 0;
+}
+.ti2-p {
+  margin: 0;
+  font: 400 var(--ti2-read) / 1.62 var(--font-text);
+  color: var(--ink);
+  /* a display clause hyphenating mid-word would look like a fault */
+  hyphens: none;
+}
+.ti2-q {
+  color: var(--ink-soft);
+  line-height: 1.62;
+}
+.ti2-lit {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.68rem, 1.05rem + 2.15vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+  /* The highlighter. `slice` (the default, stated because it is the mechanism)
+     paints the inline's background as if its lines were laid end to end, so a
+     growing background-size crosses line one, then carries on along line two:
+     a stroke, not every line at once. The band sits across the x-height and
+     the baseline, where a marker lands. */
+  -webkit-box-decoration-break: slice;
+  box-decoration-break: slice;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0 43%,
+    var(--ti2-wash) 43% 89%,
+    transparent 89%
+  );
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 100%;
+}
+
+/* the pencil bracket in the gutter, spanning exactly the marked lines once
+   Ti2Marks has measured them (the whole paragraph until then) */
+.ti2-pencil {
+  position: absolute;
+  top: var(--ti2-at, 0);
+  right: calc(var(--ti2-gap) / -2);
+  width: 2px;
+  height: var(--ti2-h, 100%);
+  border-radius: 1px;
+  background: var(--brass);
+  transform-origin: 50% 0;
+}
+
+/* ── the photograph in the margin ───────────────────────────────────────── */
+.ti2-fig {
+  grid-area: fig;
+  margin: var(--ti2-at, 0) 0 0;
+  min-width: 0;
+}
+.ti2-frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--ground-warm);
+}
+.ti2-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* the veil is paper; it leaves to the right, continuing the stroke */
+.ti2-veil {
+  position: absolute;
+  inset: -1px;
+  background: var(--ground);
+  transform: scaleX(0);
+  transform-origin: 100% 50%;
+}
+
+/* 01 · landscape, the full margin; the bag strap in the foreground trimmed */
+.ti2-fig--a .ti2-frame {
+  aspect-ratio: 8 / 5;
+}
+.ti2-fig--a img {
+  object-position: 50% 24%;
+}
+
+/* 02 · portrait, narrower, set to the margin's outer edge and hung lower than
+   the clause, so the three plates do not line up as a column of rows */
+.ti2-fig--b {
+  width: 74%;
+  margin-top: calc(var(--ti2-at, 0px) + clamp(1.5rem, 4vw, 4.5rem));
+  margin-left: auto;
+}
+.ti2-fig--b .ti2-frame {
+  aspect-ratio: 5 / 6;
+}
+.ti2-fig--b img {
+  object-position: 50% 30%;
+}
+
+/* 03 · the left 72% of the frame, from 17% down: the white-coated, masked,
+   motion-blurred watcher at the right edge (and the shrine behind her) read as
+   a clinic, so she is cropped out and the student is left with his pose. The
+   image is drawn at 1/0.72 of its box and lifted by 17% of its own height. */
+.ti2-fig--c {
+  width: 88%;
+}
+.ti2-fig--c .ti2-frame {
+  aspect-ratio: 4 / 5;
+}
+.ti2-fig--c img {
+  position: absolute;
+  left: 0;
+  top: -25.2%;
+  width: 138.9%;
+  max-width: none;
+  height: auto;
+  object-fit: fill;
+}
+
+/* ── armed: the unmarked state, and the marking ─────────────────────────── */
+.ti2--armed .ti2-piece:not(.is-marked) .ti2-lit {
+  background-size: 0% 100%;
+}
+.ti2--armed .ti2-piece:not(.is-marked) .ti2-pencil {
+  transform: scaleY(0);
+}
+.ti2--armed .ti2-piece:not(.is-marked) .ti2-veil {
+  transform: none;
+}
+.ti2--armed .ti2-piece:not(.is-marked) .ti2-frame img {
+  transform: scale(1.06);
+}
+
+.ti2--armed .is-marked .ti2-lit {
+  transition: background-size var(--ti2-dur, 1.3s) var(--ti2-stroke);
+}
+.ti2--armed .is-marked .ti2-pencil {
+  transition: transform var(--ti2-dur, 1.3s) var(--ti2-stroke);
+}
+.ti2--armed .is-marked .ti2-veil {
+  transition: transform 0.95s cubic-bezier(0.65, 0, 0.25, 1) calc(var(--ti2-dur, 1.3s) - 120ms);
+}
+.ti2--armed .is-marked .ti2-frame img {
+  transition: transform 1.7s var(--ease) calc(var(--ti2-dur, 1.3s) - 120ms);
+}
+.ti2--armed .is-instant *,
+.ti2--armed .is-instant img {
+  transition: none;
+}
+
+/* ── narrow: one column, the photograph after its passage ───────────────── */
+@media (max-width: 899px) {
+  .ti2-piece {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'folio'
+      'text'
+      'fig';
+    row-gap: clamp(1rem, 4vw, 1.5rem);
+  }
+  /* the bracket moves to the outer margin, left of the paragraph */
+  .ti2-text {
+    padding-left: 1rem;
+  }
+  .ti2-pencil {
+    right: auto;
+    left: 0;
+  }
+  .ti2-fig {
+    margin-top: 0.4rem;
+  }
+  .ti2-fig--a {
+    width: 100%;
+  }
+  .ti2-fig--b {
+    width: 66%;
+    margin-left: auto;
+  }
+  .ti2-fig--c {
+    width: 80%;
+    margin-left: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ti2 *,
+  .ti2 img {
+    transition: none !important;
+  }
+}

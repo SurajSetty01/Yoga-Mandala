@@ -1,885 +1,485 @@
-/* preview-sx3a — owned solely by /preview/sx3a/. No other file may declare these
-   selectors. Every selector in this file begins `.sx3a-`; the prefix was grepped across
-   the repo before a line was written, because two bare short prefixes have already
-   broken live pages on this project (`.in` flattened 35+ containers sitewide, and an
-   `.ab-` preview overrode the real About eyebrow down to 2.17:1). */
+/* preview-sx3a: owned solely by /preview/sx3a/. Every selector is .sx3a-*.
+   No other file may declare these selectors.
 
-/* ══════════════════════════════════════════════════════════════════════════
-   PRAṆAVA · §03 OUR APPROACH — concept A, PHOTOGRAPHY LEADS.
+   ══════════════════════════════════════════════════════════════════════════
+   PRAṆAVA §03 OUR APPROACH, CONCEPT A. PHOTOGRAPHY LEADS.
 
-   THE EVENT, in one sentence:
-     Three photographs stand on one drawn line and step up in size until the
-     third crosses the page margin and runs off the edge of the paper — and
-     then the paper ends, and the fourth frame, larger than all three and on
-     dark ground, is the only one that moves.
+   AN OPEN BOOK WHOSE GUTTER CLOSES AS YOU READ.
+   Tradition, Practice and Inquiry are each argued by two photographs that face
+   each other across one spine. Spread by spread, the two sides come closer:
+   the gutter narrows from --sx3a-g1 to --sx3a-g2 to --sx3a-g3, and the two
+   pictures converge in height from 1 : 0.52, to 0.7 : 1, to 0.82 : 0.82.
+   Transmission is not a pair. It is one photograph laid ACROSS the spine, with
+   the spine placed where the student ends and the teacher begins, so the
+   teacher's hands cross the gutter. As the frame reaches the middle of the
+   screen, the last sliver of gutter inside it closes.
 
-   WHY THAT SHAPE. The client's lead names THREE things and the list has FOUR.
-   Tradition, Practice and Inquiry are ideas a reader can be handed;
-   Transmission is not an idea at all — it is a relationship, moving between two
-   people over time, and the client's own sentence says so: "not simply
-   information that can be packaged and delivered." A still photograph cannot
-   show a passage. So the first three are stills and the fourth is the archive's
-   clearest hands-on teaching CLIP: the one term whose medium is different from
-   the other three. Three of a kind and one that is not — never four of anything,
-   and nothing here is a card, a plate-object, a tile or a package.
+   RESEARCH, AND WHAT EACH FINDING CHANGED
+   · Walker Evans, American Photographs (MoMA, 1938). Plates are sequenced to be
+     read in order, and meaning is made by juxtaposition. Evans paired a dock
+     worker with a minstrel bill. → Each of the first three ideas became a PAIR
+     whose two pictures say something neither says alone. Evans left the facing
+     pages blank, so the section opens with a blank verso and the lead on the
+     recto.
+   · Alexey Brodovitch, Harper's Bazaar 1934-58. He "bled single pictures across
+     double-page spreads", and repeated one pose across a spread to give it a
+     temporal feeling. → Transmission is the single picture bled across the
+     gutter. Tradition's recto is the repeated pose: one form in a row of bodies.
+   · The LIFE photo-essay formula (overall, medium, close-up, sequence,
+     interaction, signature image, clincher). The SIGNATURE image "summarises
+     the situation with all the key storytelling elements in one photo". → Of the
+     four, only Transmission is given a signature image: teacher, student and
+     practice in one frame. The pairs take the other roles: overall (the banyan),
+     sequence (the loop), interaction (listeners and the explained pose).
+   · Look-in: editorial layout turns subjects to face INTO the spread. → Every
+     verso was chosen or cropped so its subject faces the gutter.
+   · Rijksmuseum "Every Inch a Story" and scrollytelling (Snow Fall, vev.design's
+     picture-essay survey). The fixed image with story panels was REJECTED here:
+     it is a zoom into detail, and that is the move §02 directly above makes.
 
-   ──────────────────────────────────────────────────────────────────────────
-   WHAT CHANGED FROM THE FIRST BUILD, AND WHY IT IS A COMPOSITION CHANGE RATHER
-   THAN A TUNING PASS.
+   GROUNDS. §02 above is deep, so this section is paper. It holds no text on a
+   photograph, so no scrim anywhere.
 
-   The first build gave each of the three stills a full screen of its own. Two
-   defects followed from that ONE decision and neither could be tuned away:
-
-     · it cost 4,465px at 1440 — 4.96 screens for ~136 words — and
-     · the size ramp was invisible, because you could never see two plates at
-       once. A ramp of three sizes read in sequence, a screen apart, is not a
-       ramp; it is three photographs the reader is asked to remember.
-
-   Both are fixed by the same move: the three plates now stand SIDE BY SIDE on
-   one floor line, bottoms on it, tops climbing. Adjacency is the only thing
-   that makes a size ramp legible, and it collapses three screens into one.
-
-   Measured section height, then and now:
-
-                   390    1024   1280   1440   2531
-     was           3391   3316   3945   4465   5044
-     is            2920   1982   2174   2223   2627
-                  −14%  −40%  −45%  −50%  −48%
-
-   2,223px at 1440 is 2.47 screens and 16.3px of scroll per word, against 4.96
-   screens and 32.8px/word before. The same four photographs, half the scroll —
-   and reduced motion and JavaScript-off both measure 2,223px too, to the pixel.
-
-   And the ramp now reaches its stated end. The run is laid from the drawn page
-   margin rightwards, and the third plate crosses the right-hand rule and leaves
-   the paper at every width from 900 up. It is no longer a claim; it is where
-   the picture stops being visible.
+   Every scroll-linked value arrives as ONE custom property, written by
+   components/preview/sx3a/Sx3aMotion.tsx inside a single rAF. Every one has a
+   FINISHED default here. With JavaScript off, or under reduced motion, the
+   Transmission frame is already whole and every plate is already in place.
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sx3a {
+  /* the three gutters, and the one that closes inside the fourth */
+  --sx3a-g1: clamp(2.2rem, 9vw, 12rem);
+  --sx3a-g2: clamp(1.3rem, 5vw, 7rem);
+  --sx3a-g3: clamp(0.6rem, 2.2vw, 3rem);
+  /* the minimum space between a name and its paragraph, which the gutter can
+     never squeeze below; the third and fourth spreads sit on it */
+  --sx3a-tgap: clamp(1.25rem, 3.2vw, 3rem);
+  /* where the spine crosses the Transmission frame: at the student's hip, where
+     the teacher's hands are. Measured on the clip's frames at 1s and 4s. */
+  --sx3a-cross: 0.43;
+  --sx3a-line: rgba(36, 29, 24, 0.2);
+  --sx3a-pad: clamp(4.4rem, 10vw, 9rem);
+  --sx3a-gap: clamp(3.75rem, 7vw, 6.75rem);
+
   position: relative;
-  z-index: 1;
   display: block;
-
-  /* The measure. Capped AND centred — `max-width` on its own is invisible at
-     1440 and hundreds of px off-axis at 2531, which shipped on this site once. */
-  --sx3a-max: 92rem;
-
-  /* The gutter every full-bleed row shares: the rail, or half the slack once the
-     page is wider than the measure. Percentages inside it resolve at the point of
-     USE, so one declaration serves the band, the plate list and the dark stage.
-     The drawn margin rules stand on exactly this figure, which is why the two
-     never drift apart at 2531. */
-  --gut: max(var(--rail), calc((100% - var(--sx3a-max)) / 2));
-
-  /* how far inside the left-hand rule the run starts, so plate 1 is visibly
-     within the margin before plate 3 is seen to leave it */
-  --sx3a-inset: clamp(1.5rem, 3vw, 3rem);
-  --sx3a-gap: clamp(1rem, 2vw, 2.5rem);
-
-  /* Type. The three terms share ONE size because the client's lead gives them
-     equal billing; Transmission is the only one set larger, because it is the
-     only one the lead does not name. */
-  --sx3a-lead: clamp(1.35rem, 0.8rem + 1.7vw, 2.35rem);
-  --sx3a-name: clamp(1.3rem, 1.02rem + 1.15vw, 2.1rem);
-  /* The one long unbreakable word in the section, so its ramp is gentler than it
-     looks like it should be: at 1.2rem + 5.4vw "Transmission" was 430px wide at
-     1024 inside a 316px column and the T was clipped clean off. */
-  --sx3a-huge: clamp(2.5rem, 0.95rem + 4.2vw, 6rem);
-  /* 16.4px at 390, 18.56px at 1440 — inside the house's 18.7px body, and never
-     below the 16px floor at any width from 320 up. */
-  --sx3a-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.16rem);
-  --sx3a-small: clamp(0.8rem, 0.78rem + 0.12vw, 0.88rem);
-
-  --sx3a-pad-top: clamp(2.2rem, 3.5vw, 3.5rem);
-  --sx3a-pad-bot: clamp(2.5rem, 4vw, 4rem);
-
-  /* ornament only. Never text — clay is 3.90:1 and may not carry any. */
-  --sx3a-hair: rgba(36, 29, 24, 0.17);
-  --sx3a-tick: var(--brass);
-
-  /* written by Sx3aMotion; every one has a FINISHED default here, so the page
-     with no JavaScript and the page under reduced motion are the end state. */
-  --sx3a-draw: 1;
-}
-
-.sx3a-sec {
-  display: block;
-}
-
-/* ── the two grounds ───────────────────────────────────────────────────────
-   They are SIBLINGS, not nested: the drawn margin is absolutely positioned
-   against the paper block, and if the dark stage sat inside it the two rules
-   would run down over the photograph — which would say the opposite of what
-   this section is for. `.sx3a-paper` ends where the margin ends.
-
-   `overflow-x: clip` is what cuts the third plate at the edge of the screen.
-   It is not a safety net here, it is the mechanic: the plate is laid out past
-   the viewport and the paper is where it stops. `clip` rather than `hidden`
-   because `hidden` would make this block a scroll container. */
-.sx3a-paper {
-  position: relative;
+  padding-block: var(--sx3a-pad);
   background: var(--ground);
   color: var(--ink);
-  padding-block: var(--sx3a-pad-top) var(--sx3a-pad-bot);
-  overflow-x: clip;
-}
-.sx3a-dark {
-  position: relative;
-  background: var(--ground-deep);
-  color: var(--ink-onDark);
+  /* the reveal slides and the recto-side bleed of the fourth frame never widen the page */
   overflow-x: clip;
 }
 
+/* THE PAGE MEASURE, AND IT IS CENTRED. max-width without margin-inline:auto is
+   invisible at 1440 and hundreds of pixels off-axis at 2531. */
 .sx3a-rail {
-  max-width: calc(var(--sx3a-max) + 2 * var(--rail));
+  max-width: calc(92rem + 2 * var(--rail));
   margin-inline: auto;
   padding-inline: var(--rail);
 }
 
-.sx3a img,
-.sx3a video {
-  display: block;
-  object-position: var(--op, 50% 50%);
+/* ── the opening ───────────────────────────────────────────────────────── */
+.sx3a-open {
+  margin-bottom: clamp(3rem, 7vw, 6.5rem);
 }
-@media (max-width: 899px) {
-  .sx3a img,
-  .sx3a video {
-    object-position: var(--op-n, var(--op, 50% 50%));
-  }
+.sx3a-open .apr-eyebrow {
+  margin-bottom: 1.5rem;
 }
-
-/* Focus is visible on both grounds. Never `outline: none`. */
-.sx3a-paper :focus-visible {
-  outline: 2px solid var(--forest);
-  outline-offset: 3px;
-}
-.sx3a-dark :focus-visible {
-  outline: 2px solid var(--ink-onDark);
-  outline-offset: 3px;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   THE DRAWN MARGIN.
-
-   Two hairlines standing where the page's rail is. They are the thing the
-   photographs are measured against: plate 1 stands inside them, plate 3 crosses
-   the right-hand one and carries on off the paper, and at the dark stage they
-   stop. Without them "the run leaves the page" is an assertion nobody can see.
-
-   `scaleY` from a top origin is the only property animated, and its default is
-   the finished state, so with JS off both rules are simply drawn.
-   ══════════════════════════════════════════════════════════════════════════ */
-.sx3a-margin {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: 0;
-  max-width: calc(var(--sx3a-max) + 2 * var(--rail));
-  margin-inline: auto;
-  pointer-events: none;
-  z-index: 0;
-}
-.sx3a-margin::before,
-.sx3a-margin::after {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  width: 1px;
-  background: var(--sx3a-hair);
-  transform: scaleY(var(--sx3a-draw));
-  transform-origin: 50% 0;
-}
-.sx3a-margin::before {
-  left: var(--rail);
-}
-.sx3a-margin::after {
-  right: var(--rail);
-}
-.sx3a.is-live .sx3a-margin::before,
-.sx3a.is-live .sx3a-margin::after {
-  will-change: transform;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   MOVEMENT 0 — the register mark.
-   ══════════════════════════════════════════════════════════════════════════ */
-/* BESIDE THE RULE, NOT ON IT — 0.15rem, and it was found by measurement, not by eye.
-   The eyebrow sat at exactly `--gut`, which is exactly where the left-hand margin
-   hairline stands, and a direct paint/transparent glyph-diff on all fourteen leaf text
-   runs found the numeral reading 4.65:1 at 320, 390, 1920 and 2531 while the same element
-   read 6.56:1 at 768, 1024 and 1440. 4.65 is not `--brass` on cream — brass on cream is
-   6.48 computed and 6.56 measured. It is brass on rgb(215,210,205), which is the hairline
-   composited onto the paper: at those four widths the 0's left stem rounds onto the 1px
-   rule and the rule shows through the numeral. It still cleared 4.5, so both the ordinary
-   probe and the p5 column reported a pass, and only reading the WORST column run by run
-   made it visible at all. 2.4px of clearance puts the ink beside the rule instead of on
-   it at every width; it is a quarter of the numeral's own sidebearing and does not read
-   as a misalignment against the lead below, which keeps the margin exactly. */
-.sx3a-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  margin: 0 0 clamp(1.4rem, 2.6vw, 2.4rem);
-  padding-inline: calc(var(--gut) + 0.15rem) var(--gut);
-  font-family: var(--font-text);
-  font-size: var(--sx3a-small);
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--forest-mid); /* 7.27:1 on cream. Measured, and on PAPER only. */
-}
-.sx3a-eyebrow__n {
-  font-variant-numeric: tabular-nums;
-  color: var(--brass); /* 6.56:1 on cream */
-}
-.sx3a-eyebrow__rule {
-  flex: 0 0 clamp(1.6rem, 4vw, 3.4rem);
-  height: 1px;
-  background: var(--sx3a-tick);
-  opacity: 0.55;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   MOVEMENTS 1–3 — THE RUN.
-
-   One line. Three upright 3 : 4 frames standing on it, bottoms flush, tops
-   climbing, each larger than the last. The three widths are NOT written here:
-   each figure carries its own `--w` and `--wn` from components/preview/sx3a/
-   frames.ts, which is the same pair of numbers that builds its `sizes`. That is
-   deliberate — the last build kept the layout width in the stylesheet and the
-   `sizes` in the markup, and they drifted by 26% on the frame cropped hardest.
-   One number, two consumers, no way to update one and forget the other.
-
-   The ramp is 0.52 / 0.70 / 1.00 of a common step, and the step is
-   `min(42vw, 48rem)`. Measured widths, and the height of the tallest, which is
-   the height of the whole band:
-
-                  900   1024   1280   1440   2531
-     plate 1      197    224    280    315    399
-     plate 2      265    301    376    423    538
-     plate 3      378    430    538    605    768
-     the line     504    573    717    806   1024   ← band height = plate 3
-
-   and where plate 3 ends, against the right-hand rule and against the glass:
-
-      900   ends  940   screen  900   →  40px past the screen
-     1024   ends 1069   screen 1024   →  45px past the screen (88 past the rule)
-     1280   ends 1337   screen 1280   →  57px past the screen
-     1440   ends 1504   screen 1440   →  64px past the screen (124 past the rule)
-     1600   ends 1671   screen 1600   →  71px past the screen
-     2531   ends 2363   screen 2531   → 361px past the rule,
-                                         168px short of the screen
-
-   From 900 to 1600 the third plate runs off the glass. At 2531 it crosses the
-   drawn page margin by 361px but stops 168px — 6.6% of the width — short of it,
-   and that is stated rather than claimed away: an upright 3 : 4 plate cannot be
-   more than about 850px wide on a 1140-tall screen without becoming taller than
-   the screen. On a monitor that wide "the page" is the drawn rule, which is
-   what the rule is there for.
-
-   THE RAMP'S STEEPNESS IS LOAD-BEARING, not a taste. The void the lead sits in
-   IS the difference between plate 3's height and plate 2's, so flattening the
-   ramp closes it: at 0.52 / 0.70 / 1.00 the gap between the lead's last line
-   and the top of plate 2 is 39px at 900 and 157px at 2531. At 0.58 / 0.84 /
-   1.00 — the flattest ramp that still reaches the screen edge with a narrower
-   plate 3 — it is −29px, and the lead lands on the photograph.
-   ══════════════════════════════════════════════════════════════════════════ */
-.sx3a-band {
-  position: relative;
-}
-
-.sx3a-frame {
-  position: relative;
+.sx3a-lead {
   margin: 0;
-  overflow: hidden;
-  aspect-ratio: 3 / 4;
-  background: var(--ground-warm);
-  width: var(--wn);
-}
-
-/* THE APERTURE, AND THE ENLARGEMENT EACH FRAME IS PRINTED AT.
-   All four frames are native 3 : 4, and a 3 : 4 source in a 3 : 4 aperture has NO
-   crop lever at all — `object-fit: cover` has nothing in surplus to trim, so
-   `object-position` does literally nothing and every plate shows the whole
-   phone photograph, ceiling fans and empty floor included. That is not a crop,
-   it is a default, and "crops that mean something" is half this brief.
-
-   So the crop is an ENLARGEMENT, which is what a picture editor actually does:
-   `--z` is the factor each frame is printed at and `--zo` is the point that
-   stays put. It is a `transform`, so it composites and animates nothing, and
-   every `sizes` is built from the same layout width multiplied by the same
-   `--z`, so the browser fetches a derivative sized for the enlarged pixels. */
-.sx3a-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(var(--z, 1));
-  transform-origin: var(--zo, 50% 50%);
-}
-
-/* ── the plate list ─────────────────────────────────────────────────────── */
-.sx3a-name {
-  margin: 0 0 0.55em;
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 400;
-  font-size: var(--sx3a-name);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-}
-/* the hairline tick that ties a term to the line its plate stands on */
-.sx3a-name::before {
-  content: '';
-  display: block;
-  width: clamp(1.8rem, 4vw, 3rem);
-  height: 1px;
-  background: var(--sx3a-tick);
-  opacity: 0.7;
-  margin-bottom: 0.7em;
-}
-.sx3a-body {
-  margin: 0;
-  font-size: var(--sx3a-read);
-  line-height: 1.66;
-  color: var(--ink-soft); /* 7.0:1 on cream */
-  /* the top of the house measure, so a wide column cannot run past it */
-  max-width: 46ch;
-}
-
-/* THE MEASURE GOES ON THE <p>, NOT ON THE WRAPPER. `ch` resolves against the
-   element's OWN font, so `max-width: 30ch` on a div was 30 characters of 16px
-   Inter — 255px — and broke every one of the client's three sentences in half
-   with two thirds of the page left empty beside them. On the paragraph it is
-   22 characters of Fraunces at the display size, which is what it was meant to
-   be: each sentence on one line, down to 390px. */
-.sx3a-lead p {
-  max-width: 22ch;
-  margin: 0 0 0.2em;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-size: var(--sx3a-lead);
-  line-height: 1.13;
-  letter-spacing: -0.012em;
+  font-size: clamp(1.85rem, 0.7rem + 3.3vw, 4.1rem);
+  line-height: 1.07;
+  letter-spacing: -0.016em;
+  color: var(--ink);
   text-wrap: balance;
 }
-/* The third sentence is the one the fourth term will contradict, so it is the
-   one set in the italic the house uses for emphasis. */
-.sx3a-lead p:last-child {
-  font-style: italic;
+.sx3a-lead__line {
+  display: block;
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   ≥ 900 — the run, the line, and the void the lead sits in.
-   ══════════════════════════════════════════════════════════════════════════ */
-@media (min-width: 900px) {
-  .sx3a-band {
-    display: flex;
-    align-items: flex-end; /* one floor line */
-    gap: var(--sx3a-gap);
-    padding-left: calc(var(--gut) + var(--sx3a-inset));
-    padding-right: 0;
-  }
-  .sx3a-frame {
-    flex: 0 0 auto;
-    width: var(--w);
-  }
-
-  /* THE FLOOR. A hairline the three plates stand on, drawn left to right as the
-     section is read by the same variable that draws the two vertical rules —
-     and, like them, defaulting to FULLY DRAWN, so reduced motion and a page with
-     no JavaScript get the finished line rather than an absent one.
-     `inset-inline: 0` resolves against the band's padding box, which is the full
-     width of the paper, so the line runs edge to edge under a run that does not. */
-  .sx3a-band::after {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    height: 1px;
-    background: var(--sx3a-hair);
-    transform: scaleX(var(--sx3a-draw));
-    transform-origin: 0 50%;
-  }
-
-  /* THE LEAD SITS IN THE AIR THE TWO SHORT PLATES LEAVE ABOVE THEM.
-     This is where the section's height went. Taken out of flow it costs nothing
-     — the band is exactly as tall as plate 3 — and it puts the three sentences
-     that NAME the three terms directly above the three pictures that are them.
-
-     It is anchored on `--gut`, not on the band's padding, so the words hold the
-     page margin while the pictures step in from it and then leave it.
-
-     THE CLEARANCE IS MEASURED, NOT ASSUMED, because an absolutely positioned
-     block over a bottom-aligned one is exactly the kind of thing that collides
-     two breakpoints away. Gap between the lead's last line and the top of plate
-     2 — the nearer of the two — swept across the range rather than sampled at
-     three convenient widths:
-
-        900 → 39.2    950 → 44.2   1000 → 49.2   1024 → 51.6
-       1100 → 59.1   1199 → 69.1   1280 → 77.2   1399 → 89.1
-       1440 → 93.2   1600 → 118.9  1920 → 157.3  2531 → 157.3
-
-     The tightest point in the whole range is 39px, at the breakpoint itself.
-     The lead is three lines at every width because each of the client's three
-     sentences is under 22 characters, so its height is not at the mercy of a
-     reflow. */
-  .sx3a-lead {
-    position: absolute;
-    top: 0;
-    left: var(--gut);
-    width: min(26rem, 44vw);
-    z-index: 1;
-  }
-
-  /* THE PLATE LIST, below the line the plates stand on.
-
-     `auto-fit` with a 19rem floor and a 32rem ceiling, rather than three fixed
-     columns, and the reason is arithmetic that cannot be designed around: the
-     house measure is 41–46 characters, which at 18.56px Inter is 484–543px, and
-     three of those plus their gutters need 1,532px. There is not 1,532px inside
-     1,440. So the three columns hold 401px / 34 characters at 1440, and they
-     grow to the house's own 512px / 44 characters at 2531 — where there IS room
-     — instead of staying frozen at 36 the way the first build did at every
-     width. Below about 1,100px `auto-fit` drops to two columns at 440px / 37
-     characters rather than crushing three into 284px / 24.
-
-     The trade is stated because it is a real one: co-visibility of the triad was
-     the structural fix this section needed, and three co-visible paragraphs at
-     1440 cannot each be set at the house measure. The one paragraph that is
-     alone on its ground — Transmission, and it is the longest — is set at 44. */
-  .sx3a-terms {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    justify-content: start;
-    column-gap: clamp(1.5rem, 3vw, 3.5rem);
-    row-gap: clamp(1.6rem, 2.6vw, 2.4rem);
-    padding-inline: calc(var(--gut) + var(--sx3a-inset)) var(--rail);
-    margin-top: clamp(1.4rem, 2.2vw, 2.2rem);
-  }
+/* ── the book ──────────────────────────────────────────────────────────── */
+.sx3a-book {
+  position: relative;
+  padding-bottom: var(--sx3a-gap);
 }
-/* The column count is set explicitly rather than by `auto-fit`, because `auto-fit`
-   counts repetitions against the track's MAXIMUM and therefore fell to one column at
-   1024 and two at 1440 — 628px and 472px of plate list where one row would do. Each
-   breakpoint below is the widest arrangement whose columns still hold a real measure:
-
-     900–999    1 column    46 cpl      (two columns here would be 24 characters)
-     1000–1399  2 columns   36.6 at 1000, 40.2 at 1100, 43.8 at 1199, 46 at 1280
-     ≥1400      3 columns   33.8 at 1440, 37.7 at 1600, 41.8 at 1920, 46 at 2531
-
-   Measured at 18.6px throughout. The first build's figure was 36 at 1440 AND 36 at 2531
-   — frozen, which is half of what the review objected to. This moves with the page and
-   reaches the house measure wherever the page is wide enough to hold it.
-
-   The dip to 33.8 at 1440 is under the house's 41–46 and it is a deliberate trade, not an
-   oversight: three paragraphs standing side by side need 3 × 484px plus gutters — 1,532px
-   — and a 1440 screen does not have it. The triad being visible at once is the structural
-   fix this section needed; another third of a screen of scroll to widen three columns by
-   90px is not worth it. The one paragraph with a ground to itself, Transmission, is set
-   at 44 at every width from 1280 up. */
-@media (min-width: 1000px) {
-  .sx3a-terms {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1400px) {
-  .sx3a-terms {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+/* the spine. On a phone, name and paragraph are stacked across the middle of the
+   page, so a continuous line would strike through them. There the gutter's
+   line is drawn inside each pair instead (.sx3a-pair::before). */
+.sx3a-spine {
+  display: none;
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   < 900 — the same event, stacked, and it is the SAME event.
-
-   A mechanic that becomes a different mechanic on the majority viewport has
-   failed on the majority viewport. So the ramp and the encroachment both
-   survive: three plates at 46 / 66 / 88vw, the first inset two rails inside
-   both rules, the second and third flush to the glass and therefore across the
-   right-hand rule, and then the fourth — on dark, and the only frame that
-   takes the whole page.
-
-       plate 1     46vw   179 × 239   inside both rules
-       plate 2     66vw   257 × 343   right edge 390, crosses the rule by 22
-       plate 3     88vw   343 × 458   right edge 390, crosses the rule by 22
-       movement 4  100vw   390 × 519   no margin left, and it moves
-
-   STATED PLAINLY BECAUSE THE PREVIOUS VERSION OF THIS TABLE OVERCLAIMED IT:
-   plates 2 and 3 cross the right-hand rule by the SAME 22px, because both are
-   flush to the glass and the rule stands one rail inside it. Below 900 the
-   encroachment is a yes/no — plate 1 inside, plates 2 and 3 out — and what
-   steps at every rung is the SIZE: 239 → 343 → 458 → 519px tall, each ≥ 14%
-   over the last. The first build put plates 3 and 4 both at exactly 390 × 520,
-   so the ladder flatlined at the last rung on the majority viewport; it no
-   longer does. The rung the rule measures and the rung the size measures are
-   different rungs, and saying otherwise was the kind of claim the render does
-   not deliver.
-
-   (measured at 390. The rem caps hold the same run at 304 / 432 / 576 with a
-   768 × 1024 fourth frame on a portrait tablet, where 88vw on its own would be
-   a 676 × 901 plate and the section would run to 4.2 screens.)
-
-   `display: contents` on the two containers is what lets each term's paragraph
-   follow its own photograph here while the pictures and the paragraphs stay in
-   separate rows of a spread above 900. The alternative was rendering the copy
-   twice, which is how a section ends up shipping two versions of a sentence. */
-@media (max-width: 899px) {
-  .sx3a-paper {
-    display: flex;
-    flex-direction: column;
-  }
-  .sx3a-band,
-  .sx3a-terms {
-    display: contents;
-  }
-  .sx3a-eyebrow {
-    order: 0;
-  }
-  .sx3a-lead {
-    order: 1;
-    padding-inline: var(--rail);
-    margin-bottom: clamp(1.6rem, 6vw, 2.6rem);
-  }
-  .sx3a-frame--1 {
-    order: 2;
-    /* two rails, not one: at one rail the frame's edge lands exactly ON the
-       margin hairline and the plate stops looking as though it is inside
-       anything. */
-    margin-left: calc(var(--rail) * 2);
-  }
-  .sx3a-said--1 {
-    order: 3;
-  }
-  .sx3a-frame--2 {
-    order: 4;
-    margin-left: auto;
-  }
-  .sx3a-said--2 {
-    order: 5;
-  }
-  .sx3a-frame--3 {
-    order: 6;
-    margin-left: auto;
-  }
-  .sx3a-said--3 {
-    order: 7;
-  }
-  .sx3a-said {
-    padding-inline: var(--rail);
-    padding-block: clamp(1.1rem, 4.5vw, 1.8rem) clamp(1.8rem, 7vw, 3rem);
-  }
+.sx3a-spread + .sx3a-spread {
+  margin-top: var(--sx3a-gap);
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   MOVEMENT 4 — TRANSMISSION.
+.sx3a-spread--tradition { --g: var(--sx3a-g1); }
+.sx3a-spread--practice  { --g: var(--sx3a-g2); }
+.sx3a-spread--inquiry   { --g: var(--sx3a-g3); }
 
-   No paper, no rules, no margin: one dark room with an upright frame standing
-   in it, flush to the right edge with no gutter at all. Same 3 : 4 shape as the
-   other three, and LARGER THAN ANY OF THEM at every width — the ramp's last
-   rung — but the thing that makes it the fourth term is not its size. It is
-   that the ground has turned, the type has gone white, and the picture moves.
-
-   TEXT IS ON THE GROUND, NOT ON THE PICTURE. Cream on #12201A is 15.79:1 as a
-   constant; a scrim over a moving frame is a ratio that changes every frame and
-   every viewport, which is how this site has failed contrast before.
-   ══════════════════════════════════════════════════════════════════════════ */
-
-/* THE LAST RUNG, AND WHY IT IS EXPRESSED IN VIEWPORT UNITS RATHER THAN IN THE
-   RAMP'S OWN STEP. The three plates carry their widths as custom properties on
-   themselves, so the dark stage — a sibling two levels up — cannot read plate
-   3's height out of them without restating the ramp. Restating it is exactly
-   the duplication that broke `sizes` on the last build.
-
-   So it is written against the viewport instead and VERIFIED by measurement
-   rather than by derivation. Frame height against plate 3's height, which is
-   the claim "larger than all three", at every viewport this project tests plus
-   the two that nearly broke it:
-
-      320×568    426 / 376 ✓      1199×800    704 / 671 ✓
-      390×844    519 / 458 ✓      1280×720    742 / 717 ✓
-      768×1024   832 / 768 ✓      1399×900    811 / 783 ✓
-      900×800    702 / 504 ✓      1440×900    835 / 806 ✓
-      1000×800   704 / 560 ✓      1600×900    928 / 896 ✓
-      1024×768   676 / 573 ✓      1920×900   1056 / 1024 ✓
-      1100×800   704 / 616 ✓      2531×1140  1056 / 1024 ✓
-
-   The 58vw leg exists for 1280×720 and 1920×900, where a short viewport makes
-   `88svh` smaller than plate 3 — the two viewports where a height-only rule
-   silently inverts the ramp. The cap exists so a 2531 monitor does not produce
-   a 1,468px frame. Both were found by sweeping the range and putting the
-   numbers in a table, not by looking at one screen. The narrowest margin here
-   is 1280×720 at +3.5%, and it is left thin on purpose: the fourth term is not
-   the fourth term because it is bigger.
-
-   THE CAP IS 80rem, NOT 66rem, AND THAT IS THE ONE THING THIS ROUND CHANGED
-   ABOUT THE FOURTH MOVEMENT. A review called A's 2531 screen the emptiest
-   desktop screen in the comparison, and at 66rem it still was: the frame was
-   792 of 2,531px (31%), the words 576 (23%), and 1,163px — 46% of the screen —
-   was bare ground carrying nothing. Measured at 2531 the cap now gives a
-   960 × 1,280 frame, so the picture takes 38% and the bare field falls to
-   931px. The cap binds only above 2,207px, where `58vw` overtakes 80rem:
-   every viewport from 320 to 2,206 renders byte-identical to before, which is
-   why the rest of this table still reads true. A 1,280px frame is 140px taller
-   than a 1,140px screen, which is deliberate — above 2.2K the fourth frame is
-   the one thing on the page you cannot take in at a glance. */
-.sx3a-move-stage {
+.sx3a-pair {
   position: relative;
   display: grid;
-  align-items: center;
-  padding-block: clamp(2rem, 3vw, 3rem);
-  column-gap: clamp(2rem, 4vw, 4rem);
-
-  /* ONE DECLARATION OF THE FRAME'S SIZE, READ BY THE FRAME AND BY ITS GRID TRACK.
-     It used to be written only on `.sx3a-move__frame`, and the track was `minmax(0, auto)`
-     — i.e. sized from the FIGURE's max-content, which is the wider of the picture and the
-     caption. The caption is wider. Measured, the track came out 674px at 1440 against a
-     626px picture and 572px at 1024 against a 507px picture, and because the figure is
-     `align-items: flex-start` the surplus was spent on the right: the photograph stopped
-     48px short of the glass at 1440 and 65px short at 1024, with the caption alone running
-     on to the edge underneath it. A dark strip down the right of the one frame that is
-     supposed to have no margin left — visible in the render, and invisible in the source,
-     because nothing in the source mentions a width at all. With the height declared here
-     the track is `calc(--mv-h * 3 / 4)` and the caption wraps inside the picture's width,
-     which is what this file already claimed the caption did. */
-  --mv-h: max(min(88svh, 78vw), min(58vw, 80rem));
+  grid-template-columns: minmax(0, 1fr) var(--g) minmax(0, 1fr);
+  align-items: end;
 }
+.sx3a-pair::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-0.5px);
+  background: var(--sx3a-line);
+}
+.sx3a-spread--practice .sx3a-pair { align-items: start; }
+.sx3a-spread--inquiry .sx3a-pair  { align-items: center; }
 
-.sx3a-move {
-  position: relative;
+.sx3a-plate {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  /* START, NOT END, and the difference is the whole of a bug.
-     Its column is the last track and the stage has no right padding, so wherever
-     the track can hold the frame, start and end put it in exactly the same place:
-     flush to the viewport edge. Where the track is SQUEEZED — below about 1100px,
-     once the words have taken their 23rem floor — the two differ completely.
-     `end` pins the frame's right edge to the track and pushes the overflow out of
-     its LEFT side, straight across the paragraph: at 900×800 the last word of four
-     lines and the whole caption were underneath the photograph. `start` pins the
-     left edge and sends the same overflow off the right of the screen, where there
-     is nothing but more of a picture that is bleeding off that edge anyway. */
+  min-width: 0;
+}
+.sx3a-plate--verso {
+  grid-column: 1;
+  justify-self: end;
+}
+.sx3a-plate--recto {
+  grid-column: 3;
   justify-self: start;
 }
-.sx3a-move__frame {
+
+/* a phone: every plate is sized by its page, and each spread's smaller plate is 78% */
+.sx3a-plate {
+  width: 100%;
+}
+.sx3a-spread--tradition .sx3a-plate--recto,
+.sx3a-spread--practice .sx3a-plate--verso {
+  width: 78%;
+}
+
+/* THE APERTURE CLIPS; THE FIGURE IS WHAT IS OBSERVED. An observed element that
+   clips to nothing never intersects, and that shipped a blank page on this site. */
+.sx3a-plate__ap,
+.sx3a-cross__ap {
   position: relative;
   overflow: hidden;
-  background: #0c1712;
-  aspect-ratio: 3 / 4;
-  height: var(--mv-h);
+  background: var(--ground-warm);
 }
-.sx3a-move__still,
-.sx3a-move__vid {
+.sx3a-plate__ap {
+  aspect-ratio: var(--ar-n, var(--ar));
+}
+.sx3a-plate__img,
+.sx3a-plate__film {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* the same enlargement as the three plates, applied to BOTH layers so the still and
-     the clip are the identical crop and the swap between them is invisible */
-  transform: scale(var(--z, 1));
-  transform-origin: var(--zo, 50% 50%);
+  object-position: var(--op-n, var(--op, 50% 50%));
 }
-.sx3a-move__vid {
+.sx3a-plate__ap picture,
+.sx3a-cross__ap picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sx3a-plate__film {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 700ms var(--ease);
+  transition: opacity 0.7s var(--ease);
 }
-/* NO `poster` attribute anywhere: a visible <img> sits beneath this video, and a
-   poster is fetched even when `src` is never set. That cost this site 948 KB on
-   every device once already. The <img> IS the poster. */
-.sx3a-move.is-playing .sx3a-move__vid {
+.sx3a-plate__film.is-playing {
   opacity: 1;
 }
+
+/* ── the words beneath each spread ───────────────────────────────────── */
+.sx3a-words {
+  margin-top: clamp(1.4rem, 2.6vw, 2.3rem);
+}
+.sx3a-name {
+  margin: 0 0 0.7rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 1.1rem + 2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.014em;
+  color: var(--ink);
+}
+.sx3a-body {
+  margin: 0;
+  max-width: 33rem;
+  font-family: var(--font-text);
+  font-size: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+/* ── Transmission: one frame across the spine ─────────────────────────── */
+.sx3a-spread--transmission {
+  --tw: 87.72vw;
+}
+/* On a phone the frame bleeds off the RECTO edge, the teacher's side. Its left edge
+   is placed so the spine (the page centre) falls at --sx3a-cross of its width:
+     left = 50vw - 0.43W and right = 100vw, so W = 50vw / 0.57 = 87.72vw. */
+.sx3a-cross {
+  position: relative;
+  margin: 0;
+  width: var(--tw);
+  margin-left: calc(50% - var(--tw) * var(--sx3a-cross));
+}
+.sx3a-cross__ap {
+  aspect-ratio: 2 / 3;
+}
+.sx3a-cross .sx3a-plate__img,
+.sx3a-cross .sx3a-plate__film {
+  object-position: var(--op-n, var(--op, 50% 0%));
+}
+
+/* THE LAST OF THE GUTTER. Paper, the width of Inquiry's gutter, with the spine's
+   line through its middle. Closed (scaleX 0) by default: the finished state. */
+.sx3a-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--sx3a-cross) * 100%);
+  width: var(--sx3a-g3);
+  background: var(--ground);
+  transform: translateX(-50%) scaleX(var(--sx3a-open, 0));
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+.sx3a-seam::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-0.5px);
+  background: var(--sx3a-line);
+}
+
+/* ══ 720px and up: pages side by side, words either side of the spine ══════ */
+@media (min-width: 720px) {
+  .sx3a {
+    /* one height unit for every plate. Height-led, so a short laptop is not
+       handed a column of pictures taller than its screen. */
+    --sx3a-u: min(64svh, 42vw, 40rem);
+    /* the fourth frame: nearly the height of the screen, and capped for tall ones */
+    --sx3a-th: min(94svh, 93vw, 66rem);
+  }
+
+  .sx3a-open {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sx3a-g1) minmax(0, 1fr);
+    align-items: start;
+  }
+  .sx3a-open__verso {
+    grid-column: 1;
+  }
+  .sx3a-lead {
+    grid-column: 3;
+  }
+
+  .sx3a-spine {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-0.5px);
+    background: var(--sx3a-line);
+    pointer-events: none;
+  }
+  .sx3a-pair::before {
+    content: none;
+  }
+
+  .sx3a-plate,
+  .sx3a-spread--tradition .sx3a-plate--recto,
+  .sx3a-spread--practice .sx3a-plate--verso {
+    width: min(100%, calc(var(--h) * var(--ar)));
+  }
+  .sx3a-plate__ap {
+    aspect-ratio: var(--ar);
+  }
+  .sx3a-plate__img,
+  .sx3a-plate__film {
+    object-position: var(--op, 50% 50%);
+  }
+
+  /* heights: the pairs converge. Big against small, then small against big, then equal. */
+  .sx3a-spread--tradition .sx3a-plate--verso { --h: var(--sx3a-u); }
+  .sx3a-spread--tradition .sx3a-plate--recto { --h: calc(var(--sx3a-u) * 0.5); }
+  .sx3a-spread--practice .sx3a-plate--verso  { --h: calc(var(--sx3a-u) * 0.62); }
+  .sx3a-spread--practice .sx3a-plate--recto  { --h: var(--sx3a-u); }
+  .sx3a-spread--inquiry .sx3a-plate          { --h: calc(var(--sx3a-u) * 0.8); }
+
+
+
+  /* Where a page is full, the words straddle the spine beneath the pictures: the name
+     ends at it and the paragraph begins at it. From 1000px, Tradition and Practice
+     move their words up into the page beside the smaller plate instead (below). */
+  .sx3a-words {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max(var(--g, 0px), var(--sx3a-tgap)) minmax(0, 1fr);
+    align-items: baseline;
+  }
+  .sx3a-name {
+    grid-column: 1;
+    justify-self: end;
+    margin: 0;
+    text-align: right;
+  }
+  .sx3a-body {
+    grid-column: 3;
+    max-width: 31rem;
+  }
+
+  .sx3a-spread--transmission {
+    --tw: calc(var(--sx3a-th) * 0.75);
+    --g: var(--sx3a-g3);
+  }
+  .sx3a-cross__ap {
+    aspect-ratio: 3 / 4;
+  }
+  .sx3a-cross .sx3a-plate__img,
+  .sx3a-cross .sx3a-plate__film {
+    object-position: var(--op, 50% 0%);
+  }
+}
+
+/* ══ 1000px and up: Tradition and Practice become magazine spreads ══════════ */
+@media (min-width: 1000px) {
+  /* THE FIRST TWO SPREADS ARE MAGAZINE SPREADS. The tall plate owns one page; the other
+     page carries the words at its head and the small plate at its foot, both hugging
+     the spine. Tradition puts the tall plate on the verso; Practice mirrors it. The pair
+     wrapper dissolves so all three become cells of one grid about the spine. */
+  .sx3a-spread--tradition,
+  .sx3a-spread--practice {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--g) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: clamp(1.4rem, 2.4vw, 2.2rem);
+  }
+  .sx3a-spread--tradition .sx3a-pair,
+  .sx3a-spread--practice .sx3a-pair {
+    display: contents;
+  }
+  .sx3a-spread--tradition .sx3a-plate--verso { grid-column: 1; grid-row: 1 / 3; align-self: end; }
+  .sx3a-spread--tradition .sx3a-words        { grid-column: 3; grid-row: 1; align-self: start; }
+  .sx3a-spread--tradition .sx3a-plate--recto { grid-column: 3; grid-row: 2; align-self: end; }
+  .sx3a-spread--practice .sx3a-words         { grid-column: 1; grid-row: 1; align-self: start; justify-self: end; }
+  .sx3a-spread--practice .sx3a-plate--verso  { grid-column: 1; grid-row: 2; align-self: end; }
+  .sx3a-spread--practice .sx3a-plate--recto  { grid-column: 3; grid-row: 1 / 3; align-self: start; }
+
+  .sx3a-spread--tradition .sx3a-words,
+  .sx3a-spread--practice .sx3a-words {
+    margin: 0;
+    width: min(100%, 30rem);
+  }
+
+  .sx3a-spread--tradition .sx3a-words,
+  .sx3a-spread--practice .sx3a-words {
+    display: block;
+  }
+  .sx3a-spread--tradition .sx3a-name,
+  .sx3a-spread--practice .sx3a-name {
+    justify-self: auto;
+    margin: 0 0 0.7rem;
+    text-align: left;
+  }
+  .sx3a-spread--tradition .sx3a-body,
+  .sx3a-spread--practice .sx3a-body {
+    max-width: none;
+  }
+}
+
+/* ══ 1200px and up: the Transmission words move into the frame's own margin ══════
+   Left of the frame there is a whole verso of paper (347px at 1440, 520px at 2531).
+   The name and paragraph stand in it at the foot of the frame, like a caption set
+   beside a plate, so the fourth spread is ONE picture and its words on one screen. */
+@media (min-width: 1200px) {
+  .sx3a-spread--transmission {
+    position: relative;
+  }
+  .sx3a-spread--transmission .sx3a-words {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    width: calc(50% - var(--tw) * var(--sx3a-cross) - var(--sx3a-tgap));
+    margin: 0;
+  }
+  /* justify-self applies in block layout too, and `end` would shrink the heading to its
+     text and push it right, off the paragraph's left edge */
+  .sx3a-spread--transmission .sx3a-name {
+    justify-self: auto;
+    margin: 0 0 0.7rem;
+    text-align: left;
+  }
+  .sx3a-spread--transmission .sx3a-body {
+    max-width: 26rem;
+  }
+}
+
+/* ══ the reveal. Opt-in through .is-live, which Sx3aMotion adds only when motion is
+   allowed, so a reader whose JavaScript never arrives keeps everything painted. ══ */
+.sx3a.is-live [data-sx='verso'],
+.sx3a.is-live [data-sx='recto'],
+.sx3a.is-live [data-sx='words'],
+.sx3a.is-live [data-sx='cross'] {
+  opacity: 0;
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.15s var(--ease);
+}
+/* the two sides arrive from the outer edges and come to face each other */
+.sx3a.is-live [data-sx='verso'] { transform: translateX(-2.4vw); }
+.sx3a.is-live [data-sx='recto'] { transform: translateX(2.4vw); transition-delay: 90ms; }
+.sx3a.is-live [data-sx='words'] { transform: translateY(18px); transition-delay: 140ms; }
+.sx3a.is-live [data-sx].in {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .sx3a-move__vid {
+  .sx3a.is-live [data-sx] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .sx3a-seam {
+    transform: translateX(-50%) scaleX(0);
+  }
+  .sx3a-plate__film {
     display: none;
   }
 }
 
-.sx3a-huge {
-  margin: 0 0 0.42em;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-size: var(--sx3a-huge);
-  line-height: 0.95;
-  letter-spacing: -0.028em;
-  color: var(--ink-onDark); /* 15.79:1 on --ground-deep */
-}
-.sx3a-move-said .sx3a-body {
-  color: var(--ink-onDark-soft); /* composites to #BABBB5 → 8.6:1 */
-  max-width: 44ch; /* the house measure, on the one paragraph that has room for it */
-}
-.sx3a-move-said {
-  position: relative;
-  z-index: 1;
-  max-width: 36rem;
-}
-
-/* THE PROVENANCE LINE, FLUSH TO THE FRAME IT NAMES.
-   It is a <figcaption> inside the <figure>, sitting 11px under the picture, and
-   it says what is IN the picture. A caption that floats hundreds of pixels from
-   its photograph is not a caption, and one that explains the layout is not a
-   caption either — it is a designer talking about the design. */
-.sx3a-cap {
-  margin: 0.7rem 0 0;
-  display: flex;
-  gap: 0.7em;
-  align-items: baseline;
-  /* the frame's own width, not a character count: a caption is bound to its picture,
-     and at 44ch this one broke to three lines under a 626px frame */
-  max-width: 100%;
-  font-size: var(--sx3a-small);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-onDark-soft);
-}
-.sx3a-cap::before {
-  content: '';
-  flex: 0 0 18px;
-  height: 1px;
-  background: var(--sand);
-  transform: translateY(-4px);
-}
-
-@media (min-width: 900px) {
-  /* THE TEXT TRACK HAS A FLOOR AND THE PICTURE DOES NOT.
-     `minmax(0, 1fr)` let the frame take whatever it wanted and left the words with
-     316px at 1024×768 — where "Transmission" alone is wider than that. The block
-     is `justify-self: end`, so the overflow went off the LEFT of the screen and
-     `overflow-x: clip` on the dark ground swallowed it silently: the heading read
-     "ransmission", the paragraph lost its first two characters on every line, and
-     BOTH the horizontal-overflow check and the contrast probe reported clean,
-     because clipped glyphs are not painted and a clipped page does not scroll.
-     Only looking at the render found it.
-
-     With a 23rem floor the words are never squeezed; where that leaves the frame
-     no room, the frame runs past the right edge and is clipped instead — which is
-     the same thing plate 3 already does on purpose, and it costs a picture that is
-     bleeding off that edge anyway 30–50px of its least important side. */
-  .sx3a-move-stage {
-    grid-template-columns: minmax(min(100%, 23rem), 1fr) calc(var(--mv-h) * 3 / 4);
-    padding-left: var(--gut);
-    padding-right: 0;
-  }
-  /* THE WORDS HOLD THE MARGIN THE PAPER NO LONGER DRAWS.
-     This was `end`, which pinned the text block to the picture and left every pixel of
-     slack in one stranded field on the far left: measured at 2531 the words ran 992→1507
-     and 992px — 39% of the screen — of dark ground carried nothing at all, which is the
-     same shape of defect a review called the emptiest desktop screen in the comparison.
-
-     `start` puts the block's left edge on `--gut`, which is the exact figure the paper's
-     left-hand margin rule stands on two movements above: "Transmission" now begins on the
-     same vertical as "Rooted in tradition.", 60px at 1440 and 530px at 2531. The margin is
-     no longer drawn — that is what changed when the paper ended — but the type still
-     keeps it, and the slack becomes an ordinary gutter between a column and a picture
-     (191px at 1440, 465px at 2531) instead of a field beside nothing.
-
-     It cannot reintroduce the overflow this file already fixed: that bug was `end` on the
-     FIGURE, whose track has no right padding, and the figure is still `start`. The text's
-     track carries a 23rem floor, so below about 1,100px the track is exactly the floor and
-     start and end resolve to the same pixel anyway. */
-  .sx3a-move-said {
-    justify-self: start;
-  }
-}
-@media (max-width: 899px) {
-  .sx3a-move-stage {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: clamp(1.6rem, 6vw, 2.6rem);
-  }
-  .sx3a-move-said {
-    padding-inline: var(--rail);
-    order: 2;
-  }
-  .sx3a-move {
-    order: 1;
-    width: 100%;
-  }
-  .sx3a-move__frame {
-    width: 100%;
-    /* 100% of the row, NOT 100vw: `vw` includes the classic scrollbar, so a
-       full-bleed element sized in vw is 15px of horizontal overflow on any
-       desktop browser that still paints one. */
-    /* the 52rem leg is for 768 portrait, where 86svh alone would be 881px */
-    height: min(86svh, 133vw, 52rem);
-    aspect-ratio: auto;
-  }
-  .sx3a-cap {
-    padding-inline: var(--rail);
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   REVEALS — the house primitive, namespaced.
-
-   Opt-in through `.is-live`, which Sx3aMotion adds only after its first frame
-   has run. A reader whose JavaScript never arrives keeps the whole section,
-   because nothing already painted is hidden by CSS that is not gated on that
-   class. The three plates rise onto the drawn floor as it is drawn, 90ms apart,
-   which is the only place the motion has anything to do with the idea — and
-   with motion off they are simply already standing on it.
-   ══════════════════════════════════════════════════════════════════════════ */
-.sx3a.is-live [data-sx] {
-  opacity: 0;
-  transform: translateY(22px);
-}
-.sx3a.is-live [data-sx='fade'] {
-  transform: none;
-}
-.sx3a.is-live [data-sx].in {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.85s var(--ease),
-    transform 1.05s var(--ease);
-  transition-delay: var(--sx3a-d, 0ms);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sx3a [data-sx] {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  .sx3a * {
-    animation: none !important;
-  }
-}
-
-/* ── the ground the preview needs so spacing reads true ───────────────────
-   NOT part of the section, and labelled so that nobody reads these two lines as
-   captions: they are the seam §03 has to survive at each end. */
+/* ══ the preview scaffold (not the section) ══════════════════════════════ */
 .sx3a-tail {
-  background: var(--ground);
-  min-height: 70svh;
-  padding-block: clamp(4rem, 9vw, 8rem);
+  min-height: 60svh;
+  padding-block: 4rem;
+  background: var(--ground-warm);
 }
-.sx3a-head {
-  background: var(--ground-deep);
-  color: var(--ink-onDark);
-  min-height: 46svh;
-  display: grid;
-  align-content: end;
-  padding-block: clamp(6rem, 14vw, 10rem) clamp(2.5rem, 6vw, 4rem);
-}
-.sx3a-head p,
 .sx3a-tail p {
   margin: 0;
-  font-size: var(--sx3a-small);
-  letter-spacing: 0.08em;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-}
-.sx3a-tail p {
   color: var(--ink-soft);
-}
-.sx3a-head p {
-  color: var(--ink-onDark-soft);
 }
 .sx3a-scaffold {
   display: inline-block;
-  margin-right: 0.7em;
-  padding: 0.25em 0.6em;
-  border: 1px dashed currentColor;
-  opacity: 0.75;
-  font-size: 0.86em;
+  margin-right: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
 }

@@ -1,113 +1,63 @@
 /**
- * PREVIEW sx2c — the five plates of §01.
+ * sx2c — the ONE photograph in this section, and why it is this one.
  *
- * WHY FIVE, AND WHY THESE FIVE. Round 2's critique was unanimous on the diet: 18.3% media
- * coverage at 390 and 28.7% at 1440 against the home page's 102.8% / 94.0%, "1.5-2.5x
- * thinner than the other three", with 527 KB of 745 KB in a single file. Three plates on
- * one card is a handsome object; it is not an Introduction's worth of pictures. The section
- * the copy asks for is "a vast body of knowledge — encompassing practice, philosophy,
- * self-observation, discipline and ways of understanding life," and one room shown three
- * times is not a picture of that.
+ * The section is a concordance: all five of the client's sentences contain the word
+ * "practice", and they are set on one vertical axis through it. The axis is a photograph
+ * the proportion of a yoga mat (about 1:3), standing on end down the middle of the page.
+ * So the frame has to hold together as a tall, narrow strip — which rules out almost the
+ * whole archive, because nearly every practice frame is a horizontal body or a diagonal
+ * row, and a 1:3 slice of a diagonal is an arm and some floor.
  *
- * So five frames, five different practices, five different places — and NOT five copies of
- * one room (the failure mode both critics named in a and d: "a mechanic that shows that one
- * room more and more fully argues the opposite of the sentence directly above it").
+ * Every candidate was cropped to 1:3 at the position it would actually be shown at and
+ * looked at, not read about:
+ *   · pr-pbh-img_5746 (headstand over a chair) — q4 and 2560 wide, but at 1:3 the lower
+ *     third is an empty black folding chair in the foreground, and a chair as the subject
+ *     is one of the four ways this project has already failed a frame.
+ *   · pr-mov-img_5681 poster (headstand with a teacher standing by) — the truest story,
+ *     but both figures sit in the middle third; the strip's top is a wall notice and its
+ *     bottom is floor, so the strip reads as a room with people in it, not as a line.
+ *   · pr-pbh-img_5416 / _5618 / pr-ttc-dsc_0274 — receding rows. Beautiful whole, and
+ *     every one of them is a diagonal, so a vertical slice cuts the row into fragments.
+ *   · pr-pbh-img_5538 — CHOSEN. One woman on her shoulders on a bolster, legs straight
+ *     up, feet at the top of the frame and her head on the mat at the bottom: a single
+ *     body that IS a vertical line from one end of the strip to the other, beside a wall
+ *     of hanging practice ropes that are themselves vertical threads. It is the practice
+ *     on the mat, stood on end.
  *
- *   I    pr-ttc-dsc_0404   seated side stretch on the grass — three figures, outdoors, low
- *   II   pr-ttc-dsc_0459   tree pose and a standing balance at the laterite wall
- *   III  pr-ttc-dsc_0302_1 five in tree pose on the concrete apron — THE PROTECTED FRAME.
- *        Both critics named it the best-composed photograph in the tournament (per-fifth
- *        detail 48.6 / 41.8 / 40.6 / 39.2 / 30.2; 4% flat tiles, 2.5x better filled than
- *        the next best frame anywhere). It is kept, and it is now the largest single plate
- *        in the section rather than one of three equals.
- *   IV   pr-ttc-dsc_0347   four under the banyan
- *   V    pr-ttc-dsc_0510   inverted on the wall ropes — the TTC venue's own red floor,
- *        indoors, which nothing else here carries
+ * Its flaws, stated because they are true: the manifest rates it q3 for a slightly muddy
+ * yellow cast; there is a blue block on the floor at the lower left of the strip; and her
+ * face is visible, upside down, near the bottom — a documentary frame of practice, on the
+ * same basis the approved About sections publish faces. Nobody is named. The plastic stool
+ * and its printed label, which another concept flagged in this frame, sit at x < 0.16 and
+ * are outside every crop this section makes (the narrowest strip spans 0.22 – 0.66).
  *
- * GONE: pr-ttc-dsc_0195_1. Critic 1 measured it 53% flat tiles as this build's plate II and
- * listed it as a frame that "MUST NOT SURVIVE ... as any design's anchor frame"; critic 2
- * measured its top fifth at detail 8.9-10.7 / saturation 5.5-5.9%. Half the frame is bare
- * wall. It is not replaced by a better crop of itself; it is replaced.
+ * Derivatives on disk: 480, 960, 1920 (960 × 1280 is 127 KB). The strip is `object-fit:
+ * cover` in a box far taller than it is wide, so the picture is scaled by HEIGHT — the
+ * decoded width must be ~0.75 × the strip's height, not the strip's width. The `sizes` in
+ * Introduction.tsx says so, measured: the mat is 813px tall at 760 (needs ~610px of
+ * image, so 640px is declared rather than 58vw, which picked the 480 and upscaled it),
+ * and the phone plate is 1 : 1.88 so its image renders at 1.41 × the plate's width.
  *
- * CHECKED, in this order, for all five: none is one of the four forbidden ids (_0209 /
- * _0193 / _0215 / _0217); none appears anywhere in the shipped site — grepped across
- * components/ and app/ excluding preview/, which returns none of them; each was LOOKED AT
- * at 960px, not merely read about, and none has a folding chair, an air cooler, a speaker
- * stand or a ceiling fan as its subject. V has chairs in it; what it is a photograph of is
- * three people inverted on wall ropes.
- *
- * NO CAPTION STATES A COUNT THAT THE RENDER CANNOT CARRY. Every plate is shown at 3/2 — the
- * source's own ratio — so the crop is the whole frame at every breakpoint and a count true
- * in the file is true on the screen. Where a partial figure enters at an edge (V has an arm
- * and a leg at the right), the caption names no number at all.
+ * Unused anywhere on the site at the time of writing (grepped components/ and app/).
  */
-
-export type Sx2cPlate = {
-  /** the still's id; files live at /media/stills/<id>-<w>.webp */
+export type Frame = {
   id: string;
-  /** every derivative that exists. Checked per frame — none of these reaches 2560. */
   widths: number[];
-  /** the plate's number in the section's own numbering */
-  numeral: string;
-  /** what a reader who cannot see it is told. Written from the rendered crop. */
+  /** object-position, desktop strip */
+  pos: string;
+  /** object-position for the phone plate */
+  posNarrow: string;
   alt: string;
-  /** what is in the plate. It names the practice, never the framing and never the props. */
-  caption: string;
-  /**
-   * `sizes` is the box, stated exactly. Every plate's width is a declared fraction of the
-   * viewport at both tiers — 28 / 44 / 60 / 50 / 50 vw at >= 64rem and 52 / 68 / 84 / 100 /
-   * 100 vw below it — because the step ladder IS percentages of the viewport. So `sizes` is
-   * not an estimate here; it is the same number the grid uses.
-   */
-  sizes: string;
 };
 
-const S = (wide: number, narrow: number) => `(max-width: 63.99rem) ${narrow}vw, ${wide}vw`;
+export const MAT: Frame = {
+  id: 'pr-pbh-img_5538',
+  widths: [480, 960, 1920],
+  pos: '35% 50%',
+  posNarrow: '76% 50%',
+  alt: 'A woman lying with her shoulders on a bolster and her legs raised straight up, beside a wall hung with practice ropes',
+};
 
-export const PLATES: readonly Sx2cPlate[] = [
-  {
-    id: 'pr-ttc-dsc_0404',
-    widths: [480, 960, 1620],
-    numeral: 'I',
-    alt: 'Three women sitting cross-legged on grass under trees, each with one arm bent over the head in a seated side stretch',
-    caption: 'Three in a seated side stretch on the grass.',
-    sizes: S(28, 52),
-  },
-  {
-    id: 'pr-ttc-dsc_0459',
-    widths: [480, 960, 1620],
-    numeral: 'II',
-    alt: 'Three women balancing against a laterite brick wall, two in tree pose with palms joined overhead and one holding a raised foot out in front',
-    caption: 'Tree pose and a standing balance at the laterite wall.',
-    sizes: S(44, 68),
-  },
-  {
-    id: 'pr-ttc-dsc_0302_1',
-    widths: [480, 960, 1620],
-    numeral: 'III',
-    alt: 'Five women standing in tree pose with palms joined overhead on a concrete apron, a banyan and bamboo behind them',
-    caption: 'Five in tree pose on a concrete apron under the trees.',
-    sizes: S(60, 84),
-  },
-  {
-    id: 'pr-ttc-dsc_0347',
-    widths: [480, 960, 1620],
-    numeral: 'IV',
-    alt: 'Four women practising beneath a banyan, two bending sideways with arms overhead, one standing with arms raised and one seated with palms joined',
-    caption: 'Four under the banyan, one seated at the centre.',
-    sizes: S(50, 100),
-  },
-  {
-    id: 'pr-ttc-dsc_0510',
-    widths: [480, 960, 1620],
-    numeral: 'V',
-    alt: 'Practitioners hanging inverted from wall ropes with legs spread wide, hands reaching to the red floor of the hall',
-    caption: 'Inverted on the wall ropes, hands to the floor.',
-    sizes: S(50, 100),
-  },
-];
-
-export const srcSetFor = (p: Sx2cPlate) =>
-  p.widths.map((w) => `/media/stills/${p.id}-${w}.webp ${w}w`).join(', ');
-
-export const srcFor = (p: Sx2cPlate) => `/media/stills/${p.id}-960.webp`;
+export const src = (f: Frame, w = f.widths[1]) => `/media/stills/${f.id}-${w}.webp`;
+export const srcSet = (f: Frame) =>
+  f.widths.map((w) => `/media/stills/${f.id}-${w}.webp ${w}w`).join(', ');

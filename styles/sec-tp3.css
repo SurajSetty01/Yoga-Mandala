@@ -1,0 +1,303 @@
+/* Final tp3 section. Every selector is namespaced .tp3- */
+
+/* ── 02 · REGULAR PRACTICE — four nouns, four steps closer ───────────────────
+   Still state (no JS, reduced motion, or a viewport too short to pin): the
+   sentence, then the four frames in a row, each at its own crop with its own
+   corners. Live state (.tp3-live, added by Tp3Motion): a pinned stage, the
+   four frames stacked in one window, the lit noun decides which one shows. */
+
+.tp3 {
+  --tp3-rail: var(--rail, clamp(1.35rem, 4.2vw, 4.25rem));
+  /* 4.8:1 on --ground-warm: the unlit words of the sentence */
+  --tp3-mute: #6e645c;
+  --tp3-cream: rgba(251, 247, 242, 0.94);
+  --tp3-in: 6%;
+  position: relative;
+  background: var(--ground-warm);
+  color: var(--ink);
+  padding-block: clamp(4.5rem, 9vw, 8.5rem);
+  overflow-x: clip;
+}
+
+.tp3-stage {
+  max-width: calc(1560px + 2 * var(--tp3-rail));
+  margin-inline: auto;
+  padding-inline: var(--tp3-rail);
+}
+
+/* the register mark, to the letter of the rest of the page */
+.tp3-eyebrow {
+  margin: 0 0 clamp(1.25rem, 3vw, 2.25rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.tp3-eyebrow-n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.tp3-eyebrow-rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+}
+
+.tp3-line {
+  margin: 0;
+  max-width: 21ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 380;
+  font-size: clamp(1.8rem, 4.4vw, 4.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.016em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.tp3-term {
+  background-image: linear-gradient(var(--clay), var(--clay));
+  background-repeat: no-repeat;
+  background-position: 0 94%;
+  background-size: 0% 0.055em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ── the frames, still: a row of four (two up on a phone) ── */
+.tp3-frames {
+  margin-top: clamp(2.2rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.4rem, 2.4vw, 2.6rem) clamp(0.75rem, 1.8vw, 2rem);
+}
+@media (min-width: 900px) {
+  .tp3-frames {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.tp3-fig {
+  margin: 0;
+  min-width: 0;
+}
+.tp3-win {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--sandstone);
+}
+.tp3-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--tp3-o);
+  transform: scale(var(--tp3-s));
+  transform-origin: var(--tp3-o);
+}
+
+/* the viewfinder: four corners drawn with eight gradients on one box */
+.tp3-marks,
+.tp3-view::before {
+  --a: clamp(14px, 1.5vw, 26px);
+  --t: 1.5px;
+  position: absolute;
+  pointer-events: none;
+  color: var(--tp3-cream);
+  background:
+    linear-gradient(currentColor, currentColor) 0 0 / var(--a) var(--t),
+    linear-gradient(currentColor, currentColor) 0 0 / var(--t) var(--a),
+    linear-gradient(currentColor, currentColor) 100% 0 / var(--a) var(--t),
+    linear-gradient(currentColor, currentColor) 100% 0 / var(--t) var(--a),
+    linear-gradient(currentColor, currentColor) 0 100% / var(--a) var(--t),
+    linear-gradient(currentColor, currentColor) 0 100% / var(--t) var(--a),
+    linear-gradient(currentColor, currentColor) 100% 100% / var(--a) var(--t),
+    linear-gradient(currentColor, currentColor) 100% 100% / var(--t) var(--a);
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 0 1.5px rgba(16, 12, 10, 0.55));
+}
+.tp3-marks {
+  inset: var(--tp3-mark);
+}
+.tp3-view {
+  display: none;
+}
+
+.tp3-cap {
+  margin: 0.8rem 0 0;
+  max-width: 42ch;
+  font: 400 clamp(0.8rem, 0.85vw, 0.9rem) / 1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+.tp3-cap-term {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: 1.3em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+/* ── live: the pinned stage ──────────────────────────────────────────────── */
+@media (min-height: 34rem) {
+  .tp3.tp3-live {
+    padding-block: 0;
+  }
+  .tp3-live .tp3-run {
+    height: 300svh;
+  }
+  .tp3-live .tp3-stage {
+    --tp3-wh: min(calc((100vw - 2 * var(--tp3-rail)) * 4 / 3), calc(100svh - 21rem));
+    --tp3-ww: calc(var(--tp3-wh) * 3 / 4);
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    padding-top: clamp(5.5rem, 12svh, 7.5rem);
+    padding-bottom: 1.25rem;
+  }
+  .tp3-live .tp3-line {
+    font-size: clamp(1.7rem, 7.4vw, 2.6rem);
+    color: var(--tp3-mute);
+  }
+  .tp3-live .tp3-term.is-on {
+    color: var(--ink);
+    background-size: 100% 0.055em;
+    transition: background-size 0.7s var(--ease);
+  }
+
+  .tp3-live .tp3-frames {
+    margin-top: clamp(1.1rem, 2.6svh, 1.8rem);
+    grid-template-columns: minmax(0, var(--tp3-ww));
+    gap: 0;
+    justify-content: start;
+  }
+  .tp3-live .tp3-fig,
+  .tp3-live .tp3-view {
+    grid-area: 1 / 1;
+    align-self: start;
+    width: min(var(--tp3-ww), 100%);
+  }
+  .tp3-live .tp3-fig {
+    position: relative;
+  }
+  .tp3-live .tp3-fig.is-on {
+    z-index: 1;
+  }
+  .tp3-live .tp3-win {
+    width: 100%;
+    height: var(--tp3-wh);
+    aspect-ratio: auto;
+  }
+
+  /* THE CUT. No transition: the frame is simply there. Opacity sits on the
+     picture and on the caption themselves, never on a parent, so nothing that
+     measures text ever meets a caption it cannot see. */
+  .tp3-live .tp3-fig:not(.is-on) .tp3-img,
+  .tp3-live .tp3-fig:not(.is-on) .tp3-cap {
+    opacity: 0;
+  }
+  .tp3-live .tp3-fig.is-on .tp3-img {
+    animation: tp3-settle 6s var(--ease) both;
+  }
+  .tp3-live .tp3-marks,
+  .tp3-live .tp3-cap-term {
+    display: none;
+  }
+
+  /* one viewfinder over the window; its corners glide in as the cuts close in,
+     and open to the edges on "time" */
+  .tp3-live .tp3-view {
+    display: block;
+    position: relative;
+    z-index: 2;
+    height: var(--tp3-wh);
+    pointer-events: none;
+  }
+  .tp3-live .tp3-view::before {
+    content: '';
+    inset: var(--tp3-in);
+    transition: inset 0.6s var(--ease);
+  }
+  .tp3-live[data-step='1'] {
+    --tp3-in: 11%;
+  }
+  .tp3-live[data-step='2'] {
+    --tp3-in: 16%;
+  }
+  .tp3-live[data-step='3'] {
+    --tp3-in: 3%;
+  }
+}
+
+@media (min-width: 900px) and (min-height: 34rem) {
+  .tp3-live .tp3-stage {
+    --tp3-wh: min(calc(100svh - 12.5rem), calc(44vw * 4 / 3));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--tp3-ww);
+    column-gap: clamp(2rem, 5vw, 6.5rem);
+    align-content: start;
+  }
+  .tp3-live .tp3-copy {
+    container-type: inline-size;
+    height: var(--tp3-wh);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .tp3-live .tp3-eyebrow {
+    margin-bottom: 0;
+  }
+  /* one demand to a line, sized so the longest line fills the column: the lit
+     noun walks down the stack as the frames close in */
+  .tp3-live .tp3-line {
+    max-width: none;
+    font-size: min(7.2rem, 12.2cqi);
+    line-height: 1.04;
+  }
+  .tp3-live .tp3-seg {
+    display: block;
+  }
+  .tp3-live .tp3-frames {
+    margin-top: 0;
+  }
+}
+
+@keyframes tp3-settle {
+  from {
+    transform: scale(var(--tp3-s));
+  }
+  to {
+    transform: scale(calc(var(--tp3-s) * 1.035));
+  }
+}
+
+/* ── verification route only: the neighbours' grounds ── */
+.tp3-scaffold {
+  display: grid;
+  place-items: center;
+  min-height: 70svh;
+  padding: 6rem 1.25rem;
+  font: 500 14px/1.4 var(--font-text);
+  text-align: center;
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.tp3-scaffold--deep {
+  min-height: 120svh;
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+}

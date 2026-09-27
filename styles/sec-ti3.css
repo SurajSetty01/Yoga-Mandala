@@ -1,0 +1,367 @@
+/* Final ti3 section. Every selector is namespaced .ti3- */
+
+/* ══ /insights/ 02 · WHEN THERE IS SOMETHING TO READ ═══════════════════════
+   A note is passed round the circle and lands in front of the reader as the
+   button. components/insights/ti3/Told.tsx. The landed state is the default;
+   `.ti3--run` (added by the script, never under reduced motion) adds the
+   journey. */
+
+.ti3 {
+  --ti3-plate: 62rem;
+  --ti3-over: clamp(2rem, 5vw, 4.25rem);   /* how far the slip lands onto the photo */
+  --ti3-slipw: 25rem;
+  position: relative;
+  padding-block: clamp(4.5rem, 8vw, 7.5rem) clamp(4.5rem, 8vw, 7rem);
+  background: var(--ground-warm);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* capped AND centred — max-width alone pins it left at 2531 */
+.ti3-wrap {
+  max-width: calc(var(--ti3-plate) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* the global ring is cream in a dark halo; on this warm ground it inverts */
+.ti3 :focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(251, 247, 242, 0.95);
+  border-radius: 2px;
+}
+
+/* ── the register mark (same construction as the rest of the site) ─────── */
+.ti3-mark {
+  margin: 0 0 clamp(1.4rem, 3vw, 2.2rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.ti3-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.ti3-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: rgba(193, 97, 60, 0.55);
+}
+
+/* ── the invitation ─────────────────────────────────────────────────────── */
+.ti3-head {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+  margin-bottom: clamp(1.75rem, 3.6vw, 2.9rem);
+}
+.ti3-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.7rem, 1.35rem + 4.8vw, 5.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.038em;
+  color: var(--ink);
+}
+.ti3-sub {
+  margin: 0;
+  max-width: 25ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: clamp(1.2rem, 0.98rem + 0.85vw, 1.7rem);
+  line-height: 1.24;
+  letter-spacing: -0.016em;
+  color: var(--ink-soft);
+  text-wrap: balance;
+}
+
+/* ── the circle ─────────────────────────────────────────────────────────── */
+.ti3-fig {
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+/* provenance sits ABOVE the plate's right edge: below it is where the slip lands */
+.ti3-cap {
+  order: -1;
+  justify-self: end;
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  font: 400 11px/1.4 var(--font-text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.ti3-cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--forest);
+  transform: translateY(-4px);
+}
+.ti3-plate {
+  position: relative;
+}
+/* 1620 is the largest file: at 62rem (992px) it is ~1.6x — never full-bleed */
+.ti3-plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 3px;
+  background: #d8cab6;
+}
+.ti3-ring {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* where each hand held the note. Ornament: sand on a dark ring, never text */
+.ti3-dot {
+  position: absolute;
+  --d: clamp(5px, 0.62vw, 7px);
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+  border-radius: 50%;
+  background: var(--sand);
+  box-shadow: 0 0 0 1.5px rgba(18, 32, 26, 0.6);
+  opacity: 0.92;
+  transition:
+    opacity 0.5s var(--ease),
+    transform 0.5s var(--ease);
+}
+.ti3--run .ti3-dot {
+  opacity: 0.3;
+  transform: scale(0.6);
+}
+.ti3--run .ti3-dot.is-lit {
+  opacity: 0.95;
+  transform: none;
+}
+
+/* ── where it lands ─────────────────────────────────────────────────────── */
+.ti3-foot {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: clamp(2rem, 5vw, 2.75rem);
+  margin-top: calc(-1 * var(--ti3-over));
+}
+
+.ti3-slip {
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, var(--ti3-slipw));
+  padding: 1.1rem 1.35rem 1.25rem;
+  background: var(--ground);
+  border: 1px solid rgba(36, 29, 24, 0.12);
+  border-radius: 2px;
+  box-shadow:
+    0 1px 0 rgba(36, 29, 24, 0.05),
+    0 24px 46px -24px rgba(18, 32, 26, 0.5);
+  transform-origin: 50% 50%;
+}
+.ti3--run:not(.ti3--landed) .ti3-slip {
+  will-change: transform;
+}
+.ti3-slip__top {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(36, 29, 24, 0.12);
+  font: 600 10.5px/1.3 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+/* the message is typed text, so it is set in the text face */
+.ti3-slip__msg {
+  margin: 0.95rem 0 1.15rem;
+  font: 400 clamp(1rem, 0.94rem + 0.25vw, 1.1rem) / 1.5 var(--font-text);
+  color: var(--ink);
+}
+.ti3-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--forest);
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.15rem + 1vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+}
+/* the whole slip is the target */
+.ti3-cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.ti3-cta:hover {
+  border-bottom-color: var(--ink);
+}
+.ti3-cta__arw {
+  flex: none;
+  transition: transform 0.35s var(--ease);
+}
+.ti3-cta:hover .ti3-cta__arw,
+.ti3-cta:focus-visible .ti3-cta__arw {
+  transform: translateX(5px);
+}
+.ti3-slip__fine {
+  margin: 1rem 0 0;
+  font: 400 13px/1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ── the quieter lines ──────────────────────────────────────────────────── */
+.ti3-also {
+  justify-self: stretch;
+  max-width: 34rem;
+  font: 400 15px/1.6 var(--font-text);
+  color: var(--ink-soft);
+}
+.ti3-also p {
+  margin: 0;
+}
+.ti3-also__k {
+  margin-bottom: 0.45rem !important;
+  font: 600 10.5px/1.3 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.ti3-also__p {
+  color: var(--ink);
+}
+.ti3-also__go {
+  margin-top: 0.55rem !important;
+}
+.ti3-go {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid var(--forest);
+  color: var(--forest);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+}
+.ti3-go::after {
+  content: '\2192';
+  display: inline-block;
+  font-family: var(--font-text);
+  font-size: 0.85em;
+  transition: transform 0.35s var(--ease);
+}
+.ti3-go:hover::after,
+.ti3-go:focus-visible::after {
+  transform: translateX(4px);
+}
+.ti3-also__end {
+  margin-top: 1.4rem !important;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(36, 29, 24, 0.14);
+  font-size: 14px;
+}
+.ti3-ilink {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(193, 97, 60, 0.6);
+  text-decoration-thickness: 1px;
+}
+.ti3-ilink:hover {
+  text-decoration-color: var(--forest);
+}
+
+/* ── wide: invitation in two columns; slip centred on the open side, the
+      quieter lines beside it ─────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .ti3-head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    column-gap: 3rem;
+  }
+  .ti3-sub {
+    justify-self: end;
+    padding-bottom: 0.35rem;
+  }
+  .ti3-foot {
+    grid-template-columns: minmax(0, 1fr) var(--ti3-slipw) minmax(0, 1fr);
+    justify-items: stretch;
+    align-items: start;
+    column-gap: clamp(1.5rem, 2.6vw, 2.5rem);
+  }
+  .ti3-slip {
+    grid-column: 2;
+    width: 100%;
+  }
+  .ti3-also {
+    grid-column: 3;
+    padding-top: calc(var(--ti3-over) + 1.4rem);
+  }
+  /* wide, provenance moves under the plate's left edge, balancing the lines on
+     the right; the slip lands between them */
+  .ti3-fig {
+    position: relative;
+  }
+  .ti3-cap {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 1.55rem);
+  }
+}
+
+@media (max-width: 1023px) {
+  .ti3-slip {
+    width: min(calc(100% - 1.5rem), var(--ti3-slipw));
+  }
+  .ti3-also {
+    width: min(100%, var(--ti3-slipw));
+    justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ti3 .ti3-slip {
+    transform: none !important;
+  }
+  .ti3 .ti3-dot {
+    opacity: 0.92 !important;
+    transform: none !important;
+    transition: none;
+  }
+  .ti3-cta__arw,
+  .ti3-go::after {
+    transition: none;
+  }
+}

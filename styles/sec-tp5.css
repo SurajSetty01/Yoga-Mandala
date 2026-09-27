@@ -1,0 +1,244 @@
+/* Final tp5 section. Every selector is namespaced .tp5- */
+
+/* ── 04 · PRĀṆĀYĀMA — only the air moves ─────────────────────────────────────
+   The section is the height between a canopy and the ground. The leaves hang
+   from the top edge (no top padding), the seated group stands on the bottom
+   edge (no bottom padding), and the word is in the air between. The only
+   motion is the clip's own loop; nothing is scroll-linked, so reduced motion
+   changes nothing but the leaves, which then hold still on their first frame.
+
+   Object-position selectors are (0,2,0) on purpose: /practice/'s `.pc img`
+   and `.pc video` (0,1,1) would otherwise re-centre both crops — and a
+   centred crop of the clip puts the wasp nest in the window. */
+
+.tp5 {
+  --tp5-rail: var(--rail, clamp(1.35rem, 4.2vw, 4.25rem));
+  position: relative;
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+/* margins on the two figures are (0,2,0): /practice/'s `.pc figure` (0,1,1)
+   zeroes them otherwise, which pins the capped ground to the left at 2531 */
+
+.tp5-rail {
+  max-width: calc(92rem + 2 * var(--tp5-rail));
+  margin-inline: auto;
+  padding-inline: var(--tp5-rail);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ── the register mark, to the letter of the rest of the page ── */
+.tp5-eyebrow {
+  margin: clamp(2rem, 6vw, 2.75rem) 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+}
+.tp5-eyebrow-n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.tp5-eyebrow-rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--clay);
+}
+
+/* ── the canopy: a 3:2 window pinned to the TOP of a 9:16 clip ──
+   3:2 over 9:16 shows 37.5% of the frame height; y 0% makes that 0-37.5%.
+   The nest is at 51-67%. Never change the aspect below 1.25:1 or the y. */
+.tp5 .tp5-air {
+  order: -1;
+  /* on a phone the canopy runs to both edges */
+  margin: 0 calc(-1 * var(--tp5-rail));
+}
+.tp5-air-win {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--forest-deep);
+}
+.tp5 .tp5-air-img,
+.tp5 .tp5-air-vid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 0%;
+  /* The source is a chartreuse macro with clipped highlights; brought down
+     toward the forest and clay of the palette, never hue-shifted. */
+  filter: saturate(0.74) brightness(0.93) contrast(1.04);
+}
+.tp5 .tp5-air-vid {
+  opacity: 0;
+  transition: opacity 0.9s var(--ease, ease);
+}
+.tp5 .tp5-air-vid.is-live {
+  opacity: 1;
+}
+
+.tp5-cap {
+  margin: 0.8rem 0 0;
+  padding-inline: var(--tp5-rail);
+  font: 400 clamp(0.86rem, 0.83rem + 0.16vw, 0.95rem) / 1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ── the word in the air, and the honest mark under it ── */
+.tp5-mid {
+  margin-top: clamp(2.2rem, 6vw, 3.4rem);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+.tp5-word {
+  margin: 0;
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(2.75rem, 16.5vw, 10.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--forest);
+  /* the macron and the dot below both need room inside the line box */
+  padding-block: 0.08em 0.1em;
+}
+.tp5-ask {
+  margin: clamp(1.2rem, 2.6vw, 2rem) 0 0;
+  max-width: 40ch;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  font: 400 clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.tp5-ask-note {
+  display: block;
+  padding-top: clamp(0.9rem, 1.8vw, 1.2rem);
+  background: linear-gradient(var(--clay), var(--clay)) top center / 3rem 1px no-repeat;
+}
+.tp5-ask-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font: 600 clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem) / 1.3 var(--font-text);
+  text-decoration: none;
+  color: var(--forest);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+.tp5-ask-arw {
+  flex: none;
+  transition: transform 0.3s var(--ease, ease);
+}
+.tp5-ask-link:hover .tp5-ask-arw,
+.tp5-ask-link:focus-visible .tp5-ask-arw {
+  transform: translateX(3px);
+}
+.tp5 :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the ground: the seated group, standing on the section's bottom edge ── */
+.tp5 .tp5-ground {
+  margin: clamp(2.8rem, 7vw, 5rem) auto 0;
+  width: min(100%, 1620px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.tp5 .tp5-ground-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* a tablet in portrait: the canopy stops bleeding and hangs centred */
+@media (min-width: 640px) {
+  .tp5 .tp5-air {
+    margin-inline: auto;
+    width: min(100%, 36rem);
+  }
+  .tp5-cap {
+    padding-inline: 0;
+  }
+  .tp5 .tp5-ground {
+    aspect-ratio: 16 / 9;
+  }
+  .tp5 .tp5-ground-img {
+    object-position: 50% 82%;
+  }
+}
+
+/* ── desktop: the register mark beside the hanging canopy ──
+   Three columns, the canopy in the middle one, so the eyebrow holds the page
+   rail on the left while the leaves hang on the section's axis. */
+@media (min-width: 900px) {
+  .tp5-rail {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: start;
+  }
+  .tp5-eyebrow {
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: clamp(3.5rem, 7vw, 6.5rem);
+  }
+  .tp5 .tp5-air {
+    grid-column: 2;
+    grid-row: 1;
+    width: clamp(15rem, 10rem + 20vw, 32rem);
+  }
+  .tp5-cap {
+    text-align: center;
+  }
+  .tp5-mid {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .tp5 .tp5-ground {
+    aspect-ratio: 12 / 5;
+  }
+  .tp5 .tp5-ground-img {
+    object-position: 50% 90%;
+  }
+}
+@media (min-width: 1100px) {
+  .tp5 .tp5-ground {
+    aspect-ratio: 3 / 1;
+  }
+  .tp5 .tp5-ground-img {
+    object-position: 50% 88%;
+  }
+}
+
+/* ── verification route only (app/preview/tp5): the neighbours' grounds ── */
+.tp5-scaffold {
+  padding: clamp(4rem, 12vw, 9rem) var(--rail, 1.35rem);
+  background: #12201a;
+  color: rgba(251, 247, 242, 0.9);
+  font: 500 12px/1.4 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.tp5-scaffold p {
+  margin: 0 auto;
+  max-width: 92rem;
+}

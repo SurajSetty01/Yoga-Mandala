@@ -1,0 +1,415 @@
+/* Final sx8 section. Every selector is namespaced .sx8- */
+/* ══════════════════════════════════════════════════════════════════════════
+   FINAL sx8 — About §08 PRAṆAVA & SEVA. "Rings spread from one person."
+
+   One person at a chair sits in a small disc. Six hairline rings spread out
+   from her, one at a time, each reaching the initiative written where it
+   crosses the axis beneath her. Ring six's band holds a seated gathering. The
+   seventh, widest ring is the mandala, in Yoga Mandala's terracotta; it
+   carries the Yoga Mandala sentence and the plate that links to it.
+
+   GEOMETRY. Everything is measured from her centre in one unit, --k, so the
+   rings, the labels and the band stay concentric at every width. Only the
+   lower half of each ring is drawn: the field is clipped at her horizontal.
+
+   MOTION. CSS scroll-driven only, and only under no-preference + @supports.
+   Each ring runs on the view timeline of its own label, so it arrives at its
+   word as the word comes up the screen. The words themselves never animate.
+   Without it (reduced motion, no support) every ring is simply drawn.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx8-seva {
+  --k: clamp(40px, 4.4vw, 64px);
+  --r0: calc(1.75 * var(--k));
+  --r1: calc(2.6 * var(--k));
+  --r2: calc(3.6 * var(--k));
+  --r3: calc(4.6 * var(--k));
+  --r4: calc(5.6 * var(--k));
+  --r5: calc(6.6 * var(--k));
+  --r6: calc(9.2 * var(--k));
+  --r7: calc(var(--r6) + 340px);
+  /* the plate: 480 is the frame's own ceiling */
+  --pw: min(480px, calc(100vw - 2 * var(--rail)));
+  --ph: calc(var(--pw) * 0.5625);
+  --cap: 3.25rem;
+  --hair: rgba(34, 69, 47, 0.4);
+  position: relative;
+  padding-block: clamp(4.4rem, 9vw, 8rem) clamp(3.5rem, 7vw, 6rem);
+  background: var(--ground-warm);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+.sx8-rail {
+  box-sizing: border-box;
+  width: 100%;
+  /* the page measure (.apr-rail), so 08's label sits on the same left edge as 07's and 09's */
+  max-width: calc(var(--apr-max, 92rem) + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the head ─────────────────────────────────────────────────────────── */
+.sx8-head {
+  display: grid;
+  row-gap: clamp(1.4rem, 3vw, 2rem);
+}
+.sx8-head__mark .apr-eyebrow {
+  margin: 0;
+}
+.sx8-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.15rem, 1.2rem + 3.5vw, 4.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.sx8-body p {
+  margin: 0;
+  max-width: 34rem;
+  font: 400 clamp(1rem, 0.95rem + 0.22vw, 1.12rem) / 1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+.sx8-body p + p {
+  margin-top: 0.9em;
+}
+
+@media (min-width: 960px) {
+  .sx8-head {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    column-gap: clamp(2.5rem, 5vw, 6rem);
+    align-items: end;
+  }
+  .sx8-head__mark {
+    grid-column: 1 / -1;
+  }
+  .sx8-body {
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* ── the stage ────────────────────────────────────────────────────────── */
+.sx8-stage {
+  position: relative;
+  margin-top: clamp(3rem, 7vw, 6rem);
+}
+
+.sx8-prompt {
+  margin: 0 auto clamp(1.6rem, 5vw, 2.2rem);
+  padding-inline: var(--rail);
+  max-width: 24rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 1rem + 0.45vw, 1.4rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+/* at desktop the prompt stands on her horizontal, reading into her */
+@media (min-width: 960px) {
+  .sx8-prompt {
+    position: absolute;
+    z-index: 3;
+    top: var(--r0);
+    right: calc(50% + var(--r0) + 2.4rem);
+    width: min(16rem, calc(50% - var(--r0) - 2.4rem - var(--rail)));
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    transform: translateY(-50%);
+  }
+}
+
+.sx8-orbit {
+  position: relative;
+  height: calc(var(--r0) + var(--r7) + var(--ph) / 2 + var(--cap));
+}
+
+/* her */
+.sx8-her {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: calc(50% - var(--r0));
+  width: calc(2 * var(--r0));
+  aspect-ratio: 1;
+  margin: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--sandstone);
+  box-shadow:
+    0 0 0 6px var(--ground-warm),
+    0 0 0 7px var(--hair);
+}
+.sx8-her img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 62%;
+}
+
+/* the field: lower halves only, fading in just below her horizontal */
+.sx8-field {
+  position: absolute;
+  z-index: 0;
+  top: var(--r0);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(1.1 * var(--k)));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 calc(1.1 * var(--k)));
+}
+
+.sx8-ring {
+  position: absolute;
+  box-sizing: border-box;
+  left: calc(50% - var(--r));
+  top: calc(-1 * var(--r));
+  width: calc(2 * var(--r));
+  height: calc(2 * var(--r));
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+}
+.sx8-ring--1 { --r: var(--r1); --from: 0.673; }
+.sx8-ring--2 { --r: var(--r2); --from: 0.486; }
+.sx8-ring--3 { --r: var(--r3); --from: 0.38; }
+.sx8-ring--4 { --r: var(--r4); --from: 0.3125; }
+.sx8-ring--5 { --r: var(--r5); --from: 0.265; }
+.sx8-ring--6 { --r: var(--r6); --from: 0.19; }
+
+/* the mandala: the widest ring, doubled, in Yoga Mandala's own terracotta
+   (a hairline only, never text) */
+.sx8-ring--7 {
+  --r: var(--r7);
+  /* a short travel: a longer one would sweep through the sentence it carries */
+  --from: 0.965;
+  border: 1.5px solid var(--clay);
+}
+.sx8-ring--7::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 1px solid var(--clay);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* ring six's band, holding the gathering */
+.sx8-band {
+  position: absolute;
+  left: calc(50% - var(--r6));
+  top: calc(-1 * var(--r6));
+  width: calc(2 * var(--r6));
+  height: calc(2 * var(--r6));
+  overflow: hidden;
+  border-radius: 50%;
+  -webkit-mask-image: radial-gradient(
+    circle closest-side at 50% 50%,
+    transparent var(--r5),
+    #000 calc(var(--r5) + 1px),
+    #000 calc(var(--r6) - 1px),
+    transparent var(--r6)
+  );
+  mask-image: radial-gradient(
+    circle closest-side at 50% 50%,
+    transparent var(--r5),
+    #000 calc(var(--r5) + 1px),
+    #000 calc(var(--r6) - 1px),
+    transparent var(--r6)
+  );
+}
+/* placed so the row of seated women lies in the band's lowest arc */
+.sx8-band__img {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--r6) + 1.43 * var(--k));
+  width: calc(12.3 * var(--k));
+  height: auto;
+  max-width: none;
+  transform: translateX(-50%);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 17%, #000 83%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 17%, #000 83%, transparent);
+}
+
+/* the six initiatives, each where its ring crosses the axis beneath her */
+.sx8-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sx8-list__item {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: calc(var(--r0) + var(--r));
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+.sx8-list__item span {
+  display: block;
+  padding: 0.28em 0.85em;
+  background: var(--ground-warm);
+  font: 500 clamp(13.5px, 12.4px + 0.3vw, 16.5px) / 1.3 var(--font-text);
+  letter-spacing: 0.005em;
+  color: var(--ink);
+}
+.sx8-list__item--1 { --r: var(--r1); }
+.sx8-list__item--2 { --r: var(--r2); }
+.sx8-list__item--3 { --r: var(--r3); }
+.sx8-list__item--4 { --r: var(--r4); }
+.sx8-list__item--5 { --r: var(--r5); }
+.sx8-list__item--6 { --r: var(--r6); }
+
+/* the sentence the seventh ring carries, standing just above its plate */
+.sx8-mandala {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: calc(var(--ph) + var(--cap) + clamp(1.4rem, 3vw, 2rem));
+  width: min(34rem, calc(100% - 2 * var(--rail)));
+  margin: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  text-wrap: pretty;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 0.95rem + 0.55vw, 1.42rem);
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* the plate, hung on the seventh ring: its picture is centred on the ring */
+.sx8-plate {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: calc(var(--r0) + var(--r7) - var(--ph) / 2);
+  width: var(--pw);
+  transform: translateX(-50%);
+  display: block;
+  color: var(--clay-deep);
+  text-decoration: none;
+}
+.sx8-plate__frame {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--sandstone);
+  box-shadow: 0 0 0 7px var(--ground-warm);
+}
+.sx8-plate__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease, ease);
+}
+.sx8-plate__go {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  height: var(--cap);
+  background: var(--ground-warm);
+  font: 600 13px/1 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.sx8-plate__go svg {
+  transition: transform 0.35s var(--ease, ease);
+}
+.sx8-plate:hover .sx8-plate__go svg,
+.sx8-plate:focus-visible .sx8-plate__go svg {
+  transform: translateX(4px);
+}
+.sx8-plate:hover .sx8-plate__frame img {
+  transform: scale(1.03);
+}
+
+/* ── the spread ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .sx8-orbit {
+      timeline-scope: --sx8-t1, --sx8-t2, --sx8-t3, --sx8-t4, --sx8-t5, --sx8-t6, --sx8-t7;
+    }
+    .sx8-list__item--1 { view-timeline-name: --sx8-t1; }
+    .sx8-list__item--2 { view-timeline-name: --sx8-t2; }
+    .sx8-list__item--3 { view-timeline-name: --sx8-t3; }
+    .sx8-list__item--4 { view-timeline-name: --sx8-t4; }
+    .sx8-list__item--5 { view-timeline-name: --sx8-t5; }
+    .sx8-list__item--6 { view-timeline-name: --sx8-t6; }
+    .sx8-mandala { view-timeline-name: --sx8-t7; }
+
+    .sx8-ring,
+    .sx8-band {
+      animation: sx8-spread linear both;
+      animation-range: entry 0% cover 45%;
+    }
+    .sx8-ring--1 { animation-timeline: --sx8-t1; }
+    .sx8-ring--2 { animation-timeline: --sx8-t2; }
+    .sx8-ring--3 { animation-timeline: --sx8-t3; }
+    .sx8-ring--4 { animation-timeline: --sx8-t4; }
+    .sx8-ring--5 { animation-timeline: --sx8-t5; }
+    .sx8-ring--6 { animation-timeline: --sx8-t6; }
+    .sx8-band {
+      --from: 0.717;
+      animation-timeline: --sx8-t6;
+      animation-range: entry 0% cover 50%;
+    }
+    .sx8-ring--7 {
+      animation-timeline: --sx8-t7;
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
+@keyframes sx8-spread {
+  from {
+    transform: scale(var(--from, 0.5));
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── the verification route's neighbours (app/preview/sx8 only) ──────── */
+.sx8-scaffold {
+  padding: clamp(3.5rem, 8vw, 6rem) var(--rail);
+  background: var(--ground-deep);
+  color: var(--ink-onDark-soft);
+  font: 400 13px/1.5 var(--font-text);
+  text-align: center;
+}
+.sx8-scaffold p {
+  margin: 0;
+}
+.sx8-scaffold__tag {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-onDark);
+}
+.sx8-scaffold--below {
+  min-height: 100svh;
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.sx8-scaffold--below .sx8-scaffold__tag {
+  color: var(--ink);
+}

@@ -1,0 +1,387 @@
+/* Final tl5 section. Every selector is namespaced .tl5- */
+
+/* ══ 04 · THE REGISTER WRITES THE ENQUIRY ═════════════════════════════════
+   One column of names, one slip. Choosing a name rewrites the slip's
+   message and the one button sends exactly that. The slip lies on the red
+   approach in a photograph of the place, never beside a name.
+   ════════════════════════════════════════════════════════════════════════ */
+
+.tl5 {
+  --tl5-rail: clamp(1.35rem, 4.2vw, 4.25rem);
+  --tl5-stem: 0.48;
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  padding: clamp(4.5rem, 12svh, 9.5rem) 0 clamp(5rem, 13svh, 10rem);
+  overflow: clip;
+}
+.tl5-in {
+  width: min(100% - 2 * var(--tl5-rail), 92rem);
+  margin-inline: auto;
+}
+
+.tl5-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(2.6rem, 7svh, 4rem);
+}
+@media (min-width: 900px) {
+  .tl5-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(2.5rem, 5vw, 6.5rem);
+    align-items: start;
+  }
+}
+
+/* ── the column ──────────────────────────────────────────────────────── */
+
+.tl5-head {
+  margin: 0;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--rule-onDark);
+  font: 600 11px/1 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.tl5-names {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tl5-row {
+  position: relative;
+}
+/* the register's ruled line, and over it the chosen row's sand line */
+.tl5-row::before,
+.tl5-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  transform-origin: left center;
+}
+.tl5-row::before {
+  background: var(--rule-onDark);
+}
+.tl5-row::after {
+  background: var(--sand);
+  transform: scaleX(0);
+  transition: transform 0.7s var(--ease);
+}
+.tl5-row[data-on]::after {
+  transform: none;
+}
+
+.tl5-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 11vw, 4.2rem);
+  line-height: 1;
+  letter-spacing: -0.022em;
+  /* the seam only exists if every stem has the same advance */
+  font-kerning: none;
+  font-variant-ligatures: none;
+}
+@media (min-width: 900px) {
+  .tl5-name {
+    font-size: clamp(2.7rem, 5vw, 5.25rem);
+  }
+}
+.tl5-pick {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  width: 100%;
+  padding: clamp(0.8rem, 2.1svh, 1.45rem) 0 clamp(0.7rem, 1.8svh, 1.2rem);
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.tl5-pick:focus-visible {
+  outline: 2px solid #fbf7f2;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(var(--shade), 0.92);
+  border-radius: 3px;
+}
+.tl5-stem {
+  opacity: var(--tl5-stem);
+  transition: opacity 0.45s var(--ease);
+}
+.tl5-tail {
+  color: var(--ink-onDark);
+}
+.tl5-name--cat {
+  font-family: var(--font-text);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  letter-spacing: 0;
+}
+.tl5-name--cat .tl5-pick {
+  padding: clamp(1rem, 2.6svh, 1.6rem) 0 clamp(0.9rem, 2.2svh, 1.3rem);
+}
+.tl5-name--cat .tl5-tail {
+  color: var(--ink-onDark-soft);
+  transition: color 0.45s var(--ease);
+}
+.tl5-row[data-on] .tl5-stem {
+  opacity: 1;
+}
+.tl5-row--cat[data-on] .tl5-tail {
+  color: var(--ink-onDark);
+}
+/* the mark that points the chosen name at the slip */
+.tl5-mk {
+  flex: none;
+  margin-left: auto;
+  width: clamp(18px, 1.6vw, 26px);
+  height: auto;
+  color: var(--sand);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.4s var(--ease), transform 0.6s var(--ease);
+}
+.tl5-row[data-on] .tl5-mk {
+  opacity: 1;
+  transform: none;
+}
+/* stacked, the slip is above the column: the mark turns to point up at it */
+@media (max-width: 899.98px) {
+  .tl5-mk {
+    transform: translateY(8px) rotate(-90deg);
+  }
+  .tl5-row[data-on] .tl5-mk {
+    transform: rotate(-90deg);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .tl5-pick:hover .tl5-stem {
+    opacity: 0.78;
+  }
+  .tl5-row[data-on] .tl5-pick:hover .tl5-stem {
+    opacity: 1;
+  }
+  .tl5-name--cat .tl5-pick:hover .tl5-tail {
+    color: var(--ink-onDark);
+  }
+}
+
+/* ── the place, and the slip lying on it ─────────────────────────────── */
+
+.tl5-place {
+  position: relative;
+}
+/* Stacked, the slip goes ABOVE the names, so the message and the list share
+   one screen and a tap visibly rewrites it. DOM order stays names → slip, so
+   the choice precedes the button for keyboard and screen reader; the message
+   is a polite live region either way. */
+@media (max-width: 899.98px) {
+  .tl5-place {
+    order: -1;
+  }
+}
+.tl5-frame {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #1a2b22;
+}
+.tl5-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* the pavilion and the approach, centred on the path */
+  object-position: 53% 52%;
+}
+
+/* In flow, pulled up over the photograph by a width-relative margin, so the
+   slip always starts on the red approach below the pavilion, whatever the
+   width, and the section's height is the slip's real height. */
+.tl5-slip {
+  position: relative;
+  width: min(92%, 34rem);
+  margin: -21% auto 0;
+  padding: clamp(1.25rem, 2.4vw, 2.1rem) clamp(1.2rem, 2.4vw, 2.2rem) clamp(1.3rem, 2.4vw, 2rem);
+  background: var(--ground);
+  color: var(--ink);
+  transform: rotate(-1.1deg);
+  box-shadow:
+    0 26px 48px -22px rgba(0, 0, 0, 0.7),
+    0 2px 6px rgba(0, 0, 0, 0.28);
+}
+@media (min-width: 560px) {
+  .tl5-slip {
+    width: min(66%, 34rem);
+    margin-top: -21%;
+  }
+}
+@media (min-width: 900px) {
+  .tl5-slip {
+    width: min(64%, 36rem);
+    margin-top: -22%;
+  }
+}
+
+.tl5-slip__det {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 clamp(0.9rem, 1.8vw, 1.3rem);
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--rule);
+  font: 600 11px/1 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.tl5-slip__det dt {
+  color: var(--ink-soft);
+}
+.tl5-slip__det dd {
+  margin: 0;
+  color: var(--forest);
+}
+
+.tl5-msg {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2vw, 1.85rem);
+  line-height: 1.28;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+/* upright: the client's names are never set in a face that alters a letter */
+.tl5-slot {
+  color: var(--forest);
+  border-bottom: 1px solid var(--brass);
+}
+.tl5-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.tl5-l {
+  display: inline-block;
+  white-space: pre;
+}
+@keyframes tl5-write {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+}
+.tl5-slot[data-write] .tl5-l {
+  animation: tl5-write 0.55s var(--ease) both;
+  animation-delay: calc(var(--k) * 38ms);
+}
+
+.tl5-send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.2rem;
+  margin-top: clamp(1.2rem, 2.4vw, 1.8rem);
+}
+.tl5-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.3rem;
+  border-radius: 4px;
+  background: var(--forest);
+  color: #fbf7f2;
+  font: 600 14px/1 var(--font-text);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: background-color 0.3s var(--ease);
+}
+.tl5-go svg {
+  transition: transform 0.35s var(--ease);
+}
+.tl5-go:hover {
+  background: var(--forest-mid);
+}
+.tl5-go:hover svg,
+.tl5-go:focus-visible svg {
+  transform: translateX(4px);
+}
+.tl5-go:active {
+  background: var(--forest-deep);
+}
+.tl5-go:focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
+}
+.tl5-via {
+  font: 400 12px/1.3 var(--font-text);
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+/* ── arrival ─────────────────────────────────────────────────────────────
+   Start states exist only under .is-live, which the component sets only when
+   motion is allowed and an observer is watching. Reduced motion never gets
+   them, so it is the finished section from the first paint. */
+
+.tl5.is-live .tl5-head,
+.tl5.is-live .tl5-row {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.tl5.is-live .tl5-row::before,
+.tl5.is-live .tl5-head {
+  transform-origin: left center;
+}
+.tl5.is-live .tl5-row::before {
+  transform: scaleX(0);
+}
+.tl5.is-live .tl5-photo {
+  transform: scale(1.07);
+}
+.tl5.is-live .tl5-slip {
+  opacity: 0;
+  transform: translateY(-34px) rotate(-5deg);
+}
+
+.tl5.is-in .tl5-head,
+.tl5.is-in .tl5-row {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.9s var(--ease) calc(var(--i, 0) * 85ms),
+    transform 1s var(--ease) calc(var(--i, 0) * 85ms);
+}
+.tl5.is-in .tl5-row::before {
+  transform: none;
+  transition: transform 1.1s var(--ease) calc(120ms + var(--i, 0) * 85ms);
+}
+.tl5.is-in .tl5-photo {
+  transform: none;
+  transition: transform 1.8s var(--ease);
+}
+.tl5.is-in .tl5-slip {
+  opacity: 1;
+  transform: rotate(-1.1deg);
+  transition:
+    opacity 0.7s var(--ease) 0.45s,
+    transform 1.1s var(--ease) 0.45s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl5 *,
+  .tl5 *::before,
+  .tl5 *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

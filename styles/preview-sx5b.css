@@ -1,0 +1,565 @@
+/* preview-sx5b — owned solely by /preview/sx5b/. Every selector is .sx5b-*; no other file
+   may declare one, and this file declares nothing outside that prefix.
+
+   ══════════════════════════════════════════════════════════════════════════
+   §05 THE PRAṆAVA JOURNEY — FOUR ROOMS, EACH IN THE DOORWAY OF THE LAST.
+
+   Every photograph has a real opening in it, and the next room stands in it.
+   Scrolling walks you through the opening (JourneyMotion.tsx); without motion
+   the four rooms stand in order, each showing the next through its door.
+   In the walk the four names roll through one clipped window — they are never
+   faded out — and in each hold the room beyond the opening drifts across it.
+
+   THE DEFAULT HERE IS THE STATIC PAGE. `.sx5b--live` is added by the script
+   only when motion is allowed and the viewport can hold the stage; everything
+   under it is the pinned walk. Nothing outside it hides anything.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx5b {
+  /* clearance under the navigation pill: its bottom edge is ≈70px on a phone,
+     ≈80px at 1024 and ≈85px at 1440 — measured on the render; 14–18px of air
+     under it at every width (the first value left 7px at 1024) */
+  --sx5b-nav: clamp(5.25rem, 4.4rem + 2.2vw, 6.75rem);
+  --sx5b-gap: clamp(1.5rem, 3.6vw, 4.5rem);
+  --sx5b-read: clamp(1rem, 0.94rem + 0.3vw, 1.2rem);
+  --sx5b-name: clamp(2.75rem, 1.4rem + 5vw, 6rem);
+  --sx5b-edge: rgba(246, 217, 193, 0.92); /* sand: a hairline, never text */
+
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+  overflow-x: clip;
+}
+
+.sx5b-track {
+  position: relative;
+  padding-block: clamp(4.5rem, 10vw, 9rem);
+}
+
+/* THE MEASURE, CAPPED AND CENTRED. `max-width` alone is invisible at 1440 and
+   hundreds of pixels off-axis at 2531 — that shipped once on this site. */
+.sx5b-frame {
+  position: relative;
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+/* ── the register mark: the home page's object, reversed ─────────────────── */
+.sx5b-eyebrow {
+  margin: 0 0 clamp(2.4rem, 5vw, 4.5rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--ink-onPic-2);
+}
+.sx5b-eyebrow__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-onPic);
+}
+.sx5b-eyebrow__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+
+/* ── the doors, as text ──────────────────────────────────────────────────── */
+.sx5b-doors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(4.5rem, 10vw, 9rem);
+}
+.sx5b-door {
+  display: grid;
+  gap: clamp(1.1rem, 2.4vw, 1.75rem);
+}
+.sx5b-door__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+.sx5b-door__n {
+  flex: none;
+  /* the numeral's own window: in the walk the numerals roll through it with the names */
+  display: block;
+  overflow: hidden;
+  padding: 0.05em 0.12em 0.12em 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.3rem);
+  line-height: 1.1;
+  color: var(--ink-onDark-soft);
+}
+.sx5b-door__nn {
+  display: block;
+}
+.sx5b-door__name {
+  margin: 0;
+  /* the clip is the window the name rolls through when the walk moves; the
+     padding keeps the descenders of "Practice" and "Insights" inside it */
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 340;
+  font-size: var(--sx5b-name);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+.sx5b-door__word {
+  display: block;
+}
+.sx5b-door__foot {
+  display: grid;
+  justify-items: start;
+  gap: 1.1rem;
+  max-width: 30rem;
+}
+.sx5b-door__body {
+  margin: 0;
+  font-size: var(--sx5b-read);
+  line-height: 1.58;
+  color: var(--ink-onPic-2);
+  text-wrap: pretty;
+}
+.sx5b-door__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55em;
+  padding-block: 0.35rem 0.3rem;
+  font: 500 0.98rem/1.3 var(--font-text);
+  letter-spacing: 0.01em;
+  color: var(--ink-onPic);
+  text-decoration: none;
+  border-bottom: 1px solid var(--sand);
+}
+.sx5b-door__arrow {
+  display: inline-block;
+  transition: transform 0.35s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sx5b-door__link:hover .sx5b-door__arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* ── one room, and the rooms beyond its opening ─────────────────────────── */
+.sx5b-still {
+  margin: 0;
+  width: 100%;
+}
+.sx5b-still__frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #0c1712;
+}
+/* what stands in the opening, said in words for the page that does not walk */
+.sx5b-still__cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.7em;
+  margin-top: 0.85rem;
+  font: 500 11px/1.5 var(--font-text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+}
+.sx5b-still__cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--sand);
+  transform: translateY(-3px);
+}
+.sx5b-still__to {
+  color: var(--ink-onPic);
+}
+.sx5b-still__to::before {
+  content: '→';
+  content: '→' / '';
+  margin-right: 0.5em;
+}
+.sx5b-room {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-origin: 0 0;
+}
+.sx5b-img {
+  position: absolute;
+  /* one pixel of overscan on every side, inside the clip: a room that has just been walked
+     into is the product of a ×7 and a ×0.14 transform, and the float residue of that
+     product showed as a 1px line of the ground at the frame's edge */
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  max-width: none;
+  /* the source is 3:4 and so is every box it sits in: nothing is cropped */
+  object-fit: cover;
+}
+/* THE OPENING. A 3:4 hole cut exactly where the photograph's own corridor, alcove or
+   door is, and the room beyond it inside.
+
+   EVERY BOX IN THE NEST IS LAID OUT AT (0,0) AT FULL SIZE, AND PLACED ONLY BY TRANSFORM.
+   The first build positioned the opening with left/top percentages, and Chromium snaps a
+   box's layout offset to the pixel grid BEFORE its transform is applied — so a half-pixel
+   snap inside a room magnified seven times became a 3px seam of the portal's ground along
+   the frame's edge, measured on the render at Practice and Insights. Transforms are
+   composed as matrices and are never snapped; boxes that all start at the origin have no
+   fractional offset to snap. */
+.sx5b-portal {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform-origin: 0 0;
+  transform: translate(calc(var(--hx) * 100%), calc(var(--hy) * 100%)) scale(var(--hs));
+  background: #0c1712;
+}
+.sx5b-room--in {
+  /* placed relative to the opening: its focus on the opening's centre, at MAG× */
+  transform: translate(calc(var(--ox) * 100%), calc(var(--oy) * 100%)) scale(var(--k));
+}
+/* The cut is drawn, not hidden: a sand hairline and a dark one inside it say plainly
+   that this is a room set into a photograph, not a photograph pretending to be one.
+   The opening is a full-size box scaled down, so the line is drawn 1/s thick to land at
+   one pixel. */
+.sx5b-portal__edge {
+  position: absolute;
+  inset: 0;
+  border: calc(1px / var(--hs)) solid var(--sx5b-edge);
+  /* the dark inner hairline, then the shade a lintel throws into a doorway: it is what
+     turns the cut from a print hung on the wall into a way through it */
+  box-shadow:
+    inset 0 0 0 calc(1px / var(--hs)) rgba(16, 12, 10, 0.34),
+    inset 0 calc(7px / var(--hs)) calc(16px / var(--hs)) calc(-2px / var(--hs)) rgba(16, 12, 10, 0.42);
+  pointer-events: none;
+}
+
+.sx5b-aperture {
+  display: none;
+}
+.sx5b-route {
+  display: none;
+}
+
+.sx5b-cap {
+  margin: clamp(3.5rem, 7vw, 6rem) 0 0;
+  font: 500 11px/1.5 var(--font-text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-onDark-soft);
+  display: flex;
+  gap: 0.7em;
+  align-items: baseline;
+}
+.sx5b-cap::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--sand);
+  transform: translateY(-3px);
+}
+
+/* The static page, wide: name and sentence on the left, the room on the right, the
+   four doors descending. The photograph is capped and the row is centred by the frame. */
+@media (min-width: 900px) {
+  .sx5b-door {
+    grid-template-columns: minmax(0, 1fr) min(36vw, 32rem);
+    grid-template-areas:
+      'head still'
+      'foot still';
+    grid-template-rows: 1fr 1fr;
+    column-gap: var(--sx5b-gap);
+    row-gap: 1.75rem;
+  }
+  .sx5b-door__head {
+    grid-area: head;
+    align-self: end;
+  }
+  .sx5b-door__foot {
+    grid-area: foot;
+    align-self: start;
+  }
+  .sx5b-still {
+    grid-area: still;
+  }
+  .sx5b-cap {
+    justify-content: flex-end;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THE WALK — only when JourneyMotion has taken over.
+
+   The stage is pinned for 3.6 screens of scroll. In that length: a short
+   hold on Learn, then three walks each followed by a hold, and a short hold on
+   Insights before the stage lets go. Heights are in svh — the SMALL viewport —
+   so a phone's toolbar sliding in and out never changes the length of the walk
+   (the problem the Pudding's responsive-scrollytelling guide solves with px
+   from innerHeight; svh is the platform's fix for the same thing).
+   ══════════════════════════════════════════════════════════════════════════ */
+.sx5b--live .sx5b-track {
+  height: calc(100svh * 4.6);
+  padding-block: 0;
+}
+.sx5b--live .sx5b-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.sx5b--live .sx5b-frame {
+  height: 100%;
+  /* ── narrow: name above the room, sentence below it ── */
+  --sx5b-name: clamp(2.6rem, 1.6rem + 5vw, 4.5rem);
+  --sx5b-eb: 1.75rem;
+  --sx5b-name-h: calc(var(--sx5b-name) * 1.14);
+  --sx5b-pad: 0.9rem;
+  --sx5b-under: 11.5rem; /* the sentence, the link, the route */
+  --sx5b-ap-w: min(
+    100vw - 2 * var(--rail),
+    (100svh - var(--sx5b-nav) - var(--sx5b-eb) - var(--sx5b-name-h) - 2 * var(--sx5b-pad) - var(--sx5b-under)) * 0.75
+  );
+  --sx5b-ap-h: calc(var(--sx5b-ap-w) * 4 / 3);
+  --sx5b-ap-top: calc(var(--sx5b-nav) + var(--sx5b-eb) + var(--sx5b-name-h) + var(--sx5b-pad));
+  /* the column is the room's width, centred: on a phone that is the rail; on a portrait
+     tablet the room is height-bound and the column would otherwise hug the left edge */
+  --sx5b-col: calc((100% - var(--sx5b-ap-w)) / 2);
+}
+.sx5b--live .sx5b-eyebrow {
+  position: absolute;
+  top: var(--sx5b-nav);
+  left: var(--sx5b-col);
+  margin: 0;
+}
+.sx5b--live .sx5b-still {
+  display: none;
+}
+.sx5b--live .sx5b-doors {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+/* Each door is laid over the whole stage in the same grid, so all four sit in the same
+   place and only the one you are standing at is visible. The rows are sized from the
+   same variables as the aperture, which is what keeps the words and the room aligned. */
+.sx5b--live .sx5b-door {
+  position: absolute;
+  inset: 0 var(--sx5b-col);
+  display: grid;
+  grid-template-rows:
+    calc(var(--sx5b-nav) + var(--sx5b-eb))
+    var(--sx5b-name-h)
+    calc(var(--sx5b-ap-h) + 2 * var(--sx5b-pad))
+    1fr;
+  gap: 0;
+  pointer-events: none;
+}
+.sx5b--live .sx5b-door {
+  /* undo the static page's two-column row: a portrait tablet ≥900 wide matches both */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: none;
+}
+.sx5b--live .sx5b-door__head {
+  grid-area: auto;
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+}
+/* The names and numerals are never faded in the walk — they roll through their clips
+   (JourneyMotion). Before its first frame, every door but Learn waits below the window. */
+.sx5b--live .sx5b-door:not([data-door='0']) .sx5b-door__word,
+.sx5b--live .sx5b-door:not([data-door='0']) .sx5b-door__nn {
+  transform: translateY(120%);
+}
+.sx5b--live .sx5b-door__foot {
+  grid-area: auto;
+  grid-column: 1;
+  grid-row: 4;
+  align-self: start;
+  opacity: 0;
+}
+.sx5b--live .sx5b-door[data-on] .sx5b-door__link {
+  pointer-events: auto;
+}
+/* the resting state before the first frame is written: Learn */
+.sx5b--live .sx5b-door[data-door='0'] .sx5b-door__foot {
+  opacity: 1;
+}
+
+.sx5b--live .sx5b-aperture {
+  display: block;
+  position: absolute;
+  left: var(--sx5b-col);
+  top: var(--sx5b-ap-top);
+  width: var(--sx5b-ap-w);
+  height: var(--sx5b-ap-h);
+  overflow: hidden;
+  background: #0c1712;
+}
+
+.sx5b--live .sx5b-route {
+  position: absolute;
+  left: var(--sx5b-col);
+  right: var(--sx5b-col);
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 500 10.5px/1 var(--font-text);
+  letter-spacing: 0.12em;
+  color: var(--ink-onDark-soft);
+}
+.sx5b-route__line {
+  position: absolute;
+  left: 2.4em;
+  right: 2.4em;
+  top: 50%;
+  height: 1px;
+  background: var(--rule-onDark);
+}
+.sx5b-route__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--sand);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+.sx5b-route__stop {
+  position: relative;
+  padding-inline: 0.5em;
+  background: var(--ground-deep);
+}
+.sx5b-route__stop[data-past] {
+  color: var(--ink-onPic);
+}
+
+.sx5b--live .sx5b-cap {
+  display: none;
+}
+
+/* ── wide: the room on the right, full height; the words on the left ────── */
+@media (min-width: 900px) and (orientation: landscape) {
+  .sx5b--live .sx5b-frame {
+    /* capped where "Practice" would outgrow the words' column at 2531 */
+    --sx5b-name: clamp(3rem, 0.5rem + 8vw, 9rem);
+    --sx5b-foot: 3.25rem;
+    --sx5b-ap-h: min(
+      100svh - var(--sx5b-nav) - var(--sx5b-foot),
+      62.5rem,
+      (100vw - 2 * var(--rail) - var(--sx5b-gap) - 20rem) * 4 / 3
+    );
+    --sx5b-ap-w: calc(var(--sx5b-ap-h) * 0.75);
+    --sx5b-ap-top: var(--sx5b-nav);
+  }
+  .sx5b--live .sx5b-aperture {
+    left: auto;
+    right: var(--rail);
+  }
+  .sx5b--live .sx5b-eyebrow {
+    left: var(--rail);
+  }
+  /* The name sits on ONE line of the stage for all four doors, whatever the length of the
+     sentence under it: all four are stacked in the same place and roll through the same
+     window, and centring name + sentence together moved the window ~15px between Learn
+     (two lines) and Practice (three). The sentence hangs from the name instead. */
+  .sx5b--live .sx5b-door {
+    inset: var(--sx5b-nav) calc(var(--rail) + var(--sx5b-ap-w) + var(--sx5b-gap)) var(--sx5b-foot) var(--rail);
+    grid-template-rows: minmax(0, 0.8fr) auto minmax(0, 1fr);
+    row-gap: clamp(1.4rem, 3.2svh, 2.4rem);
+  }
+  .sx5b--live .sx5b-door__head {
+    grid-row: 2;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .sx5b--live .sx5b-door__foot {
+    grid-row: 3;
+  }
+  .sx5b--live .sx5b-route {
+    left: var(--rail);
+    right: calc(var(--rail) + var(--sx5b-ap-w) + var(--sx5b-gap));
+    bottom: calc(var(--sx5b-foot) + 0.2rem);
+    max-width: 26rem;
+  }
+  .sx5b--live .sx5b-cap {
+    display: flex;
+    position: absolute;
+    right: var(--rail);
+    bottom: 0;
+    height: var(--sx5b-foot);
+    width: var(--sx5b-ap-w);
+    margin: 0;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 10.5px;
+  }
+}
+
+/* ── preview scaffold only: the neighbours' grounds, labelled as such ───── */
+.sx5b-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.sx5b-seam {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 var(--rail) clamp(2rem, 5vw, 3.5rem);
+  max-width: none;
+}
+.sx5b-seam--above {
+  min-height: 100svh;
+  background: var(--ground-warm);
+  color: var(--ink-soft);
+}
+.sx5b-seam--below {
+  min-height: 90svh;
+  align-items: flex-start;
+  padding-top: clamp(2rem, 5vw, 3.5rem);
+  background: var(--ground);
+  color: var(--ink-soft);
+}
+.sx5b-seam__text {
+  width: 100%;
+  max-width: 92rem;
+  margin: 0 auto;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.sx5b-seam__tag {
+  display: inline-block;
+  margin-right: 0.8em;
+  padding: 0.2em 0.6em;
+  border: 1px solid var(--rule);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}

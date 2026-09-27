@@ -1,135 +1,149 @@
+import type { CSSProperties } from 'react';
 import { about } from '@/content/pranava';
-import { site } from '@/content/site';
-import { LEFT, RIGHT, src, srcSet, sizes, type Cell } from './frames';
+import { LEAVES, still } from './frames';
+import { HeroMotion } from './HeroMotion';
 
 /**
- * PRAṆAVA · ABOUT — HERO, concept sx1b.  "THE STILL CENTRE."
+ * PRAṆAVA · ABOUT — HERO, concept sx1b.  "THE BOOK THAT OPENS AS IT IS READ."
  *
- * WHAT HAPPENS: two standing walls of photographs shear past each other — the left wall
- * rising, the right wall falling — while the page's name and its one sentence do not move
- * at all, and a clay hairline lengthens beneath the sentence until it spans the whole gap
- * the two walls are holding open. You are not scrolling past a picture. You are standing
- * still in the one place on the page that is not moving.
+ * WHAT HAPPENS. The page's name stands above a folded book. Its first leaf is already open
+ * and already moving: a man holds a pose while three people watch him - study. As you read
+ * down, the second leaf swings out from behind the first on its hinge and a woman is
+ * working through a movement with a dowel - practice. Then the third swings out from
+ * behind the second: a man at the wall guiding someone down out of an inversion -
+ * transmission. Each noun in the sentence above is struck in brass the moment its leaf
+ * opens, so the sentence and the book are read together, at one pace, by one scroll. At
+ * the end the book stands open in a zigzag on the floor of the section and the stage lets
+ * go; the supporting paragraph is waiting beneath it.
  *
- * ONE SCREEN, PLUS A FIFTH. The section is 100svh with motion off and 120svh with it on:
- * a single screen of composition and 20svh of runway, and every pixel of that runway moves
- * both walls and lengthens the rule. There is no interval in which nothing changes.
+ * WHY A FOLDING BOOK. The sentence is a definition - "a space for the study, practice and
+ * transmission of Yoga and India's living knowledge traditions" - and its last word is
+ * transmission: knowledge handed on in order, one opening at a time. A concertina is the
+ * oldest book form that does exactly that, and the storyteller's kavad of Rajasthan is the
+ * Indian one: hinged panels opened in sequence as the story is told, the innermost last.
+ * The scroll is the storyteller's hand. Nothing on the page says so - it is a model for
+ * the motion, not a claim - and nothing on the page states a fact the client did not.
  *
- * NO JAVASCRIPT AT ALL. Every word, every photograph and every alt is in the static HTML;
- * the shear is a native CSS scroll-driven animation on a named view timeline. Disable
- * scripting and the page is byte-identical. The previous version of this section shipped
- * two MP4s and an IntersectionObserver to attach them; both are gone, and with them
- * 5,075 KB that was transferred identically at 320 and at 2531.
+ * WITH MOTION OFF the book is simply open: three leaves standing in a zigzag on the floor,
+ * each with its still and its folio, every noun already struck, every word in the flow.
+ * That is the finished state and it is the default in the stylesheet; the closed start
+ * state exists only under `.js` AND `prefers-reduced-motion: no-preference`. JavaScript
+ * disabled and reduced motion render the same complete section.
  *
- * NO TEXT SITS ON A PHOTOGRAPH, at any viewport, at any scroll position. The channel is
- * paper on the wide layout and a full-bleed paper band on the narrow one — not a card laid
- * over a gallery — so contrast is a property of the structure rather than a function of the
- * crop, which is the trap DESIGN-SYSTEM §1 was written about.
+ * WORDS. Every sentence is read out of content/pranava.ts. The sub is split on its own
+ * three nouns with a capturing regex, so the pieces concatenate back to the client's
+ * sentence character for character. The eyebrow is the centre's own full name, sliced out
+ * of about.what.body[0] - "Pranava – Center for Indian Culture & Yogic Studies was
+ * established ..." - between its dash and "was established". It is not retyped.
  *
- * COPY is verbatim from content/pranava.ts (`about.hero`) and content/site.ts. The eyebrow
- * is the client's own descriptor from their lockup, not a label invented for the page; there
- * is no caption anywhere in the section, and nothing here is a count, a date, a fee or a
- * name the client has not supplied.
+ * THE ONE h1 ON THE PAGE is here.
  */
+const { heading, sub, support } = about.hero;
 
-/**
- * One cell. `echo` marks a REPEAT of a photograph that is already described once in this
- * wall: it carries the same two URLs, so it costs no transfer, and it is hidden from the
- * accessibility tree with an empty alt so the same picture is not announced twice.
- */
-function Plate({ cell, eager, echo }: { cell: Cell; eager?: boolean; echo?: boolean }) {
-  return (
-    <figure className="sx1b-cell" aria-hidden={echo || undefined}>
-      <img
-        src={src(cell)}
-        srcSet={srcSet(cell)}
-        sizes={sizes(cell)}
-        alt={echo ? '' : cell.alt}
-        loading={eager ? 'eager' : 'lazy'}
-        decoding={eager ? 'sync' : 'async'}
-        style={{ '--sx1b-op': cell.pos } as React.CSSProperties}
-      />
-    </figure>
-  );
+/** "Center for Indian Culture & Yogic Studies", cut from the client's own sentence. */
+function centreName(): string | null {
+  const s = about.what.body[0];
+  const from = s.indexOf('–');
+  const to = s.indexOf(' was established');
+  if (from < 0 || to < 0 || to <= from) return null;
+  return s.slice(from + 1, to).trim();
 }
 
-/**
- * A WALL IS FOUR CELLS OF TWO PHOTOGRAPHS, ALTERNATING, so that there is always another
- * picture where the wall is about to travel and no scroll position can expose paper at
- * either end. The stylesheet's run note has the measurement that forced this.
- *
- * The two walls differ only in where the run is parked, and that is done in CSS: the
- * rising wall sits at the top of its window with three cells of run below it, the falling
- * wall is parked one whole cell high so it has a cell in hand above. The consequence here
- * is the ORDER — the falling wall leads with its second frame so that, once the run is
- * shifted up by one cell, the photograph standing whole in the window at rest is still
- * `cells[0]` for both walls.
- *
- * `slots` therefore says, for each of the four boxes, which frame goes in it and whether
- * this is the described instance or an echo. `eager` marks the two boxes that are in the
- * window before a pixel is scrolled: at 320×568 only one cell per wall is in the window at
- * rest, and this is what makes the phone fetch what it can actually see first rather than
- * the frame a reader meets last.
- */
-function Wall({ side, cells }: { side: 'l' | 'r'; cells: readonly [Cell, Cell] }) {
-  const [a, b] = cells;
-  const slots =
-    side === 'l'
-      ? [
-          { c: a, echo: false, eager: true },
-          { c: b, echo: false, eager: true },
-          { c: a, echo: true, eager: false },
-          { c: b, echo: true, eager: false },
-        ]
-      : [
-          { c: b, echo: true, eager: false },
-          { c: a, echo: false, eager: true },
-          { c: b, echo: false, eager: true },
-          { c: a, echo: true, eager: false },
-        ];
-
+/** One leaf, and nested inside it, the leaf hinged to its right edge. */
+function LeafEl({ i }: { i: number }) {
+  const leaf = LEAVES[i];
+  if (!leaf) return null;
   return (
-    <div className={`sx1b-wall sx1b-wall--${side}`}>
-      <div className="sx1b-run">
-        {slots.map((s, i) => (
-          <Plate key={`${s.c.id}-${i}`} cell={s.c} eager={s.eager} echo={s.echo} />
-        ))}
-      </div>
+    <div className={`sx1b-leaf sx1b-leaf--${i + 1}`}>
+      <figure className="sx1b-face">
+        <div
+          className="sx1b-plate"
+          data-clip={leaf.clip}
+          style={{ '--sx1b-op': leaf.pos } as CSSProperties}
+        >
+          <picture>
+            <source type="image/avif" srcSet={still(leaf.clip, 'avif')} />
+            <img
+              src={still(leaf.clip, 'jpg')}
+              alt={leaf.alt}
+              width={1080}
+              height={1920}
+              loading="eager"
+              decoding="async"
+              {...(i === 0 ? { fetchPriority: 'high' as const } : {})}
+            />
+          </picture>
+        </div>
+        <figcaption className="sx1b-folio">
+          {/* the numeral is for the eye; read aloud, "i study" is a different sentence */}
+          <span className="sx1b-folio__n" aria-hidden="true">
+            {leaf.folio}
+          </span>
+          <span className="sx1b-folio__w">{leaf.noun}</span>
+        </figcaption>
+        <span className="sx1b-shade" aria-hidden="true" />
+      </figure>
+      <span className="sx1b-back" aria-hidden="true" />
+      {i + 1 < LEAVES.length ? <LeafEl i={i + 1} /> : null}
     </div>
   );
 }
 
 export function Hero() {
-  const { heading, sub, support } = about.hero;
-  const [first, ...restWords] = heading.split(' ');
+  const eyebrow = centreName();
+  /* ['A space for the ', 'study', ', ', 'practice', ' and ', 'transmission', ' of Yoga …'] */
+  const parts = sub.split(/(study|practice|transmission)/);
+  const nounIndex = (w: string) => LEAVES.findIndex((l) => l.noun === w) + 1;
 
   return (
-    <section className="sx1b-hero" aria-labelledby="sx1b-title">
-      <div className="sx1b-stage">
-        <Wall side="l" cells={LEFT} />
+    <section className="sx1b" aria-labelledby="sx1b-title">
+      <div className="sx1b-track">
+        <div className="sx1b-stage">
+          <div className="sx1b-rail sx1b-top">
+            <div className="sx1b-head">
+              {eyebrow ? (
+                <p className="sx1b-eyebrow">
+                  <span className="sx1b-eyebrow__rule" aria-hidden="true" />
+                  {eyebrow}
+                </p>
+              ) : null}
+              <h1 className="sx1b-title" id="sx1b-title">
+                {heading}
+              </h1>
+            </div>
+            <p className="sx1b-sub">
+              {parts.map((p, k) => {
+                const n = nounIndex(p);
+                return n > 0 ? (
+                  <span className="sx1b-noun" data-n={n} key={k}>
+                    {p}
+                  </span>
+                ) : (
+                  p
+                );
+              })}
+            </p>
+          </div>
 
-        <div className="sx1b-channel">
-          <p className="sx1b-eyebrow">{site.descriptor}</p>
-
-          {/* The page's single h1. Two words, two lines, one left axis — the house hero's
-              own move, roman then italic, set at the page's rail rather than centred. */}
-          <h1 className="sx1b-h1" id="sx1b-title">
-            <span>{first}</span>
-            <span className="sx1b-h1__b">{restWords.join(' ')}</span>
-          </h1>
-
-          <p className="sx1b-sub">{sub}</p>
-
-          {/* Ornament, not a thematic break: it is the measure the two walls hold open, and
-              an <hr> would put a separator in the accessibility tree between a heading and
-              the sentence that belongs to it. */}
-          <div className="sx1b-rule" aria-hidden="true" />
-
-          <p className="sx1b-support">{support}</p>
+          <div className="sx1b-rail sx1b-sceneRail">
+            <div className="sx1b-scene">
+              <div className="sx1b-set">
+                <span className="sx1b-floor" aria-hidden="true" />
+                <div className="sx1b-book">
+                  <span className="sx1b-shadow" aria-hidden="true" />
+                  <LeafEl i={0} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <Wall side="r" cells={RIGHT} />
       </div>
+
+      <div className="sx1b-rail sx1b-coda">
+        <p className="sx1b-support">{support}</p>
+      </div>
+
+      <HeroMotion />
     </section>
   );
 }

@@ -1,0 +1,595 @@
+/* Final sx4 section. Every selector is namespaced .sx4- */
+/* sec-sx4 — About §04 How We Teach, final. Built on concept B (preview-sx4b.css); owned by
+   components/about-pranava/sx4/. Every selector is .sx4-*; no other file may declare one,
+   and this file declares nothing outside that prefix.
+
+   ══════════════════════════════════════════════════════════════════════════
+   §04 HOW WE TEACH — THE HOLD.
+
+   One supported inversion, photographed eight times: seven people in the
+   Prabhava workshop and one at Prabodha TTC. The eight frames are REGISTERED —
+   every photograph is scaled and placed so that the practitioner's toes sit on
+   one line and the legs on one axis — so when one replaces another the pose does
+   not move. Only the room, the person and the light change.
+
+   With motion: the frame holds still in the middle of the section while the
+   eight practices scroll past it on alternating sides, and each one dissolves
+   the frame into the next photograph. After the eighth, the photographs stop
+   replacing one another and settle on top of each other at equal weight — a
+   long exposure in which the eight rooms blur and the pose they share stays.
+
+   Without motion, without JavaScript, or on a viewport too short to pin: the
+   section is that finished state — the long exposure, the eight registered
+   frames in a strip beneath it, the practices around it.
+
+   The static default here IS the long exposure. Layer n of 8 carries opacity
+   1/n, which composites all eight at exactly equal weight (each contributes
+   1/8), so the page needs no script at all to be complete.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx4-sec {
+  /* the type scale of the About page, restated so this preview stands alone */
+  --sx4-big: clamp(2.15rem, 1.05rem + 4.1vw, 5rem);
+  --sx4-mid: clamp(1.08rem, 0.97rem + 0.78vw, 1.6rem);
+  --sx4-step: clamp(1.32rem, 0.9rem + 1.45vw, 2.55rem);
+  --sx4-read: clamp(0.98rem, 0.94rem + 0.36vw, 1.18rem);
+
+  /* THE FRAME. Its aspect is fixed at 0.62 because the registration data in
+     frames.ts is solved for exactly that aspect: change one and the feet leave
+     the line. Height is bounded by the viewport so the whole stage — frame,
+     strip, caption — always fits between the navigation and the bottom edge. */
+  /* the stage is the frame, the strip (≈0.125 of the frame's height) and a
+     caption: 1.125·fh + ~60px. Solved so the whole stage, axis tick included,
+     fits between the pill (bottom edge ≈84px, so 104px clears it) and the
+     bottom of the screen — 620px of frame at 1440×900, 464 at 1280×720, 835 at
+     2531×1140, capped at 900. */
+  --sx4-gap: clamp(2rem, 4.2vw, 5rem);
+  /* …and, between 900 and ~1000px wide, by the width: each lane keeps 250px */
+  --sx4-fh: clamp(
+    300px,
+    min(
+      calc((100svh - 196px) * 0.885),
+      calc((100vw - 2 * var(--rail) - 2 * var(--sx4-gap) - 500px) / 0.62)
+    ),
+    900px
+  );
+  --sx4-fw: calc(var(--sx4-fh) * 0.62);
+
+  position: relative;
+  display: block;
+  padding-block: clamp(4.4rem, 10vw, 9rem);
+  background: var(--ground-warm);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* the measure, capped AND centred — max-width alone is 462px off-axis at 2531 */
+.sx4-rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.sx4-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* focus on paper: an ink ring in a cream halo (the global ring is cream, and
+   invisible on this ground) */
+.sx4-sec :focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the head ───────────────────────────────────────────────────────────── */
+.sx4-head {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  margin-bottom: clamp(2.6rem, 6vw, 4.8rem);
+}
+/* the register mark — the site's own object: 11.5px Inter at 0.19em, a
+   Fraunces numeral, and a sand rule, which is the one thing sand may be */
+.sx4-mark {
+  margin: 0 0 clamp(1.4rem, 3vw, 2.4rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: var(--forest-mid);
+  /* centred on its WORDS: the numeral, the rule and their two gaps (≈16 + 22 +
+     2·0.8rem) are balanced by the same width of padding on the other side, so
+     "How we teach" sits on the section's axis rather than 32px right of it */
+  padding-inline-end: calc(38px + 1.6rem);
+}
+.sx4-mark__n {
+  flex: none;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+}
+.sx4-mark__rule {
+  flex: none;
+  align-self: center;
+  width: 22px;
+  height: 1px;
+  background: var(--sand);
+}
+.sx4-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx4-big);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+.sx4-open {
+  margin: clamp(1.1rem, 2.2vw, 1.8rem) 0 0;
+  max-width: 36ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx4-mid);
+  line-height: 1.42;
+  text-wrap: balance;
+}
+.sx4-prompt {
+  margin: clamp(1.6rem, 3.4vw, 2.8rem) 0 0;
+  font: 500 var(--sx4-read) / 1.5 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ── the track: the frame in the middle, the practices on either side ───── */
+.sx4-track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--sx4-fw) minmax(0, 1fr);
+  grid-template-rows: repeat(9, auto);
+  column-gap: var(--sx4-gap);
+}
+
+.sx4-stage {
+  grid-column: 2;
+  grid-row: 1 / 10;
+  align-self: start;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+}
+
+.sx4-steps {
+  grid-column: 1 / 4;
+  grid-row: 1 / 9;
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-template-rows: subgrid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sx4-step {
+  position: relative;
+  grid-column: 3;
+  align-self: center;
+  padding-block: clamp(0.7rem, 1.4vw, 1.1rem);
+  text-align: left;
+}
+.sx4-step:nth-child(even) {
+  grid-column: 1;
+  text-align: right;
+}
+.sx4-step:nth-child(1) { grid-row: 1; }
+.sx4-step:nth-child(2) { grid-row: 2; }
+.sx4-step:nth-child(3) { grid-row: 3; }
+.sx4-step:nth-child(4) { grid-row: 4; }
+.sx4-step:nth-child(5) { grid-row: 5; }
+.sx4-step:nth-child(6) { grid-row: 6; }
+.sx4-step:nth-child(7) { grid-row: 7; }
+.sx4-step:nth-child(8) { grid-row: 8; }
+
+.sx4-step__n {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--brass);
+}
+.sx4-step__t {
+  display: block;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx4-step);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* the leader: a clay hairline from the practice's numeral to the edge of the
+   frame, drawn only for the practice the frame is currently showing. Clay is
+   ornament here, never text (3.90:1). Transform only. */
+.sx4-step__n {
+  position: relative;
+}
+.sx4-step__n::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.9rem);
+  width: calc(var(--sx4-gap) - 1.3rem);
+  height: 1px;
+  background: var(--clay);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.6s var(--ease);
+}
+.sx4-step:nth-child(even) .sx4-step__n::after {
+  right: auto;
+  left: calc(100% + 0.9rem);
+  transform-origin: left center;
+}
+.sx4-step[data-on] .sx4-step__n::after {
+  transform: scaleX(1);
+}
+
+/* the last two sentences flank the frame when it has become the long exposure */
+.sx4-close {
+  grid-column: 1 / 4;
+  grid-row: 9;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  padding-top: clamp(1.4rem, 3vw, 2.6rem);
+}
+.sx4-close p {
+  grid-column: 1;
+  margin: 0;
+  justify-self: end;
+  max-width: 22ch;
+  text-align: right;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: var(--sx4-mid);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+.sx4-close__back {
+  color: var(--ink-soft);
+}
+.sx4-close p + p {
+  grid-column: 3;
+  justify-self: start;
+  max-width: 26ch;
+  text-align: left;
+}
+
+/* ── the figure ─────────────────────────────────────────────────────────── */
+.sx4-fig {
+  position: relative;
+  margin: 0;
+  width: var(--sx4-fw);
+}
+.sx4-framebox {
+  position: relative;
+}
+.sx4-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 62 / 100;
+  overflow: hidden;
+  background: #d9cdbb;
+  box-shadow: 0 0 0 1px rgba(36, 29, 24, 0.16);
+  isolation: isolate;
+}
+/* every layer is positioned by its registration box (frames.ts), in percent of
+   the frame, so it holds at every size with no measurement at all */
+.sx4-layer {
+  position: absolute;
+  left: var(--l);
+  top: var(--t);
+  width: var(--w);
+  height: var(--h);
+  margin: 0;
+  opacity: calc(1 / var(--n));
+}
+.sx4-layer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* registration marks — a printer's mark on either side at the line the toes
+   return to, and one tick over the axis the legs return to. Ornament. */
+.sx4-reg {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  color: var(--clay);
+  pointer-events: none;
+}
+.sx4-reg--l {
+  top: 8%;
+  right: calc(100% + 12px);
+  transform: translateY(-50%);
+}
+.sx4-reg--r {
+  top: 8%;
+  left: calc(100% + 12px);
+  transform: translateY(-50%);
+}
+.sx4-reg--a {
+  bottom: calc(100% + 10px);
+  left: 39%;
+  width: 1px;
+  height: 14px;
+  background: var(--clay);
+  transform: translateX(-50%);
+}
+
+/* the eight frames side by side, each registered like the big one: toes on one
+   line across all eight. In the static page it is the key to the exposure above
+   it; with motion, a mark under it follows the frame being shown. */
+.sx4-strip {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.sx4-mini {
+  position: relative;
+}
+/* once Sx4Motion has made them buttons */
+.sx4-mini[role='button'] {
+  cursor: pointer;
+  border-radius: 1px;
+  transition: transform 0.3s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .sx4-mini[role='button']:hover {
+    transform: translateY(-3px);
+  }
+}
+.sx4-mini[role='button']:focus-visible {
+  outline: 2px solid #241d18;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
+}
+.sx4-mini__frame {
+  position: relative;
+  aspect-ratio: 62 / 100;
+  overflow: hidden;
+  background: #d9cdbb;
+}
+.sx4-mini .sx4-layer {
+  opacity: 1;
+}
+.sx4-mini::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--clay);
+  transform: scaleX(0);
+  transition: transform 0.45s var(--ease);
+}
+.sx4-mini[data-on]::after {
+  transform: scaleX(1);
+}
+
+/* the caption object: 11.5px Inter, ink-soft, a brass tick. Three visual
+   states share one place; the accessible caption is a single sentence that
+   describes what the static figure is. */
+.sx4-cap {
+  display: grid;
+  margin-top: 16px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+.sx4-cap__v {
+  grid-area: 1 / 1;
+  display: flex;
+  gap: 0.6em;
+  align-items: baseline;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.sx4-cap__v::before {
+  content: '';
+  flex: none;
+  width: 18px;
+  height: 1px;
+  background: var(--brass);
+  transform: translateY(-4px);
+}
+.sx4-fig[data-cap='all'] .sx4-cap__v--all,
+.sx4-fig[data-cap='one'] .sx4-cap__v--one[data-on] {
+  opacity: 1;
+}
+
+/* the hold, live: a clip laid over its own first frame (the still beneath it), so
+   the fade in and the wrap back are both onto the same picture. Opacity only. */
+.sx4-loop {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+  pointer-events: none;
+}
+.sx4-loop--on {
+  opacity: 1;
+}
+
+/* ══ LIVE — added by Sx4Motion only when motion is allowed, the viewport is
+   tall enough to hold the stage, and JavaScript is running. ═══════════════ */
+.sx4--live .sx4-stage {
+  position: sticky;
+  top: max(104px, calc((100svh - 1.125 * var(--sx4-fh) - 60px) / 2));
+}
+.sx4--live .sx4-frame .sx4-layer {
+  opacity: 0;
+}
+.sx4--live .sx4-frame .sx4-layer:first-child {
+  opacity: 1;
+}
+.sx4--live .sx4-step {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  min-height: 56svh;
+}
+/* the close row is long on purpose: its two sentences arrive high in it, the
+   exposure completes as they cross the middle of the screen, and the rest of the
+   row is the exposure held still before the frame is released */
+.sx4--live .sx4-close {
+  min-height: 118svh;
+  align-items: start;
+  padding-top: 30svh;
+}
+
+/* ══ BELOW 900px: one lane. The frame sits above the practices; with motion it
+   pins at the top as a band and the practices rise into the space beneath it
+   and slip under it. ═══════════════════════════════════════════════════════ */
+@media (max-width: 899px) {
+  .sx4-sec {
+    --sx4-fh: clamp(300px, 62svh, 560px);
+  }
+  .sx4-track {
+    display: block;
+  }
+  .sx4-stage {
+    margin-inline: auto;
+    width: max-content;
+    max-width: 100%;
+    margin-bottom: clamp(2rem, 6vw, 3rem);
+  }
+  .sx4-steps {
+    display: block;
+    text-align: center;
+  }
+  .sx4-step,
+  .sx4-step:nth-child(even) {
+    text-align: center;
+    padding-block: 0.8rem;
+  }
+  .sx4-step__n::after {
+    display: none;
+  }
+  .sx4-step__t {
+    font-size: clamp(1.45rem, 1.02rem + 2.4vw, 2.1rem);
+  }
+  .sx4-close {
+    display: block;
+    margin-top: clamp(1.8rem, 6vw, 2.6rem);
+    text-align: center;
+  }
+  .sx4-close p,
+  .sx4-close p + p {
+    max-width: 30ch;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .sx4-close p + p {
+    margin-top: 0.9em;
+  }
+
+  .sx4--live {
+    --sx4-fh: clamp(220px, 44svh, 480px);
+  }
+  .sx4--live .sx4-stage {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    width: auto;
+    max-width: none;
+    margin-inline: calc(-1 * var(--rail));
+    padding: 76px var(--rail) 14px;
+    background: var(--ground-warm);
+    box-shadow: 0 1px 0 rgba(36, 29, 24, 0.1);
+  }
+  .sx4--live .sx4-fig {
+    margin-inline: auto;
+  }
+  /* 26px frames are a texture, not a key; on a phone the strip waits for the
+     static page */
+  .sx4--live .sx4-strip {
+    display: none;
+  }
+  .sx4--live .sx4-cap {
+    margin-top: 10px;
+  }
+  .sx4--live .sx4-step {
+    min-height: 36svh;
+  }
+  .sx4--live .sx4-close {
+    min-height: 64svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .sx4-reg--l,
+  .sx4-reg--r {
+    display: none;
+  }
+}
+
+/* ══ the preview scaffold — not the section ═════════════════════════════ */
+.sx4-seam {
+  padding-block: 3.2rem;
+}
+.sx4-seam--above {
+  background: var(--ground);
+}
+.sx4-seam--below {
+  min-height: 70svh;
+  background: var(--ground-deep);
+}
+.sx4-seam p {
+  margin: 0;
+  font: 500 12px/1.5 var(--font-text);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.sx4-seam--below p {
+  color: rgba(251, 247, 242, 0.82);
+}
+.sx4-seam__tag {
+  display: inline-block;
+  margin-right: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+}

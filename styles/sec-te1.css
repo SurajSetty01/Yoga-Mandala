@@ -1,0 +1,375 @@
+/* Final te1 section. Every selector is namespaced .te1- */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   EVENTS · MASTHEAD — "the gathering leaves the hall".
+
+   DEFAULT (reduced motion, no scroll-timeline support, no JS): the finished
+   section. "Events" as the headline, the condition beside it, and the two
+   frames side by side — the class, then the empty hall with the sentence
+   already on its wall. Stacked below 700px.
+
+   LIVE (supports view timelines AND no-preference): the stage is held for
+   ~1.15 screens. A soft edge crosses the class right to left, taking the
+   farthest figure first, and uncovers the empty hall beneath. Its upper wall
+   then turns to paper and the sentence lands there. No script: CSS only.
+
+   Both frames are 1620 × 1080, so the band is capped at 1620 and centred.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@property --te1-sweep {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 138%;
+}
+
+.te1 {
+  position: relative;
+  z-index: 1;
+  display: block;
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+  --te1-paper: 251, 247, 242;
+}
+
+.te1-stage {
+  max-width: 1620px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 27rem);
+  grid-template-areas:
+    'head say'
+    'band band';
+  column-gap: clamp(1.5rem, 4vw, 4rem);
+  row-gap: clamp(1.1rem, 2.2vw, 1.9rem);
+  padding-top: clamp(5.75rem, 8.2vw, 7.25rem);
+  /* collapsed on purpose: the deep strip starts right under the captions */
+  padding-bottom: clamp(1.4rem, 2.6vw, 2.2rem);
+}
+
+/* ── the headline ───────────────────────────────────────────────────────── */
+.te1-h1 {
+  grid-area: head;
+  align-self: end;
+  margin: 0;
+  padding-left: var(--rail);
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(3.6rem, 1.4rem + 7.4vw, 9.6rem);
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.te1-say {
+  grid-area: say;
+  align-self: end;
+  margin: 0;
+  padding-right: var(--rail);
+  max-width: 40ch;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(34, 69, 47, 0.32);
+  font: 400 clamp(0.95rem, 0.9rem + 0.28vw, 1.14rem) / 1.56 var(--font-text);
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* ── the band: two frames, side by side by default ──────────────────────── */
+.te1-band {
+  grid-area: band;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding-inline: var(--rail);
+  min-width: 0;
+}
+
+.te1-fig {
+  grid-row: 1;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.te1-fig--full {
+  grid-column: 1;
+}
+.te1-fig--empty {
+  grid-column: 2;
+}
+
+.te1-pic {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: #cdbfb1;
+}
+.te1-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--te1-w, 50% 50%);
+}
+
+/* the empty hall's upper wall turns to paper where the sentence sits */
+.te1-fig--empty .te1-pic::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 64% 118% at 78% 0%,
+    rgba(var(--te1-paper), 0.93) 0%,
+    rgba(var(--te1-paper), 0.84) 50%,
+    rgba(var(--te1-paper), 0) 100%
+  );
+}
+
+.te1-cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.7rem;
+  padding-top: 0.7rem;
+  font: 400 clamp(0.84rem, 0.82rem + 0.12vw, 0.92rem) / 1.45 var(--font-text);
+  color: var(--ink-soft);
+}
+.te1-cap__src {
+  font: 600 11.5px/1.35 var(--font-text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+.te1-cap__rule {
+  flex: none;
+  align-self: center;
+  width: 18px;
+  height: 1px;
+  background: rgba(193, 97, 60, 0.6);
+}
+
+/* ── the sentence, on the empty room ────────────────────────────────────── */
+.te1-lede {
+  grid-row: 1;
+  grid-column: 2;
+  align-self: start;
+  justify-self: end;
+  position: relative;
+  z-index: 2;
+  margin: clamp(0.9rem, 2.2vw, 2rem) clamp(1rem, 2.4vw, 2.4rem) 0 0;
+  max-width: 11ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 0.9rem + 2.3vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.026em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* ── narrow, static: the two frames stacked, the sentence on the second ── */
+@media (max-width: 699px) {
+  .te1-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'head'
+      'say'
+      'band';
+  }
+  .te1-h1,
+  .te1-say {
+    padding-inline: var(--rail);
+  }
+  .te1-say {
+    border-top: 0;
+    padding-top: 0;
+    max-width: 44ch;
+    font-size: 0.95rem;
+  }
+  .te1-band {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .te1-fig--full,
+  .te1-fig--empty,
+  .te1-lede {
+    grid-column: 1;
+  }
+  .te1-fig--empty,
+  .te1-lede {
+    grid-row: 2;
+  }
+  .te1-fig--empty {
+    margin-top: 1rem;
+  }
+  .te1-lede {
+    margin-top: calc(1rem + 0.8rem);
+  }
+}
+
+/* ══ LIVE ═══════════════════════════════════════════════════════════════════
+   Everything below is progressive. It changes layout only where the browser
+   will also run the timeline, so there is never a held stage that does not
+   move, and never a moving stage for a reader who asked for none. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .te1-track {
+      height: 215svh;
+      view-timeline: --te1 block;
+    }
+    .te1-stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .te1-band {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      padding-inline: 0;
+      width: 100%;
+      /* on a short, wide screen the band would become a letterbox that cuts
+         off the hands and the feet; hold it near 2.35:1 and centre it */
+      max-width: min(1620px, calc((100svh - 16rem) * 2.35));
+      justify-self: center;
+      min-height: 0;
+    }
+    .te1-fig,
+    .te1-lede {
+      grid-area: 1 / 1;
+    }
+    .te1-fig {
+      min-height: 0;
+    }
+    .te1-fig--full {
+      z-index: 1;
+    }
+    .te1-pic {
+      flex: 1 1 auto;
+      min-height: 0;
+      aspect-ratio: auto;
+    }
+    .te1-cap {
+      padding-inline: var(--rail);
+    }
+    .te1-lede {
+      margin: clamp(1.2rem, 3.4vw, 3rem) var(--rail) 0 0;
+      font-size: clamp(2.3rem, 1.2rem + 3.6vw, 5.2rem);
+    }
+
+    /* 1 · the class leaves, farthest first */
+    .te1-fig--full .te1-pic {
+      -webkit-mask-image: linear-gradient(
+        90deg,
+        #000 calc(var(--te1-sweep) - 38%),
+        transparent var(--te1-sweep)
+      );
+      mask-image: linear-gradient(
+        90deg,
+        #000 calc(var(--te1-sweep) - 38%),
+        transparent var(--te1-sweep)
+      );
+      animation: te1-leave linear both;
+      animation-timeline: --te1;
+      animation-range: contain 6% contain 60%;
+    }
+    /* the empty hall settles as it is uncovered */
+    .te1-fig--empty .te1-img {
+      animation: te1-settle linear both;
+      animation-timeline: --te1;
+      animation-range: contain 0% contain 62%;
+    }
+    /* 2 · the captions change over as the middle figure goes */
+    .te1-fig--full .te1-cap {
+      animation: te1-out linear both;
+      animation-timeline: --te1;
+      animation-range: contain 24% contain 36%;
+    }
+    .te1-fig--empty .te1-cap {
+      animation: te1-in linear both;
+      animation-timeline: --te1;
+      animation-range: contain 38% contain 50%;
+    }
+    /* 3 · the wall turns to paper, then the sentence lands on it */
+    .te1-fig--empty .te1-pic::after {
+      animation: te1-in linear both;
+      animation-timeline: --te1;
+      animation-range: contain 54% contain 70%;
+    }
+    .te1-lede {
+      animation: te1-land linear both;
+      animation-timeline: --te1;
+      animation-range: contain 60% contain 80%;
+    }
+  }
+}
+
+@keyframes te1-leave {
+  from {
+    --te1-sweep: 138%;
+  }
+  to {
+    --te1-sweep: 0%;
+  }
+}
+@keyframes te1-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes te1-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes te1-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes te1-land {
+  from {
+    opacity: 0;
+    transform: translateY(-0.28em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* live, narrow: the band is taller than it is wide, so each frame gets its
+   own crop, and the heading block tightens to leave the picture the room */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (max-width: 699px) {
+    .te1-track {
+      height: 205svh;
+    }
+    .te1-stage {
+      grid-template-rows: auto auto minmax(0, 1fr);
+      row-gap: 0.9rem;
+      padding-bottom: 1rem;
+    }
+    .te1-img {
+      object-position: var(--te1-n, 50% 50%);
+    }
+    .te1-fig--empty {
+      margin-top: 0;
+    }
+    .te1-lede {
+      margin-top: 1.1rem;
+      font-size: clamp(2.1rem, 1.3rem + 3.4vw, 2.8rem);
+      max-width: 10ch;
+    }
+  }
+}

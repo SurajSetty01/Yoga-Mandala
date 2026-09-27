@@ -1,0 +1,238 @@
+/* Final sx9 section. Every selector is namespaced .sx9- */
+
+/* ══ 09 · WHAT WE VALUE — FOUR SLITS THAT OPEN ══════════════════════════════
+   Four photographs cut down to four thin slits, veiled pale as the page, each with its
+   word across it. One at a time a slit reaches the reading line and opens to the whole
+   frame; the veil lifts, the word steps down out of the picture to name it, and its line
+   appears beneath. Paper ground, between §08 (warm) and the Closing (warm).
+
+   The DEFAULT below is the finished state — all four open at 3:2, word and line under
+   each — which is what no-script and reduced motion get. `.sx9-live` is added by
+   Motion.tsx only where the stage fits the screen.
+
+   CONTRAST. A word on a slit is forest (#22452F) on a paper veil at 0.62 over the
+   photograph. Over the darkest possible pixel the veil composites to #9B9996 (L 0.33):
+   forest on that is 3.9:1, and every word is ≥ 35px, so the 3:1 large-text bar holds
+   over ANY frame at ANY crop — the guarantee is the veil's, not the picture's.
+   Measured on rendered glyph cores, 390x844 and 1440x900, all five states: worst
+   pixel 3.84:1, p5 ≥ 4.06:1 on the slits; 10.04:1 word and 15.58:1 line on paper.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx9 {
+  position: relative;
+  padding-block: clamp(4.4rem, 10vw, 9rem);
+  background: var(--ground);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+.sx9-rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+
+.sx9-track {
+  padding-inline: var(--rail);
+}
+
+.sx9-stage {
+  max-width: 50rem;
+  margin-inline: auto;
+}
+
+.sx9-list {
+  display: grid;
+  gap: clamp(3.4rem, 8vw, 6.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sx9-v {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  text-align: center;
+}
+
+.sx9-win {
+  order: -1;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--ground-warm);
+}
+
+.sx9-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sx9-veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(251, 247, 242, 0.62);
+  opacity: 0;
+}
+
+/* Inter, all four: Fraunces drops the macron of ā (DESIGN-SYSTEM §1). */
+.sx9-word {
+  margin: clamp(1rem, 2.2vw, 1.5rem) 0 0;
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.028em;
+  color: var(--forest);
+}
+
+.sx9-line {
+  margin: 0.4rem 0 0;
+  max-width: 32ch;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: clamp(1.08rem, 0.98rem + 0.5vw, 1.4rem);
+  line-height: 1.35;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* measured at the width it will have on the stage */
+.sx9-measuring .sx9-line {
+  box-sizing: border-box;
+  width: var(--sx9-W);
+  max-width: none;
+  padding-inline: 0.5rem;
+}
+
+/* ── the stage ────────────────────────────────────────────────────────────── */
+
+.sx9-live .sx9-track {
+  height: var(--sx9-track);
+  padding-inline: 0;
+}
+
+.sx9-live .sx9-stage {
+  position: sticky;
+  top: var(--sx9-top);
+  width: var(--sx9-W);
+  max-width: none;
+  height: var(--sx9-stage);
+  margin-inline: auto;
+}
+
+.sx9-live .sx9-list {
+  display: block;
+  position: relative;
+  height: 100%;
+}
+
+.sx9-live .sx9-v {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+  width: var(--sx9-W);
+  height: var(--sx9-H);
+  transform: translate3d(0, var(--sx9-y, 0px), 0);
+  transition: transform 0.9s var(--ease);
+}
+.sx9-live .sx9-open {
+  z-index: 2;
+}
+
+.sx9-live .sx9-win {
+  position: absolute;
+  inset: 0;
+  height: var(--sx9-H);
+  aspect-ratio: auto;
+  clip-path: inset(var(--sx9-bt) 0 calc(var(--sx9-H) - var(--sx9-bt) - var(--sx9-s)) 0);
+  transition: clip-path 0.9s var(--ease);
+}
+.sx9-live .sx9-open .sx9-win {
+  clip-path: inset(0 0 0 0);
+}
+
+.sx9-live .sx9-veil {
+  opacity: 1;
+  transition: opacity 0.6s var(--ease) 0.2s;
+}
+.sx9-live .sx9-open .sx9-veil {
+  opacity: 0;
+  transition-delay: 0.1s;
+}
+
+/* the word sits centred on its slit, and when the slit opens it steps down out of the
+   picture to stand beneath it at 62% — a transform, never a re-layout */
+.sx9-live .sx9-word {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  margin: 0;
+  font-size: var(--sx9-F);
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 50% 0;
+  transform: translate3d(0, calc(var(--sx9-bt) + (var(--sx9-s) - var(--sx9-F)) / 2 - 0.05em), 0);
+  transition: transform 0.9s var(--ease);
+  pointer-events: none;
+}
+.sx9-live .sx9-open .sx9-word {
+  transform: translate3d(0, calc(var(--sx9-H) + var(--sx9-m1)), 0) scale(var(--sx9-k));
+}
+
+.sx9-live .sx9-line {
+  box-sizing: border-box;
+  position: absolute;
+  top: var(--sx9-lt);
+  left: 0;
+  right: 0;
+  max-width: none;
+  margin: 0;
+  padding-inline: 0.5rem;
+  opacity: 0;
+  transform: translate3d(0, -6px, 0);
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.6s var(--ease);
+  pointer-events: none;
+}
+.sx9-live .sx9-open .sx9-line {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.4s;
+  pointer-events: auto;
+}
+
+/* ── preview scaffold (app/preview/sx9 only) ──────────────────────────────── */
+.sx9-scaffold {
+  padding: clamp(3.5rem, 8vw, 6rem) var(--rail);
+  background: var(--ground-warm);
+  color: var(--ink-soft);
+  font: 400 13px/1.5 var(--font-text);
+  text-align: center;
+}
+.sx9-scaffold p {
+  margin: 0;
+}
+.sx9-scaffold__tag {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sx9-scaffold--below {
+  min-height: 100svh;
+}

@@ -1,0 +1,241 @@
+/* Final tp1 section. Every selector is namespaced .tp1- */
+
+/* ══ PRACTICE · HERO ══════════════════════════════════════════════════════
+   THE LOOP IS COUNTED IN STROKES, NEVER IN NUMBERS.
+
+   Under the page name, a landscape take of a whole class in one wide
+   standing pose. Under the value line, a row of short brass strokes: three
+   already set, then one drawn by the film's clock each time round, until
+   they join into the line's underline. See components/practice/tp1.
+
+   The type never sits on the picture (the home hero owns that); on the
+   reversed ground every glyph's contrast is a constant.
+
+   --tp1-brass is ORNAMENT ONLY — the strokes, never text. #705515 is the
+   brass that carries small type on paper, but on #12201A it is 2.4:1 and
+   the count would vanish; this lighter brass is 5.8:1 on the deep ground.
+   ══════════════════════════════════════════════════════════════════════════ */
+.tp1-hero {
+  --tp1-brass: #b8923a;
+  --tp1-gap: clamp(1.6rem, 3.6vw, 3.6rem);
+  position: relative;
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  padding-block: clamp(6.4rem, 12.5svh, 9.5rem) clamp(2.6rem, 5vw, 4.6rem);
+  overflow-x: clip;
+}
+
+/* capped AND centred — the same measure as every other /practice/ section */
+.tp1-in {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.tp1-h1 {
+  margin: 0 0 0 -0.045em;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 340;
+  font-variation-settings: 'SOFT' 40;
+  font-size: clamp(3.6rem, 1.6rem + 9vw, 10rem);
+  line-height: 0.86;
+  letter-spacing: -0.035em;
+  color: var(--ink-onPic);
+}
+
+/* ── the take (≥761px) ─────────────────────────────────────────────────── */
+.tp1-film {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  max-width: 1920px;
+  overflow: clip;
+  background: rgba(251, 247, 242, 0.06);
+}
+.tp1-film picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.tp1-hero .tp1-film img,
+.tp1-hero .tp1-film video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 44% 56%;
+}
+.tp1-hero .tp1-film__vid {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+.tp1-hero .tp1-film__vid.is-live {
+  opacity: 1;
+}
+
+/* ── the portrait (≤760px) ─────────────────────────────────────────────── */
+.tp1-still {
+  display: none;
+  margin: 0;
+}
+
+/* ── the wish, the value, the count ────────────────────────────────────── */
+.tp1-aside {
+  display: grid;
+  align-content: start;
+  gap: clamp(1.1rem, 2.6vw, 1.6rem);
+}
+.tp1-wish {
+  margin: 0;
+  font: 500 clamp(0.98rem, 0.92rem + 0.28vw, 1.14rem) / 1.4 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+/* the opening mark hangs in the gutter so the words align with the h1 */
+.tp1-wish__q {
+  display: inline-block;
+  margin-left: -0.44em;
+  width: 0.44em;
+}
+
+.tp1-value {
+  width: fit-content;
+  max-width: 100%;
+}
+.tp1-value__line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 380;
+  font-size: clamp(1.45rem, 1.1rem + 1.05vw, 2.15rem);
+  line-height: 1.22;
+  letter-spacing: -0.008em;
+  text-wrap: balance;
+  color: var(--ink-onPic);
+}
+
+.tp1-strokes {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(4px, 0.45vw, 7px);
+  height: 3px;
+  margin-top: clamp(0.8rem, 1.6vw, 1.1rem);
+}
+.tp1-stroke {
+  display: block;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--tp1-brass);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+.tp1-stroke.is-set {
+  transform: scaleX(1);
+}
+/* the three strokes the page already holds, counted in on load */
+.tp1-stroke.is-fixed {
+  animation: tp1-draw 0.62s var(--ease) calc(650ms + var(--tp1-i) * 300ms) both;
+}
+@keyframes tp1-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* when every slot is set, the gaps close into one rule under the line */
+.tp1-strokes__whole {
+  position: absolute;
+  inset: 0;
+  border-radius: 1px;
+  background: var(--tp1-brass);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 1.8s var(--ease);
+}
+.tp1-strokes.is-whole .tp1-strokes__whole {
+  transform: scaleX(1);
+}
+
+.tp1-cap {
+  margin: 0;
+  max-width: 34ch;
+  font: 400 clamp(0.82rem, 0.8rem + 0.12vw, 0.9rem) / 1.5 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.tp1-cap__still {
+  display: none;
+}
+
+/* ── phone: the portrait replaces the take, edge to edge ───────────────── */
+@media (max-width: 760px) {
+  .tp1-film {
+    display: none;
+  }
+  .tp1-hero .tp1-still {
+    display: block;
+    margin-inline: calc(-1 * var(--rail));
+    aspect-ratio: 10 / 11;
+    max-height: 60svh;
+    overflow: clip;
+    background: rgba(251, 247, 242, 0.06);
+  }
+  .tp1-still picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .tp1-hero .tp1-still img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 58%;
+  }
+  .tp1-cap__film {
+    display: none;
+  }
+  .tp1-cap__still {
+    display: inline;
+  }
+}
+
+/* ── ≥1000px: the take under the name, the wish and the value beside it ── */
+@media (min-width: 1000px) {
+  .tp1-in {
+    grid-template-columns:
+      min(calc(max(55svh, 100svh - 26rem) * 16 / 9), calc(100% - 18rem - var(--tp1-gap)))
+      minmax(18rem, 1fr);
+    grid-template-areas:
+      'h1   wish'
+      'film aside';
+    column-gap: var(--tp1-gap);
+    row-gap: clamp(1.4rem, 2.6vw, 2.2rem);
+  }
+  .tp1-h1 {
+    grid-area: h1;
+  }
+  .tp1-film {
+    grid-area: film;
+  }
+  /* the wish answers the name on its own line; the value and its count sit at
+     the take's top edge, and the wall label at its foot */
+  .tp1-wish {
+    grid-area: wish;
+    align-self: end;
+    max-width: 22ch;
+    padding-bottom: 0.35em;
+  }
+  .tp1-aside {
+    grid-area: aside;
+    align-content: space-between;
+  }
+}

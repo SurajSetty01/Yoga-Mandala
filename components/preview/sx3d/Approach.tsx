@@ -1,208 +1,179 @@
 import type { CSSProperties } from 'react';
 import { about } from '@/content/pranava';
-import { FRAMES, src, srcSet, type Frame } from './frames';
+import { CLIP, FRAMES, src, srcSet, type Face } from './frames';
 
 /**
- * PRAṆAVA · ABOUT · §03 — OUR APPROACH.
+ * PRAṆAVA · ABOUT · §03 — OUR APPROACH.   Concept sx3d, the spatial one.
  *
- * THE MECHANIC, as something that happens:
- *   Three terms stand at three depths in one dark room and walk away from you as
- *   you read them — Tradition nearest and largest, Practice further, Inquiry
- *   furthest and smallest, stepping right toward the hall at the end of the
- *   room. Then the room ends. The ground turns to paper and Transmission is
- *   standing on your side of it, at the site's own body size, beside a
- *   photograph taken from inside a class instead of outside one.
+ * WHAT HAPPENS
+ *   A room arrives drawn flat, and stands up around a teacher and a student.
  *
- * THE SECTION IS A TYPE SCALE MADE OUT OF DISTANCE. There is ONE authored body
- * size in the whole room — 15.6px — and one perspective constant, 2400px. The
- * three planes sit at z = 400 / 276 / 157px, which the browser resolves to
- * scale factors of exactly 2400/(2400−z) = 1.200 / 1.130 / 1.070, and that
- * renders the one authored size at 18.72 / 17.63 / 16.69px. The fourth term is
- * not in the frustum at all: it is set flat, at 18.88px, which is the site's own
- * body size to two decimals. Four rendered sizes, two authored ones, every one
- * of them inside the house's measured 16.0 – 18.9px band. Nothing here was tuned
- * until it fitted a picture.
+ *   The section opens on a laid-out drawing: five photographs lying in one plane in the
+ *   shape of a cross — the convention Robert Adam's office used for interiors, "a box with
+ *   the walls flattened open". It rises into view lying flat, and once the whole of it is
+ *   on screen the four outer pictures fold up on their hinges in the order the lead names them: the
+ *   floor first (Rooted in tradition), then the two walls (Alive in practice), then the
+ *   ceiling (Open to inquiry). What they fold up AROUND is the fifth picture, which never
+ *   moves and is the only one that does: a teacher talking a student through a headstand
+ *   while the class watches — Transmission, on the far wall, facing the reader.
  *
- * AND THE MEASURE IS CONSTANT WITH IT. Each plane is authored at the same 434px
- * width, so the magnification that enlarges the type enlarges the column with
- * it, and all three terms land on the SAME measure at any given width. Measured:
- * 44 characters per line at 768, 41 at 1024, 44 at 1280 / 1440 / 2531, 29 at 390
- * and 23 at 320 — the house itself runs 41 – 46 at desktop widths and 29 – 34 at
- * 390. The fourth term, outside the frustum, runs 43.
+ * WHY THE LEAD LINE BECOMES A ROOM
+ *   The client's sentence is already spatial. ROOTED is down; ALIVE is at your own height,
+ *   on either side of you; OPEN is up. So Tradition is the floor, an earth lane running
+ *   away toward the back wall; Practice is both walls, two rows of people working against
+ *   the walls they are photographed on; Inquiry is the ceiling, a palm crown photographed
+ *   looking straight up. Transmission is not in the lead because it is not a direction of
+ *   the room. It is who you face in it — and the reader, standing at the open fourth side,
+ *   is standing where the student stands. That is the asymmetry the content carries, and
+ *   it is carried here without a number, a panel or a row.
  *
- * THERE ARE NO CARDS. No plate, no panel, no border, no shadow, no photograph
- * behind a rectangle of paper. The site already deals four mounted plates on the
- * home page and runs a four-up photo grid above that; a third set of four
- * parallel objects would be repetition, and it would package the paragraph that
- * says Yoga cannot be packaged and delivered. Three of these terms are type
- * standing in a room. The fourth is not a fourth of the same kind, and the
- * section does not give it the same object.
+ * WHAT IS STILL
+ *   Everything but the far wall. Under reduced motion, with JavaScript off, or before the
+ *   island runs, the room is simply standing and the far wall is its still: the stylesheet
+ *   default of every fold value is 1. Nothing is reachable only through motion, and the
+ *   idea — a room made of the three, with the fourth in it — is whole in the static state.
  *
- * NO TEXT SITS ON EITHER PHOTOGRAPH, anywhere, at any width. Contrast in this
- * section is type on a flat ground and nothing else, which is why it can be
- * stated rather than tuned: cream on --ground-deep, and ink on paper. All 15
- * leaf text runs were measured DIRECTLY — not through the probe's stop list —
- * at 390, 1440 and 2531: 45 measurements, 0 FAIL, worst 7.30:1 composited and
- * 5.72:1 read straight off the painted pixel, against a 4.5 bar. The probe
- * itself returns 0 FAIL at all seven standard viewports but reaches only 11–14
- * of the 15 runs, so its number is never the one quoted here.
+ * TEXT IS NEVER ON A PICTURE. Every word stands on paper beside the room, so contrast here
+ * is ink on --ground and nothing else. Each term carries a KEY PLAN — the small shaded
+ * diagram an architect puts in the corner of a sheet to say which part of the building you
+ * are looking at — with its own surface filled in. It is the legend between the prose and
+ * the room, and it is drawn, not described.
  *
- * THERE IS NO CLIENT COMPONENT ON THIS ROUTE. Every word and both photographs
- * are in the static HTML. The only movement is one registered custom property,
- * `--sx3d-dz`, animated on one element by one `view()` timeline: the room drifts
- * 80px forward as it arrives and settles. Because the four planes are at four
- * depths, one number moves them by four different amounts. With JavaScript off,
- * with `prefers-reduced-motion`, or in a browser without scroll-driven
- * animations, `--sx3d-dz` is its initial 0px — which is the settled, documented
- * geometry above. Nothing is reachable only through motion and the document
- * height is identical either way, because transforms do not affect layout.
- *
- * COPY. Every sentence comes out of `content/pranava.ts` untouched. The lead is
- * split on its OWN full stops with a lookbehind, so the three spans concatenate
- * back to the client's sentence character for character.
+ * COPY. Every sentence comes out of content/pranava.ts untouched.
  */
 
-/** The three that stand in the room, nearest first, in the client's order. */
-const PLANE = ['sx3d-p1', 'sx3d-p2', 'sx3d-p3'] as const;
+const K = {
+  /* the key plan, in the room's own proportions: a front opening of 95 × 118.75 and a back
+     wall 1/1.75 of it, scaled to 38 × 47.5 */
+  W: 38,
+  H: 47.5,
+  x0: 8.143,
+  y0: 10.179,
+  x1: 29.857,
+  y1: 37.321,
+};
 
-/* The painted width of each photograph, declared as what it actually PAINTS.
-   Both values below are the element's rendered box, not its CSS width keyword
-   and not a guess: the stage's inner width is `min(1680px, 100vw − 2 × rail)`
-   where rail is `clamp(1.35rem, 4.2vw, 4.25rem)`, which is 91.6vw between 515px
-   and 1816px and `100vw − 2.7rem` below that. Every term below is that identity
-   carried through the layout it sits in. An earlier design in this tournament
-   declared `100vw` for a box that painted at 799px because a transform scaled
-   it after `sizes` was resolved; neither photograph here is scaled by anything
-   above 1.000 — the hall sits at the picture plane and the teaching frame is
-   outside the room entirely — so the box and the paint are the same number.
-   Measured sizes-to-box ratio at the seven standard viewports: 0.997 to 1.004. */
-/* The hall. Seven clauses because the layout has seven regimes, and every one of
-   them is the identity carried through, not a rounded guess:
-     ≥1816  the stage is capped at 1680 inner, terms 528, gap 56 → 1096px
-     ≥1619  rail freezes at 68px → 100vw − 136 − 528 − 56 = 100vw − 720
-     ≥1440  rail is 4.2vw → 91.6vw − 528 − 56 = 91.6vw − 584
-     ≥1333  the 1.2/1 split with a 3vw gap → (91.6vw − 3vw)/2.2 = 40.27vw
-     ≥1024  the same split with the gap on its 2.5rem floor → 41.64vw − 18.2px
-     ≥515   stacked, full stage → 91.6vw
-     else   stacked, rail on its 1.35rem floor → 100vw − 2.7rem
-   The clauses meet: at 1618 the third gives 898.1 and at 1619 the second gives
-   899; at 1816 the second gives 1096 and the first gives 1096. */
-const HALL_SIZES =
-  '(min-width: 1816px) 1096px, (min-width: 1619px) calc(100vw - 720px), (min-width: 1440px) calc(91.6vw - 584px), (min-width: 1333px) 40.27vw, (min-width: 1024px) calc(41.64vw - 18.2px), (min-width: 515px) 91.6vw, calc(100vw - 2.7rem)';
-const TEACH_SIZES =
-  '(min-width: 1518px) 832px, (min-width: 1152px) calc(88.6vw - 512px), (min-width: 908px) 832px, (min-width: 515px) 91.6vw, calc(100vw - 2.7rem)';
+const POLY: Record<Face, string> = {
+  floor: `0,${K.H} ${K.W},${K.H} ${K.x1},${K.y1} ${K.x0},${K.y1}`,
+  ceiling: `0,0 ${K.W},0 ${K.x1},${K.y0} ${K.x0},${K.y0}`,
+  left: `0,0 ${K.x0},${K.y0} ${K.x0},${K.y1} 0,${K.H}`,
+  right: `${K.W},0 ${K.x1},${K.y0} ${K.x1},${K.y1} ${K.W},${K.H}`,
+  back: `${K.x0},${K.y0} ${K.x1},${K.y0} ${K.x1},${K.y1} ${K.x0},${K.y1}`,
+};
+
+function KeyPlan({ lit }: { lit: Face[] }) {
+  return (
+    <svg
+      className="sx3d-key"
+      viewBox={`-0.5 -0.5 ${K.W + 1} ${K.H + 1}`}
+      aria-hidden="true"
+      focusable="false"
+    >
+      {(Object.keys(POLY) as Face[]).map((f) => (
+        <polygon key={f} points={POLY[f]} className={lit.includes(f) ? 'sx3d-key__on' : 'sx3d-key__off'} />
+      ))}
+    </svg>
+  );
+}
+
+/** which surface(s) each of the client's four terms is, in the client's order */
+const SURFACES: Face[][] = [['floor'], ['left', 'right'], ['ceiling'], ['back']];
+
+function Wall({ face }: { face: Exclude<Face, 'back'> }) {
+  const f = FRAMES[face];
+  return (
+    <div className={`sx3d-face sx3d-face--${face}`}>
+      <img
+        src={src(f)}
+        srcSet={srcSet(f)}
+        sizes={f.sizes}
+        alt={f.alt}
+        loading="lazy"
+        decoding="async"
+        style={{ '--sx3d-op': f.pos } as CSSProperties}
+      />
+    </div>
+  );
+}
 
 export function Sx3dApproach() {
-  const lead = about.approach.lead.split(/(?<=\.)\s+/);
-  const [tradition, practice, inquiry, transmission] = about.approach.items;
-  const standing = [tradition, practice, inquiry];
+  const { lead, items } = about.approach;
+  const three = items.slice(0, 3);
+  const fourth = items[3];
 
   return (
-    <section className="sx3d" id="sx3d-approach" aria-labelledby="sx3d-mark">
-      {/* ── THE ROOM. Deep ground, continuous with the end of §02, so the
-             section does not announce itself with a band change it has not
-             earned. The one ground change in the section is the one that
-             means something, and it comes later. ─────────────────────────── */}
-      <div className="sx3d-room">
-        <div className="sx3d-stage">
-          {/* the element the dolly runs on, and the only animated thing here */}
-          <div className="sx3d-space">
-            <h2 className="sx3d-eyebrow" id="sx3d-mark">
-              <span className="sx3d-eyebrow__n">03</span>
-              <span className="sx3d-eyebrow__rule" aria-hidden="true" />
-              Our approach
-            </h2>
+    <section className="sx3d" aria-labelledby="sx3d-mark">
+      <div className="sx3d-rail">
+        <h2 className="sx3d-mark" id="sx3d-mark">
+          <span className="sx3d-mark__n">03</span>
+          <span className="sx3d-mark__rule" aria-hidden="true" />
+          Our approach
+        </h2>
 
-            {/* The lead names three, and it already recedes: its three sentences
-                stand on the same three planes the three terms will stand on, so
-                the sentence performs the section before the section happens.
-                One authored display size, three depths. */}
-            <p className="sx3d-lead">
-              {lead.map((line, i) => (
-                <span className={`sx3d-lead__l ${PLANE[i]}`} key={line}>
-                  {line}
-                </span>
-              ))}
-            </p>
+        <p className="sx3d-lead">{lead}</p>
 
-            <div className="sx3d-floor">
-              <div className="sx3d-terms">
-                {standing.map((item, i) => (
-                  <article className={`sx3d-term ${PLANE[i]}`} key={item.name}>
-                    <h3 className="sx3d-term__n">{item.name}</h3>
-                    <p className="sx3d-term__b">{item.body}</p>
-                  </article>
-                ))}
+        <div className="sx3d-body">
+          {/* THE ROOM. One perspective, one vanishing point at the centre of the stage,
+              and every length in container units so it is the same room at 320 and 2560.
+              Faces are listed back-to-front so the paint order agrees with the depth
+              order even where a browser flattens the scene. */}
+          <figure className="sx3d-stage">
+            <div className="sx3d-view">
+              <div className="sx3d-room">
+                <div className="sx3d-face sx3d-face--back">
+                  <picture>
+                    <source srcSet={CLIP.avif} type="image/avif" />
+                    <img
+                      src={CLIP.jpg}
+                      alt={CLIP.alt}
+                      loading="lazy"
+                      decoding="async"
+                      style={{ '--sx3d-op': CLIP.pos } as CSSProperties}
+                    />
+                  </picture>
+                  {/* no `src`, no `poster`: the island attaches the file on approach and
+                      releases it a screen past. The still above IS the poster. */}
+                  <video
+                    className="sx3d-clip"
+                    data-src={CLIP.mp4}
+                    muted
+                    playsInline
+                    loop
+                    preload="none"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                    style={{ '--sx3d-op': CLIP.pos } as CSSProperties}
+                  />
+                </div>
+                <Wall face="floor" />
+                <Wall face="ceiling" />
+                <Wall face="left" />
+                <Wall face="right" />
               </div>
-
-              {/* The hall, at the picture plane — z = 0, the only plane the
-                  dolly never magnifies past 1.000. It is the far end of the
-                  room the three terms are walking into, and it is shown at its
-                  own 1620 × 1080 ratio so nothing is cropped at any width. */}
-              <figure className="sx3d-wall">
-                <Shot frame={FRAMES.hall} sizes={HALL_SIZES} eager />
-                <figcaption className="sx3d-cap">{FRAMES.hall.cap}</figcaption>
-              </figure>
             </div>
-          </div>
-        </div>
-      </div>
+          </figure>
 
-      {/* ── OUT OF THE ROOM. One hard edge, no gradient: the room stops and
-             paper starts, and the fourth term is standing on it. This is the
-             whole distinction the copy makes — three things Yoga is approached
-             through, and one thing it moves BY — and it is carried by the
-             ground and the distance, not by a fourth copy of the same object. */}
-      <div className="sx3d-out">
-        <div className="sx3d-stage">
-          <div className="sx3d-fourth">
-            <div className="sx3d-fourth__t">
-              <h3 className="sx3d-fourth__n">{transmission.name}</h3>
-              <p className="sx3d-fourth__b">{transmission.body}</p>
+          <div className="sx3d-terms">
+            {three.map((it, i) => (
+              <div className="sx3d-term" key={it.name}>
+                <h3 className="sx3d-term__name">
+                  <KeyPlan lit={SURFACES[i] ?? []} />
+                  {it.name}
+                </h3>
+                <p className="sx3d-term__body">{it.body}</p>
+              </div>
+            ))}
+
+            <div className="sx3d-term sx3d-term--turn">
+              <h3 className="sx3d-term__name">
+                <KeyPlan lit={['back']} />
+                {fourth.name}
+              </h3>
+              <p className="sx3d-term__body">{fourth.body}</p>
             </div>
-
-            <figure className="sx3d-fourth__fig">
-              <Shot frame={FRAMES.teach} sizes={TEACH_SIZES} />
-              <figcaption className="sx3d-cap sx3d-cap--paper">{FRAMES.teach.cap}</figcaption>
-            </figure>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-/**
- * One photograph.
- *
- * `sizes` is always explicit — a srcset with no sizes makes the browser assume
- * 100vw, so a phone pulls a 1620 derivative for a small plate. The box is given
- * the frame's own ratio (or a window cut from it that was rendered and looked
- * at), and both object-position values travel with the element so the
- * stylesheet can art-direct the narrow box rather than letting `cover` choose.
- *
- * No <video> and no `poster` attribute appears anywhere in this section: a
- * poster is fetched even when `src` is never set, which cost this site 948 KB on
- * every device once already.
- */
-function Shot({
-  frame,
-  sizes,
-  eager = false,
-}: {
-  frame: Frame;
-  sizes: string;
-  eager?: boolean;
-}) {
-  return (
-    <img
-      src={src(frame)}
-      srcSet={srcSet(frame)}
-      sizes={sizes}
-      alt={frame.alt}
-      loading={eager ? 'eager' : 'lazy'}
-      decoding={eager ? 'sync' : 'async'}
-      style={{ '--op': frame.pos, '--op-n': frame.posNarrow } as CSSProperties}
-    />
   );
 }

@@ -1,0 +1,415 @@
+/* preview-sx7c — owned solely by /preview/sx7c/. Every selector carries the .sx7c- prefix. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ABOUT §07 FACULTY — concept C, "type is the structure".
+
+   A ROOT TEXT AND ITS COMMENTARY.
+
+   One leaf, laid out as a tripāṭha, the Indian manuscript format in which the
+   root text runs through the middle of the folio and its commentary is written
+   above and beneath it. The lead is the root, at display size; the client's
+   two paragraphs are the commentary, in the italic, as the Talmud page gives
+   its commentary a semi-cursive voice. Down the middle runs the binding column
+   a pothi leaves open for its cord, marked, as Jain paper manuscripts go on
+   marking it, with a disc. Every line breaks round the column and resumes on
+   the far side, the root line too, at "shared", with the disc in the break.
+   The disc opens into the leaf's one picture as the leaf rises.
+
+   THE GRID IS THE PICTURE'S. The leaf is exactly as tall as the binding
+   column, and the column is the clip's own 9:16: the upper commentary starts
+   on its top edge and the lower commentary finishes on its bottom edge, so the
+   text block and the picture are one rectangle.
+
+   Every scroll-linked value arrives as a custom property written by
+   LeafMotion.tsx, and only while `.is-iris` is on the plate. Without that
+   class, which is the page with no JavaScript and under reduced motion, the
+   plate is a plain open rectangle.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sx7c-sec {
+  /* the leaf's height, which is the binding column's */
+  --sx7c-H: clamp(25rem, 68svh, 46rem);
+  /* wing text to column: a wide word space at display size */
+  --sx7c-G: clamp(1.25rem, 2.4vw, 2.75rem);
+  /* sand as a hairline, the one thing DESIGN-SYSTEM §1 lets it be */
+  --sx7c-rule: rgba(246, 217, 193, 0.3);
+  /* the commentary's reading size */
+  --sx7c-com: clamp(1.04rem, 0.92rem + 0.4vw, 1.36rem);
+
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(4.4rem, 10vw, 9rem) clamp(5.5rem, 11vw, 10rem);
+  background: var(--ground-deep);
+  color: var(--ink-onPic);
+  overflow-x: clip;
+}
+
+/* capped AND centred, and the container every size below is solved against */
+.sx7c-rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+  container-type: inline-size;
+}
+
+.sx7c-rail > .apr-eyebrow {
+  margin-bottom: clamp(2.2rem, 4.6vw, 4rem);
+}
+
+/* ── THE ROOT ──────────────────────────────────────────────────────────── */
+.sx7c-root {
+  position: relative;
+  z-index: 2; /* the disc sits over the column, and so over the picture */
+  margin: 0;
+  font-family: var(--font-display);
+  /* ONE optical cut at every size. With opsz following the size, the longer run
+     measured 6.68em at 36px and 5.47em at 102px, so no single fit could be
+     exact. Pinned at 72 it is 6.196em everywhere (measured in the page), and
+     the size below is solved against 6.24. */
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 72;
+  font-weight: 360;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink-onPic);
+}
+.sx7c-root__a,
+.sx7c-root__b {
+  white-space: nowrap;
+}
+
+/* THE DISC. An inline block on the root's own line, so it sits at x-height
+   by the root's baseline rather than by a guessed offset. Invisible by
+   default: with no JavaScript the column is already open. */
+.sx7c-disc {
+  line-height: 1;
+}
+.sx7c-disc__dot {
+  display: inline-block;
+  width: 0.17em;
+  height: 0.17em;
+  border-radius: 50%;
+  vertical-align: 0.17em;
+  background: var(--clay);
+  opacity: 0;
+}
+
+/* ── THE COMMENTARY ────────────────────────────────────────────────────── */
+.sx7c-com {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-style: italic;
+  font-weight: 330;
+  /* the soft cut: the nearest this face has to a scribe's semi-cursive */
+  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  font-size: var(--sx7c-com);
+  line-height: 1.52;
+  color: rgba(251, 247, 242, 0.86);
+  /* ragged, not justified: a browser justifies greedily, line by line, and at
+     this measure that opened rivers of four word-spaces in the italic. A good
+     rag is better than a bad block. */
+  text-align: start;
+  hyphens: manual;
+  text-wrap: pretty;
+}
+
+/* ── THE ILLUMINATION ──────────────────────────────────────────────────── */
+.sx7c-fig {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+.sx7c-plate {
+  position: relative;
+  overflow: hidden;
+}
+.sx7c-iris,
+.sx7c-pic {
+  position: absolute;
+  inset: 0;
+}
+.sx7c-pic img,
+.sx7c-pic video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+.sx7c-pic video {
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+.sx7c-pic video.is-live {
+  opacity: 1;
+}
+
+/* the iris, only while it is opening: a circle centred on the disc, scaled by
+   s, with the picture inside it scaled by 1/s about the same point */
+.sx7c-plate.is-iris .sx7c-iris {
+  inset: auto;
+  left: calc(var(--sx7c-cx) - var(--sx7c-D) / 2);
+  top: calc(var(--sx7c-cy) - var(--sx7c-D) / 2);
+  width: var(--sx7c-D);
+  height: var(--sx7c-D);
+  border-radius: 50%;
+  overflow: hidden;
+  transform: scale(var(--sx7c-s));
+  will-change: transform;
+}
+.sx7c-plate.is-iris .sx7c-pic {
+  inset: auto;
+  left: calc(var(--sx7c-D) / 2 - var(--sx7c-cx));
+  top: calc(var(--sx7c-D) / 2 - var(--sx7c-cy));
+  width: var(--sx7c-w);
+  height: var(--sx7c-h);
+  transform-origin: var(--sx7c-cx) var(--sx7c-cy);
+  transform: scale(calc(1 / var(--sx7c-s)));
+  will-change: transform;
+}
+
+/* the column's rules: a double hairline down each side, standing proud of the
+   leaf at both ends as a ruled column does on the folio */
+.sx7c-fig::before,
+.sx7c-fig::after {
+  content: '';
+  position: absolute;
+  top: -1.4rem;
+  bottom: -1.4rem;
+  width: 4px;
+  border-inline: 1px solid var(--sx7c-rule);
+  pointer-events: none;
+}
+
+.sx7c-cap {
+  margin: 0;
+  font: 400 12.5px/1.5 var(--font-text);
+  letter-spacing: 0.01em;
+  color: rgba(251, 247, 242, 0.76);
+}
+
+/* ══ THE LEAF, 960 and up: three tracks, three bands ═══════════════════════ */
+@media (min-width: 960px) {
+  .sx7c-leaf {
+    /* the column is the clip's 9:16 at the leaf's height, unless that would
+       starve the wings, in which case the picture is cropped to fit */
+    --sx7c-S: min(calc(var(--sx7c-H) * 0.5625), 30cqi);
+    --sx7c-wing: calc((100cqi - var(--sx7c-S) - 2 * var(--sx7c-G)) / 2);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sx7c-S) minmax(0, 1fr);
+    grid-template-rows: auto minmax(1.75rem, 1fr) auto minmax(1.75rem, 1fr) auto;
+    column-gap: var(--sx7c-G);
+    /* the caption's room beneath the column */
+    padding-bottom: 5.5rem;
+  }
+
+  .sx7c-fig {
+    grid-column: 2;
+    grid-row: 1 / 6;
+  }
+  .sx7c-plate {
+    height: 100%;
+    min-height: var(--sx7c-H);
+  }
+  .sx7c-fig::before {
+    left: calc(var(--sx7c-G) / -2 - 2px);
+  }
+  .sx7c-fig::after {
+    right: calc(var(--sx7c-G) / -2 - 2px);
+  }
+  .sx7c-cap {
+    position: absolute;
+    top: calc(100% + 2.4rem);
+    left: 50%;
+    width: max(100%, 16rem);
+    transform: translateX(-50%);
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  /* the root line crosses the column on one baseline: "Learning is a" set flush
+     against it, "shared journey." starting from it. The size is whichever is
+     smaller, the ceiling or the size at which the longer run fills its wing. */
+  .sx7c-root {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+    font-size: min(6.4rem, calc(var(--sx7c-wing) / 6.24));
+  }
+  .sx7c-root__a {
+    grid-column: 1;
+    justify-self: end;
+  }
+  .sx7c-disc {
+    grid-column: 2;
+    justify-self: center;
+  }
+  .sx7c-root__b {
+    grid-column: 3;
+    justify-self: start;
+  }
+
+  /* THE COMMENTARY BREAKS ROUND THE COLUMN TOO. Each paragraph is one <p> whose
+     two runs sit in the wings on the root's own tracks: the left run set flush
+     against the column, as "Learning is a" is, the right run starting from it.
+     So every edge that faces the binding column is straight and every edge
+     that faces the margin is ragged, and the leaf is symmetrical about its cord.
+     Neither run's box crosses the picture. */
+  .sx7c-com {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  .sx7c-com__a {
+    grid-column: 1;
+    text-align: right;
+  }
+  .sx7c-com__b {
+    grid-column: 3;
+    text-align: left;
+  }
+  /* the upper runs HANG from the picture's top edge: leading trimmed off the
+     first line, so the cap height of the first words stands exactly on it */
+  .sx7c-com--up {
+    grid-row: 1;
+    align-items: start;
+  }
+  .sx7c-com--up > span {
+    text-box: trim-start cap alphabetic;
+  }
+  /* the lower runs STAND on its bottom edge: trimmed to the last baseline, and
+     aligned to the row's foot, so both last lines sit on the picture's edge */
+  .sx7c-com--down {
+    grid-row: 5;
+    align-items: end;
+  }
+  .sx7c-com--down > span {
+    text-box: trim-end cap alphabetic;
+  }
+}
+
+/* ══ ONE COLUMN, below 960: the leaf turned on its side ════════════════════
+   There is no room for wings, so the binding column becomes a band across the
+   page, and the root sentence breaks round it the same way, now vertically:
+   "Learning is a", the picture, "shared journey." The commentary follows. */
+@media (max-width: 959px) {
+  .sx7c-leaf {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto;
+  }
+  .sx7c-root {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-template-columns: minmax(0, 1fr);
+    font-size: min(4.8rem, calc(100cqi / 6.24));
+    line-height: 1.04;
+  }
+  .sx7c-root__a {
+    grid-row: 1;
+    justify-self: start;
+  }
+  .sx7c-disc {
+    grid-row: 2;
+    justify-self: center;
+    align-self: center;
+  }
+  .sx7c-root__b {
+    grid-row: 3;
+    justify-self: end;
+  }
+  .sx7c-disc__dot {
+    vertical-align: middle;
+  }
+
+  .sx7c-fig {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    width: min(100% - 3rem, 22rem);
+    margin-block: clamp(1.4rem, 5vw, 2.2rem);
+  }
+  .sx7c-plate {
+    aspect-ratio: 9 / 16;
+    max-height: 80svh;
+  }
+  .sx7c-fig::before {
+    left: -0.7rem;
+  }
+  .sx7c-fig::after {
+    right: -0.7rem;
+  }
+  /* the caption is a note written up the margin beside the picture */
+  .sx7c-cap {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 0.95rem);
+    height: 100%;
+    writing-mode: vertical-rl;
+    font-size: 11.5px;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .sx7c-com--up {
+    grid-row: 4;
+    margin-top: clamp(2.2rem, 8vw, 3.2rem);
+  }
+  .sx7c-com--down {
+    grid-row: 5;
+    margin-top: 1.2em;
+  }
+  .sx7c-com {
+    max-width: 34em;
+  }
+}
+
+/* ── PREVIEW SCAFFOLD — not the section. The neighbours' grounds, so the seams
+   are judged against what is really above and below. ─────────────────────── */
+.sx7c-scaffold {
+  padding-block: clamp(3rem, 7vw, 5.5rem);
+  background: var(--ground);
+  color: var(--ink-soft);
+  font: 400 13px/1.5 var(--font-text);
+}
+.sx7c-scaffold--above {
+  min-height: 100svh;
+}
+.sx7c-scaffold--warm {
+  background: var(--ground-warm);
+  padding-block: clamp(4rem, 10vw, 8rem) clamp(12rem, 40vh, 26rem);
+}
+.sx7c-scaffold__rail {
+  max-width: calc(92rem + 2 * var(--rail));
+  margin-inline: auto;
+  padding-inline: var(--rail);
+}
+.sx7c-scaffold__rail p {
+  margin: 0;
+}
+.sx7c-scaffold__tag {
+  display: inline-block;
+  margin-right: 0.8em;
+  padding: 0.15em 0.55em;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sx7c-scaffold :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
