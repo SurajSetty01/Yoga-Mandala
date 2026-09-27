@@ -1,11 +1,11 @@
 /**
  * sx6: THE FOUNDER'S PORTRAIT SLOT.
  *
- * Founder.tsx passes `photo`: an illustration of Pranav Murthy made from an archive photograph
+ * Founder.tsx passes `photo`: Pranav Murthy cut out of an archive photograph
  * of him (Prabodha TTC, DSC_0333, seated under the banyan with palms joined), which the site
- * owner identified as him. His figure was cut out and reduced to three flat tones inside a
- * brass outline, so it reads as a drawing rather than a photo. The source file is
- * public/media/founder/pranav-murthy-seated.webp.
+ * owner identified as him. Only the background is removed; the photograph is unaltered.
+ * The file is
+ * public/media/founder/pranav-murthy.webp.
  *
  * Without `photo` the slot falls back to the hand-drawn line figure below, which is labelled
  * as what it shows and never as him.
