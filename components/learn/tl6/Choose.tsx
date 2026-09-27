@@ -1,28 +1,27 @@
 import { Fragment, type CSSProperties } from 'react';
 import Link from 'next/link';
 import { about } from '@/content/pranava';
-import { Mark, Shot } from '../parts';
-import { PATHS } from './frames';
-import { Tl6Arrival } from './Arrival';
+import { Mark } from '../parts';
+import { PHOTOS, type Tl6Photo } from './frames';
+import { Tl6Track } from './Track';
 
 /**
- * 05 — HOW TO CHOOSE. Four paths meet at one arrival.
+ * 05 · HOW TO CHOOSE. The client's sentence, written out with the scroll.
  *
  * The client never says how to choose between programmes, and nothing ties a programme to a
  * kind of reader, so there is no table, quiz or decision tree here. What the client HAS
- * written is a sentence that is already a chooser: four beginnings and one destination.
+ * written is a sentence that is already a chooser: four readers and one place.
  *
  *   Whether you are / beginning… / seeking… / preparing… / or simply… / Pranava is a space…
  *
- * Each clause stands over its own tall photograph of a path. As the reader scrolls, the
- * feet of the four panels swing inward and narrow until the four touch, a fan of paths whose
- * lines all run to one point, and that point is the top edge of a moving frame of shaded
- * paving. The resolve and the enquiry route are set at that arrival. The grammar of the
- * sentence is the geometry: four subordinate clauses, one main clause.
+ * Each of the four clauses stands under (on a phone: beside) a photograph of that reader.
+ * While the stage is pinned, the clauses arrive one at a time, each with its photograph, left
+ * to right as the sentence is read. When the fourth is in, the gaps between the four close,
+ * the four frames become one band, and the main clause and the enquiry route arrive beneath.
+ * Four readers, one place: the grammar of the sentence is the composition.
  *
- * On phones the four are short bands stacked down the axis, each narrower at its foot than
- * its head, so the stack tapers into the arrival. Reduced motion, and no script, give the
- * met state, which is the whole picture.
+ * Reduced motion, no script, and a screen too short to hold the stage all get that joined,
+ * finished composition at once, unpinned. See Track.tsx.
  *
  * COPY. Every word is sliced out of `about.closing.body` at its own commas, so no fragment
  * can drift from the client's wording, and the commas stay with their clauses: read in
@@ -44,47 +43,75 @@ const CLAUSES = S.slice(LEAD.length + 1, TAIL_AT)
   .split(', ')
   .map((c) => `${c},`);
 
+function Photo({ photo, i }: { photo: Tl6Photo; i: number }) {
+  const style = { '--i': i, '--op': photo.pos, '--op-n': photo.posNarrow } as CSSProperties;
+  const { id, widths, w, h, alt } = photo;
+  return (
+    <figure className={`tl6-pic tl6-pic--${i}`} style={style}>
+      {widths ? (
+        <img
+          src={`/media/stills/${id}-${widths[widths.length - 1]}.webp`}
+          srcSet={widths.map((x) => `/media/stills/${id}-${x}.webp ${x}w`).join(', ')}
+          sizes={photo.sizes}
+          width={w}
+          height={h}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <picture>
+          <source type="image/avif" srcSet={`/media/posters/${id}.avif`} />
+          <img
+            src={`/media/posters/${id}.jpg`}
+            width={w}
+            height={h}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      )}
+    </figure>
+  );
+}
+
 export function Tl6Choose() {
   return (
     <section className="tl6" id="how-to-choose">
-      <div className="tl6-in">
-        <Mark n="05">How to choose</Mark>
+      <Tl6Track>
+        <div className="tl6-in">
+          <Mark n="05">How to choose</Mark>
 
-        <div className="tl6-stage">
-          <p className="tl6-sentence">
-            <span className="tl6-lead">{LEAD}</span>{' '}
-            {CLAUSES.map((c, i) => (
-              <Fragment key={c}>
-                <span className={`tl6-clause tl6-clause--${i}`}>{c}</span>{' '}
-              </Fragment>
+          <div className="tl6-grid">
+            <p className="tl6-sentence">
+              <span className="tl6-lead">{LEAD}</span>{' '}
+              {CLAUSES.map((c, i) => (
+                <Fragment key={c}>
+                  <span
+                    className={`tl6-clause tl6-clause--${i}`}
+                    style={{ '--i': i } as CSSProperties}
+                  >
+                    {c}
+                  </span>{' '}
+                </Fragment>
+              ))}
+              <span className="tl6-resolve">{RESOLVE}</span>
+            </p>
+
+            {PHOTOS.map((p, i) => (
+              <Photo photo={p} i={i} key={p.id} />
             ))}
-            <span className="tl6-resolve">{RESOLVE}</span>
-          </p>
 
-          {PATHS.map((fr, i) => (
-            <div
-              className={`tl6-path tl6-path--${i}`}
-              key={fr.id}
-              style={{ '--i': i } as CSSProperties}
-            >
-              <Shot
-                className="tl6-path__img"
-                frame={fr}
-                sizes={fr.w < fr.h ? '(max-width: 819px) 100vw, 27rem' : '(max-width: 819px) 100vw, 60rem'}
-              />
-            </div>
-          ))}
-
-          <Tl6Arrival />
-
-          <Link className="tl6-cta" href="/contact/">
-            Enquire
-            <svg width="15" height="10" viewBox="0 0 15 10" aria-hidden="true" focusable="false">
-              <path d="M0 5h12.5M8.5 1L12.8 5 8.5 9" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </Link>
+            <Link className="tl6-cta" href="/contact/">
+              Enquire
+              <svg width="15" height="10" viewBox="0 0 15 10" aria-hidden="true" focusable="false">
+                <path d="M0 5h12.5M8.5 1L12.8 5 8.5 9" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              </svg>
+            </Link>
+          </div>
         </div>
-      </div>
+      </Tl6Track>
     </section>
   );
 }

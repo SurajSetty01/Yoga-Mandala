@@ -1,72 +1,84 @@
-import type { Frame } from '../frames';
-
 /**
- * 05 · How to choose — four paths and the place they arrive at.
+ * 05 · How to choose — one photograph per reader the client's sentence names.
  *
- * Every frame here is a path with nobody on it (0364 has one figure too small to be anyone),
- * and every alt is the manifest's own description of the path. None of them says who walks
- * it: the clause above each panel is the reader's, the picture is only the ground.
+ * Each frame was chosen so the clause could be matched to it with the words covered:
  *
- * Widths are what exists on disk. The three landscape frames stop at 1620; `0364` stops at
- * 960 and is 2:3, so it is given the one inner panel whose box stays narrow at every width.
+ *   beginning      ss-dsc07118   a teacher bent over one student in a plank, a hand held
+ *                                over the student's back: one person being shown a pose
+ *   deepening      0146_1        one practitioner alone in a full backbend over a chair:
+ *                                a practice that is already strong and exact
+ *   to teach       p27-img_0889  two people adjusting a third while two more watch from the
+ *                                floor: hands-on teaching, practised on a peer
+ *   traditions     ss-dsc07137   a man in a kurta on a low stool, listeners seated on the
+ *                                floor before him: learning by sitting and listening
  *
- * `pos` puts each path's vanishing point near the middle of its STARTING column (the image
- * box is wider than the column because it also has to cover where the panel's foot swings
- * to). `posNarrow` is for the phone's short wide bands, aimed low at the path itself.
+ * None of these is used anywhere else on /learn/. Nobody in the archive is identified, so
+ * every alt says what is happening and never who.
+ *
+ * SIZES ARE THE FILES ON DISK, not the manifest. `ss-dsc07118` is catalogued 7008 × 4672 but
+ * its derivatives are 2:3 portrait (1920 × 2880); `p27-img_0889` exists only as its clip's
+ * poster, one 1080 × 1920 JPEG with an AVIF twin, so it carries no srcset.
+ *
+ * The apertures are 4:5 in the row of four and square in the phone's 2 × 2, so each frame
+ * has a crop for both (`pos`, `posNarrow`). A 3:2 frame in a 4:5 box renders 1.875 × the
+ * box's width, and `sizes` says so, or a retina screen would pull a derivative too small.
  */
-export const PATHS: Frame[] = [
+
+export type Tl6Photo = {
+  id: string;
+  /** derivative widths in /media/stills, largest last; absent for a clip poster */
+  widths?: number[];
+  /** intrinsic pixels of the largest file */
+  w: number;
+  h: number;
+  /** object-position in the 4:5 row */
+  pos: string;
+  /** object-position in the phone's square */
+  posNarrow: string;
+  sizes?: string;
+  alt: string;
+};
+
+const PORTRAIT = '(max-width: 819.98px) 46vw, (min-width: 1620px) 370px, 23vw';
+const LANDSCAPE = '(max-width: 819.98px) 70vw, (min-width: 1620px) 700px, 44vw';
+
+export const PHOTOS: Tl6Photo[] = [
   {
-    id: 'pr-ttc-dsc_0015_1',
+    id: 'ss-dsc07118',
+    widths: [480, 960, 1920],
+    w: 1920,
+    h: 2880,
+    pos: '50% 40%',
+    posNarrow: '50% 42%',
+    sizes: PORTRAIT,
+    alt: "A teacher bends over a student holding a plank, one hand just above the student's back to correct the line of the pose",
+  },
+  {
+    id: 'pr-ttc-dsc_0146_1',
     widths: [480, 960, 1620],
     w: 1620,
     h: 1080,
-    pos: '78% 50%',
-    posNarrow: '50% 64%',
-    alt: 'An earth path running away between dense green trees and clipped lawn into shade',
+    pos: '56% 50%',
+    posNarrow: '56% 50%',
+    sizes: LANDSCAPE,
+    alt: 'A practitioner arches back over a folding chair in a deep backbend, hands and feet planted on the mat, another working on a chair behind',
   },
   {
-    id: 'pr-ttc-dsc_0294_1',
-    widths: [480, 960, 1620],
-    w: 1620,
-    h: 1080,
-    pos: '50% 50%',
-    posNarrow: '50% 62%',
-    alt: 'A broad earth path running between kerbed lawns and tall slender trees',
+    id: 'p27-img_0889',
+    w: 1080,
+    h: 1920,
+    pos: '50% 34%',
+    posNarrow: '50% 34%',
+    alt: "Two people place their hands on a third person's shoulder and back to adjust a standing posture while two others watch from the floor",
   },
   {
-    id: 'pr-ttc-dsc_0364',
-    widths: [480, 960],
-    w: 960,
-    h: 1440,
-    pos: '50% 50%',
-    posNarrow: '50% 74%',
-    alt: 'A paved path running away between tall slender tree trunks under a green canopy',
-  },
-  {
-    id: 'pr-ttc-dsc_0020_1',
-    widths: [480, 960, 1620],
-    w: 1620,
-    h: 1080,
-    pos: '36% 50%',
-    posNarrow: '52% 66%',
-    alt: 'A narrow earth lane between a white building and a wall of hanging vines, opening into light',
+    id: 'ss-dsc07137',
+    widths: [480, 960, 1920],
+    w: 1920,
+    h: 1280,
+    pos: '42% 50%',
+    posNarrow: '42% 50%',
+    sizes: LANDSCAPE,
+    alt: 'A man in a light blue kurta sits on a low stool speaking, with listeners seated on the floor before him',
   },
 ];
-
-/**
- * The arrival. `pr-mov-img_5964` is a 9:16 courtyard clip, and only its lower 31% is used:
- * above that line a man kneels and bows to the floor beside a walled enclosure carrying a
- * painted sign on another institution's ground, which is not what an arrival at Pranava
- * should show. Below it, the whole clip is pale stone paving with leaf-shadow moving across
- * it. The last ~2s pan away, so playback loops before LOOP_END.
- */
-export const ARRIVAL = {
-  id: 'pr-mov-img_5964',
-  src: '/media/clips/pr-mov-img_5964.mp4',
-  posterAvif: '/media/posters/pr-mov-img_5964.avif',
-  poster: '/media/posters/pr-mov-img_5964.jpg',
-  w: 1080,
-  h: 1920,
-  loopEnd: 5.4,
-  alt: 'Dappled light moving across the pale stone paving of a shaded courtyard',
-} as const;

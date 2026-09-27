@@ -1,42 +1,57 @@
 /* Final tl6 section. Every selector is namespaced .tl6-
 
-   05 · How to choose — four paths meet at one arrival.
+   05 · How to choose — four readers, one sentence, one place.
 
-   GEOMETRY. On wide screens all four panels sit in ONE grid cell, each a full-stage-width
-   layer cut to its own quadrilateral by clip-path. Its head is its grid column and never
-   moves (the clause above it stays put and readable); its foot runs from that column
-   (--p: 0) to one quarter of the arrival's width (--p: 1). At 1 the four feet touch and
-   together are exactly the arrival's top edge, so the paths end on it.
-   Every coordinate is a length-percentage of the stage width, so it holds 820 → 2560 with
-   no script measuring anything: the script only writes --p.
+   THE COMPOSITION (the finished state, and the default):
 
-   Each photograph's box covers both where the panel starts and where its foot ends, so the
-   clip never runs past the picture.
+     wide     Whether you are
+              [ photo ][ photo ][ photo ][ photo ]    one band, the four frames touching
+              clause,   clause,   clause,   clause,
+              Pranava is a space to learn,            [ Enquire ]
+              practise and enquire.
 
-   --p defaults to 1: no script and reduced motion get the met state, the whole picture. */
+     phone    Whether you are
+              clause,   clause,                       the top pair's clauses sit above
+              [ photo ][ photo ]                      their photographs, the bottom pair's
+              [ photo ][ photo ]                      below, so the four frames close into
+              clause,   clause,                       one square and every clause still
+              Pranava is a space…                     touches its own picture
+              [ Enquire ]
+
+   THE SCROLL. `--step` runs 0 → 5 (Track.tsx). Each item's `--on` is 1 once the step has
+   reached it: a photograph rises into its frame and its clause arrives with it. At step 5
+   `--j` turns on: the gaps close so the four join, then the resolve and the pill arrive.
+   The steps are whole numbers; the transitions do the moving.
+
+   All motion lives in the media query at the foot (motion allowed, scripting on). Inside
+   it the stage is pinned in a tall track, unless Track.tsx finds the composition taller
+   than the screen below the nav and sets `.tl6--flow`: then it stays in normal flow and
+   each photograph arrives as it comes up into view. Reduced motion and no script get the
+   finished composition, unpinned, at once. */
 
 .tl6 {
-  --p: 1;
-  --g: clamp(12px, 1.7vw, 26px);
-  /* the arrival's share of the stage width, and so the width of the paths' meeting edge */
-  --B: 46%;
-  --H: clamp(22rem, 36vw, 40rem);
+  --step: 5;
+  --j: clamp(0, var(--step) - 4, 1);
+  --g: clamp(0.75rem, 1.6vw, 1.6rem);
   position: relative;
   background: var(--ground);
   color: var(--ink);
-  padding: clamp(4.5rem, 10vw, 8.5rem) var(--page) clamp(5rem, 11vw, 9.5rem);
+  padding-block: clamp(4.5rem, 10vw, 8.5rem) clamp(5rem, 11vw, 9.5rem);
   overflow-x: clip;
 }
 
+/* the same edges as 06 below it: capped at 1620 with the page gutter inside the cap */
 .tl6-in {
-  max-width: 82.5rem;
+  max-width: 101.25rem;
   margin-inline: auto;
+  padding-inline: var(--page);
+  box-sizing: border-box;
 }
 
-.tl6-stage {
+.tl6-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: var(--g);
+  column-gap: calc(var(--g) * (1 - var(--j)));
 }
 
 /* the sentence is one paragraph for a screen reader; its six parts are laid out by the grid */
@@ -47,139 +62,102 @@
 .tl6-lead {
   grid-column: 1 / -1;
   grid-row: 1;
-  justify-self: center;
-  margin: 0 0 clamp(1.5rem, 3.2vw, 2.8rem);
-  font: italic 400 clamp(1.75rem, 3vw, 2.9rem)/1.1 var(--font-display);
+  display: block;
+  margin: 0 0 clamp(1rem, 2.6svh, 1.9rem);
+  font: italic 400 clamp(1.5rem, 2.4vw, 2.5rem)/1.1 var(--font-display);
   color: var(--forest);
 }
 
+/* ── the four ─────────────────────────────────────────────────────────────────────── */
+
+.tl6-pic,
 .tl6-clause {
-  grid-row: 2;
-  align-self: end;
-  display: block;
-  padding: 0 0.35rem clamp(0.9rem, 1.6vw, 1.4rem);
-  font: 400 clamp(1.08rem, 1.45vw, 1.5rem)/1.28 var(--font-display);
-  color: var(--ink);
-  text-align: center;
-  text-wrap: balance;
+  --on: clamp(0, var(--step) - var(--i), 1);
 }
-.tl6-clause::before {
-  /* a brass stroke on the axis of each column: four heads, each over its own path */
-  content: '';
+
+.tl6-pic {
+  grid-row: 2;
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--ground-warm);
+  /* rises into its frame from the foot */
+  clip-path: inset(calc(100% * (1 - var(--on))) 0 0 0);
+}
+.tl6-pic picture {
+  display: contents;
+}
+.tl6-pic img {
   display: block;
-  width: 1px;
-  height: clamp(0.9rem, 1.6vw, 1.4rem);
-  margin: 0 auto 0.8rem;
-  background: var(--brass);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--op);
+  transform: scale(calc(1 + 0.06 * (1 - var(--on))));
+  transform-origin: 50% 100%;
+}
+.tl6-pic--0 { grid-column: 1; }
+.tl6-pic--1 { grid-column: 2; }
+.tl6-pic--2 { grid-column: 3; }
+.tl6-pic--3 { grid-column: 4; }
+
+.tl6-clause {
+  grid-row: 3;
+  display: block;
+  /* the right padding keeps two clauses apart once their frames touch */
+  padding: clamp(0.8rem, 1.7svh, 1.2rem) clamp(0.75rem, 1.6vw, 1.6rem) 0 0;
+  font: 400 clamp(1.02rem, 1.3vw, 1.4rem)/1.3 var(--font-display);
+  color: var(--ink);
+  text-wrap: pretty;
+  opacity: var(--on);
+  transform: translateY(calc(0.75rem * (1 - var(--on))));
 }
 .tl6-clause--0 { grid-column: 1; }
 .tl6-clause--1 { grid-column: 2; }
 .tl6-clause--2 { grid-column: 3; }
 .tl6-clause--3 { grid-column: 4; }
 
-/* ── the four paths ─────────────────────────────────────────────────────────────── */
-
-.tl6-path {
-  --cw: calc((100% - 3 * var(--g)) / 4);
-  --l: calc(var(--i) * (var(--cw) + var(--g)));
-  --r: calc(var(--l) + var(--cw));
-  --bl: calc(50% - var(--B) / 2 + var(--i) * var(--B) / 4);
-  --br: calc(var(--bl) + var(--B) / 4);
-  grid-column: 1 / -1;
-  grid-row: 3;
-  position: relative;
-  height: var(--H);
-  clip-path: polygon(
-    var(--l) 0,
-    var(--r) 0,
-    calc(var(--r) + (var(--br) - var(--r)) * var(--p)) 100%,
-    calc(var(--l) + (var(--bl) - var(--l)) * var(--p)) 100%
-  );
-  /* the layer is the full stage; only the clipped quadrilateral is the panel */
-  background: transparent;
-  pointer-events: none;
-}
-
-.tl6-path__img {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  left: min(var(--l), var(--bl));
-  width: calc(max(var(--r), var(--br)) - min(var(--l), var(--bl)));
-  object-fit: cover;
-  object-position: var(--op);
-  background: var(--ground-warm);
-}
-
-/* ── the arrival ────────────────────────────────────────────────────────────────── */
-
-.tl6-arrival {
-  grid-column: 1 / -1;
-  grid-row: 4;
-  justify-self: center;
-  position: relative;
-  width: var(--B);
-  margin: 0;
-  /* the clip's lower 1080 × 500: paving and moving shade only, a threshold not a floor */
-  aspect-ratio: 1080 / 500;
-  overflow: clip;
-  background: var(--ground-warm);
-}
-.tl6-arrival picture {
-  display: contents;
-}
-.tl6-arrival__still,
-.tl6-arrival__clip {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 100%;
-  display: block;
-}
-.tl6-arrival__clip {
-  opacity: 0;
-  transition: opacity 0.9s var(--ease);
-}
-.tl6-is-playing .tl6-arrival__clip {
-  opacity: 1;
-}
+/* ── the one place ────────────────────────────────────────────────────────────────── */
 
 .tl6-resolve {
-  grid-column: 1 / -1;
-  grid-row: 5;
-  justify-self: center;
+  grid-column: 1 / 4;
+  grid-row: 4;
   display: block;
-  max-width: 21ch;
-  margin-top: clamp(1.6rem, 3.4vw, 2.8rem);
-  font: 400 clamp(1.7rem, 3.1vw, 3rem)/1.12 var(--font-display);
+  margin-top: clamp(1.6rem, 4svh, 3rem);
+  padding-right: var(--g);
+  font: 400 clamp(1.6rem, 3vw, 3rem)/1.12 var(--font-display);
   letter-spacing: -0.01em;
   color: var(--forest);
-  text-align: center;
   text-wrap: balance;
+  opacity: var(--j);
+  transform: translateY(calc(1rem * (1 - var(--j))));
 }
 
 .tl6-cta {
-  grid-column: 1 / -1;
-  grid-row: 6;
-  justify-self: center;
+  grid-column: 4;
+  grid-row: 4;
+  align-self: end;
+  justify-self: start;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  margin-top: clamp(1.4rem, 3vw, 2.2rem);
   padding: 0.9rem 1.45rem;
   border-radius: 999px;
   background: var(--forest);
   color: var(--ink-onDark);
   font: 600 14px/1 var(--font-text);
   text-decoration: none;
+  opacity: var(--j);
+  transform: translateY(calc(0.75rem * (1 - var(--j))));
   transition: background 0.3s var(--ease);
 }
 .tl6-cta:hover {
   background: var(--forest-deep);
 }
 .tl6-cta:focus-visible {
+  opacity: 1;
+  transform: none;
   outline: 2px solid var(--forest);
   outline-offset: 3px;
 }
@@ -191,63 +169,116 @@
   transform: translateX(4px);
 }
 
-/* ── phones: four short bands down one axis, tapering into the arrival ───────────── */
+/* ── phones: a 2 × 2 that closes into one square ──────────────────────────────────── */
 
-@media (max-width: 819px) {
-  .tl6 {
-    /* how much each band's foot is drawn in, per side, at the met state */
-    --s: 3.5%;
+@media (max-width: 819.98px) {
+  .tl6-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 34rem;
   }
-  .tl6-stage {
-    grid-template-columns: minmax(0, 1fr);
-    column-gap: 0;
+  .tl6-pic {
+    aspect-ratio: 1;
   }
-  .tl6-lead {
-    margin-bottom: 0.4rem;
-  }
-  .tl6-clause {
-    grid-column: 1;
-    padding: 1.1rem 0.5rem 0.8rem;
-  }
-  .tl6-clause::before {
-    height: 0.8rem;
-    margin-bottom: 0.6rem;
-  }
-  .tl6-clause--0 { grid-row: 2; }
-  .tl6-clause--1 { grid-row: 4; }
-  .tl6-clause--2 { grid-row: 6; }
-  .tl6-clause--3 { grid-row: 8; }
-  .tl6-path {
-    grid-column: 1;
-    height: clamp(7.5rem, 32vw, 11rem);
-    clip-path: polygon(
-      calc(var(--s) * var(--i) * var(--p)) 0,
-      calc(100% - var(--s) * var(--i) * var(--p)) 0,
-      calc(100% - var(--s) * (var(--i) + 1) * var(--p)) 100%,
-      calc(var(--s) * (var(--i) + 1) * var(--p)) 100%
-    );
-  }
-  .tl6-path--0 { grid-row: 3; }
-  .tl6-path--1 { grid-row: 5; }
-  .tl6-path--2 { grid-row: 7; }
-  .tl6-path--3 { grid-row: 9; }
-  .tl6-path__img {
-    left: 0;
-    width: 100%;
+  .tl6-pic img {
     object-position: var(--op-n);
   }
-  .tl6-arrival {
-    grid-row: 10;
-    grid-column: 1;
-    width: calc(100% - 8 * var(--s));
+  .tl6-pic--0 { grid-row: 3; grid-column: 1; }
+  .tl6-pic--1 { grid-row: 3; grid-column: 2; }
+  .tl6-pic--2,
+  .tl6-pic--3 {
+    grid-row: 4;
+    margin-top: calc(var(--g) * (1 - var(--j)));
   }
+  .tl6-pic--2 { grid-column: 1; }
+  .tl6-pic--3 { grid-column: 2; }
+
+  .tl6-clause {
+    padding: 0.7rem 0.7rem 0 0;
+    font-size: 1rem;
+  }
+  .tl6-clause--0,
+  .tl6-clause--1 {
+    grid-row: 2;
+    align-self: end;
+    padding: 0 0.7rem 0.7rem 0;
+  }
+  .tl6-clause--0 { grid-column: 1; }
+  .tl6-clause--1 { grid-column: 2; }
+  .tl6-clause--2 { grid-row: 5; grid-column: 1; }
+  .tl6-clause--3 { grid-row: 5; grid-column: 2; }
+
   .tl6-resolve {
-    grid-row: 11;
-    grid-column: 1;
+    grid-row: 6;
+    grid-column: 1 / -1;
+    margin-top: 1.4rem;
+    padding-right: 0;
+    font-size: 1.5rem;
   }
   .tl6-cta {
-    grid-row: 12;
-    grid-column: 1;
+    grid-row: 7;
+    grid-column: 1 / -1;
+    margin-top: 1.1rem;
+  }
+  /* kept tight so the whole square and its sentence fit one phone screen */
+  .tl6 .ln-mark {
+    margin-bottom: 1rem;
+  }
+  .tl6-lead {
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* ── the pinned stage, and the motion ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .tl6:not(.tl6--flow) {
+    padding-block: clamp(1rem, 3svh, 2rem);
+  }
+  .tl6:not(.tl6--flow) .tl6-track {
+    height: 380svh;
+  }
+  .tl6:not(.tl6--flow) .tl6-stage {
+    position: sticky;
+    top: 0;
+    box-sizing: border-box;
+    min-height: 100svh;
+    /* the site's pill nav is fixed over the top of every screen on this page: the
+       composition centres in what is left below it */
+    padding-block: clamp(5rem, calc(4rem + 1.6vw), 6.25rem) 1rem;
+    display: grid;
+    align-content: center;
+  }
+
+  /* unpinned, several arrive together: a row on a laptop, a pair on a phone */
+  .tl6--flow .tl6-pic {
+    transition-delay: calc(var(--i) * 0.14s);
+  }
+  .tl6--flow .tl6-clause {
+    transition-delay: calc(0.25s + var(--i) * 0.14s);
+  }
+
+  .tl6-grid {
+    transition: column-gap 1.1s var(--ease);
+  }
+  .tl6-pic {
+    transition: clip-path 1.1s var(--ease), margin-top 1.1s var(--ease);
+  }
+  .tl6-pic img {
+    transition: transform 1.6s var(--ease);
+  }
+  .tl6-clause {
+    transition: opacity 0.7s ease 0.25s, transform 0.9s var(--ease) 0.25s;
+  }
+  .tl6-resolve {
+    transition: opacity 0.8s ease 0.45s, transform 1s var(--ease) 0.45s;
+  }
+  .tl6-cta {
+    transition: opacity 0.8s ease 0.65s, transform 1s var(--ease) 0.65s,
+      background 0.3s var(--ease);
+  }
+  .tl6--settle,
+  .tl6--settle * {
+    transition: none !important;
   }
 }
 
