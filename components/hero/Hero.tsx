@@ -107,7 +107,7 @@ export function Hero() {
             <em>No one holds it all.</em>
           </h1>
           <p className="lede">
-            Teachers and serious practitioners, meeting across traditions — to connect, learn,
+            Teachers and serious practitioners, meeting across traditions, to connect, learn,
             collaborate and grow.
           </p>
           <div className="acts">
@@ -139,7 +139,7 @@ export function Hero() {
             {MOVEMENTS.map((m, i) => (
               <li key={m.label}>
                 <button className="idx__mark" type="button" data-go={i}>
-                  <span className="sr">{`Movement ${['one', 'two', 'three'][i]} — ${m.label}`}</span>
+                  <span className="sr">{`Movement ${['one', 'two', 'three'][i]}: ${m.label}`}</span>
                   <span className="idx__dot" aria-hidden="true" />
                 </button>
               </li>

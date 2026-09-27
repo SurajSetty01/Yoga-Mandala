@@ -1,30 +1,24 @@
-/* Final sx4 section. Every selector is namespaced .sx4- */
-/* sec-sx4 — About §04 How We Teach, final. Built on concept B (preview-sx4b.css); owned by
-   components/about-pranava/sx4/. Every selector is .sx4-*; no other file may declare one,
-   and this file declares nothing outside that prefix.
+/* sec-sx4: About §04 How We Teach. Owned by components/about-pranava/sx4/. Every selector
+   is .sx4-*; no other file may declare one, and this file declares nothing outside that prefix.
 
    ══════════════════════════════════════════════════════════════════════════
-   §04 HOW WE TEACH — THE HOLD.
+   §04 HOW WE TEACH: THE HOLD.
 
    One supported inversion, photographed eight times: seven people in the
-   Prabhava workshop and one at Prabodha TTC. The eight frames are REGISTERED —
+   Prabhava workshop and one at Prabodha TTC. The eight frames are REGISTERED:
    every photograph is scaled and placed so that the practitioner's toes sit on
-   one line and the legs on one axis — so when one replaces another the pose does
+   one line and the legs on one axis, so when one replaces another the pose does
    not move. Only the room, the person and the light change.
 
    With motion: the frame holds still in the middle of the section while the
-   eight practices scroll past it on alternating sides, and each one dissolves
-   the frame into the next photograph. After the eighth, the photographs stop
-   replacing one another and settle on top of each other at equal weight — a
-   long exposure in which the eight rooms blur and the pose they share stays.
+   eight practices scroll past it on alternating sides, and each one swaps in
+   the next photograph with a short timed fade. The last two sentences flank the
+   final hold. Then the frame is released and the eight holds stand side by
+   side, feet on one line, each with its day and minute.
 
    Without motion, without JavaScript, or on a viewport too short to pin: the
-   section is that finished state — the long exposure, the eight registered
-   frames in a strip beneath it, the practices around it.
-
-   The static default here IS the long exposure. Layer n of 8 carries opacity
-   1/n, which composites all eight at exactly equal weight (each contributes
-   1/8), so the page needs no script at all to be complete.
+   frame shows the first hold, the practices sit around it, and the same row of
+   eight closes the section. Every photograph is whole and sharp in every state.
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sx4-sec {
@@ -36,13 +30,10 @@
 
   /* THE FRAME. Its aspect is fixed at 0.62 because the registration data in
      frames.ts is solved for exactly that aspect: change one and the feet leave
-     the line. Height is bounded by the viewport so the whole stage — frame,
-     strip, caption — always fits between the navigation and the bottom edge. */
-  /* the stage is the frame, the strip (≈0.125 of the frame's height) and a
-     caption: 1.125·fh + ~60px. Solved so the whole stage, axis tick included,
-     fits between the pill (bottom edge ≈84px, so 104px clears it) and the
-     bottom of the screen — 620px of frame at 1440×900, 464 at 1280×720, 835 at
-     2531×1140, capped at 900. */
+     the line. Height is bounded by the viewport so the whole stage (frame and
+     caption) always fits between the pill (bottom edge ≈84px, so 104px clears
+     it) and the bottom of the screen: 623px of frame at 1440×900, 464 at
+     1280×720, 835 at 2531×1140, capped at 900. */
   --sx4-gap: clamp(2rem, 4.2vw, 5rem);
   /* …and, between 900 and ~1000px wide, by the width: each lane keeps 250px */
   --sx4-fh: clamp(
@@ -97,8 +88,7 @@
   text-align: center;
   margin-bottom: clamp(2.6rem, 6vw, 4.8rem);
 }
-/* the register mark — the site's own object: 11.5px Inter at 0.19em, a
-   Fraunces numeral, and a sand rule, which is the one thing sand may be */
+/* the register mark: 11.5px Inter at 0.19em and a Fraunces numeral */
 .sx4-mark {
   margin: 0 0 clamp(1.4rem, 3vw, 2.4rem);
   display: flex;
@@ -108,10 +98,10 @@
   letter-spacing: 0.19em;
   text-transform: uppercase;
   color: var(--forest-mid);
-  /* centred on its WORDS: the numeral, the rule and their two gaps (≈16 + 22 +
-     2·0.8rem) are balanced by the same width of padding on the other side, so
-     "How we teach" sits on the section's axis rather than 32px right of it */
-  padding-inline-end: calc(38px + 1.6rem);
+  /* centred on its WORDS: the numeral and its gap (≈16px + 0.8rem) are
+     balanced by the same width of padding on the other side, so "How we teach"
+     sits on the section's axis */
+  padding-inline-end: calc(16px + 0.8rem);
 }
 .sx4-mark__n {
   flex: none;
@@ -120,13 +110,6 @@
   font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--forest);
-}
-.sx4-mark__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
 }
 .sx4-lead {
   margin: 0;
@@ -222,34 +205,17 @@
   text-wrap: balance;
 }
 
-/* the leader: a clay hairline from the practice's numeral to the edge of the
-   frame, drawn only for the practice the frame is currently showing. Clay is
-   ornament here, never text (3.90:1). Transform only. */
-.sx4-step__n {
-  position: relative;
+/* which practice the frame is showing: with motion, the others recede to
+   ink-soft (still readable at 4.5:1), and the current one is ink */
+.sx4--live .sx4-step {
+  color: var(--ink-soft);
+  transition: color 0.45s var(--ease);
 }
-.sx4-step__n::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: calc(100% + 0.9rem);
-  width: calc(var(--sx4-gap) - 1.3rem);
-  height: 1px;
-  background: var(--clay);
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 0.6s var(--ease);
-}
-.sx4-step:nth-child(even) .sx4-step__n::after {
-  right: auto;
-  left: calc(100% + 0.9rem);
-  transform-origin: left center;
-}
-.sx4-step[data-on] .sx4-step__n::after {
-  transform: scaleX(1);
+.sx4--live .sx4-step[data-on] {
+  color: var(--ink);
 }
 
-/* the last two sentences flank the frame when it has become the long exposure */
+/* the last two sentences flank the frame while it holds the final photograph */
 .sx4-close {
   grid-column: 1 / 4;
   grid-row: 9;
@@ -287,9 +253,6 @@
   margin: 0;
   width: var(--sx4-fw);
 }
-.sx4-framebox {
-  position: relative;
-}
 .sx4-frame {
   position: relative;
   width: 100%;
@@ -308,100 +271,25 @@
   width: var(--w);
   height: var(--h);
   margin: 0;
-  opacity: calc(1 / var(--n));
 }
 .sx4-layer img {
   display: block;
   width: 100%;
   height: 100%;
 }
-
-/* registration marks — a printer's mark on either side at the line the toes
-   return to, and one tick over the axis the legs return to. Ornament. */
-.sx4-reg {
-  position: absolute;
-  width: 17px;
-  height: 17px;
-  color: var(--clay);
-  pointer-events: none;
+/* one photograph at a time, whole: the first, until Sx4Motion swaps them */
+.sx4-frame .sx4-layer {
+  opacity: 0;
+  visibility: hidden;
 }
-.sx4-reg--l {
-  top: 8%;
-  right: calc(100% + 12px);
-  transform: translateY(-50%);
-}
-.sx4-reg--r {
-  top: 8%;
-  left: calc(100% + 12px);
-  transform: translateY(-50%);
-}
-.sx4-reg--a {
-  bottom: calc(100% + 10px);
-  left: 39%;
-  width: 1px;
-  height: 14px;
-  background: var(--clay);
-  transform: translateX(-50%);
-}
-
-/* the eight frames side by side, each registered like the big one: toes on one
-   line across all eight. In the static page it is the key to the exposure above
-   it; with motion, a mark under it follows the frame being shown. */
-.sx4-strip {
-  display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 4px;
-  width: 100%;
-  margin: 10px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.sx4-mini {
-  position: relative;
-}
-/* once Sx4Motion has made them buttons */
-.sx4-mini[role='button'] {
-  cursor: pointer;
-  border-radius: 1px;
-  transition: transform 0.3s var(--ease);
-}
-@media (hover: hover) and (pointer: fine) {
-  .sx4-mini[role='button']:hover {
-    transform: translateY(-3px);
-  }
-}
-.sx4-mini[role='button']:focus-visible {
-  outline: 2px solid #241d18;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 5px rgba(251, 247, 242, 0.95);
-}
-.sx4-mini__frame {
-  position: relative;
-  aspect-ratio: 62 / 100;
-  overflow: hidden;
-  background: #d9cdbb;
-}
-.sx4-mini .sx4-layer {
+.sx4-frame .sx4-layer:first-child {
   opacity: 1;
-}
-.sx4-mini::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 2px;
-  background: var(--clay);
-  transform: scaleX(0);
-  transition: transform 0.45s var(--ease);
-}
-.sx4-mini[data-on]::after {
-  transform: scaleX(1);
+  visibility: visible;
 }
 
-/* the caption object: 11.5px Inter, ink-soft, a brass tick. Three visual
-   states share one place; the accessible caption is a single sentence that
-   describes what the static figure is. */
+/* the caption object: 11.5px Inter, ink-soft. The visible line is the day and
+   minute of the photograph on show; the accessible caption is one sentence
+   that describes the figure. */
 .sx4-cap {
   display: grid;
   margin-top: 16px;
@@ -412,22 +300,10 @@
 }
 .sx4-cap__v {
   grid-area: 1 / 1;
-  display: flex;
-  gap: 0.6em;
-  align-items: baseline;
   opacity: 0;
   transition: opacity 0.4s var(--ease);
 }
-.sx4-cap__v::before {
-  content: '';
-  flex: none;
-  width: 18px;
-  height: 1px;
-  background: var(--brass);
-  transform: translateY(-4px);
-}
-.sx4-fig[data-cap='all'] .sx4-cap__v--all,
-.sx4-fig[data-cap='one'] .sx4-cap__v--one[data-on] {
+.sx4-cap__v[data-on] {
   opacity: 1;
 }
 
@@ -452,13 +328,13 @@
    tall enough to hold the stage, and JavaScript is running. ═══════════════ */
 .sx4--live .sx4-stage {
   position: sticky;
-  top: max(104px, calc((100svh - 1.125 * var(--sx4-fh) - 60px) / 2));
+  top: max(104px, calc((100svh - var(--sx4-fh) - 44px) / 2));
 }
+/* the swap: the arriving photograph fades in over the one it replaces (Sx4Motion
+   keeps that one whole beneath it, then hides it). A timed fade, not a scrubbed
+   one, so no scroll position ever holds two photographs. */
 .sx4--live .sx4-frame .sx4-layer {
-  opacity: 0;
-}
-.sx4--live .sx4-frame .sx4-layer:first-child {
-  opacity: 1;
+  transition: opacity 0.45s var(--ease);
 }
 .sx4--live .sx4-step {
   display: flex;
@@ -467,13 +343,12 @@
   align-self: stretch;
   min-height: 56svh;
 }
-/* the close row is long on purpose: its two sentences arrive high in it, the
-   exposure completes as they cross the middle of the screen, and the rest of the
-   row is the exposure held still before the frame is released */
+/* the close row gives the two sentences their time beside the final hold
+   before the frame is released */
 .sx4--live .sx4-close {
-  min-height: 118svh;
+  min-height: 70svh;
   align-items: start;
-  padding-top: 30svh;
+  padding-top: 16svh;
 }
 
 /* ══ BELOW 900px: one lane. The frame sits above the practices; with motion it
@@ -500,9 +375,6 @@
   .sx4-step:nth-child(even) {
     text-align: center;
     padding-block: 0.8rem;
-  }
-  .sx4-step__n::after {
-    display: none;
   }
   .sx4-step__t {
     font-size: clamp(1.45rem, 1.02rem + 2.4vw, 2.1rem);
@@ -539,11 +411,6 @@
   .sx4--live .sx4-fig {
     margin-inline: auto;
   }
-  /* 26px frames are a texture, not a key; on a phone the strip waits for the
-     static page */
-  .sx4--live .sx4-strip {
-    display: none;
-  }
   .sx4--live .sx4-cap {
     margin-top: 10px;
   }
@@ -558,11 +425,63 @@
   }
 }
 
-@media (max-width: 420px) {
-  .sx4-reg--l,
-  .sx4-reg--r {
-    display: none;
+/* ══ THE ENDING: the eight holds side by side, in the order they were taken.
+   Each frame is registered like the big one, so the toes sit on one line
+   across the row. Four and four on a phone, eight in a row from 900px. ══════ */
+.sx4-seq {
+  margin: clamp(3.4rem, 7vw, 6rem) 0 0;
+}
+.sx4-seq__row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(0.5rem, 1.1vw, 1rem);
+  row-gap: clamp(1.4rem, 4vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 900px) {
+  .sx4-seq__row {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
+}
+.sx4-seq__i {
+  min-width: 0;
+}
+.sx4-seq__frame {
+  position: relative;
+  aspect-ratio: 62 / 100;
+  overflow: hidden;
+  background: #d9cdbb;
+  box-shadow: 0 0 0 1px rgba(36, 29, 24, 0.16);
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+/* with motion, the row arrives left to right the first time it is seen */
+.sx4--live .sx4-seq:not([data-in]) .sx4-seq__frame {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.sx4-seq__when {
+  margin: 0.7rem 0 0;
+  font: 500 11.5px/1.45 var(--font-text);
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+.sx4-seq__when span {
+  display: block;
+}
+.sx4-seq__day {
+  font-weight: 600;
+  color: var(--ink);
+}
+.sx4-seq__cap {
+  margin-top: clamp(1.6rem, 3.4vw, 2.6rem);
+  font: 500 13px/1.5 var(--font-text);
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
 }
 
 /* ══ the preview scaffold — not the section ═════════════════════════════ */

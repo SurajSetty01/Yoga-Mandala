@@ -31,7 +31,7 @@ import { PracticeEnquire } from '@/components/practice/tp7/Enquire';
  * read out of content/pranava.ts.
  */
 export const metadata = {
-  title: 'Practice — Praṇava',
+  title: 'Practice',
   description:
     'Sustained practice at Praṇava: ongoing Sādhana, regular practice, Prayatna, Prāṇāyāma, retreats and immersions. Consistent practice over quick results.',
 };

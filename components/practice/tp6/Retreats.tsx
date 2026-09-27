@@ -30,7 +30,6 @@ export function Tp6Retreats() {
             <div className="tp6-clear">
               <h2 className="tp6-eyebrow" id="tp6-h">
                 <span className="tp6-eyebrow-n">05</span>
-                <span className="tp6-eyebrow-rule" aria-hidden="true" />
                 Retreats and immersions
               </h2>
               <p className="tp6-lead">{FORMS}</p>

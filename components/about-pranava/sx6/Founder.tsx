@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import { about } from '@/content/pranava';
 import { Eyebrow } from '@/components/about-pranava/parts';
 import { Sx6Motion } from './Motion';
+import { Sx6Portrait } from './Portrait';
 import {
   LEFT,
   RIGHT,
@@ -39,6 +40,11 @@ import {
  *   is the point the whole room is organised around and that occupies none of it — which is
  *   the sentence, laid out as a room: the role of a teacher at the vanishing point, and the
  *   student's own capacity growing toward the reader.
+ *
+ * THE OWNER'S NOTE ("it's the founder's section and his photo isn't even there"), answered
+ * without faking one: Portrait.tsx is a single slot, in the left margin level with the middle
+ * of the biography (centred above the name below 1360px). It holds a hand-drawn line drawing of
+ * a seated teacher, labelled as exactly that, until a photograph of Pranav is supplied.
  *
  * THE CLIENT'S SPACING NOTE, answered: the heading does not stack on one side of an empty
  * page, and no rectangle of photograph stands beside a block of text. The composition is
@@ -187,6 +193,11 @@ export function Sx6Founder() {
 
         {/* ── the ceiling: who, and the five sentences, narrowing toward the point ── */}
         <div className="sx6-ceiling">
+          {/* THE PORTRAIT SLOT. A line drawing of a seated teacher until the client supplies
+              a photograph of Pranav; pass it as <Sx6Portrait photo={{ src, alt, width,
+              height }} /> and it takes the drawing's place. Wide: the left margin, beside
+              the biography. Narrower: centred above his name. */}
+          <Sx6Portrait />
           <div className="sx6-by">
             <p className="sx6-kicker">{kicker}</p>
             <p className="sx6-role">{f.role}</p>
@@ -256,7 +267,7 @@ export function Sx6Founder() {
             and this is not one. The figure above takes it as its name. */}
         <p className="sx6-cap" id="sx6-cap">
           Left and right, one row of chair-supported shoulderstands photographed from either
-          end — Prabhava, a five-day Hatha-Iyengar immersion, 2–6 October 2023.
+          end at Prabhava, a five-day Hatha-Iyengar immersion held from 2 to 6 October 2023.
         </p>
       </div>
       <Sx6Motion />

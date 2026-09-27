@@ -20,7 +20,6 @@ export function Mark({ n, children }: { n: string; children: string }) {
   return (
     <h2 className="hl-mark">
       <span className="hl-mark__n">{n}</span>
-      <span className="hl-mark__rule" aria-hidden="true" />
       {children}
     </h2>
   );

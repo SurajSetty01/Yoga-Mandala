@@ -1,8 +1,7 @@
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
 import { ChannelList, buildChannels } from '@/components/contact/ChannelList';
-import { Depth } from '@/components/contact/Depth';
-import { Colonnade } from '@/components/contact/Colonnade';
+import { RouteBook } from '@/components/contact/RouteBook';
 import { Social } from '@/components/contact/Social';
 import { contact } from '@/content/copy';
 import { links, site } from '@/content/site';
@@ -55,7 +54,7 @@ import { links, site } from '@/content/site';
 export const metadata = {
   title: contact.title,
   description:
-    'Enquire about Praṇava — structured learning, ongoing practice, programmes, health-oriented guidance, collaborations and the Yoga Mandala community. Enquiries are answered on WhatsApp.',
+    'Enquire about Praṇava · structured learning, ongoing practice, programmes, health-oriented guidance, collaborations and the Yoga Mandala community. Enquiries are answered on WhatsApp.',
 };
 
 /**
@@ -75,9 +74,6 @@ export default function ContactPage() {
   return (
     <>
       <SiteNav />
-      {/* The colonnade's reveal and its two-lane depth. Nothing below is reachable only
-          through it, and it does not run at all under prefers-reduced-motion. */}
-      <Depth />
 
       <main className="cx" id="top">
         {/* ── THE OPEN LINE ───────────────────────────────────────────────────
@@ -97,14 +93,13 @@ export default function ContactPage() {
               <div className="cx-open__col">
                 <p className="cx-mark">
                   <span className="cx-mark__n">01</span>
-                  <span className="cx-mark__r" aria-hidden="true" />
                 </p>
                 <h2 className="cx-h2">{contact.general.heading}</h2>
                 {/* The honest answer to Blueprint §6's location/mode slot: the mode is
                     named because it is true, and no place is named because none is known. */}
                 <p className="cx-lead">
                   Learning, practice, programmes, health-oriented guidance, collaborations
-                  and the Yoga Mandala community — all of it is read and answered on
+                  and the Yoga Mandala community: all of it is read and answered on
                   WhatsApp.
                 </p>
 
@@ -132,16 +127,12 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* ── THE SIX ROUTES, AS SIX DOORWAYS ────────────────────────────────
-            No list. Arched openings cut down the paper, tilted and overlapping,
-            each one a link that opens the line with its own subject written in. */}
-        <Colonnade />
+        {/* THE SIX ROUTES, AS A BOOK. One route per spread; scrolling turns the
+            pages, and each page's link opens the line with its subject written in. */}
+        <RouteBook />
 
-        {/* ── WHOSE ACCOUNTS THESE ARE ────────────────────────────────────────
-            The wall goes dark and two more doorways are cut into it. Praṇava Seva
-            Trust keeps the accounts; Yoga Mandala, one of its community
-            initiatives, keeps none of its own. That is the reason the handle
-            reads the way it does, so it is the heading and not a footnote. */}
+        {/* WHOSE ACCOUNTS THESE ARE. Two doorways cut into a dark wall, one onto a
+            grid of archive photographs, one onto a class moving together. */}
         <Social />
       </main>
 

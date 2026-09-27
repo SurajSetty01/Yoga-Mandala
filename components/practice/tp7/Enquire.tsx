@@ -46,7 +46,6 @@ export function PracticeEnquire() {
         <header className="tp7-head">
           <h2 className="tp7-eyebrow" id="tp7-h">
             <span className="tp7-eyebrow-n">06</span>
-            <span className="tp7-eyebrow-rule" aria-hidden="true" />
             Schedule and enquiry
           </h2>
           <p className="tp7-line">

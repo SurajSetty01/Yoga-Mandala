@@ -48,7 +48,6 @@ export function MarkedPassages() {
       <div className="ti2-in">
         <h2 className="ti2-mark" id="ti2-title">
           <span className="ti2-mark__n">01</span>
-          <span className="ti2-mark__rule" aria-hidden="true" />
           The kind of thinking that will be here
         </h2>
 
@@ -65,7 +64,6 @@ export function MarkedPassages() {
                 style={{ '--ti2-dur': `${dur}ms` } as CSSProperties}
               >
                 <p className="ti2-folio">
-                  <span className="ti2-folio__rule" aria-hidden="true" />
                   {p.link ? (
                     <>
                       <span className="ti2-folio__k">On the About page</span>

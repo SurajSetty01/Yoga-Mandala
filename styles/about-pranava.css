@@ -120,13 +120,6 @@
 .apr-eyebrow--dark .apr-eyebrow__n {
   color: var(--ink-onPic);
 }
-.apr-eyebrow__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
 
 /* shared type objects */
 .apr-display {

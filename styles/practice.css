@@ -62,18 +62,8 @@
 .pc-eyebrow--dark .pc-eyebrow__n {
   color: var(--ink-onPic);
 }
-.pc-eyebrow__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--clay);
-}
 /* clay on the light grounds, sand on the reversed ones — the rule every
    section on this page follows, whether it uses this mark or its own copy */
-.pc-eyebrow--dark .pc-eyebrow__rule {
-  background: var(--sand);
-}
 
 /* ── the wall label under a picture ─────────────────────────────────────── */
 .pc-cap {

@@ -51,8 +51,9 @@ export type RegFrame = {
   w: number;
   course: 'pbh' | 'ttc';
   alt: string;
-  /** the camera's own clock (see WHEN, below); absent where the clock cannot be trusted */
-  when?: string;
+  /** the camera's own clock (see WHEN, below): the day of the five-day Prabhava immersion,
+      the date and the minute; absent where the clock cannot be trusted */
+  shot?: { day: number; date: string; time: string };
   /** a clip whose opening seconds are the held pose: its loop plays over its own first
       frame (the poster) while it is the frame on show, and wraps back at `hold` seconds,
       before the practitioner comes down */
@@ -86,7 +87,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.073,
     w: 0.45,
     course: 'pbh',
-    when: 'Prabhava, day 1 of 5 · 2 October 2023, 18:52',
+    shot: { day: 1, date: '2 October 2023', time: '18:52' },
     alt: 'A practitioner hanging upside down from the wall ropes, legs straight up against a yellow wall.',
   },
   {
@@ -98,7 +99,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.089,
     w: 0.545,
     course: 'pbh',
-    when: 'Prabhava, day 2 of 5 · 3 October 2023, 14:05',
+    shot: { day: 2, date: '3 October 2023', time: '14:05' },
     clip: { src: '/media/clips/pr-mov-img_5523.mp4', hold: 10 },
     alt: 'A practitioner upside down between two folding chairs, shoulders on the seats, legs straight up a bare cream wall.',
   },
@@ -111,7 +112,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.107,
     w: 0.68,
     course: 'pbh',
-    when: 'Prabhava, day 2 of 5 · 3 October 2023, 14:27',
+    shot: { day: 2, date: '3 October 2023', time: '14:27' },
     alt: 'A practitioner lying back over a bolster with both legs raised straight up beside a folding chair, practice ropes hanging on the wall behind.',
   },
   {
@@ -123,7 +124,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.165,
     w: 0.55,
     course: 'pbh',
-    when: 'Prabhava, day 2 of 5 · 3 October 2023, 14:35',
+    shot: { day: 2, date: '3 October 2023', time: '14:35' },
     clip: { src: '/media/clips/pr-mov-img_5557.mp4', hold: 9 },
     alt: 'A practitioner in supported shoulderstand on a pink bolster beside a folding chair, legs raised, a turquoise curtain behind.',
   },
@@ -136,7 +137,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.067,
     w: 0.512,
     course: 'pbh',
-    when: 'Prabhava, day 2 of 5 · 3 October 2023, 18:51',
+    shot: { day: 2, date: '3 October 2023', time: '18:51' },
     alt: 'A practitioner in olive trousers upside down between two chairs, head on the floor and arms spread along the seats, feet reaching for the wall.',
   },
   {
@@ -148,7 +149,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.225,
     w: 0.475,
     course: 'pbh',
-    when: 'Prabhava, day 4 of 5 · 5 October 2023, 13:35',
+    shot: { day: 4, date: '5 October 2023', time: '13:35' },
     alt: "A teacher steadies a student upside down against the wall, one hand at the student's legs, while another student holds a handstand beside them.",
   },
   {
@@ -162,7 +163,7 @@ export const FRAMES: RegFrame[] = [
     t: 0.213,
     w: 0.555,
     course: 'pbh',
-    when: 'Prabhava, day 4 of 5 · 5 October 2023, 14:02',
+    shot: { day: 4, date: '5 October 2023', time: '14:02' },
     alt: 'A practitioner upside down over a folding chair in front of a curtained window, legs straight up, another chair in the foreground.',
   },
   {
@@ -191,6 +192,16 @@ export function box(f: RegFrame) {
       '--h': `${(H * 100).toFixed(3)}%`,
     } as Record<string, string>,
   };
+}
+
+/** the line under the frame while this photograph is on show */
+export function whenOf(f: RegFrame) {
+  return f.shot ? `Prabhava, day ${f.shot.day} of 5 · ${f.shot.date}, ${f.shot.time}` : 'Prabodha TTC';
+}
+
+/** the two short lines under this photograph in the closing row */
+export function dayOf(f: RegFrame) {
+  return f.shot ? { day: `Day ${f.shot.day}`, time: f.shot.time } : { day: 'Prabodha TTC', time: '' };
 }
 
 export function srcOf(f: RegFrame, width?: number) {

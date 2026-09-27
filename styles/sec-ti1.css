@@ -77,12 +77,6 @@
   text-transform: uppercase;
   color: var(--ink-onPic);
 }
-.ti1-h1__rule {
-  flex: none;
-  width: 30px;
-  height: 1px;
-  background: var(--sand);
-}
 
 /* ── the sentence ───────────────────────────────────────────────────────── */
 .ti1-lede {

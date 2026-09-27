@@ -46,6 +46,7 @@ const H0 = 0.06; // on the threshold
 const H = 0.12; // in each room
 const HE = 0.1; // under the trees
 const P = (1 - H0 - (N - 1) * H - HE) / N; // each walk
+const CLIP_RATE = 0.6; // the practice clip, slowed at the owner's review
 
 const PLACED = nest();
 const OPEN = ROOMS.map((r) => r.opening);
@@ -116,7 +117,6 @@ export function PranavaJourneyMotion() {
     const stage = root.querySelector<HTMLElement>('.sx5-stage');
     const rooms = [...root.querySelectorAll<HTMLElement>('.sx5-room')];
     const doors = [...root.querySelectorAll<HTMLElement>('.sx5-door')];
-    const where = [...root.querySelectorAll<HTMLElement>('.sx5-where__i')];
     const words = doors.map((el) => el.querySelector<HTMLElement>('.sx5-door__word'));
     const video = root.querySelector<HTMLVideoElement>('.sx5-room__vid');
     if (!track || !stage || rooms.length !== ROOMS.length || doors.length !== ROOMS.length) return;
@@ -207,8 +207,8 @@ export function PranavaJourneyMotion() {
         // The door's small parts are SWITCHED on and off, like the signs:
         // a scroll-linked fade held words at a third of their opacity wherever the reader
         // stopped mid-doorway (measured 2.6:1 at 1440x900 with the opacity composited in).
-        // Now the room you leave keeps its numeral, sentence and arrow to 0.35 of the walk
-        // and the next room's arrive at 0.6, with a short CSS fade.
+        // Now the room you leave keeps its sentence and arrow to 0.35 of the walk and the
+        // next room's arrive at 0.6, with a short CSS fade.
         //
         // THE NAMES ROLL, THEY DO NOT FADE (grafted from concept B). All four share one
         // clipped window, and R — the walk compressed into the stretch where the doorway
@@ -221,12 +221,6 @@ export function PranavaJourneyMotion() {
           w.style.transform = `translate3d(0, ${(dn * 130).toFixed(2)}%, 0)`;
         }
         const on = t > i - 0.4 && t < i + 0.35;
-        if ((el.dataset.on === '1') !== on) el.dataset.on = on ? '1' : '0';
-      });
-
-      const a = Math.round(t);
-      where.forEach((el, i) => {
-        const on = i === a;
         if ((el.dataset.on === '1') !== on) el.dataset.on = on ? '1' : '0';
       });
     };
@@ -242,12 +236,22 @@ export function PranavaJourneyMotion() {
     };
 
     /* ── the clip: attached on approach, released a screen past ─────────────── */
+    // It plays at CLIP_RATE. A browser puts the rate back to the default whenever a source
+    // loads, so the default is set as well, and both are re-applied on loadedmetadata and
+    // on every play.
+    const slow = () => {
+      if (!video) return;
+      video.defaultPlaybackRate = CLIP_RATE;
+      if (video.playbackRate !== CLIP_RATE) video.playbackRate = CLIP_RATE;
+    };
     const attach = () => {
       if (!video || !live || !near || behind) return;
       if (!video.getAttribute('src')) {
         video.muted = true;
+        slow();
         video.src = video.dataset.src ?? '';
       }
+      slow();
       const go = video.play();
       if (go) go.catch(() => {});
     };
@@ -262,6 +266,8 @@ export function PranavaJourneyMotion() {
     };
     const onPlaying = () => video?.classList.add('is-playing');
     video?.addEventListener('playing', onPlaying);
+    video?.addEventListener('loadedmetadata', slow);
+    video?.addEventListener('play', slow);
     const io =
       typeof IntersectionObserver !== 'undefined'
         ? new IntersectionObserver(
@@ -290,7 +296,6 @@ export function PranavaJourneyMotion() {
       });
       doors.forEach((el) => delete el.dataset.on);
       words.forEach((w) => w?.style.removeProperty('transform'));
-      where.forEach((el) => delete el.dataset.on);
     };
 
     const setLive = (on: boolean) => {
@@ -339,6 +344,8 @@ export function PranavaJourneyMotion() {
       reduce.removeEventListener('change', decide);
       fits.removeEventListener('change', decide);
       video?.removeEventListener('playing', onPlaying);
+      video?.removeEventListener('loadedmetadata', slow);
+      video?.removeEventListener('play', slow);
       ro?.disconnect();
       io?.disconnect();
       if (raf) cancelAnimationFrame(raf);

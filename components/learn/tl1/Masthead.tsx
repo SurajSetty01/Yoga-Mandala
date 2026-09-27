@@ -86,7 +86,7 @@ export function Tl1Masthead() {
             </div>
             <figcaption className="tl1-cap">
               <span>{TL1_FRAME.alt}</span>
-              <span className="tl1-prov">Prabhava 5-day Hatha-Iyengar Immersion, 2–6 October 2023</span>
+              <span className="tl1-prov">Prabhava 5-day Hatha-Iyengar Immersion, 2 to 6 October 2023</span>
             </figcaption>
           </figure>
 

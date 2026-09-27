@@ -75,7 +75,6 @@ export function Ti1Masthead() {
       <div className="ti1-rail">
         <div className="ti1-col">
           <h1 className="ti1-h1" id="ti1-h1">
-            <span className="ti1-h1__rule" aria-hidden="true" />
             Insights
           </h1>
 

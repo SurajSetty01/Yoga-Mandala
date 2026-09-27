@@ -43,14 +43,6 @@
   text-transform: uppercase;
   color: var(--teal-deep);
 }
-.jn-eyebrow::before {
-  content: '';
-  flex: none;
-  width: 1.6rem;
-  height: 2px;
-  border-radius: 1px;
-  background: var(--clay);
-}
 .jn-eyebrow--dark {
   color: var(--sand);
 }
@@ -100,7 +92,6 @@
 .jn-reply {
   position: relative;
   margin: clamp(1.1rem, 2.2vw, 1.55rem) 0 0;
-  padding-left: clamp(2.5rem, 5vw, 3.9rem);
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-size: clamp(1.3rem, 1.06rem + 1.05vw, 1.95rem);
@@ -108,17 +99,9 @@
   line-height: 1.2;
   letter-spacing: -0.022em;
   color: var(--ink);
-  max-width: 21ch;
-}
-.jn-reply::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.58em;
-  width: clamp(1.5rem, 3.4vw, 2.6rem);
-  height: 2px;
-  border-radius: 1px;
-  background: var(--clay);
+  /* the measure the reply had while a dash sat in its left padding (dashes removed
+     2026-09-27): border-box, so the text keeps exactly its approved line breaks */
+  max-width: calc(21ch - clamp(2.5rem, 5vw, 3.9rem));
 }
 .jn-invite__note {
   margin: clamp(1.4rem, 2.6vw, 1.9rem) 0 0;
@@ -277,14 +260,6 @@
 .jn-litany li:last-child {
   border-bottom: 1px solid rgba(251, 247, 242, 0.18);
 }
-.jn-litany li::before {
-  content: '';
-  flex: none;
-  width: 0.75rem;
-  height: 1px;
-  margin-top: 0.78em;
-  background: var(--sand);
-}
 
 /* ── THE PRIMARY ACTION ──────────────────────────────────────────────
    It is not a button with more padding. It is a slab: the full measure of
@@ -440,14 +415,6 @@
 }
 .jn-list li:last-child {
   border-bottom: 1px solid var(--rule);
-}
-.jn-list li::before {
-  content: '';
-  flex: none;
-  width: 0.7rem;
-  height: 1px;
-  margin-top: 0.72em;
-  background: var(--clay);
 }
 .jn-card__close {
   margin: clamp(1.1rem, 2.2vw, 1.5rem) 0 0;
@@ -651,7 +618,7 @@
   }
   .jn-reply {
     font-size: 1.24rem;
-    padding-left: 2.1rem;
+    max-width: calc(21ch - 2.1rem);
   }
   .jn-slab__label {
     font-size: 1.02rem;

@@ -205,14 +205,6 @@
   gap: 0.8em;
   align-items: baseline;
 }
-.sx7-cap span::before {
-  content: '';
-  flex: none;
-  width: 18px;
-  height: 1px;
-  background: var(--sand);
-  transform: translateY(-4px);
-}
 
 .sx7-hint {
   display: none;

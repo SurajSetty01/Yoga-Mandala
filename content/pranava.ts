@@ -27,13 +27,13 @@ export const about = {
     heading: 'About Pranava',
     sub: 'A space for the study, practice and transmission of Yoga and India’s living knowledge traditions.',
     support:
-      'Pranava is a centre dedicated to approaching Yoga as a complete discipline of study, practice and living — rooted in tradition, sustained through practice and explored through inquiry.',
+      'Pranava is a centre dedicated to approaching Yoga as a complete discipline of study, practice and living: rooted in tradition, sustained through practice and explored through inquiry.',
   },
 
   /** §3. Five lines, in the client's order. The first is the shortest, and the claim. */
   intro: [
     'Yoga is more than a practice on the mat.',
-    'Yoga is a vast body of knowledge — encompassing practice, philosophy, self-observation, discipline and ways of understanding life.',
+    'Yoga is a vast body of knowledge, encompassing practice, philosophy, self-observation, discipline and ways of understanding life.',
     'At Pranava, we seek to engage with this knowledge with both reverence for its traditions and responsibility towards its contemporary practice.',
     'Our work brings together structured learning, sustained practice, teacher education, continuing inquiry and community.',
     'We believe that Yoga is best understood not merely by collecting techniques, but through a relationship between study, practice and experience.',
@@ -43,9 +43,9 @@ export const about = {
   what: {
     lead: 'A place to learn. A place to practise. A place to grow.',
     body: [
-      'Pranava – Center for Indian Culture & Yogic Studies was established as a space for people who wish to engage with Yoga more deeply.',
+      'Pranava (Center for Indian Culture & Yogic Studies) was established as a space for people who wish to engage with Yoga more deeply.',
       'This includes those beginning their journey, practitioners seeking a sustained Sādhana, teachers wishing to deepen their understanding, and those interested in exploring India’s wider knowledge traditions.',
-      'Our programmes may take different forms — from regular practice and teacher education to workshops, intensives, retreats and study — but they share a common intention:',
+      'Our programmes may take different forms, from regular practice and teacher education to workshops, intensives, retreats and study, but they share a common intention:',
     ],
     intention:
       'To create the conditions for deeper understanding through learning, practice and lived experience.',
@@ -57,7 +57,7 @@ export const about = {
     items: [
       {
         name: 'Tradition',
-        body: 'We approach Yoga as part of India’s long and living traditions of knowledge and practice. Tradition gives us a foundation — not a collection of ideas to preserve untouched, but a body of knowledge to study, understand and practise responsibly.',
+        body: 'We approach Yoga as part of India’s long and living traditions of knowledge and practice. Tradition gives us a foundation: not a collection of ideas to preserve untouched, but a body of knowledge to study, understand and practise responsibly.',
       },
       {
         name: 'Practice',

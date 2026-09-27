@@ -52,13 +52,6 @@
   letter-spacing: 0.06em;
   color: var(--forest);
 }
-.ti3-mark__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: rgba(193, 97, 60, 0.55);
-}
 
 /* ── the invitation ─────────────────────────────────────────────────────── */
 .ti3-head {
@@ -106,14 +99,6 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-soft);
-}
-.ti3-cap::before {
-  content: '';
-  flex: none;
-  width: 18px;
-  height: 1px;
-  background: var(--forest);
-  transform: translateY(-4px);
 }
 .ti3-plate {
   position: relative;

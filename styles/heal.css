@@ -42,10 +42,3 @@
   letter-spacing: 0.06em;
   color: var(--forest);
 }
-.hl-mark__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--hl-hair);
-}

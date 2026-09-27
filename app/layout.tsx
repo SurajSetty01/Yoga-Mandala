@@ -33,8 +33,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: `${site.name} — ${site.descriptor}`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} · ${site.descriptor}`,
+    template: `%s · ${site.name}`,
   },
   description:
     'Yoga Mandala is a community of Yoga teachers and serious practitioners coming together to connect, learn, collaborate and grow.',

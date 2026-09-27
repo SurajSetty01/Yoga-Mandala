@@ -29,7 +29,6 @@ export function Eyebrow({
   return (
     <h2 className={`apr-eyebrow${dark ? ' apr-eyebrow--dark' : ''}`}>
       <span className="apr-eyebrow__n">{n}</span>
-      <span className="apr-eyebrow__rule" aria-hidden="true" />
       {children}
     </h2>
   );

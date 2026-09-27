@@ -30,7 +30,6 @@ export function Te2Record() {
           <div className="te2-head">
             <h2 className="te2-mark" id="te2-h">
               <span className="te2-mark__n">01</span>
-              <span className="te2-mark__rule" aria-hidden="true" />
               What has happened here
             </h2>
             <p className="te2-lead">

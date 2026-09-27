@@ -83,7 +83,6 @@ function Frame({
       </div>
       <figcaption className="te1-cap">
         <span className="te1-cap__src">Prabodha TTC</span>
-        <span className="te1-cap__rule" aria-hidden="true" />
         {f.caption}
       </figcaption>
     </figure>

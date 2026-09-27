@@ -245,7 +245,6 @@ export function Ti3Told() {
       <div className="ti3-wrap">
         <h2 className="ti3-mark" id="ti3-title">
           <span className="ti3-mark__n">02</span>
-          <span className="ti3-mark__rule" aria-hidden="true" />
           When there is something to read
         </h2>
 

@@ -1,3 +1,6 @@
+> **Stale since 2026-09-27:** the routes section became a page-turning book of six routes, and the social arches now open onto archive media.
+> Where this file disagrees, the component files in `components/contact/` are the reference.
+
 # Enquire — `/contact/`
 
 Rewritten for **Praṇava-wide enquiries**, 22 September 2026. Before that it was Yoga

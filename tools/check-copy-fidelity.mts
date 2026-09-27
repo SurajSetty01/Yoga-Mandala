@@ -64,8 +64,22 @@ function extractDocx(file: string): string {
   }
 }
 
+/**
+ * Dashes were removed site-wide on 2026-09-27 at the owner's request, so punctuation may
+ * differ from the source but wording may not. Both sides therefore drop dashes and sentence
+ * punctuation before comparing (a dash that became a comma, colon or full stop still
+ * matches); every word, and the order of the words, must still be the client's. A numeric
+ * range dash reads as "to" ("2–6 October" is published as "2 to 6 October").
+ */
 const norm = (s: string) =>
-  s.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim().toLowerCase();
+  s
+    .replace(/[‘’]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/(\d)\s*[—–]\s*(\d)/g, '$1 to $2')
+    .replace(/[—–]|\s-\s|[.,;:!?()]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
 
 /** Every string anywhere in the exported content tree, with the path that reached it. */
 function walk(node: unknown, at: string, out: Array<{ at: string; text: string }>) {

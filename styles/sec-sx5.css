@@ -186,35 +186,20 @@
   white-space: nowrap;
   pointer-events: none;
 }
-.sx5-room__plaque-n {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 1.08em;
-  letter-spacing: 0.04em;
-}
-
 /* STILL VISTA: every sign is set at 11.5px ON SCREEN, however deep its room — its layer is
-   scaled by --s, so its type is set at 11.5px / --s. The deepest room (4.6% of the view)
-   carries only its numeral. */
+   scaled by --s, so its type is set at 11.5px / --s. Signs carry names only (no numerals,
+   at the owner's review), and a name needs more wall than a numeral did: the third room
+   (13.6% of the view) never has room for "Insights" beside its door, so its sign is not
+   drawn in the still vista. The list beside the vista names every door. */
 .sx5-journey:not(.sx5-journey--live) .sx5-room__plaque {
   font-size: calc(11.5px / var(--s));
 }
-.sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='2'] .sx5-room__plaque-name {
+.sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='2'] .sx5-room__plaque {
   display: none;
 }
-/* at 320 the second room is 115px wide and "03 Heal" no longer fits the wall beside its
-   door; the list beside the vista names every door, so the sign keeps its numeral */
+/* at 320 the second room is 115px wide and "Heal" no longer fits the wall beside its door */
 @media (max-width: 479px) {
-  .sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='1'] .sx5-room__plaque-name {
-    display: none;
-  }
-}
-/* the third room is 13.6% of the view. Its "04" needs ~46px of wall left of the last door,
-   which it has once the view is ~570px wide (1440 gives it 576). Below that the pill was
-   cut by the room's own edge and read "4" (seen at 390, and at 1024 where the view is
-   410px). The list beside the vista names the last door; half a sign is worse than none. */
-@container sx5-view (max-width: 569px) {
-  .sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='2'] .sx5-room__plaque {
+  .sx5-journey:not(.sx5-journey--live) .sx5-room[data-room='1'] .sx5-room__plaque {
     display: none;
   }
 }
@@ -226,13 +211,14 @@
   min-width: 0;
 }
 
-/* the register mark, the site's one voice for "where am I" — on the reversed plate the
-   mark goes cream and the accent is a sand RULE, the one thing sand may be */
+/* the register mark, the site's one voice for "where am I": on the reversed plate the
+   numeral goes cream. No rule between numeral and label (the owner wants no dash-like
+   separators); the gap alone parts them. */
 .sx5-eyebrow {
   margin: 0 0 clamp(1.4rem, 3.2vw, 2.6rem);
   display: flex;
   align-items: baseline;
-  gap: 0.8rem;
+  gap: 1rem;
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.19em;
   text-transform: uppercase;
@@ -246,13 +232,6 @@
   letter-spacing: 0.06em;
   color: var(--ink-onPic);
 }
-.sx5-eyebrow__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
 
 .sx5-doors {
   list-style: none;
@@ -265,24 +244,15 @@
 }
 .sx5-door__link {
   display: grid;
-  grid-template-columns: 2.4rem minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    'n head'
-    '. body';
-  column-gap: clamp(0.75rem, 1.6vw, 1.25rem);
+    'head'
+    'body';
   row-gap: 0.4rem;
   align-items: baseline;
   padding-block: clamp(1.1rem, 2.2vw, 1.55rem);
   color: inherit;
   text-decoration: none;
-}
-.sx5-door__n {
-  grid-area: n;
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  color: var(--ink-onPic-2);
 }
 .sx5-door__head {
   grid-area: head;
@@ -335,10 +305,6 @@
   color: var(--ground-deep);
 }
 
-.sx5-where {
-  display: none;
-}
-
 /* the one provenance line, printed once after the doors (from concept C) */
 .sx5-prov {
   margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
@@ -349,7 +315,7 @@
   color: var(--ink-onPic-2);
 }
 .sx5-journey--live .sx5-prov {
-  margin-top: clamp(0.75rem, 2svh, 1.6rem);
+  margin-top: clamp(1.1rem, 3svh, 2.2rem);
 }
 
 /* ── wide: words on the left, the view on the right ─────────────────────────
@@ -437,10 +403,9 @@
   border: 0;
   pointer-events: none;
 }
-/* the numeral, arrow and sentence are switched by the island and faded here: no scroll
-   position ever holds them half-painted over the room behind. The NAME is not faded — it
-   rolls through its window (below), so the column is never empty mid-walk. */
-.sx5-journey--live .sx5-door__n,
+/* the arrow and sentence are switched by the island and faded here: no scroll position
+   ever holds them half-painted over the room behind. The NAME is not faded — it rolls
+   through its window (below), so the column is never empty mid-walk. */
 .sx5-journey--live .sx5-door__go,
 .sx5-journey--live .sx5-door__body {
   opacity: 0;
@@ -449,7 +414,6 @@
 .sx5-journey--live .sx5-door[data-on='1'] {
   pointer-events: auto;
 }
-.sx5-journey--live .sx5-door[data-on='1'] .sx5-door__n,
 .sx5-journey--live .sx5-door[data-on='1'] .sx5-door__go,
 .sx5-journey--live .sx5-door[data-on='1'] .sx5-door__body {
   opacity: 1;
@@ -469,7 +433,6 @@
 .sx5-journey--live .sx5-door__link {
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    'n'
     'head'
     'body';
   row-gap: clamp(0.35rem, 1.2svh, 0.9rem);
@@ -478,17 +441,6 @@
 .sx5-journey--live .sx5-door__head {
   justify-content: flex-start;
   gap: clamp(1rem, 2vw, 1.75rem);
-}
-.sx5-journey--live .sx5-door__n {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-.sx5-journey--live .sx5-door__n::after {
-  content: '';
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
 }
 .sx5-journey--live .sx5-door__name {
   font-size: clamp(2.6rem, 1.5rem + 5vw, 7.25rem);
@@ -510,38 +462,6 @@
   margin-bottom: 0.5em;
 }
 
-.sx5-journey--live .sx5-where {
-  display: flex;
-  gap: 1.15rem;
-  margin-top: clamp(1rem, 3svh, 2.4rem);
-  font: 400 13px/1 var(--font-display);
-  letter-spacing: 0.06em;
-  color: rgba(251, 247, 242, 0.62);
-}
-.sx5-where__i {
-  position: relative;
-  padding-bottom: 0.55rem;
-  transition: color 0.3s var(--ease);
-}
-.sx5-where__i::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--sand);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s var(--ease);
-}
-.sx5-where__i[data-on='1'] {
-  color: var(--ink-onPic);
-}
-.sx5-where__i[data-on='1']::after {
-  transform: scaleX(1);
-}
-
 @media (min-width: 900px) and (min-aspect-ratio: 1/1) {
   .sx5-journey--live .sx5-frame {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
@@ -559,13 +479,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sx5-door__n,
   .sx5-door__body,
   .sx5-room__plaque,
   .sx5-room__vid,
-  .sx5-door__go,
-  .sx5-where__i,
-  .sx5-where__i::after {
+  .sx5-door__go {
     transition: none;
   }
 }

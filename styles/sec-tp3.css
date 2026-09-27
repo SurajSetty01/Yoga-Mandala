@@ -44,13 +44,6 @@
   letter-spacing: 0.06em;
   color: var(--forest);
 }
-.tp3-eyebrow-rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--clay);
-}
 
 .tp3-line {
   margin: 0;

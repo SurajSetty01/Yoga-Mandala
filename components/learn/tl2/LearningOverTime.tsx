@@ -84,7 +84,7 @@ export function LearningOverTime() {
               loading="lazy"
               decoding="async"
             />
-            <figcaption className="tl2-cap">Prabhava 5-day Hatha-Iyengar Immersion, 2–6 October 2023</figcaption>
+            <figcaption className="tl2-cap">Prabhava 5-day Hatha-Iyengar Immersion, 2 to 6 October 2023</figcaption>
           </figure>
 
           <p className="tl2-yes">{about.intro[4]}</p>

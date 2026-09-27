@@ -82,20 +82,11 @@
 .ln-mark__t {
   line-height: 1.4;
 }
-.ln-mark__rule {
-  flex: none;
-  width: clamp(18px, 3vw, 38px);
-  height: 1px;
-  background: var(--brass);
-}
 .ln-mark--dark {
   color: var(--sand);
 }
 .ln-mark--dark .ln-mark__n {
   color: var(--sand);
-}
-.ln-mark--dark .ln-mark__rule {
-  background: var(--sand);
 }
 
 /* ══ THE HANDOVER ═════════════════════════════════════════════════════════ */

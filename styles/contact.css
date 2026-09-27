@@ -12,16 +12,14 @@
    the strongest ground on the site, with the number set at display scale. An
    empty slot is never drawn — see components/contact/ChannelList.tsx.
 
-   Beneath it the six enquiry routes are not a list either. They are six
-   arched photographic openings cut down the paper — four sizes, tilted,
-   overlapping, two of them running off the rail, each one a link that opens
-   the line with its own subject — and social is two more doorways cut into a
-   dark wall. Band 01 is contained and rectangular, type beside a picture;
-   everything below it is the inverse, with the type set into the pictures.
+   Beneath it the six enquiry routes are not a list either. They are a book
+   that turns its pages as the reader scrolls, one route per spread, each
+   page's link opening the line with its own subject; and social is two
+   doorways cut into a dark wall onto the archive's photographs.
 
-   Nothing is reachable only through motion: the reveal and the two-lane depth
-   are an opt-in that never runs under prefers-reduced-motion, and the wall
-   stands exactly as it is laid out with JavaScript off.
+   Nothing is reachable only through motion: the book is an opt-in that never
+   runs under prefers-reduced-motion, and with JavaScript off the same pages
+   stand open, one spread after another.
 
    Every colour below is one already measured in design/DESIGN-SYSTEM.md, or
    a solid composite of one. Nothing new was invented.
@@ -46,6 +44,8 @@
 /* ── BAND 01 · THE OPEN LINE ────────────────────────────────────────────
    Warm black. The one real channel gets the page's strongest ground. THE
    CLIENT APPROVED THIS BLOCK — it and its markup stay exactly as they are.
+   Its three dash rules (eyebrow, ledger line, caption tick) were removed at
+   the owner's request on 2026-09-27: no dashes anywhere on the site.
    */
 .cx-open {
   background: var(--ground-deep);
@@ -67,16 +67,6 @@
   text-transform: uppercase;
   color: var(--ink-onDark);
 }
-/* sand is ornament and only ever ornament — 4.0:1 as text, a rule as a rule */
-.cx-brow::before {
-  content: '';
-  flex: none;
-  width: 1.5rem;
-  height: 2px;
-  border-radius: 1px;
-  background: var(--sand);
-}
-
 .cx-h1 {
   font-family: var(--font-display);
   font-optical-sizing: auto;
@@ -123,13 +113,6 @@
   letter-spacing: 0.1em;
   color: var(--cx-soft);
 }
-.cx-mark__r {
-  display: block;
-  flex: 1 1 auto;
-  height: 1px;
-  background: var(--cx-hair);
-}
-
 .cx-h2 {
   font-family: var(--font-display);
   font-optical-sizing: auto;
@@ -378,273 +361,292 @@
   text-transform: uppercase;
   color: var(--cx-soft);
 }
-.cx-fig__cap::before {
-  content: '';
-  flex: none;
-  width: 18px;
-  height: 1px;
-  background: var(--sand);
-  transform: translateY(-4px);
-}
+/* ── BAND 02 · THE BOOK ─────────────────────────────────────────────────
+   The six enquiry routes, bound as a book. The owner's review asked for the
+   cards to become "a book of those cards which when scrolled turns pages",
+   so each spread is one route: its photograph on the left page, and on the
+   right its subject, the message WhatsApp will open with, and the link.
 
-/* ── BAND 02 · THE COLONNADE ────────────────────────────────────────────
-   Paper, and no list at all. Arched openings cut down the page at four
-   sizes, tilted, overlapping, two of them running off the rail, with each
-   subject a nameplate set into the picture it belongs to. A doorway is the
-   shape of "we are open to".
+   The technique is the scrollytelling pin: a tall runway (.cxb-run) with a
+   sticky stage (.cxb-stage), and RouteBookMotion.tsx writing the scroll
+   progress to each leaf as --t, which is turned here into rotateY about the
+   spine, under perspective, with backface-visibility hiding whichever face
+   is turned away.
 
-   SIX, not eight. Eight was Yoga Mandala's list of collaboration subjects.
-   Praṇava takes six kinds of enquiry — see components/contact/routes.ts —
-   and each doorway is now a LINK that opens the one channel with its own
-   subject already written into the message. The composition is parametric
-   (--w / --x / --y / --r / --ar per doorway), so the count is a number of
-   placements, not a rebuild: 01–05 are the promoted preview's values
-   unchanged, and 06 is the preview's 08 — the doorway that bleeds off the
-   right rail — moved up to close the wall.
+   One DOM, three layouts:
+     static, the default: no JavaScript, prefers-reduced-motion, or a screen
+       too short for a book. Six open spreads (six cards under 40rem), every
+       page readable where it lies.
+     [data-book] under 40rem: a single page at a time, each page a whole
+       card, hinged on its left edge; a turned page goes over that edge.
+     [data-book] from 40rem: the two-page spread, leaves hinged on the spine.
 
-   Placement lives here rather than in inline styles so a breakpoint can
-   redefine every doorway's size, offset, overlap and tilt outright.
-
-   `overflow-x: clip` is what lets 05 and 06 leave the paper without giving
-   the document a horizontal scrollbar at any width, 320 to 2560.        */
-.cx-routes {
+   No dashes: no rule is drawn between a number and a word, and the only
+   separators in the text are punctuation.                                */
+.cxb {
+  /* wider than the page's 88rem measure: on a 1904 screen the book is held
+     by its height (73rem wide at most), not by the column */
+  --cxb-max: 110rem;
+  --cxb-paper: #fbf7f2;
+  --cxb-board: #1b3b2a;
+  --cxb-rad: 5px;
+  --cxb-lift: 0 1px 0 rgba(36, 29, 24, 0.06), 0 22px 44px -24px rgba(36, 29, 24, 0.42);
   position: relative;
+  /* a leaf in mid-turn and a turned phone page both reach past the book;
+     clip never makes a scroll container, so the sticky stage still pins */
   overflow-x: clip;
-  background: var(--ground);
+  background: var(--ground-warm);
   color: var(--ink);
   padding-block: clamp(3rem, 8svh, 5.5rem) clamp(3.5rem, 9svh, 6rem);
 }
-.cx-routes__head {
+.cxb-grid {
   width: 100%;
-  max-width: var(--cx-wide);
-  margin: 0 auto clamp(2.6rem, 7svh, 4.5rem);
+  max-width: var(--cxb-max);
+  margin-inline: auto;
   padding-inline: var(--rail);
 }
-
-/* a word, then a hairline running out to the measure. Clay is 3.90:1 and
-   can never be a label — it is the rule here, never the word. */
-.cx-eyebrow {
+.cxb-head {
+  max-width: 42rem;
+}
+.cxb-eyebrow {
   margin: 0 0 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
   font: 600 0.7rem/1 var(--font-text);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-.cx-eyebrow::after {
-  content: '';
-  flex: 1 1 auto;
-  height: 1px;
-  background: var(--brass);
-  opacity: 0.6;
-}
-/* on the dark wall, the same solid soft cream the rest of this page uses */
-.cx-eyebrow--dark {
-  color: var(--cx-soft);
-}
-
-.cx-q {
-  margin: 0 0 1.1rem;
-  max-width: 17ch;
+.cxb-q {
+  margin: 0 0 1rem;
+  max-width: 15ch;
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 400;
-  font-size: clamp(2rem, 1.1rem + 4.2vw, 4.4rem);
+  font-size: clamp(2rem, 1.1rem + 4.2vw, 4.2rem);
   line-height: 1.03;
   letter-spacing: -0.025em;
   color: var(--ink);
+  text-wrap: balance;
 }
-.cx-openTo {
+.cxb-how {
   margin: 0;
-  font: 600 0.72rem/1.5 var(--font-text);
-  letter-spacing: 0.16em;
+  max-width: 36ch;
+  font-size: clamp(0.97rem, 0.94rem + 0.2vw, 1.07rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* ── the contents page. The open spread's number fills in; the list is also
+   how a pointer reaches page six without turning through five others.     */
+.cxb-toc {
+  margin-top: clamp(1.6rem, 4svh, 2.4rem);
+}
+.cxb-toc__k {
+  margin: 0 0 0.5rem;
+  font: 600 0.66rem/1 var(--font-text);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--forest-mid);
+  color: var(--ink-soft);
 }
-
-/* ── the wall ───────────────────────────────────────────────────────── */
-.cx-wall {
-  width: 100%;
-  max-width: var(--cx-wide);
-  margin: 0 auto;
-  padding-inline: var(--rail);
-}
-
-/* THE DOORWAY IS A LINK NOW. It opens WhatsApp with its own subject written
-   into the message — the honest substitute for the enquiry form the site has
-   no backend for. An <a>, so it needs display, its own arch radius (the
-   global focus rule sets border-radius: 3px, which a bare .cx-arch would tie
-   with and lose to; .cx-routes .cx-arch outranks it) and no underline. */
-.cx-routes .cx-arch,
-.cx-routes .cx-arch:focus-visible {
-  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
-}
-.cx-arch {
-  position: relative;
-  display: block;
+.cxb-toc__l {
+  list-style: none;
   margin: 0;
-  width: var(--w);
-  margin-left: var(--x);
-  margin-top: var(--y);
-  transform: translate3d(0, var(--py, 0px), 0) rotate(var(--r));
-  color: inherit;
+  padding: 0;
+}
+.cxb-toc__a {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  align-items: center;
+  min-height: 2.75rem;
+  padding-block: 0.25rem;
+  border-radius: 4px;
+  color: var(--ink);
   text-decoration: none;
+  font: 500 0.95rem/1.35 var(--font-text);
 }
-.cx-arch__cut {
+.cxb-toc__n {
+  display: inline-grid;
+  place-items: center;
+  width: 1.95rem;
+  height: 1.95rem;
+  border: 1px solid rgba(36, 29, 24, 0.24);
+  border-radius: 50%;
+  font: 600 0.68rem/1 var(--font-text);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+  transition:
+    background-color 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.cxb-toc__t {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 0.3s var(--ease);
+}
+.cxb-toc__a:hover .cxb-toc__t {
+  text-decoration-color: currentColor;
+}
+.cxb-toc__a[aria-current] {
+  color: var(--forest);
+}
+.cxb-toc__a[aria-current] .cxb-toc__n {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #fbf7f2;
+}
+
+/* focus on paper: the global cream ring inverts to ink, as .within does */
+.cxb :focus-visible {
+  outline-color: #241d18;
+  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
+}
+
+/* ── the book, laid open (the default) ───────────────────────────────── */
+.cxb-run {
+  margin-top: clamp(2rem, 5svh, 3.2rem);
+}
+.cxb-book {
+  /* type and spacing inside a page scale with the page, not the window:
+     --u is a hundredth of one page's width */
+  container: cxb / inline-size;
+  --pw: 100;
+  --u: calc(var(--pw) * 0.01cqi);
+  display: grid;
+  gap: clamp(1.5rem, 5vw, 2.5rem);
+}
+.cxb-leaf {
+  display: contents;
+}
+.cxb-base,
+.cxb-back,
+.cxb-cast {
+  display: none;
+}
+.cxb-face {
   position: relative;
-  /* a <figure> now, and figures carry a UA margin of 1em 40px */
-  margin: 0;
-  aspect-ratio: var(--ar);
   overflow: hidden;
-  /* a doorway: a full arch on top, all but square at the threshold */
-  border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
-  background: var(--ground-warm);
-  box-shadow: 0 26px 64px rgba(36, 29, 24, 0.17);
-  transition: box-shadow 0.45s var(--ease);
+  background: var(--cxb-paper);
 }
-.cx-arch__cut img {
+.cxb-front {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--cxb-rad);
+  box-shadow: var(--cxb-lift);
+  scroll-margin-top: 6rem;
+}
+/* the page is where the contents send focus, not a control: no ring */
+.cxb-front:focus,
+.cxb-front:focus-visible {
+  outline: none;
+  box-shadow: var(--cxb-lift);
+}
+
+.cxb-pic {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: #d8cdbf;
+}
+.cxb-pic img {
   position: absolute;
   inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s var(--ease);
 }
-/* The door opens a little. The scale is on the IMAGE inside the clip, never
-   on .cx-arch — which carries both the tilt and the depth pass's --py and
-   would lose them. */
-.cx-arch:hover .cx-arch__cut img,
-.cx-arch:focus-visible .cx-arch__cut img {
-  transform: scale(1.035);
+.cxb-pic--own {
+  flex: none;
+  aspect-ratio: 1.25;
 }
-.cx-arch:hover .cx-arch__cut,
-.cx-arch:focus-visible .cx-arch__cut {
-  box-shadow: 0 30px 72px rgba(36, 29, 24, 0.26);
-}
-/* Depth: the far lane sits back behind a thin veil of the paper's own colour.
-   Painted, never animated — rule 4 forbids filter in a scroll handler. */
-.cx-arch[data-lane='far'] .cx-arch__cut::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(251, 247, 242, 0.17);
-  pointer-events: none;
-}
-.cx-arch[data-lane='far'] .cx-arch__cut {
-  box-shadow: 0 14px 38px rgba(36, 29, 24, 0.12);
-}
-
-/* ── THE NAMEPLATE ──────────────────────────────────────────────────────
-   A label on a photograph gets a GROUND, not a gradient: the navigation
-   pill's own material — rgba(shade,0.74) + a cream hairline + blur —
-   because a fixed-geometry scrim cannot guarantee a ratio over an arbitrary
-   crop at an arbitrary viewport. 0.34 measured 3.91:1 over this same hall's
-   skylight; 0.74 measured 8.6:1. Its contrast is a constant, so it holds on
-   every photograph at all seven widths (design/DESIGN-SYSTEM.md §1).
-
-   Two rows, because the plate carries two different kinds of fact: what the
-   reader came for, and where the photograph was actually taken. The third
-   column is the arrow — the doorway is a link, and an arrow on the plate is
-   the per-item affordance the section's one explanatory line cannot be.    */
-.cx-arch__plate {
+/* provenance on its own ground, so its contrast is a constant over any crop */
+.cxb-cap {
   position: absolute;
   z-index: 2;
-  left: 6%;
-  bottom: 5%;
-  max-width: 88%;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  column-gap: 0.7rem;
-  row-gap: 0.32rem;
-  align-items: baseline;
-  padding: 0.5rem 0.85rem 0.55rem;
-  border-radius: 4px;
-  background: rgba(var(--shade), 0.74);
+  left: 0.7rem;
+  bottom: 0.7rem;
+  max-width: calc(100% - 1.4rem);
+  margin: 0;
+  padding: 0.36rem 0.62rem 0.4rem;
   border: 1px solid rgba(251, 247, 242, 0.18);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  transition: background-color 0.4s var(--ease);
-}
-/* 0.86 over the same crops measures higher than the 0.74 the plate is
-   specified at, so deepening on hover cannot cost contrast. */
-.cx-arch:hover .cx-arch__plate,
-.cx-arch:focus-visible .cx-arch__plate {
-  background: rgba(var(--shade), 0.86);
-}
-.cx-arch__go {
-  grid-column: 3;
-  align-self: center;
-  display: inline-flex;
-  color: var(--ink-onPic);
-}
-.cx-arch:hover .cx-arch__go .cx-cta__arw,
-.cx-arch:focus-visible .cx-arch__go .cx-cta__arw {
-  transform: translateX(3px);
-}
-.cx-arch__n {
-  grid-column: 1;
-  font: 500 0.72rem/1 var(--font-text);
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-  color: rgba(251, 247, 242, 0.78);
-}
-.cx-arch__t {
-  grid-column: 2;
-  font-family: var(--font-text);
-  font-size: clamp(0.85rem, 0.76rem + 0.44vw, 1.12rem);
-  line-height: 1.3;
-  letter-spacing: -0.005em;
-  color: var(--ink-onPic);
-}
-/* Provenance, set in the caption system the hero's own figure uses: a sand
-   tick, then the event this frame was actually shot at. Sand is the rule and
-   never the word. The subject above it is a subject; this is a fact about the
-   photograph, and carrying both is what stops either being read as the other. */
-/* Full width of the plate, not the label's column: on a 62%-wide doorway the
-   number's column was the difference between one line and two, and a tick
-   hanging out to the plate's own left edge reads as a caption anyway. */
-.cx-arch__src {
-  grid-column: 1 / -1;
-  font: 500 0.62rem/1.4 var(--font-text);
-  letter-spacing: 0.06em;
+  border-radius: 4px;
+  background: rgba(var(--shade), 0.8);
+  font: 500 0.6rem/1.4 var(--font-text);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-onPic-2);
 }
-.cx-arch__src::before {
-  content: '';
-  display: inline-block;
-  vertical-align: 0.28em;
-  width: 11px;
-  height: 1px;
-  margin-right: 0.55em;
-  background: var(--sand);
+
+.cxb-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: max(0.55rem, calc(var(--u) * 2.4));
+  padding: max(1.1rem, calc(var(--u) * 7)) max(1.15rem, calc(var(--u) * 7.5));
 }
-/* THE DATE IS THE PART THAT DOES NOT FIT. A 58%-wide doorway on a 390px phone
-   gives the plate about 160px of text, and "Samskrithi Sadhana · 29 June 2025"
-   broke to three lines there — a five-line plate stops reading as a plate at
-   all. The event is what the caption has to name, so the event always shows and
-   the date joins it as soon as the doorways are wide enough to hold it.
-   Measured on screenshots, not guessed. */
-.cx-arch__on {
-  display: none;
+.cxb-folio {
+  margin: 0;
+  font: 600 clamp(0.66rem, calc(var(--u) * 2.4), 0.85rem) / 1 var(--font-text);
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+/* THE TEXT FACE, NOT THE DISPLAY ONE. Fraunces as loaded here mis-sets the
+   macron of "Sādhana": measured on screenshots at 390 and 1440, the bar
+   lands over the d. Inter sets it correctly, as it does "Praṇav Śāstrī" in
+   .cx-note; the italic message keeps Fraunces, whose ṇ sets correctly. */
+.cxb-subj {
+  margin: 0;
+  max-width: 15em;
+  font-family: var(--font-text);
+  font-weight: 500;
+  font-size: clamp(1.05rem, calc(var(--u) * 5.7), 2.05rem);
+  line-height: 1.16;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.cxb-msg {
+  margin: 0;
+  display: grid;
+  gap: 0.3rem;
+  max-width: 28em;
+}
+.cxb-msg__k {
+  font: 600 clamp(0.6rem, calc(var(--u) * 2.1), 0.7rem) / 1.2 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.cxb-msg__q {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(0.88rem, calc(var(--u) * 3.4), 1.14rem);
+  line-height: 1.42;
+  color: var(--ink-soft);
+}
+.cxb-go {
+  margin-top: max(0.3rem, calc(var(--u) * 1.6));
+  padding: 0.85rem 1.15rem;
+  font-size: clamp(0.8rem, calc(var(--u) * 3.3), 0.9rem);
+  white-space: normal;
 }
 
-/* ── the one action ─────────────────────────────────────────────────────
+/* ── the one action beneath the book ────────────────────────────────────
    All three of emailGeneral / emailProgrammes / emailCollaborations are
-   null and render as nothing. The button carries the client's own words and
-   the line beside it names where writing to them actually goes — see
-   components/contact/Routes.tsx. This is the line for the enquiry that is
-   none of the six, so nothing is written into it.                        */
+   null and render as nothing. This is the line for the enquiry that is none
+   of the six, so nothing is written into it.                             */
 .cx-act {
   width: 100%;
-  max-width: var(--cx-wide);
+  /* the book's measure, so the action lines up under the contents */
+  max-width: var(--cxb-max);
   margin: clamp(3rem, 9svh, 5.5rem) auto 0;
   padding-inline: var(--rail);
-  /* a column of two rows, not one wrapping row: the note has a reading measure,
-     and a flex item whose max-width caps its hypothetical size does not force a
-     line break — it just sits beside the button, which is what it did. */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -662,7 +664,7 @@
   letter-spacing: 0.02em;
   color: var(--ink-soft);
 }
-/* Yoga Mandala's own contact detail, on its own row — the client asked for
+/* Yoga Mandala's own contact detail, on its own row: the client asked for
    it to be kept within its own section rather than merged into Praṇava's. */
 .cx-note {
   margin: 0;
@@ -672,25 +674,224 @@
   text-wrap: pretty;
 }
 
-/* ── BAND 03 · TWO MORE DOORWAYS ────────────────────────────────────────
-   The colonnade ends, the wall goes dark, and two openings of the same arch
-   are cut into it and lit from the far side — same shape, no photograph,
-   because what is through them is the Trust's and not ours. The parent
-   organisation is the heading rather than a footnote: it is the reason
-   these handles read the way they do.                                    */
-.cx-social {
-  margin-top: clamp(3.5rem, 10svh, 6.5rem);
+/* ── the book, bound: [data-book] is set by RouteBookMotion.tsx ────────
+   The runway is one screen for the stage plus 5.7 slots of half a screen:
+   a short rest, five turns each with its own rest, a short rest. The JS
+   reads the runway's real height, so the two cannot disagree.            */
+.cxb[data-book] .cxb-run {
+  height: calc(100svh + 5.7 * 50svh);
+}
+.cxb[data-book] .cxb-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  /* clear of the floating navigation pill */
+  padding: 5.25rem 0 1.25rem;
+  container-type: size;
+}
+.cxb[data-book] .cxb-book {
+  --ar: 0.64;
+  --bw: min(100cqw, calc(100cqh * var(--ar)));
+  position: relative;
+  display: block;
+  isolation: isolate;
+  width: var(--bw);
+  aspect-ratio: var(--ar);
+  perspective: calc(var(--bw) * 3.2);
+}
+/* the boards: the cover shows round the pages, thickest at the spine */
+.cxb[data-book] .cxb-book::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -1.6% -2.4% -2.4% -4%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #122a1c, var(--cxb-board) 14%);
+  box-shadow:
+    0 30px 60px -22px rgba(36, 29, 24, 0.55),
+    0 8px 18px -6px rgba(36, 29, 24, 0.25);
+}
+/* the block of pages beneath the top one, showing at the fore edge */
+.cxb[data-book] .cxb-book::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: 0 var(--cxb-rad) var(--cxb-rad) 0;
+  background: var(--cxb-paper);
+  box-shadow:
+    2px 1px 0 #e4dacc,
+    4px 2px 0 #f4ede3,
+    6px 3px 0 #dbd0c0;
+}
+.cxb[data-book] .cxb-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--t, 0) * -180deg));
+  will-change: transform;
+}
+.cxb[data-book] .cxb-face {
+  --cxb-lift: none;
+  position: absolute;
+  inset: 0;
+  display: block;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 0 var(--cxb-rad) var(--cxb-rad) 0;
+  /* a hairline edge, so a page lying on paper still has an edge */
+  box-shadow: inset 0 0 0 1px rgba(36, 29, 24, 0.07);
+}
+.cxb[data-book] .cxb-front {
+  display: flex;
+}
+.cxb[data-book] .cxb-front:focus,
+.cxb[data-book] .cxb-front:focus-visible {
+  box-shadow: inset 0 0 0 1px rgba(36, 29, 24, 0.07);
+}
+.cxb[data-book] .cxb-back {
+  transform: rotateY(180deg);
+  border-radius: var(--cxb-rad) 0 0 var(--cxb-rad);
+}
+.cxb[data-book] .cxb-base {
+  display: none;
+}
+/* one page at a time: the back of a page is paper, and a page that has
+   turned has gone over the edge */
+.cxb[data-book] .cxb-back .cxb-pic {
+  display: none;
+}
+.cxb[data-book] .cxb-leaf[data-s='turned'] {
+  opacity: 0;
+}
+.cxb[data-book] .cxb-pic--own {
+  flex: 1 1 auto;
+  min-height: 28%;
+  aspect-ratio: auto;
+}
+.cxb[data-book] .cxb-text {
+  flex: none;
+}
+
+/* the gutter: every page darkens into the spine */
+.cxb[data-book] .cxb-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(36, 29, 24, 0.16),
+    rgba(36, 29, 24, 0.05) 3.5%,
+    rgba(36, 29, 24, 0) 10%
+  );
+}
+.cxb[data-book] .cxb-back::after,
+.cxb[data-book] .cxb-base::after {
+  background: linear-gradient(
+    270deg,
+    rgba(16, 12, 10, 0.34),
+    rgba(16, 12, 10, 0.1) 4%,
+    rgba(16, 12, 10, 0) 11%
+  );
+}
+/* the turn: a face darkens as it rises away from the reader (--sh) and
+   catches a sheen on the way up and on the way down (--gl) */
+.cxb[data-book] .cxb-face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 22%,
+      rgba(255, 255, 255, calc(var(--gl, 0) * 0.22)) 56%,
+      rgba(255, 255, 255, 0) 88%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(var(--shade), calc(var(--sh, 0) * 0.5)),
+      rgba(var(--shade), calc(var(--sh, 0) * 0.24))
+    );
+}
+.cxb[data-book] .cxb-back::before {
+  background:
+    linear-gradient(
+      270deg,
+      rgba(255, 255, 255, 0) 22%,
+      rgba(255, 255, 255, calc(var(--gl, 0) * 0.22)) 56%,
+      rgba(255, 255, 255, 0) 88%
+    ),
+    linear-gradient(
+      270deg,
+      rgba(var(--shade), calc(var(--sh, 0) * 0.5)),
+      rgba(var(--shade), calc(var(--sh, 0) * 0.24))
+    );
+}
+/* the shadow a lifted page throws on the page beneath it */
+.cxb[data-book] .cxb-cast {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 40;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transform: scaleX(var(--reach, 1));
+}
+.cxb[data-book] .cxb-cast--r {
+  left: 0;
+  width: 100%;
+  transform-origin: 0 50%;
+  border-radius: 0 var(--cxb-rad) var(--cxb-rad) 0;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--shade), 0.34),
+    rgba(var(--shade), 0.12) 55%,
+    rgba(var(--shade), 0)
+  );
+}
+.cxb[data-book] .cxb-cast--l {
+  display: none;
+}
+
+/* ── BAND 03 · TWO DOORWAYS, AND WHAT IS THROUGH THEM ───────────────────
+   The owner's review: "there is nothing in the background?" Now the dark
+   wall is cut through onto the archive: Instagram opens onto a grid of
+   stills set three across, WhatsApp onto a class moving together. The
+   label is on the wall under its opening, never on the picture, so its
+   contrast is a constant. The link is stretched over the whole doorway.  */
+.cxs {
   background: var(--ground-deep);
   color: var(--ink-onDark);
   padding-block: clamp(3.4rem, 9svh, 6rem) clamp(4rem, 11svh, 7rem);
 }
-.cx-social__in {
+.cxs-in {
   width: 100%;
   max-width: var(--cx-wide);
-  margin: 0 auto;
+  margin-inline: auto;
   padding-inline: var(--rail);
+  display: grid;
+  gap: clamp(2rem, 5svh, 3rem);
 }
-.cx-social__h {
+.cxs-eyebrow {
+  margin: 0 0 1rem;
+  font: 600 0.7rem/1 var(--font-text);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cx-soft);
+}
+.cxs-h {
   margin: 0 0 0.8rem;
   max-width: 20ch;
   font-family: var(--font-display);
@@ -701,90 +902,138 @@
   letter-spacing: -0.02em;
   color: var(--ink-onDark);
 }
-.cx-social__say {
-  margin: 0 0 clamp(2rem, 5svh, 3rem);
+.cxs-p {
+  margin: 0;
   max-width: 42ch;
   font-size: clamp(0.98rem, 0.94rem + 0.2vw, 1.08rem);
   line-height: 1.62;
   color: var(--cx-soft);
 }
-.cx-soc {
+.cxs-doors {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(1.1rem, 3vw, 2.2rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.9rem, 3vw, 2.2rem);
 }
-.cx-door {
+.cxs-door {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 0.35rem;
-  width: min(100%, 17rem);
-  aspect-ratio: 1.02;
-  padding: 1.15rem 1.15rem 1.3rem;
+  /* the stretched link's arch is sized from the doorway's own width */
+  container-type: inline-size;
+}
+.cxs-arch {
+  position: relative;
+  aspect-ratio: 0.8;
+  overflow: hidden;
   border-radius: 50% 50% 5px 5px / 34% 34% 1.6% 1.6%;
-  background: var(--ground);
-  color: var(--ink);
-  text-decoration: none;
+  background: #0b1510;
   box-shadow:
     0 0 0 1px rgba(246, 217, 193, 0.28),
     0 24px 60px rgba(0, 0, 0, 0.4);
-  transition: transform 0.4s var(--ease);
+  isolation: isolate;
+  transition:
+    transform 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
 }
-.cx-door:hover {
-  transform: translateY(-5px);
-}
-/* The doorway is a CREAM tile carrying its own box-shadow, which outranks the
-   global :focus-visible halo on specificity and would have swallowed it,
-   leaving a cream ring on a cream ground. So the ring inverts to ink here and
-   the halo is restated alongside the tile's own shadows. Measured by tabbing,
-   not assumed: this was invisible once, and it stays fixed. */
-.cx-door:focus-visible {
-  outline-color: #241d18;
+/* the reveal of the opening: a lit hairline and the wall's own shadow falling
+   into it from the top, so the arch reads as cut through, not printed on */
+.cxs-arch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
   box-shadow:
-    0 0 0 4px rgba(251, 247, 242, 0.95),
-    0 0 0 5px rgba(36, 29, 24, 0.55),
-    0 24px 60px rgba(0, 0, 0, 0.4);
+    inset 0 0 0 1px rgba(251, 247, 242, 0.14),
+    inset 0 22px 40px -22px rgba(0, 0, 0, 0.6);
 }
-.cx-door__k {
+.cxs-arch--grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+}
+.cxs-arch--grid img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+}
+.cxs-still,
+.cxs-clip {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% 55%;
+}
+.cxs-clip {
+  z-index: 1;
+}
+.cxs-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.65rem;
+  margin-top: 1rem;
+  color: var(--ink-onDark);
+  text-decoration: none;
+}
+/* the whole doorway is the target, shaped like it */
+.cxs-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: 50cqi 50cqi 6px 6px / 42.5cqi 42.5cqi 6px 6px;
+}
+.cxs-link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.cxs-link:focus-visible::after {
+  outline: 2px solid #fbf7f2;
+  outline-offset: 5px;
+  box-shadow: 0 0 0 9px rgba(var(--shade), 0.7);
+}
+.cxs-k {
+  flex-basis: 100%;
   font: 600 0.68rem/1 var(--font-text);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--forest-mid);
+  color: var(--cx-soft);
 }
-.cx-door__v {
+.cxs-v {
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 400;
-  font-size: clamp(1.02rem, 0.86rem + 0.7vw, 1.4rem);
-  line-height: 1.12;
+  font-size: clamp(1rem, 0.86rem + 0.7vw, 1.45rem);
+  line-height: 1.15;
   letter-spacing: -0.015em;
-  color: var(--ink);
   overflow-wrap: anywhere;
 }
-.cx-door__go {
-  margin-top: 0.35rem;
+.cxs-go {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   font: 600 0.78rem/1 var(--font-text);
-  color: var(--forest);
+  color: var(--sand);
 }
-.cx-door:hover .cx-cta__arw,
-.cx-door:focus-visible .cx-cta__arw {
+.cxs-door:hover .cxs-arch,
+.cxs-door:focus-within .cxs-arch {
+  transform: translateY(-5px);
+  box-shadow:
+    0 0 0 1px rgba(246, 217, 193, 0.42),
+    0 32px 70px rgba(0, 0, 0, 0.5);
+}
+.cxs-door:hover .cx-cta__arw,
+.cxs-link:focus-visible .cx-cta__arw {
   transform: translateX(3px);
-}
-
-/* ── focus on paper. The global treatment is a cream ring in a dark halo,
-   which is right on a photograph and on both dark bands; on paper it
-   inverts, exactly as .within already does. The dark social band keeps the
-   global ring — except its cream doorways, handled above.               */
-.cx-routes :focus-visible {
-  outline-color: #241d18;
-  box-shadow: 0 0 0 4px rgba(251, 247, 242, 0.95);
 }
 
 /* ── ≥ 620px · the column is wide enough for the room to read ───────── */
@@ -825,171 +1074,213 @@
   }
 }
 
-/* Occlusion is the depth cue, so the near lane is drawn OVER the far one. Both
-   carry a z-index because a positioned element with `auto` paints in DOM order,
-   which would put the later far doorway on top of the earlier near one.
-
-   The phone overlaps are deliberately shallower than the wide ones. At 430px the
-   doorways are nearly the full column, so a wide-viewport overlap put doorway 05
-   across 04's nameplate and the last one across 05's — measured on screenshots,
-   not guessed. A label a later doorway can cover is a label that is not there. */
-.cx-arch[data-lane='near'] { z-index: 2; }
-.cx-arch[data-lane='far']  { z-index: 1; }
-
-/* ── the six placements · phone ──────────────────────────────────────────── */
-.cx-arch:nth-child(1)  { --w: 86%; --x: 0%;   --y: 0;     --r: -1deg;   --ar: 0.80; }
-.cx-arch:nth-child(2)  { --w: 62%; --x: 36%;  --y: -9%;   --r: 1.4deg;  --ar: 0.72; }
-.cx-arch:nth-child(3)  { --w: 74%; --x: 2%;   --y: -6%;   --r: 0.8deg;  --ar: 0.84; }
-.cx-arch:nth-child(4)  { --w: 58%; --x: 42%;  --y: -10%;  --r: -1.2deg; --ar: 0.70; }
-.cx-arch:nth-child(5)  { --w: 92%; --x: -8%;  --y: -6%;   --r: 0.6deg;  --ar: 0.94; }
-/* 05 runs off the left rail, so its nameplate moves in far enough to stay on the paper. */
-.cx-arch:nth-child(5) .cx-arch__plate { left: 16%; }
-
-/* TWO PLATES LIFT OFF THE THRESHOLD, and this is a fix, not a preference.
-   Measured with document.elementFromPoint across 320→2560, sampling every
-   nameplate: at the phone placements the doorway that follows 02 and the one
-   that follows 04 are drawn OVER the bottom of their plates — 03's picture
-   covered 02's subject, number and provenance outright at 768, and 05's plate
-   covered 04's number at 390. A label a later doorway can cover is a label
-   that is not there, and this was true of the promoted preview too; it went
-   unseen because the probe's scroll positions were 04 and 07.
-
-   The overlaps themselves are the composition and they are untouched. The two
-   plates move up inside their own pictures instead, the way 05's already moves
-   sideways. The offsets are percentages of each doorway's own height, and the
-   occluder's top edge is a fixed percentage of the wall's width, so one value
-   clears it at every width in the range rather than at the one it was tuned on.
-   Re-measured after the change: clear at 320, 390, 430, 620, 768, 820, 960. */
-.cx-arch:nth-child(2) .cx-arch__plate { bottom: 22%; }
-.cx-arch:nth-child(4) .cx-arch__plate { bottom: 24%; }
-/* 06 is the promoted preview's 08 — same width, ratio and tilt, same bleed off
-   the right rail. Its overlap is shallower than the preview's because at 390px
-   05 is nearly the full column and a deeper pull put 06 across 05's nameplate.
-   Measured on screenshots, not guessed: a label a later doorway can cover is a
-   label that is not there. */
-.cx-arch:nth-child(6)  { --w: 88%; --x: 12%;  --y: -3%;   --r: -0.7deg; --ar: 0.90; }
-
-/* ── the six placements · wide ───────────────────────────────────────────── */
-@media (min-width: 60rem) {
-  .cx-arch:nth-child(1)  { --w: 44%; --x: 0%;   --y: 0;    --r: -1.2deg; --ar: 0.95; }
-  .cx-arch:nth-child(2)  { --w: 30%; --x: 60%;  --y: -12%; --r: 1.6deg;  --ar: 0.78; }
-  .cx-arch:nth-child(3)  { --w: 38%; --x: 6%;   --y: -4%;  --r: 0.9deg;  --ar: 0.88; }
-  .cx-arch:nth-child(4)  { --w: 27%; --x: 66%;  --y: -16%; --r: -1.5deg; --ar: 0.80; }
-  .cx-arch:nth-child(5)  { --w: 50%; --x: -8%;  --y: -6%;  --r: 0.7deg;  --ar: 1.00; }
-  .cx-arch:nth-child(5) .cx-arch__plate { left: 22%; }
-  /* the wide wall has no plate that a later doorway can reach, so both plates
-     go back to the threshold where every other one sits */
-  .cx-arch:nth-child(2) .cx-arch__plate,
-  .cx-arch:nth-child(4) .cx-arch__plate { bottom: 5%; }
-  /* 06 rises alongside 05 instead of below it: 05 spans -8→42% and 06 spans
-     56→104%, so they interlock vertically without either covering the other's
-     nameplate, and the wall still ends on a full-strength opening that leaves
-     the paper. */
-  .cx-arch:nth-child(6)  { --w: 48%; --x: 56%;  --y: -30%; --r: -0.8deg; --ar: 0.95; }
-
-  .cx-arch__plate {
-    padding: 0.6rem 1rem 0.66rem;
-    column-gap: 0.85rem;
-  }
-  /* room for the caption system's own tracking */
-  .cx-arch__src {
-    font-size: 0.66rem;
-    letter-spacing: 0.12em;
-  }
-  .cx-arch__src::before {
-    width: 14px;
-    margin-right: 0.6em;
-  }
-}
-
+/* ── ≥ 40rem · the book opens to a spread ─────────────────────────────
+   Laid open (static), each route is a spread in a grid row: the photograph
+   page on the left, the text page on the right, no gap at the gutter. Bound
+   ([data-book]), the leaves move to the right half and hinge on the spine,
+   route 01's photograph is glued inside the cover, and the back of every
+   leaf carries the next route's photograph.                              */
 @media (min-width: 40rem) {
-  .cx-door {
-    width: clamp(11rem, 30vw, 15rem);
-    aspect-ratio: 0.98;
+  .cxb-book {
+    --pw: 50;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0;
+    max-width: 62rem;
   }
-  /* 640px is where the narrowest doorway (56% of the measure) finally gives the
-     plate about 260px of text, which is more than the longest provenance needs
-     on one line. Below it the date is dropped rather than allowed to wrap the
-     plate to five lines; the event itself never is.
+  .cxb-base,
+  .cxb-back {
+    display: block;
+    border-radius: var(--cxb-rad) 0 0 var(--cxb-rad);
+    box-shadow: var(--cxb-lift);
+  }
+  .cxb-leaf:last-child > .cxb-back {
+    display: none;
+  }
+  .cxb-pic--own {
+    display: none;
+  }
+  .cxb-front {
+    border-radius: 0 var(--cxb-rad) var(--cxb-rad) 0;
+  }
+  .cxb-pic--spread {
+    height: 100%;
+    aspect-ratio: 0.78;
+  }
+  /* a text page: the number at its head, the subject in the middle of the
+     page and the link at its foot */
+  .cxb-text,
+  .cxb[data-book] .cxb-text {
+    flex: 1 1 auto;
+  }
+  .cxb-subj,
+  .cxb-go {
+    margin-top: auto;
+  }
+  /* the gutter, laid open too */
+  .cxb-front::after,
+  .cxb-base::after,
+  .cxb-back::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(36, 29, 24, 0.16),
+      rgba(36, 29, 24, 0.05) 3.5%,
+      rgba(36, 29, 24, 0) 10%
+    );
+  }
+  .cxb-base::after,
+  .cxb-back::after {
+    background: linear-gradient(
+      270deg,
+      rgba(16, 12, 10, 0.34),
+      rgba(16, 12, 10, 0.1) 4%,
+      rgba(16, 12, 10, 0) 11%
+    );
+  }
 
-     A container query on the plate would be the better rule — the doorways come
-     at four sizes, so the smallest still wraps its date at 1440 while its
-     neighbours have room. It was tried and reverted: `container-type:
-     inline-size` changes the plate's sizing model and collapsed every plate to
-     ~50px. Worth revisiting with a wrapper that can carry the containment
-     without being the sized box; not worth a layout regression for an orphaned
-     year. */
-  .cx-arch__on {
-    display: inline;
+  .cxb[data-book] .cxb-book {
+    --ar: 1.52;
+    --bw: min(100cqw, calc(100cqh * var(--ar)), 73rem);
+    max-width: none;
+    perspective: calc(var(--bw) * 2.4);
+  }
+  .cxb[data-book] .cxb-book::before {
+    inset: -1.9% -1.3% -2.8%;
+  }
+  .cxb[data-book] .cxb-book::after {
+    border-radius: var(--cxb-rad);
+    box-shadow:
+      2px 1px 0 #e4dacc,
+      4px 2px 0 #f4ede3,
+      6px 3px 0 #dbd0c0,
+      -2px 1px 0 #e4dacc,
+      -4px 2px 0 #f4ede3,
+      -6px 3px 0 #dbd0c0;
+  }
+  .cxb[data-book] .cxb-leaf {
+    left: 50%;
+    width: 50%;
+  }
+  .cxb[data-book] .cxb-leaf[data-s='turned'] {
+    opacity: 1;
+  }
+  .cxb[data-book] .cxb-base {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    display: block;
+    width: 50%;
+    border-radius: var(--cxb-rad) 0 0 var(--cxb-rad);
+  }
+  .cxb[data-book] .cxb-back .cxb-pic {
+    display: block;
+  }
+  .cxb[data-book] .cxb-pic--spread {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    aspect-ratio: auto;
+  }
+  .cxb[data-book] .cxb-cast--r {
+    left: 50%;
+    width: 50%;
+  }
+  .cxb[data-book] .cxb-cast--l {
+    left: 0;
+    display: block;
+    width: 50%;
+    transform-origin: 100% 50%;
+    border-radius: var(--cxb-rad) 0 0 var(--cxb-rad);
+    background: linear-gradient(
+      270deg,
+      rgba(var(--shade), 0.34),
+      rgba(var(--shade), 0.12) 55%,
+      rgba(var(--shade), 0)
+    );
   }
 }
 
-/* THE SAME RULE, ONE SIZE DOWN. The date fits the phone layout from 640px, but
-   the WIDE layout starts again at 960px with two doorways at 27% and 30% of the
-   measure — narrower in pixels than the 58% phone doorway they replace — so the
-   provenance wraps there and the plate goes to four lines. Between the two
-   breakpoints only those two doorways drop the date; the event itself never
-   does, and every other doorway keeps both. Measured on screenshots at 1024 and
-   1280, not guessed.
+/* a tablet held upright has height to spare: taller pages, the same spread */
+@media (min-width: 40rem) and (max-aspect-ratio: 4/5) {
+  .cxb[data-book] .cxb-book {
+    --ar: 1.22;
+  }
+}
 
-   This is the case the reverted container query was for: the doorways come at
-   four sizes, so a viewport rule can only ever approximate a per-plate one.
-   `container-type: inline-size` on the plate collapsed every plate to ~50px and
-   was reverted; putting it on .cx-arch__cut instead is untried and is the right
-   next attempt. Two nth-child selectors are not worth a layout regression. */
-@media (min-width: 60rem) and (max-width: 80rem) {
-  .cx-arch:nth-child(2) .cx-arch__on,
-  .cx-arch:nth-child(4) .cx-arch__on {
+/* ── ≥ 60rem · the social band goes to two columns ────────────────── */
+@media (min-width: 60rem) {
+  .cxs-in {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    column-gap: clamp(3rem, 6vw, 6rem);
+  }
+}
+
+/* ── ≥ 72rem · the question and its contents stand beside the book ─────
+   Bound, the header column pins with the stage, so the question and the
+   contents stay in view for every turn.                                  */
+@media (min-width: 72rem) {
+  .cxb-grid {
+    display: grid;
+    grid-template-columns: minmax(16rem, 21rem) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 4.5vw, 5.5rem);
+    align-items: start;
+  }
+  .cxb-q {
+    font-size: clamp(2.4rem, 0.9rem + 2.3vw, 3.6rem);
+  }
+  .cxb-run {
+    margin-top: 0;
+  }
+  /* laid open, the contents stay beside the spreads as they pass */
+  .cxb-head {
+    position: sticky;
+    top: 6rem;
+  }
+  .cxb[data-book] .cxb-head {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 5.25rem 1.25rem;
+  }
+}
+
+/* a book this short cannot hold its words: the message goes first */
+@media (max-height: 34rem) {
+  .cxb[data-book] .cxb-msg {
     display: none;
   }
 }
 
-/* ── reveal · opt-in, and it hides nothing the browser already painted ────
-   The start state exists only once components/contact/Depth.tsx has added
-   `is-live`, and the approved hero above carries no [data-br] at all.    */
-.cx.is-live [data-br] > * {
-  opacity: 0;
-  transform: translateY(30px);
-}
-.cx.is-live [data-br].in > * {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.85s var(--ease),
-    transform 1s var(--ease);
-  transition-delay: var(--d, 0ms);
-}
-
 /* ── MOTION OFF ───────────────────────────────────────────────────────
-   Nothing on this page is reachable only through motion. Depth.tsx does
-   not attach a listener or set a property at all, so the doorways keep
-   their tilt and stand exactly where they are laid out.                */
+   Nothing on this page is reachable only through motion. RouteBookMotion
+   never sets [data-book], so the routes stand as six open spreads, and the
+   WhatsApp doorway's clip is never attached: its still is the picture.  */
 @media (prefers-reduced-motion: reduce) {
-  .cx-arch {
-    transform: rotate(var(--r));
-  }
   .cx-cta::before,
   .cx-cta__arw,
   .cx-copy__b::after,
-  .cx-door,
-  .cx-door .cx-cta__arw,
-  .cx-arch__cut,
-  .cx-arch__cut img,
-  .cx-arch__plate {
+  .cxb-toc__n,
+  .cxb-toc__t,
+  .cxs-arch {
     transition: none;
   }
-  .cx-door:hover {
+  .cxs-door:hover .cxs-arch,
+  .cxs-door:focus-within .cxs-arch,
+  .cxs-door:hover .cx-cta__arw,
+  .cxs-link:focus-visible .cx-cta__arw {
     transform: none;
   }
-  /* the doorway still answers to hover and focus — it just does not move */
-  .cx-arch:hover .cx-arch__cut img,
-  .cx-arch:focus-visible .cx-arch__cut img,
-  .cx-arch:hover .cx-arch__go .cx-cta__arw,
-  .cx-arch:focus-visible .cx-arch__go .cx-cta__arw {
-    transform: none;
-  }
-  .cx.is-live [data-br] > * {
-    opacity: 1;
-    transform: none;
+  .cxs-clip {
+    display: none;
   }
 }

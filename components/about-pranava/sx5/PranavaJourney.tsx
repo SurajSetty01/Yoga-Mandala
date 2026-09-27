@@ -16,7 +16,8 @@ import { PranavaJourneyMotion } from './PranavaJourneyMotion';
  * at full size; the next door's name hangs beside its opening like a sign. The walk ends
  * outside, under trees. The door names never leave the column: they roll through one
  * window like a counter, in step with the doorway sweeping past (from concept B), so no
- * scroll position is a blank column beside a moving picture.
+ * scroll position is a blank column beside a moving picture. There are no numerals inside
+ * the section (the owner's review): the doors are known by their names alone.
  *
  * THE STILL VERSION IS THE SAME IDEA, NOT A FALLBACK. With no JavaScript, or under
  * prefers-reduced-motion, the section is the view from the first threshold: all four rooms
@@ -137,7 +138,6 @@ export function PranavaJourney() {
                             } as CSSProperties
                           }
                         >
-                          <span className="sx5-room__plaque-n">{`0${k + 2}`}</span>
                           <span className="sx5-room__plaque-name">{next.name}</span>
                         </span>
                       </>
@@ -150,8 +150,7 @@ export function PranavaJourney() {
 
             <div className="sx5-text">
               <h2 className="sx5-eyebrow" id="sx5-title">
-                <span className="sx5-eyebrow__n">05</span>
-                <span className="sx5-eyebrow__rule" aria-hidden="true" />
+                <span className="sx5-eyebrow__n">05</span>{' '}
                 The Praṇava journey
               </h2>
 
@@ -159,7 +158,6 @@ export function PranavaJourney() {
                 {doors.map((d, i) => (
                   <li className="sx5-door" key={d.name} data-door={i}>
                     <Link className="sx5-door__link" href={d.href}>
-                      <span className="sx5-door__n" aria-hidden="true">{`0${i + 1}`}</span>
                       <div className="sx5-door__head">
                         <h3 className="sx5-door__name">
                           <span className="sx5-door__word">{d.name}</span>
@@ -182,15 +180,6 @@ export function PranavaJourney() {
                   </li>
                 ))}
               </ol>
-
-              {/* where you are in the suite — drawn only while the walk is running */}
-              <div className="sx5-where" aria-hidden="true">
-                {doors.map((d, i) => (
-                  <span className="sx5-where__i" key={d.name} data-where={i}>
-                    {`0${i + 1}`}
-                  </span>
-                ))}
-              </div>
 
               {/* where the rooms are — printed once, the way a book lists its plates (from
                   concept C); every frame's basis is in rooms.ts */}

@@ -41,7 +41,6 @@ export function Members() {
 
       <div className="ab-mem__in ab-rail">
         <h2 className="ab-eyebrow ab-eyebrow--dark" id="ab-mem-h">
-          <i className="ab-eyebrow__rule" aria-hidden="true" />
           <span className="ab-eyebrow__n">06</span>
           {about.members.heading}
         </h2>

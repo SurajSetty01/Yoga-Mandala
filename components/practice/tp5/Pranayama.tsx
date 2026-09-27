@@ -28,7 +28,6 @@ export function Tp5Pranayama() {
       <div className="tp5-rail">
         <h2 className="tp5-eyebrow" id="tp5-h">
           <span className="tp5-eyebrow-n">04</span>
-          <span className="tp5-eyebrow-rule" aria-hidden="true" />
           Prāṇāyāma
         </h2>
 

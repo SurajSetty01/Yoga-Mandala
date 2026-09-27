@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════════════════════
-   §01 HERO — the final section on /about/. EVERY selector here is `.sx1-…`, and the
-   one keyframes rule is `sx1-leaf`. Component: components/about-pranava/sx1/AboutHero.tsx
+   §01 HERO — the final section on /about/. EVERY selector here is `.sx1-…`.
+   Component: components/about-pranava/sx1/AboutHero.tsx
 
    "THE WALLS ARE THE WORDS" (base: tournament design sx1d)
    One photograph of the TTC hall with its walls taken away: the red floor and the five
@@ -10,13 +10,9 @@
    so they pass up through the name.
 
    GRAFTED
-   · from sx1a — the sentence carries its own three nouns' photographs, each set in at
-     the size of a word (study · practice · transmission), cropped to sx1a's measured
-     detail. The hall shows practice; the sentence now shows all three things it names.
-   · from sx1b — those three frames open on a hinge, one after another, in the order the
-     client wrote them: the kavad's leaves, at the scale of a word. CSS only; under
-     reduced motion they are simply open.
    · from sx1c — the paragraph's first four words set as a small-capital lead-in.
+   The word-sized noun photographs once grafted from sx1a/sx1b were removed at the
+   owner's review; the three nouns keep only their italic.
 
    CONTRAST IS A CONSTANT. No word sits on a photograph. Cream on --ground-deep #12201A is
    15.79:1; the support paragraph at --ink-onDark-soft measured 7.19–7.70:1 on its glyph
@@ -64,9 +60,6 @@
   position: relative;
   z-index: 3;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.17em;
   text-transform: uppercase;
@@ -75,14 +68,7 @@
      a lone "Studies" */
   text-wrap: balance;
 }
-/* sand is ornament, never text (DESIGN-SYSTEM §1) — this is the one thing it may be */
-.sx1-eyebrow::before {
-  content: '';
-  flex: none;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
+/* no rule is drawn before it: the owner wants no dash-like marks beside a label */
 
 /* ── the wall: the name ───────────────────────────────────────────────────── */
 .sx1-h {
@@ -300,59 +286,9 @@
 }
 
 
-/* ══════════════════════════════════════════════════════════════════════════════
-   GRAFT (sx1a) — THE SENTENCE CARRIES WHAT IT NAMES.
-   Each noun is preceded by a frame the size of a word. The slots hold only an <img>, so
-   the paragraph's text is the client's sentence character for character.
-   ══════════════════════════════════════════════════════════════════════════════ */
-.sx1-term {
-  white-space: nowrap;
-}
+/* the sentence's three nouns (study, practice, transmission) keep their italic */
 .sx1-noun {
   font-style: italic;
-}
-.sx1-slot {
-  position: relative;
-  display: inline-block;
-  width: 1.72em;
-  height: 0.94em;
-  margin-right: 0.22em;
-  vertical-align: -0.12em;
-  overflow: hidden;
-  border-radius: 2px;
-  background: rgba(251, 247, 242, 0.08);
-  /* the pill's own hairline, so a dark frame still has an edge on the green */
-  box-shadow: 0 0 0 1px rgba(251, 247, 242, 0.18);
-}
-.sx1-stamp {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* the stamp's crop: put the detail's centre where cover puts it, then enlarge about it */
-  object-position: var(--sx1-cx) var(--sx1-cy);
-  transform: scale(var(--sx1-z));
-  transform-origin: var(--sx1-cx) var(--sx1-cy);
-}
-
-/* GRAFT (sx1b) — the three leaves open on their hinge in reading order. The end state is
-   the resting state, so without the animation (reduced motion) they are simply open. */
-@media (prefers-reduced-motion: no-preference) {
-  .sx1-slot {
-    transform-origin: 0 50%;
-    animation: sx1-leaf 0.95s var(--ease) both;
-    animation-delay: calc(0.5s + var(--sx1-i, 0) * 0.34s);
-  }
-}
-@keyframes sx1-leaf {
-  from {
-    opacity: 0;
-    transform: perspective(12em) rotateY(-80deg);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* GRAFT (sx1c) — the paragraph's first four words as its lead-in. */

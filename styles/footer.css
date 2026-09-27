@@ -76,16 +76,6 @@
   max-width: 27rem;
   text-wrap: balance;
 }
-.ft__reg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2.25rem;
-  height: 2px;
-  border-radius: 1px;
-  background: var(--sand);
-}
 
 .ft__col {
   min-width: 0;

@@ -41,7 +41,7 @@
  * Photos/IMG_5906.MOV") — so the section carries ONE provenance line for all of them.
  */
 
-export const PROVENANCE = 'Prabhava, a five-day Hatha-Iyengar immersion · 2–6 October 2023';
+export const PROVENANCE = 'Prabhava, a five-day Hatha-Iyengar immersion · 2 to 6 October 2023';
 
 export type Opening = {
   /** top-left of the opening, as a fraction of this room's width / height */

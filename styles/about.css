@@ -123,13 +123,6 @@
 .ab-eyebrow--dark .ab-eyebrow__n {
   color: var(--ink-onPic);
 }
-.ab-eyebrow__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
 
 
 /* ══ 03 · WHY WE BEGAN ══════════════════════════════════════════════════════
@@ -185,13 +178,6 @@
 }
 .ab-eyebrow--dark { color: var(--ink-onPic-2); }
 .ab-eyebrow--dark .b-eyebrow__n { color: var(--ink-onPic); }
-.ab-eyebrow__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
 
 .ab-prem {
   min-height: 92svh;
@@ -282,19 +268,6 @@
   .ab-prem__now  {
     margin-inline-start: auto;
     margin-inline-end: max(0px, calc(100% - var(--b-max)));
-  }
-  /* the hero's eyebrow rule at a larger scale: a sand hairline reaching across the
-     empty half of the band to the aside, so the space reads as measured rather than
-     left over. Sand is ornament and this is the one thing it is allowed to be. */
-  .ab-prem__now::before {
-    content: '';
-    position: absolute;
-    top: 0.62em;
-    right: calc(100% + 1.8rem);
-    width: clamp(3rem, 16vw, 14rem);
-    height: 1px;
-    background: var(--sand);
-    opacity: 0.55;
   }
 }
 

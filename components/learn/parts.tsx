@@ -30,7 +30,6 @@ export function Mark({
   return (
     <h2 className={`ln-mark${dark ? ' ln-mark--dark' : ''}`}>
       <span className="ln-mark__n">{n}</span>
-      <span className="ln-mark__rule" aria-hidden="true" />
       <span className="ln-mark__t">{children}</span>
     </h2>
   );

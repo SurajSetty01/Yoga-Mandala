@@ -1,6 +1,6 @@
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
-import { Th1Notice } from '@/components/heal/th1/Notice';
+import { Th1Care } from '@/components/heal/th1/Care';
 import { Th2Areas } from '@/components/heal/th2/Areas';
 import { Th3Ask } from '@/components/heal/th3/Ask';
 
@@ -18,8 +18,9 @@ import { Th3Ask } from '@/components/heal/th3/Ask';
  * Nothing on this page describes a service, states a benefit, implies clinical capability
  * or offers a consultation, and no frame shows therapy or a body being treated.
  *
- *   —   paper   th1  the standing notice: held for a screen while the view tilts up
- *                    out of a grove to a palm crown; "evolving" never settles its weight
+ *       paper   th1  the page's name and its line beside three captioned plates of care
+ *                    (a shoulderstand held on a bolster, a teacher's reach, rest), which
+ *                    open in order on arrival; the first is a clip
  *   01  warm    th2  a tree seat's rim traced in the photograph and projected down into
  *                    a plan; the ring stops short, the four names round it, Svasthya at
  *                    the centre
@@ -32,7 +33,7 @@ import { Th3Ask } from '@/components/heal/th3/Ask';
 export const metadata = {
   title: 'Heal',
   description:
-    'Praṇava Svasthya is being developed. Four areas are named — Yoga Therapy, Ayurveda, Nutrition and Women’s Wellness — and nothing beyond the names has been published yet. Enquiries reach Praṇava directly.',
+    'Praṇava Svasthya is being developed. Four areas are named (Yoga Therapy, Ayurveda, Nutrition and Women’s Wellness) and nothing beyond the names has been published yet. Enquiries reach Praṇava directly.',
 };
 
 export default function HealPage() {
@@ -40,7 +41,7 @@ export default function HealPage() {
     <>
       <SiteNav light />
       <main className="hl" id="top">
-        <Th1Notice />
+        <Th1Care />
         <Th2Areas />
         <Th3Ask />
       </main>

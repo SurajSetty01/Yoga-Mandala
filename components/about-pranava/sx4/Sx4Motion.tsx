@@ -3,40 +3,31 @@
 import { useEffect } from 'react';
 
 /**
- * §04's only client code. The section is complete without it: the stylesheet's default is
- * the finished long exposure (layer n at opacity 1/n, eight frames at equal weight).
+ * §04's only client code. The section is complete without it: the stylesheet's default shows
+ * the first hold in the frame, and the row of eight closes the section.
  *
- * TWO THINGS, both optional:
+ * THREE THINGS, all optional, and only when motion is allowed and the viewport is tall enough
+ * to hold the stage (≥ 600px):
  *
- * 1. THE TIME-LAPSE — only when motion is allowed and the viewport is tall enough to hold
- *    the stage (≥ 600px). `sx4--live` pins the frame and gives each practice its own stretch
- *    of scroll; then ONE continuous value, which frame the reader is at, becomes eight
- *    opacities.
- *      t ∈ [0, 7]  which frame. Between two practices' centres the frame holds for the first
- *                  ~40% and then dissolves into the next, so each photograph is seen still.
- *      e ∈ [0, 1]  after the eighth: all eight settle to equal weight.
- *    Any mix of weights is reachable with opacity alone: layer i (bottom-up) at
- *    o_i = w_i / (w_1 + … + w_i) contributes exactly w_i to the composite. The dissolve, the
- *    hold and the long exposure are all the same eight opacities, and nothing but `opacity`
- *    is ever written per frame.
+ * 1. THE SWAP. `sx4--live` pins the frame and gives each practice its own stretch of scroll.
+ *    The practice nearest the reading line is current, and its photograph is the one on show.
+ *    A change is a short timed fade: the arriving photograph fades in over the one it
+ *    replaces, which stays whole beneath it until it is covered and is then hidden. The fade
+ *    runs on the clock, not on the scroll, so no scroll position ever holds two photographs.
  *
- * 2. THE STRIP BECOMES EIGHT BUTTONS. In the static page (reduced motion, or a short
- *    viewport) a frame lifts its photograph out of the exposure on its own — an instant
- *    swap, no motion — and pressing it again lays it back. With motion on, a frame scrolls
- *    to its practice, and the scroll does the rest. Without JavaScript the strip stays a
- *    picture, hidden from assistive technology, because the figure has its caption.
+ * 2. THE LOOPS. A layer that carries `data-clip` gets a muted, looping <video> laid over its
+ *    own first frame when the reader comes within one practice of it, plays while it is the
+ *    frame on show, wraps back to its first frame at `data-hold` seconds (fading to the still
+ *    beneath and back, so the seam is the still itself), and is released (src dropped,
+ *    element removed) when the reader moves on or leaves the section. No <video> carries a
+ *    poster attribute: the <img> beneath it is its still.
  *
- * 3. THE LOOPS (live only). A layer that carries `data-clip` gets a muted, looping <video>
- *    laid over its own first frame when the reader comes within one practice of it, plays
- *    while it is the frame on show, wraps back to its first frame at `data-hold` seconds
- *    (fading to the still beneath and back, so the seam is the still itself), and is
- *    released — src dropped, element removed — when the reader moves on or leaves the
- *    section. No <video> carries a poster attribute: the <img> beneath it is its still.
+ * 3. THE ROW ARRIVES. When the closing row first comes into view its eight photographs arrive
+ *    left to right, in the order they were taken. Once in, they stay in.
  *
  * The rules it keeps, each learned on this site by breaking it:
  *   · one passive scroll listener that only raises a flag; every read and write inside one rAF
- *   · geometry measured on load, resize, font load and ResizeObserver — never in the frame
- *   · the reader's scroll position is written only when they press a frame to go there
+ *   · geometry measured on load, resize, font load and ResizeObserver, never in the frame
  *   · no wheel or touch interception, ever
  */
 export function Sx4Motion() {
@@ -50,37 +41,27 @@ export function Sx4Motion() {
 
     const layers = [...root.querySelectorAll<HTMLElement>('.sx4-frame .sx4-layer')];
     const steps = [...root.querySelectorAll<HTMLElement>('.sx4-step')];
-    const minis = [...root.querySelectorAll<HTMLElement>('.sx4-mini')];
-    const caps = [...root.querySelectorAll<HTMLElement>('.sx4-cap__v--one')];
+    const caps = [...root.querySelectorAll<HTMLElement>('.sx4-cap__v')];
     type Loop = { layer: HTMLElement; src: string; hold: number; v: HTMLVideoElement | null; wrapping: boolean };
     const loops: Loop[] = layers.flatMap((el) =>
       el.dataset.clip ? [{ layer: el, src: el.dataset.clip, hold: Number(el.dataset.hold) || 8, v: null, wrapping: false }] : [],
     );
-    const strip = root.querySelector<HTMLElement>('.sx4-strip');
-    const close = root.querySelector<HTMLElement>('.sx4-close');
     const stage = root.querySelector<HTMLElement>('.sx4-stage');
-    const fig = root.querySelector<HTMLElement>('.sx4-fig');
+    const seq = root.querySelector<HTMLElement>('.sx4-seq');
     const N = layers.length;
-    if (N < 2 || steps.length !== N || minis.length !== N || !strip || !close || !stage || !fig) return;
+    if (N < 2 || steps.length !== N || caps.length !== N || !stage || !seq) return;
 
-    const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
-    const smooth = (v: number) => {
-      const x = clamp(v, 0, 1);
-      return x * x * (3 - 2 * x);
-    };
-    /** index access under the project's noUncheckedIndexedAccess: every array here is length N */
-    const at = (arr: ArrayLike<number>, i: number) => arr[i] ?? 0;
+    /** how long the arriving photograph takes to cover the one it replaces; matches the CSS */
+    const FADE = 450;
 
     let live = false;
     let queued = false;
     let centres: number[] = [];
-    let closeC = 0;
     let line = 0;
     let top = 0;
     let bottom = 0;
-    const shown = new Array<number>(N).fill(-1);
-    let on = -2;
-    let cap = '';
+    let cur = -1;
+    let settle = 0;
 
     /* ── the loops ─────────────────────────────────────────────────────────── */
     function attach(L: Loop) {
@@ -127,22 +108,18 @@ export function Sx4Motion() {
       v.remove();
     }
     const releaseAll = () => loops.forEach(release);
-    /** tt: which frame the reader is at; e: how far the exposure has settled */
-    function steer(tt: number, e: number) {
+    function steer(k: number) {
       loops.forEach((L) => {
-        const k = layers.indexOf(L.layer);
-        const d = Math.abs(k - tt);
-        if (d > 1.2 || e > 0.5) return release(L);
+        const d = Math.abs(layers.indexOf(L.layer) - k);
+        if (d > 1) return release(L);
         if (!L.v) attach(L);
         const v = L.v;
         if (!v) return;
-        if (d < 0.5) {
+        if (d === 0) {
           if (v.paused) v.play().catch(() => {});
         } else if (!v.paused) v.pause();
       });
     }
-    /** the static page's lifted frame, or null for the exposure */
-    let lifted: number | null = null;
 
     function measure() {
       const y = scrollY;
@@ -150,9 +127,6 @@ export function Sx4Motion() {
         const r = s.getBoundingClientRect();
         return r.top + y + r.height / 2;
       });
-      /* the exposure is timed to the closing sentences, not to their (deliberately long) row */
-      const rc = (close!.querySelector('p') ?? close!).getBoundingClientRect();
-      closeC = rc.top + y + rc.height / 2;
       const rr = root!.getBoundingClientRect();
       top = rr.top + y;
       bottom = rr.bottom + y;
@@ -162,32 +136,41 @@ export function Sx4Motion() {
       line = wide.matches ? innerHeight * 0.5 : (stage!.offsetHeight + innerHeight) / 2;
     }
 
-    function write(weights: number[]) {
-      let sum = 0;
+    /* ── the swap ──────────────────────────────────────────────────────────── */
+    const hide = (el: HTMLElement) => {
+      el.style.zIndex = '';
+      el.style.opacity = '0';
+      el.style.visibility = 'hidden';
+    };
+    function show(k: number) {
+      if (k === cur) return;
+      const from = cur;
+      cur = k;
+      window.clearTimeout(settle);
       layers.forEach((el, i) => {
-        const wi = at(weights, i);
-        sum += wi;
-        const q = Math.round((sum > 1e-6 ? wi / sum : 0) * 1000) / 1000;
-        if (q !== shown[i]) {
-          shown[i] = q;
-          el.style.opacity = String(q);
-          el.style.visibility = q === 0 ? 'hidden' : '';
-        }
+        if (i === k) {
+          el.style.zIndex = '2';
+          el.style.visibility = 'visible';
+          el.style.opacity = '1';
+        } else if (i === from) {
+          el.style.zIndex = '1'; // whole, beneath the one arriving, until it is covered
+        } else hide(el);
       });
+      settle = window.setTimeout(() => layers.forEach((el, i) => i !== cur && hide(el)), FADE + 60);
+      steps.forEach((el, i) => el.toggleAttribute('data-on', i === k));
+      caps.forEach((el, i) => el.toggleAttribute('data-on', i === k));
     }
-
-    /** which frame is current (N = all of them): the leader, the strip mark and the caption */
-    function mark(now: number) {
-      if (now === on) return;
-      on = now;
-      steps.forEach((el, i) => el.toggleAttribute('data-on', live && i === now));
-      minis.forEach((el, i) => el.toggleAttribute('data-on', now === N || i === now));
-      caps.forEach((el, i) => el.toggleAttribute('data-on', i === now));
-      const c = now === N ? 'all' : 'one';
-      if (c !== cap) {
-        cap = c;
-        fig!.dataset.cap = c;
+    /** back to the stylesheet's own state: the first hold, nothing marked */
+    function reset() {
+      window.clearTimeout(settle);
+      cur = -1;
+      for (const el of layers) {
+        el.style.zIndex = '';
+        el.style.opacity = '';
+        el.style.visibility = '';
       }
+      steps.forEach((el) => el.removeAttribute('data-on'));
+      caps.forEach((el, i) => el.toggleAttribute('data-on', i === 0));
     }
 
     function frame() {
@@ -197,103 +180,33 @@ export function Sx4Motion() {
       const vh = innerHeight;
       if (y + vh < top - vh || y > bottom + vh) return releaseAll(); // far away: nothing to do
 
+      /* the current practice is the one whose centre is nearest the reading line */
       const m = y + line;
-      const last = at(centres, N - 1);
-      let tt = 0;
-      let e = 0;
-      if (m >= last) {
-        tt = N - 1;
-        e = smooth(((m - last) / Math.max(1, closeC - last) - 0.28) / 0.62);
-      } else {
-        for (let i = 0; i < N - 1; i++) {
-          const a0 = at(centres, i);
-          const a1 = at(centres, i + 1);
-          if (m >= a0 && m < a1) {
-            tt = i + smooth(((m - a0) / Math.max(1, a1 - a0) - 0.4) / 0.5);
-            break;
-          }
-        }
+      let k = 0;
+      for (let i = 1; i < N; i++) {
+        const a = centres[i - 1] ?? 0;
+        const b = centres[i] ?? 0;
+        if (m >= (a + b) / 2) k = i;
       }
-
-      /* two neighbouring frames share the weight while one dissolves into the next; after the
-         eighth, every weight drifts to 1/N */
-      const i0 = Math.floor(tt);
-      const s = tt - i0;
-      write(
-        Array.from({ length: N }, (_, i) => {
-          const own = i === i0 ? 1 - s : i === i0 + 1 ? s : 0;
-          return own * (1 - e) + e / N;
-        }),
-      );
-      mark(e >= 0.5 ? N : Math.round(tt));
-      /* the loops play only while the section is actually on screen */
-      if (y + vh < top || y > bottom) releaseAll();
-      else steer(tt, e);
+      /* the loops play only while the frame is actually on screen (read before any write) */
+      const sr = stage!.getBoundingClientRect();
+      show(k);
+      if (sr.bottom < 0 || sr.top > vh) releaseAll();
+      else steer(k);
     }
 
-    /* ── the static page's lift ──────────────────────────────────────────────── */
-    function lift(i: number | null) {
-      lifted = i;
-      minis.forEach((el, k) => el.setAttribute('aria-pressed', String(k === i)));
-      if (i === null) {
-        for (const el of layers) {
-          el.style.opacity = '';
-          el.style.visibility = '';
-        }
-        shown.fill(-1);
-        on = -2;
-        minis.forEach((el) => el.removeAttribute('data-on'));
-        caps.forEach((el) => el.removeAttribute('data-on'));
-        cap = 'all';
-        fig!.dataset.cap = 'all';
-        return;
-      }
-      write(Array.from({ length: N }, (_, k) => (k === i ? 1 : 0)));
-      mark(i);
-    }
-
-    function label() {
-      minis.forEach((el, i) =>
-        el.setAttribute(
-          'aria-label',
-          live
-            ? `Go to practice ${i + 1} of ${N} and its photograph`
-            : `Show photograph ${i + 1} of ${N} on its own`,
-        ),
-      );
-      strip!.setAttribute(
-        'aria-label',
-        live ? 'The eight photographs, in order' : 'The eight photographs in the exposure above',
-      );
-    }
-
-    function press(i: number) {
-      if (live) {
-        const target = at(centres, i) - line;
-        scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
-        return;
-      }
-      lift(lifted === i ? null : i);
-    }
-
-    /* the strip becomes a group of buttons, whatever the mode */
-    strip.removeAttribute('aria-hidden');
-    strip.setAttribute('role', 'group');
-    const handlers = minis.map((el, i) => {
-      el.setAttribute('role', 'button');
-      el.tabIndex = 0;
-      el.setAttribute('aria-pressed', 'false');
-      const click = () => press(i);
-      const key = (ev: KeyboardEvent) => {
-        if (ev.key === 'Enter' || ev.key === ' ') {
-          ev.preventDefault(); // Space would otherwise also scroll the page
-          press(i);
-        }
-      };
-      el.addEventListener('click', click);
-      el.addEventListener('keydown', key);
-      return { el, click, key };
-    });
+    /* ── the row arrives ─────────────────────────────────────────────────────── */
+    const io =
+      typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(
+            (es, obs) => {
+              if (!es.some((e) => e.isIntersecting)) return;
+              seq.setAttribute('data-in', '');
+              obs.disconnect();
+            },
+            { threshold: 0.2 },
+          )
+        : null;
 
     const onScroll = () => {
       if (queued) return;
@@ -308,26 +221,23 @@ export function Sx4Motion() {
 
     function enable() {
       if (live) return;
-      lift(null);
+      /* a row already on screen (or already passed) does not hide itself to arrive again */
+      if (!io || seq!.getBoundingClientRect().top < innerHeight) seq!.setAttribute('data-in', '');
+      else io.observe(seq!);
       live = true;
       root!.classList.add('sx4--live');
-      shown.fill(-1);
-      on = -2;
-      cap = '';
-      label();
-      minis.forEach((el) => el.removeAttribute('aria-pressed'));
       measure();
       frame();
     }
     function disable() {
       releaseAll();
+      io?.disconnect();
+      seq!.setAttribute('data-in', '');
       if (live) {
         live = false;
         root!.classList.remove('sx4--live');
-        steps.forEach((el) => el.removeAttribute('data-on'));
       }
-      lift(null);
-      label();
+      reset();
     }
     const decide = () => (!reduce.matches && tall.matches ? enable() : disable());
 
@@ -350,21 +260,12 @@ export function Sx4Motion() {
       tall.removeEventListener('change', decide);
       wide.removeEventListener('change', remeasure);
       ro?.disconnect();
-      for (const { el, click, key } of handlers) {
-        el.removeEventListener('click', click);
-        el.removeEventListener('keydown', key);
-        el.removeAttribute('role');
-        el.removeAttribute('tabindex');
-        el.removeAttribute('aria-pressed');
-        el.removeAttribute('aria-label');
-      }
-      strip.removeAttribute('role');
-      strip.removeAttribute('aria-label');
-      strip.setAttribute('aria-hidden', 'true');
+      io?.disconnect();
       live = false;
       releaseAll();
       root.classList.remove('sx4--live');
-      lift(null);
+      seq.removeAttribute('data-in');
+      reset();
     };
   }, []);
 

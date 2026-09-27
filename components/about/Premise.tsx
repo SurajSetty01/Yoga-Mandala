@@ -34,7 +34,6 @@ export function Premise() {
     <section className="ab-sec ab-sec--deep ab-prem" aria-labelledby="ab-prem-h">
       {/* The hero owns the page's <h1>, so the register mark here is an <h2>. */}
       <h2 className="ab-eyebrow ab-eyebrow--dark" id="ab-prem-h">
-        <i className="ab-eyebrow__rule" aria-hidden="true" />
         <span className="ab-eyebrow__n">03</span>
         {about.title}
       </h2>

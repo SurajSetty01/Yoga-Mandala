@@ -39,7 +39,7 @@ import { Closing } from '@/components/about-pranava/Closing';
 export const metadata = {
   title: 'About Praṇava',
   description:
-    'Praṇava is a centre dedicated to approaching Yoga as a complete discipline of study, practice and living — rooted in tradition, sustained through practice and explored through inquiry.',
+    'Praṇava is a centre dedicated to approaching Yoga as a complete discipline of study, practice and living: rooted in tradition, sustained through practice and explored through inquiry.',
 };
 
 export default function AboutPranavaPage() {

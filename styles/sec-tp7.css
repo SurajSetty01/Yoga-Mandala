@@ -68,13 +68,6 @@
   letter-spacing: 0.06em;
   color: var(--forest);
 }
-.tp7-eyebrow-rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--clay);
-}
 
 .tp7-line {
   margin: 0;

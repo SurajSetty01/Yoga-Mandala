@@ -315,16 +315,6 @@
   text-transform: uppercase;
   color: var(--teal-deep);
 }
-.wi-p__lead::before {
-  content: '';
-  display: inline-block;
-  width: 22px;
-  height: 1px;
-  background: var(--clay);
-  vertical-align: middle;
-  margin-right: 0.7em;
-  transform: translateY(-1px);
-}
 
 /* ── the aperture ─────────────────────────────────────────────────────── */
 .wi-fig {
@@ -403,16 +393,6 @@
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
-.wi-chip__in::before {
-  content: '';
-  display: inline-block;
-  width: 13px;
-  height: 1px;
-  background: var(--sand);
-  vertical-align: middle;
-  margin-right: 0.62em;
-  transform: translateY(-1px);
-}
 
 /* ── the wall label ───────────────────────────────────────────────────── */
 .wi-lbl {
@@ -442,23 +422,12 @@
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-.wi-lbl__where::before {
-  content: '';
-  flex: none;
-  width: 18px;
-  height: 1px;
-  background: var(--clay);
-  transform: translateY(-4px);
-}
 .wi-onDark .wi-lbl__what,
 .wi-room__lbl .wi-lbl__what,
 .wi-plate__cap .wi-lbl__what { color: var(--ink-onPic-2); }
 .wi-onDark .wi-lbl__where,
 .wi-room__lbl .wi-lbl__where,
 .wi-plate__cap .wi-lbl__where { color: rgba(251, 247, 242, 0.8); }
-.wi-onDark .wi-lbl__where::before,
-.wi-room__lbl .wi-lbl__where::before,
-.wi-plate__cap .wi-lbl__where::before { background: var(--sand); }
 
 /* ── desktop: the arch takes a column and the chips cross into the text ── */
 @media (min-width: 880px) {
@@ -746,15 +715,6 @@
   gap: 0.65em;
   align-items: baseline;
 }
-.wi-tag::before {
-  content: '';
-  width: 20px;
-  height: 1px;
-  background: var(--clay);
-  display: inline-block;
-  transform: translateY(-4px);
-  flex: none;
-}
 
 .wi-ent__h {
   margin: 0 0 0.55em;
@@ -854,7 +814,6 @@
 }
 .wi-plate__cap .wi-lbl__what { font-size: 12px; line-height: 1.4; }
 .wi-plate__cap .wi-lbl__where { font-size: 10px; letter-spacing: 0.05em; }
-.wi-plate__cap .wi-lbl__where::before { width: 14px; }
 
 @media (min-width: 900px) {
   .wi-ent { grid-template-columns: minmax(0, 1fr) var(--pw); align-items: start; }

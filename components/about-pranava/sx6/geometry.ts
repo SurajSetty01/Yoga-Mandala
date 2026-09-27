@@ -79,7 +79,7 @@ export const LEFT: Wall = {
   upN: 0.5435,
   downN: 0.5,
   tip: 0.745,
-  alt: 'Legs raised against a white wall, feet pressed flat to it, above a line of folding chairs — the row seen from one end.',
+  alt: 'Legs raised against a white wall, feet pressed flat to it, above a line of folding chairs: the row seen from one end.',
 };
 
 export const RIGHT: Wall = {

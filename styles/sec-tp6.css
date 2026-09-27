@@ -62,13 +62,6 @@
   letter-spacing: 0.06em;
   color: var(--ink-onPic);
 }
-.tp6-eyebrow-rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
 
 .tp6-lead {
   margin: 0 auto;
@@ -93,14 +86,6 @@
   letter-spacing: -0.014em;
   color: var(--ink-onPic);
   text-wrap: balance;
-}
-.tp6-intent::before {
-  content: '';
-  display: block;
-  width: 28px;
-  height: 1px;
-  margin: 0 auto calc(1.1 * var(--tp6-u));
-  background: var(--sand);
 }
 
 /* ── the four frames, pinwheeled clockwise round the clearing ── */
@@ -227,9 +212,6 @@
     max-width: 22ch;
     font-size: clamp(1.25rem, 0.8rem + 2vw, 2.1rem);
     line-height: 1.16;
-  }
-  .tp6-intent::before {
-    margin-bottom: 0.9rem;
   }
   .tp6-fig--top,
   .tp6-fig--right,

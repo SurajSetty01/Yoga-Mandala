@@ -64,7 +64,6 @@ export function Tp3Regular() {
           <div className="tp3-copy">
             <h2 className="tp3-eyebrow" id="tp3-h">
               <span className="tp3-eyebrow-n">02</span>
-              <span className="tp3-eyebrow-rule" aria-hidden="true" />
               Regular practice
             </h2>
             <p className="tp3-line">{line}</p>

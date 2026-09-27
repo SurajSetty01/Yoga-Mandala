@@ -205,7 +205,7 @@ export function Sx7Faculty() {
           <p className="sx7-cap">
             <span>
               Photographs and films from Prabhava, a five-day Hatha-Iyengar immersion,{" "}
-              {"2–6 October 2023."}
+              {"2 to 6 October 2023."}
             </span>
           </p>
         </div>

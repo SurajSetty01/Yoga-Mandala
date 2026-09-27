@@ -91,7 +91,6 @@ export function LearnTeacherEducation() {
         <div className="tl3-stage">
           <h2 className="tl3-mark" id="tl3-title">
             <span className="tl3-mark__n">02</span>
-            <span className="tl3-mark__rule" aria-hidden="true" />
             <span className="tl3-mark__t">What teacher education is</span>
           </h2>
 

@@ -60,13 +60,6 @@
   letter-spacing: 0.06em;
   color: var(--ink-onPic);
 }
-.te2-mark__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand);
-}
 
 .te2-lead {
   margin: 0;
@@ -213,15 +206,6 @@
 }
 .te2-prov__v {
   color: var(--sand);
-}
-.te2-prov__v::before {
-  content: '';
-  display: inline-block;
-  vertical-align: middle;
-  width: 22px;
-  height: 1px;
-  margin: -2px 1.1rem 0 0;
-  background: var(--sand);
 }
 
 /* static spread, two across once there is room */

@@ -73,7 +73,6 @@ export function AboutIntroduction() {
       <div className="sx2-rail">
         <h2 className="sx2-mark" id="sx2-h">
           <span className="sx2-mark__n">01</span>
-          <span className="sx2-mark__rule" aria-hidden="true" />
           Introduction
         </h2>
       </div>

@@ -41,7 +41,6 @@ export function Te3Next() {
       <div className="te3-rail">
         <h2 className="te3-mark" id="te3-h">
           <span className="te3-mark__n">02</span>
-          <span className="te3-mark__rule" aria-hidden="true" />
           Hearing about the next one
         </h2>
 

@@ -48,13 +48,6 @@
   letter-spacing: 0.06em;
   color: var(--forest);
 }
-.tp5-eyebrow-rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--clay);
-}
 
 /* ── the canopy: a 3:2 window pinned to the TOP of a 9:16 clip ──
    3:2 over 9:16 shows 37.5% of the frame height; y 0% makes that 0-37.5%.

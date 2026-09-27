@@ -63,13 +63,6 @@
   letter-spacing: 0.06em;
   color: var(--forest);
 }
-.sx2-mark__rule {
-  flex: none;
-  align-self: center;
-  width: 22px;
-  height: 1px;
-  background: var(--sand); /* the page register mark: same rule as 02–10 */
-}
 
 /* ── I · THE CLAIM, split around the mat ───────────────────────────────────
    Three columns: the first half of the sentence hugging the strip from the left and

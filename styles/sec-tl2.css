@@ -93,14 +93,6 @@
   line-height: 1.42;
   color: var(--ink);
 }
-.tl2-yes::before {
-  content: '';
-  display: block;
-  width: clamp(18px, 3vw, 38px);
-  height: 1px;
-  margin-bottom: clamp(0.8rem, 2svh, 1.3rem);
-  background: var(--brass);
-}
 
 /* ── 2 · over time ───────────────────────────────────────────────────────── */
 

@@ -143,13 +143,6 @@
   text-transform: uppercase;
   color: var(--forest);
 }
-.te1-cap__rule {
-  flex: none;
-  align-self: center;
-  width: 18px;
-  height: 1px;
-  background: rgba(193, 97, 60, 0.6);
-}
 
 /* ── the sentence, on the empty room ────────────────────────────────────── */
 .te1-lede {

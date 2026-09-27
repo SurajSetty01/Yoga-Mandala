@@ -40,7 +40,7 @@ import { SiteFooter } from '@/components/SiteFooter';
 export const metadata = {
   title: 'What Happens Within',
   description:
-    'Yoga Mandala is built around four simple ideas: Connect, Learn, Collaborate and Share — and a growing set of community initiatives.',
+    'Yoga Mandala is built around four simple ideas: Connect, Learn, Collaborate and Share · and a growing set of community initiatives.',
 };
 
 const NEXT = ymNav.find((n) => n.href === '/yoga-mandala/join/');
