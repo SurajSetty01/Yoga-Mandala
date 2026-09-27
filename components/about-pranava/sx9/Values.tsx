@@ -21,8 +21,12 @@ import { Sx9Motion } from './Motion';
  * carry no diacritics and are in Fraunces.
  *
  * WITHOUT SCRIPT, AND UNDER REDUCED MOTION, all four stand open at 3:2, each word and line
- * beneath its photograph, in the client's order. That is the finished state; Motion.tsx
- * only ever closes slits it is about to open.
+ * beneath its photograph (beside it on a wide screen), in the client's order. That is the
+ * finished state; Motion.tsx only ever closes slits it is about to open.
+ *
+ * ON A WIDE SCREEN the section spans the page measure its neighbours use: the frames take
+ * the left of it and each word and line stand in a column to the right, set down to the
+ * lower edge of their photograph.
  */
 export function Sx9Values() {
   return (
@@ -55,7 +59,7 @@ export function Sx9Values() {
                         className="sx9-img"
                         src={stillSrc(f.id, 960)}
                         srcSet={stillSet(f.id)}
-                        sizes="(max-width: 719px) 92vw, (max-width: 1599px) 56vw, 1040px"
+                        sizes="(max-width: 1023px) 92vw, min(62vw, 960px)"
                         width={1620}
                         height={1080}
                         alt={f.alt}

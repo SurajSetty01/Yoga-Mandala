@@ -7,8 +7,8 @@
    appears beneath. Paper ground, between §08 (warm) and the Closing (warm).
 
    The DEFAULT below is the finished state — all four open at 3:2, word and line under
-   each — which is what no-script and reduced motion get. `.sx9-live` is added by
-   Motion.tsx only where the stage fits the screen.
+   each (beside each on a wide screen) — which is what no-script and reduced motion get.
+   `.sx9-live` is added by Motion.tsx only where the stage fits the screen.
 
    CONTRAST. A word on a slit is forest (#22452F) on a paper veil at 0.62 over the
    photograph. Over the darkest possible pixel the veil composites to #9B9996 (L 0.33):
@@ -111,6 +111,37 @@
   padding-inline: 0.5rem;
 }
 
+/* WIDE. The section takes the page measure its neighbours use (the rail's 92rem, centred)
+   instead of a 50rem column: each photograph on the left of it at 7 parts, its word and
+   line in a column to the right at 5, set down to the photograph's lower edge. */
+@media (min-width: 1024px) and (min-aspect-ratio: 5/4) {
+  .sx9-stage {
+    max-width: 92rem;
+  }
+  .sx9-v {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-rows: minmax(0, 1fr) auto auto;
+    column-gap: clamp(2.5rem, 5vw, 6rem);
+    align-items: end;
+    text-align: left;
+  }
+  .sx9-win {
+    grid-area: 1 / 1 / 4 / 2;
+  }
+  .sx9-word {
+    grid-area: 2 / 2;
+    margin: 0;
+    font-size: clamp(3rem, 1.2rem + 3vw, 4.7rem);
+  }
+  .sx9-line {
+    grid-area: 3 / 2;
+    margin-top: 0.9rem;
+    max-width: 22ch;
+    font-size: clamp(1.3rem, 0.7rem + 1.1vw, 1.9rem);
+  }
+}
+
 /* ── the stage ────────────────────────────────────────────────────────────── */
 
 .sx9-live .sx9-track {
@@ -211,6 +242,33 @@
   transform: none;
   transition-delay: 0.4s;
   pointer-events: auto;
+}
+
+/* BESIDE (.sx9-side, set by Motion.tsx where it gives the larger frame). The stage spans
+   the page measure; the frames stack on its left. A closed slit's word is centred on it as
+   before, and when the slit opens the word steps down and out of the picture to stand in
+   the column to its right, on its line, both set down to the frame's lower edge. */
+.sx9-live.sx9-side .sx9-stage {
+  width: var(--sx9-C);
+}
+.sx9-live.sx9-side .sx9-word {
+  left: calc(var(--sx9-W) / 2);
+  right: auto;
+  text-align: left;
+  transform-origin: 0 0;
+  transform: translate3d(-50%, calc(var(--sx9-bt) + (var(--sx9-s) - var(--sx9-F)) / 2 - 0.05em), 0);
+}
+.sx9-live.sx9-side .sx9-open .sx9-word {
+  transform: translate3d(calc(var(--sx9-W) / 2 + var(--sx9-cg)), var(--sx9-wy), 0) scale(var(--sx9-ks, 1));
+}
+.sx9-live.sx9-side .sx9-line {
+  top: auto;
+  bottom: 0;
+  left: calc(var(--sx9-W) + var(--sx9-cg));
+  right: auto;
+  width: min(calc(var(--sx9-C) - var(--sx9-W) - var(--sx9-cg)), 22ch);
+  padding-inline: 0;
+  text-align: left;
 }
 
 /* ── preview scaffold (app/preview/sx9 only) ──────────────────────────────── */

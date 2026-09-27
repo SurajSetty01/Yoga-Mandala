@@ -6,9 +6,10 @@ import { useEffect } from 'react';
  * The section's only client island.
  *
  * GEOMETRY is read on load and resize only. The stage has to hold three slits and one open
- * 3:2 frame with its word and line beneath, all below the pill, so the open frame's size is
- * solved from the screen's HEIGHT as well as its width. Where that leaves a frame under
- * 150px tall (a landscape phone), the section stays in its finished static state.
+ * 3:2 frame with its word and line beneath (or, on a wide screen, beside it), all below the
+ * pill, so the open frame's size is solved from the screen's HEIGHT as well as its width.
+ * Where that leaves a frame under 150px tall (a landscape phone), the section stays in its
+ * finished static state.
  *
  * SCROLL. One passive listener raises a flag; one requestAnimationFrame reads scrollY and,
  * only when the open slit changes, writes one class and one `--sx9-y` per slit. Every move
@@ -75,16 +76,29 @@ export function Sx9Motion() {
         const H = Math.min(W / 1.5, vh - pill - 18 - 3 * (s + gap) - L, maxW / 1.5);
         return { H, L };
       };
+      root.classList.remove('sx9-side');
       root.classList.add('sx9-measuring');
       let r = solve(maxW);
       r = solve(r.H * 1.5);
       r = solve(r.H * 1.5);
       root.classList.remove('sx9-measuring');
 
+      /* BESIDE. On a wide screen the word and its line stand to the right of the open
+         frame instead of under it, so the frame is limited only by the height the three
+         slits leave and by a text column of at least 30% of the page measure, and the
+         stage spans the same measure as the sections above and below it. Used wherever
+         it gives the larger frame. */
+      const C = rail.clientWidth - 2 * pad;
+      const cg = Math.min(Math.max(vw * 0.05, 40), 96);
+      const hSide = Math.min(vh - pill - 18 - 3 * (s + gap), (C - cg - Math.max(0.3 * C, 5.4 * F)) / 1.5);
+      const side = vw >= 1024 && hSide > r.H;
+      if (side) r = { H: hSide, L: 0 };
+
       live = !rm.matches && r.H >= 150;
       root.classList.toggle('sx9-live', live);
+      root.classList.toggle('sx9-side', live && side);
       if (!live) {
-        for (const k2 of ['--sx9-W', '--sx9-H', '--sx9-stage', '--sx9-track', '--sx9-top', '--sx9-lt'])
+        for (const k2 of ['--sx9-W', '--sx9-H', '--sx9-stage', '--sx9-track', '--sx9-top', '--sx9-lt', '--sx9-C', '--sx9-cg'])
           root.style.removeProperty(k2);
         items.forEach((li) => li.classList.remove('sx9-open'));
         active = -2;
@@ -101,6 +115,19 @@ export function Sx9Motion() {
       set('--sx9-stage', stage);
       set('--sx9-top', top);
       set('--sx9-track', stage + 3 * step + vh * 0.3);
+      if (side) {
+        set('--sx9-C', C);
+        set('--sx9-cg', cg);
+        /* the word grows as it steps out, as far as the column allows (at most 1.3), and
+           stands on its line; the pair is set down to the frame's lower edge */
+        const wordW = Math.max(1, ...items.map((li) => li.querySelector<HTMLElement>('.sx9-word')?.offsetWidth ?? 0));
+        const ks = Math.min(1.3, Math.max(1, (C - W - cg) / wordW));
+        root.style.setProperty('--sx9-ks', String(Math.round(ks * 1000) / 1000));
+        items.forEach((li, i) => {
+          const lh = lines[i]?.offsetHeight ?? 0;
+          li.style.setProperty('--sx9-wy', `${Math.round(H - lh - F * (ks + 0.24))}px`);
+        });
+      }
       const bt = items.map((li) => {
         const c = parseFloat(li.dataset.band ?? '0.5');
         const b = Math.min(Math.max(c * H - s / 2, 0), H - s);
