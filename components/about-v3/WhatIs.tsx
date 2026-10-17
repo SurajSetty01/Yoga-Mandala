@@ -1,63 +1,52 @@
 import { about } from '@/content/pranava';
 
 /**
- * 02 WHAT IS PRAṆAVA? The client: "a teaching/study photograph could communicate the
- * institutional character even better." A MIXED section on the deep ground, so it answers
- * the warm Introduction above it: the copy on one side, and two photographs of the centre
- * at work on the other, one large above one smaller. The large one is a panel at
- * Samskrithi Sadhana under the Praṇava emblem (the centre speaking in public), the small
- * one a study circle at the Prabodha teacher training (the centre teaching). The intention
- * closes the section on its own line, as the client's text does.
+ * 02 WHAT IS PRAṆAVA? Rebuilt from zero. The lead names three places ("A place to learn. A
+ * place to practise. A place to grow."), so the section shows three: three tall arched
+ * windows, the shape of the shala's own doorways, rising in one after another, each holding
+ * a photograph of that place at work and the line that names it. A study circle on the
+ * veranda (learn), the class under the emblem (practise), the cohort on the grass under the
+ * trees (grow). The client's paragraphs and the intention follow underneath, on the dark
+ * ground, in two calm columns.
  */
+const ARCHES = [
+  { src: '/media/about-v3/ttc-0280-1280.webp', alt: 'A teacher seated in a study circle with students holding notes on a veranda', pos: '50% 60%' },
+  { src: '/media/about-v3/ss-dsc07130-1280.webp', alt: 'Praṇav Śāstrī seated beneath the Praṇava emblem with his class', pos: '50% 30%' },
+  { src: '/media/about-v3/ttc-0402-1280.webp', alt: 'The cohort seated in meditation together on the grass under the trees', pos: '50% 60%' },
+];
+
 export function A3WhatIs() {
   const w = about.what;
+  const places = w.lead.split(/(?<=\.)\s+/);
   return (
     <section className="a3-sec a3-what" aria-labelledby="a3-what-h">
-      <div className="a3-rail a3-what__grid">
-        <div className="a3-what__copy">
-          <p className="a3-label a3-label--dark" data-a3r>
-            <span className="a3-label__n">02</span> What is Praṇava?
-          </p>
-          <h2 className="a3-what__h" id="a3-what-h" data-a3r>
-            {w.lead}
-          </h2>
-          <div className="a3-what__body">
-            {w.body.map((s, i) => (
-              <p key={s} data-a3r style={{ '--d': `${i * 80}ms` } as React.CSSProperties}>
-                {s}
-              </p>
+      <div className="a3-rail">
+        <p className="a3-label a3-label--dark" data-a3r>
+          <span className="a3-label__n">02</span>
+          <span id="a3-what-h">What is Praṇava?</span>
+        </p>
+
+        <ul className="a3-what__arches" role="list" data-a3-rise>
+          {ARCHES.map((a, i) => (
+            <li key={a.src} className="a3-arch">
+              <div className="a3-arch__win">
+                <img src={a.src} alt={a.alt} style={{ objectPosition: a.pos }} loading="lazy" decoding="async" />
+              </div>
+              <p className="a3-arch__line">{places[i]}</p>
+            </li>
+          ))}
+        </ul>
+
+        <div className="a3-what__text">
+          <div className="a3-what__body" data-a3r>
+            {w.body.map((s) => (
+              <p key={s}>{s}</p>
             ))}
           </div>
+          <p className="a3-what__intent" data-a3r>
+            {w.intention}
+          </p>
         </div>
-
-        <div className="a3-what__pics" data-a3r>
-          <img
-            className="a3-what__big"
-            src="/media/about-v3/ss-dsc07144-1280.webp"
-            srcSet="/media/about-v3/ss-dsc07144-640.webp 640w, /media/about-v3/ss-dsc07144-1280.webp 1280w, /media/about-v3/ss-dsc07144-1920.webp 1920w"
-            sizes="(min-width: 1000px) 46vw, 100vw"
-            width={1280}
-            height={853}
-            alt="Praṇav Śāstrī speaking on a panel of four beneath the Praṇava emblem at Samskrithi Sadhana"
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            className="a3-what__small"
-            src="/media/about-v3/ttc-0280-640.webp"
-            srcSet="/media/about-v3/ttc-0280-640.webp 640w, /media/about-v3/ttc-0280-1280.webp 1280w"
-            sizes="(min-width: 1000px) 22vw, 50vw"
-            width={640}
-            height={427}
-            alt="A teacher seated in a study circle with students holding notes, in an open veranda"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
-        <p className="a3-what__intent" data-a3r>
-          {w.intention}
-        </p>
       </div>
     </section>
   );

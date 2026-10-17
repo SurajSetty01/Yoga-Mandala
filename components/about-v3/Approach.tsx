@@ -2,15 +2,12 @@ import { about } from '@/content/pranava';
 import { A3Clip } from './Clip';
 
 /**
- * 03 OUR APPROACH. The client: "keep the structure, reduce the photography ... Tradition: a
- * Bharatanatyam image ... Practice & Inquiry look good, leave them ... Transmission: the
- * video of me teaching scorpion pose to a girl where my face is seen."
- *
- * One screen: the lead across the top, then the four principles as four tall columns, each
- * with exactly one image above its name and paragraph. The lead names only three of them,
- * so Transmission is set apart: its name in forest green over a brass rule, the column the
- * other three lead to.
- * The two approved clips and the scorpion-pose clip play only while on screen.
+ * 03 OUR APPROACH. The four principles as four arched windows on one line, joined by a thread
+ * that draws itself through them as the section is read (Motion.tsx, data-a3-draw): Tradition
+ * passes to Practice, Practice to Inquiry, and all of it arrives at Transmission. The lead
+ * names only three, so Transmission's arch is the tallest and stands a little apart, on the
+ * forest ground. Tradition is the Bharatanatyam frame; Practice, Inquiry and Transmission are
+ * the client-approved clips, playing only while on screen.
  */
 type Media =
   | { kind: 'still'; src: string; set: string; alt: string }
@@ -21,7 +18,7 @@ const MEDIA: Record<string, Media> = {
     kind: 'still',
     src: '/media/stills/ss-dsc07165-960.webp',
     set: '/media/stills/ss-dsc07165-480.webp 480w, /media/stills/ss-dsc07165-960.webp 960w',
-    alt: 'A Bharatanatyam dancer in a low stance with both arms raised in a mudra, beneath the Praṇava emblem',
+    alt: 'A Bharatanatyam dancer in a low stance with both arms raised in a mudra',
   },
   Practice: {
     kind: 'clip',
@@ -47,6 +44,12 @@ export function A3Approach() {
   const a = about.approach;
   return (
     <section className="a3-sec a3-appr" aria-labelledby="a3-appr-h">
+      <svg className="a3-appr__thread" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          data-a3-draw
+          d="M-20 260 C 160 120, 260 360, 420 240 S 700 120, 800 250 S 1060 380, 1160 220 S 1360 90, 1460 160"
+        />
+      </svg>
       <div className="a3-rail">
         <div className="a3-appr__head">
           <p className="a3-label" data-a3r>
@@ -57,26 +60,14 @@ export function A3Approach() {
           </h2>
         </div>
 
-        <ol className="a3-appr__cols" role="list">
-          {a.items.map((it, i) => {
+        <ol className="a3-appr__cols" role="list" data-a3-rise>
+          {a.items.map((it) => {
             const m = MEDIA[it.name];
             return (
-              <li
-                key={it.name}
-                className={`a3-appr__col${it.name === 'Transmission' ? ' is-key' : ''}`}
-                data-a3r
-                style={{ '--d': `${i * 90}ms` } as React.CSSProperties}
-              >
+              <li key={it.name} className={`a3-appr__col${it.name === 'Transmission' ? ' is-key' : ''}`}>
                 <div className="a3-appr__media">
                   {m?.kind === 'still' ? (
-                    <img
-                      src={m.src}
-                      srcSet={m.set}
-                      sizes="(min-width: 1000px) 22vw, 50vw"
-                      alt={m.alt}
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <img src={m.src} srcSet={m.set} sizes="(min-width: 1000px) 22vw, 50vw" alt={m.alt} loading="lazy" decoding="async" />
                   ) : m ? (
                     <A3Clip src={m.src} poster={m.poster} alt={m.alt} />
                   ) : null}

@@ -1,32 +1,31 @@
 import { about } from '@/content/pranava';
 
 /**
- * 04 HOW WE TEACH. The client: "keep the eight teaching principles. Replace the large image
- * sequence with ONE strong teaching photograph. Remove raw image captions, dates and
- * programme-gallery metadata."
+ * 04 HOW WE TEACH. The client: "keep the eight teaching principles ... ONE strong teaching
+ * photograph. Remove raw image captions, dates and programme-gallery metadata."
  *
- * MIXED. One tall photograph of Praṇav adjusting a student's side bend under the emblem
- * and the tree mural; beside it the lead, the opening sentence, and the eight practices as
- * a two-column register (they are a list the client gives in order, so they are numbered).
- * The closing sentence sits under the register as the section's conclusion.
+ * The one photograph is cut out of its background: Praṇav steadying a student's side bend,
+ * standing in the section itself rather than in a box, in front of a tall sandstone arch
+ * like the shala's doorways, and drifting slower than the page (Motion.tsx, data-a3-float). The opening sentence
+ * and the eight practices sit on the other side, the practices arriving one by one.
  */
 export function A3Teach() {
   const t = about.teach;
   return (
     <section className="a3-sec a3-teach" aria-labelledby="a3-teach-h">
       <div className="a3-rail a3-teach__grid">
-        <figure className="a3-teach__pic" data-a3r>
+        <div className="a3-teach__fig">
+          <span className="a3-teach__door" aria-hidden="true" />
           <img
-            src="/media/about-v2/ss-ven0116-teach-960.webp"
-            srcSet="/media/about-v2/ss-ven0116-teach-480.webp 480w, /media/about-v2/ss-ven0116-teach-960.webp 960w, /media/about-v2/ss-ven0116-teach-1080.webp 1080w"
-            sizes="(min-width: 1000px) 34vw, 100vw"
-            width={960}
-            height={1707}
-            alt="Praṇav Śāstrī steadying a student's hip as she reaches into a standing side bend on a blue mat"
+            data-a3-float="0.35"
+            src="/media/about-v3/teach-cutout.webp"
+            width={656}
+            height={1884}
+            alt="Praṇav Śāstrī steadying a student's hip as she reaches into a standing side bend"
             loading="lazy"
             decoding="async"
           />
-        </figure>
+        </div>
 
         <div className="a3-teach__copy">
           <p className="a3-label" data-a3r>
@@ -41,7 +40,7 @@ export function A3Teach() {
           <p className="a3-teach__prompt" data-a3r>
             {t.prompt}
           </p>
-          <ol className="a3-teach__list" data-a3r>
+          <ol className="a3-teach__list" data-a3-rise>
             {t.practices.map((p, i) => (
               <li key={p}>
                 <span className="a3-teach__n" aria-hidden="true">

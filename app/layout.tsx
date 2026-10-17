@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { EB_Garamond, Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import { site } from '@/content/site';
+import { SmoothScroll } from '@/components/SmoothScroll';
 
 /**
  * Self-hosted at build time by next/font, so there is no third-party request and no
@@ -98,7 +99,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SmoothScroll />
+      </body>
     </html>
   );
 }

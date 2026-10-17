@@ -1,6 +1,7 @@
 import { SiteNav } from '@/components/SiteNav';
 import { SiteFooter } from '@/components/SiteFooter';
 import { A3Reveal } from '@/components/about-v3/Reveal';
+import { A3Motion } from '@/components/about-v3/Motion';
 import { A3Hero } from '@/components/about-v3/Hero';
 import { A3Introduction } from '@/components/about-v3/Introduction';
 import { A3WhatIs } from '@/components/about-v3/WhatIs';
@@ -56,6 +57,7 @@ export default function AboutPranavaPage() {
         <A3Closing />
       </main>
       <A3Reveal />
+      <A3Motion />
       <SiteFooter />
     </>
   );
