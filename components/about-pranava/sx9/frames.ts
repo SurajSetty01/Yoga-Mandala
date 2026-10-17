@@ -1,53 +1,46 @@
 /**
- * §09 What We Value — one photograph per value, each one an act rather than a symbol.
+ * §05 What We Value: one photograph per value, each one an act rather than a symbol.
  *
- * All four are Prabodha TTC frames at 1620 (480 / 960 / 1620 on disk), and none of them
- * appears in §§01–08. Every alt below was written from the rendered frame, not copied
- * from the manifest, because two of the manifest's counts are wrong:
- *   · pr-ttc-dsc_0354 — the manifest says three women. There are TWO, each holding her
- *     raised foot overhead in both hands.
- *   · pr-ttc-dsc_0185_1 — the manifest says four chairs. Five are in view, each with a
- *     bolster, block, blanket and mat laid beside it, and a sixth place is cut by the
- *     bottom-left corner.
- *   · pr-ttc-dsc_0191 — three people sit on chairs beside the standing woman, not two.
- *
- * `band` is the centre of the slit, as a fraction of the frame's height: the glimpse each
- * value shows while it is closed. Read off a gridded render of the 960 derivative.
- *   Sādhana    0.60  hips to hands of all five downward dogs, the whole receding line
- *   Adhyayana  0.60  the seated women's heads, the standing woman, the three on chairs
- *   Viveka     0.34  two faces, two pairs of arms looped back to two held feet
- *   Sevā       0.60  chair seats, bolsters and blocks receding in one rhythm
+ * Sādhana and Adhyayana are Prabodha TTC frames at 1620 (480 / 960 / 1620 in
+ * public/media/stills/). Viveka and Sevā were replaced on the client's review ("a teacher /
+ * student discussion rather than a balancing pose"; "community, teaching or mentorship
+ * rather than an empty hall"). Both are 3:2 crops of frames from Samskrithi Sadhana phone
+ * films, so their largest size is the film's own 1080 width (480 / 960 / 1080 in
+ * public/media/about-v2/):
+ *   · ss-ven0194 at 30%, top 720 rows: two people mid-conversation.
+ *   · ss-ven0052 at 55%, rows 640 to 1360: a teacher adjusting a seated participant while
+ *     others sit on chairs behind and watch.
+ * Every alt was written from the rendered crop.
  */
 export type ValueFrame = {
-  id: string;
   alt: string;
-  band: number;
+  /** one entry per derivative: [url, width] */
+  set: ReadonlyArray<readonly [string, number]>;
 };
 
-export const WIDTHS = [480, 960, 1620] as const;
+const still = (id: string): ValueFrame['set'] =>
+  [480, 960, 1620].map((w) => [`/media/stills/${id}-${w}.webp`, w] as const);
+const v2 = (id: string): ValueFrame['set'] =>
+  [480, 960, 1080].map((w) => [`/media/about-v2/values-${id}-${w}.webp`, w] as const);
 
 export const VALUE_FRAMES: Record<string, ValueFrame> = {
   Sādhana: {
-    id: 'pr-ttc-dsc_0569',
+    set: still('pr-ttc-dsc_0569'),
     alt: 'Five practitioners in downward-facing dog on mats in a receding line, low sunlight across a red floor',
-    band: 0.6,
   },
   Adhyayana: {
-    id: 'pr-ttc-dsc_0191',
+    set: still('pr-ttc-dsc_0191'),
     alt: 'Women in saris seated on a red floor, turned towards a woman standing in a white sari, with three people seated on chairs beside her',
-    band: 0.6,
   },
   Viveka: {
-    id: 'pr-ttc-dsc_0354',
-    alt: 'Two women balancing on one leg, each holding her raised foot overhead in both hands, a low wall and dry fields behind them',
-    band: 0.34,
+    set: v2('ss-ven0194'),
+    alt: 'A man and a woman in conversation outdoors, he speaking with a hand raised to his chest, she listening and about to reply',
   },
   Sevā: {
-    id: 'pr-ttc-dsc_0185_1',
-    alt: 'An empty hall set out for a class: a row of folding chairs, each with a mat, a folded blanket, a bolster and a wooden block laid beside it, on a red floor',
-    band: 0.6,
+    set: v2('ss-ven0052'),
+    alt: 'A teacher bends to guide a participant seated on a mat, while others sit on chairs behind them and watch',
   },
 };
 
-export const stillSrc = (id: string, w: number) => `/media/stills/${id}-${w}.webp`;
-export const stillSet = (id: string) => WIDTHS.map((w) => `${stillSrc(id, w)} ${w}w`).join(', ');
+export const frameSrc = (f: ValueFrame) => f.set[1]![0];
+export const frameSet = (f: ValueFrame) => f.set.map(([u, w]) => `${u} ${w}w`).join(', ');

@@ -16,6 +16,9 @@ import { nav, ymNav, site } from '@/content/site';
  * picture) are applied by the hero choreography, which is the only thing that knows where the
  * picture ends. On pages with no hero, `light` pins it to the paper treatment from the start.
  */
+/** The Enquire button already leads to /contact/, so the list does not repeat it. */
+const barNav = nav.filter((n) => n.href !== '/contact/');
+
 export function SiteNav({ light = false }: { light?: boolean }) {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -70,7 +73,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
         </Link>
         <nav className="pill__nav" aria-label="Primary">
           <ul className="pill__links">
-            {nav.map((n) =>
+            {barNav.map((n) =>
               'sub' in n && n.sub ? (
                 /*
                   The one item with pages beneath it. The submenu opens on hover AND on
@@ -127,7 +130,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
 
       <div className="sheet" id="sheet" ref={sheetRef} hidden={!open}>
         <nav className="sheet__nav" aria-label="Menu">
-          {nav.map((n) => (
+          {barNav.map((n) => (
             <div key={n.href} className="sheet__group">
               <Link href={n.href} onClick={() => setOpen(false)}>
                 {n.full}

@@ -43,7 +43,7 @@ export const about = {
   what: {
     lead: 'A place to learn. A place to practise. A place to grow.',
     body: [
-      'Pranava (Center for Indian Culture & Yogic Studies) was established as a space for people who wish to engage with Yoga more deeply.',
+      'Pranava – Center for Indian Culture & Yogic Studies was established as a space for people who wish to engage with Yoga more deeply.',
       'This includes those beginning their journey, practitioners seeking a sustained Sādhana, teachers wishing to deepen their understanding, and those interested in exploring India’s wider knowledge traditions.',
       'Our programmes may take different forms, from regular practice and teacher education to workshops, intensives, retreats and study, but they share a common intention:',
     ],
@@ -119,10 +119,10 @@ export const about = {
 
   /** §8. */
   founder: {
-    kicker: 'Founded by Pranav Murthy',
+    kicker: 'Founded by Praṇav Śāstrī',
     role: 'Yoga Teacher · Educator · Practitioner',
     body: [
-      'Pranav Murthy began his Yoga practice in 2012 and gradually moved from a career in technology into full-time work in Yoga.',
+      'Praṇav Śāstrī began his Yoga practice in 2012 and gradually moved from a career in technology into full-time work in Yoga.',
       'His teaching journey has included work in large-scale Yoga education and wellness organisations, teacher training, curriculum development and the training of Yoga teachers.',
       'Over the years, his work has increasingly centred around Hatha Yoga, Asana, alignment, biomechanics, Yoga philosophy, Prāṇāyāma, Yoga therapy and teacher education.',
       'His approach draws from traditional Yoga teachings while engaging with contemporary understanding of anatomy, movement, health and education.',

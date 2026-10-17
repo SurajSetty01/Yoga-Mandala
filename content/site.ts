@@ -65,7 +65,10 @@ export const links = {
 } as const;
 
 /**
- * NAME DISCREPANCY — do not silently reconcile.
+ * NAME: resolved by the client's About review (28 Sep 2026): "Change name from Pranav Murthy
+ * to Pranav Shastri", spelt with the diacritics he uses on Instagram, Praṇav Śāstrī.
+ *
+ * (History) The discrepancy as it stood before that review:
  *
  * The Yoga Mandala contact document (9 Sep 2026) names the contact "Praṇav Śāstrī".
  * The Praṇava About brief (21 Sep 2026) says "Founded by Pranav Murthy".
@@ -76,7 +79,7 @@ export const links = {
  * how the Yoga Mandala material names him. Ask before unifying them.
  */
 export const founder = {
-  name: 'Pranav Murthy',
+  name: 'Praṇav Śāstrī',
   role: 'Yoga Teacher · Educator · Practitioner',
 } as const;
 
@@ -103,7 +106,10 @@ export const nav = [
      hiding them: hovering (or focusing, or tapping) reveals the section's own routes. */
   { href: '/yoga-mandala/', label: 'Yoga Mandala', full: 'Yoga Mandala', sub: true },
   { href: '/events/', label: 'Events', full: 'Events' },
-  { href: '/contact/', label: 'Contact', full: 'Contact' },
+  /* The client's architecture (28 Sep 2026): "Enquire becomes the universal contact point".
+     The bar's Enquire button is this link, so SiteNav leaves it out of the list; the
+     footer keeps it. */
+  { href: '/contact/', label: 'Enquire', full: 'Enquire' },
 ] as const;
 
 /**

@@ -1,14 +1,25 @@
 import { about } from '@/content/pranava';
-import { Eyebrow, FRAMES, Shot } from './parts';
+import { Eyebrow } from './parts';
 
 /**
- * 02 · WHAT IS PRAṆAVA — an enlargement you cannot place, stepping back into its room.
+ * The teaching frame (client review, Oct 2026: "a teaching/study photograph could
+ * communicate the institutional character even better"). `ss-ven0039` at 1.0s, from the
+ * Samskriti Sadhana yoga session: the teacher seated on the low stage mid-explanation, one
+ * hand at his chest, a student seated beside him, the class on the floor in the foreground
+ * and the painted tree and Praṇava emblem on the wall behind. The derivatives were cut from
+ * the 1920x1080 source video frame into public/media/about-v2/.
+ */
+const TEACHING = {
+  src: '/media/about-v2/ss-ven0039-1920.webp',
+  srcSet:
+    '/media/about-v2/ss-ven0039-480.webp 480w, /media/about-v2/ss-ven0039-960.webp 960w, /media/about-v2/ss-ven0039-1920.webp 1920w',
+  alt: 'Praṇav Śāstrī teaching: seated cross-legged on a low stage, one hand raised to his chest as he explains, a student seated beside him and the class sitting on the floor in front, under a painted tree and the Praṇava emblem.',
+};
+
+/**
+ * 02 · WHAT IS PRAṆAVA. One still teaching photograph, then the client's words.
  *
- * The plate opens at 2.4× on a patch of studio floor and a pair of hands, and steps back as
- * the section is read until the same frame is ten people doing one thing. The section asks
- * what this place is; the picture answers it by pulling back far enough to show you.
- *
- * The client's lead — "A place to learn. A place to practise. A place to grow." — is split
+ * The client's lead, "A place to learn. A place to practise. A place to grow.", is split
  * at its OWN full stops with a lookbehind, so the three spans concatenate back to the
  * sentence character for character. Nothing is retyped and nothing is added.
  */
@@ -19,12 +30,21 @@ export function WhatIs() {
     <section className="apr-s apr-s--deep apr-what" id="apr-what">
       <div className="apr-rail">
         <Eyebrow n="02" dark>
-          What Praṇava is
+          What is Praṇava?
         </Eyebrow>
       </div>
 
       <div className="apr-what__stage">
-        <Shot frame={FRAMES.practiceLine} sizes="100vw" />
+        <img
+          src={TEACHING.src}
+          srcSet={TEACHING.srcSet}
+          sizes="100vw"
+          width={1920}
+          height={1080}
+          alt={TEACHING.alt}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
 
       <div className="apr-rail">

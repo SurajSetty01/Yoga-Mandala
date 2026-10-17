@@ -52,11 +52,12 @@ export default function AboutPranavaPage() {
         <WhatIs />
         <OurApproach />
         <HowWeTeach />
+        {/* the client's review (28 Sep 2026): values "right after what we teach" */}
+        <Sx9Values />
         <PranavaJourney />
         <Sx6Founder />
         <Sx7Faculty />
         <Sx8Seva />
-        <Sx9Values />
         <Closing />
       </main>
       <AboutMotion />

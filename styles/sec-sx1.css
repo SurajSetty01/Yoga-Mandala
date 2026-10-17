@@ -1,80 +1,51 @@
 /* ══════════════════════════════════════════════════════════════════════════════
-   §01 HERO — the final section on /about/. EVERY selector here is `.sx1-…`.
+   §01 HERO. EVERY selector here is `.sx1-…`.
    Component: components/about-pranava/sx1/AboutHero.tsx
 
-   "THE WALLS ARE THE WORDS" (base: tournament design sx1d)
-   One photograph of the TTC hall with its walls taken away: the red floor and the five
-   women on it stand in front of the page's own green, and the page's words are written
-   where the walls were. The four furthest heads cross the foot of "Pranava". As the hero
-   scrolls away the room swells about its far corner and rises while the wall holds back,
-   so they pass up through the name.
+   IMAGE-LED AND CALM (client review, Oct 2026). One photograph of the teacher seated
+   before his students under the Praṇava emblem, and the page's words beside it.
+   Phone: eyebrow, name, then the photograph edge to edge, then the two paragraphs.
+   From 900px: a 5 : 7 grid inside a centred, capped stage; the words on the left, the
+   name at the top and the paragraphs at the foot, the photograph filling the right.
 
-   GRAFTED
-   · from sx1c — the paragraph's first four words set as a small-capital lead-in.
-   The word-sized noun photographs once grafted from sx1a/sx1b were removed at the
-   owner's review; the three nouns keep only their italic.
+   CONTRAST. No word sits on the photograph. Cream on --ground-deep #12201A is 15.79:1;
+   the support paragraph is --ink-onDark-soft on the same ground.
 
-   CONTRAST IS A CONSTANT. No word sits on a photograph. Cream on --ground-deep #12201A is
-   15.79:1; the support paragraph at --ink-onDark-soft measured 7.19–7.70:1 on its glyph
-   cores (sx1d's measurements). A head HIDES pixels of "Pranava" — at most 26% of any one
-   glyph's ink, never the P, never "About", the eyebrow or the paragraphs.
+   MOTION. One fade and rise on load, CSS only, and only under
+   prefers-reduced-motion: no-preference. Nothing is tied to scroll.
    ══════════════════════════════════════════════════════════════════════════════ */
-
 
 .sx1-hero {
   position: relative;
   display: block;
   background: var(--ground-deep);
   color: var(--ink-onPic);
-  /* the room bleeds past the section's foot and to the right on phones; both are cut
-     here, and `clip` (not `hidden`) makes no scroll container, so nothing can scroll it */
-  overflow: clip;
-
-  /* scroll-linked progress. It RESTS at 0 — the finished composition — and only the
-     island's `sx1-is-live` points it at the live value. */
-  --sx1-p: 0;
-
-  /* the phone-first geometry, all derived from ONE length: the room's width. 150svh
-     keeps a landscape phone's room one screen tall instead of three. The name is a fixed
-     fraction of the room, so the heads land on the same letters at 320 and at 899. */
-  --sx1-hall: min(140vw, calc(100vw + 14rem), 150svh);
-  --sx1-name: calc(var(--sx1-hall) * 0.15); /* "Pranava" */
-}
-.sx1-hero.sx1-is-live {
-  --sx1-p: var(--sx1-scroll, 0);
+  overflow-x: clip;
 }
 
-/* ── the stage ────────────────────────────────────────────────────────────── */
+/* ── the stage: capped AND centred ───────────────────────────────────────── */
 .sx1-stage {
-  position: relative;
-  max-width: 60rem;
+  max-width: calc(104rem + 2 * var(--rail));
   margin-inline: auto;
-  /* the pill is fixed and ~5.3rem deep at every width; the first word clears it */
+  /* the navigation pill is fixed and ~5.3rem deep at every width; the first word clears it */
   padding: calc(5.4rem + clamp(1.25rem, 5vw, 2.5rem)) var(--rail) clamp(3rem, 9vw, 4.5rem);
   display: flex;
   flex-direction: column;
 }
 
-/* ── the wall: eyebrow ────────────────────────────────────────────────────── */
+/* ── eyebrow ─────────────────────────────────────────────────────────────── */
 .sx1-eyebrow {
-  position: relative;
-  z-index: 3;
   margin: 0;
   font: 600 11.5px/1.35 var(--font-text);
   letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--ink-onPic-2);
-  /* on a phone it takes two lines; balanced, it breaks after "Culture", not before
-     a lone "Studies" */
   text-wrap: balance;
 }
-/* no rule is drawn before it: the owner wants no dash-like marks beside a label */
 
-/* ── the wall: the name ───────────────────────────────────────────────────── */
+/* ── the name ────────────────────────────────────────────────────────────── */
 .sx1-h {
-  position: relative;
-  z-index: 1; /* BEHIND the room */
-  margin: clamp(1.1rem, 4.5vw, 1.8rem) 0 0;
+  margin: clamp(1rem, 4vw, 1.6rem) 0 0;
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 300;
@@ -84,49 +55,40 @@
   display: block;
   font-size: clamp(1.6rem, 7vw, 3rem);
   font-style: italic;
-  font-weight: 300;
   line-height: 1;
   letter-spacing: -0.01em;
 }
 .sx1-h__name {
   display: block;
-  font-size: var(--sx1-name);
-  line-height: 0.86;
+  font-size: clamp(3.6rem, 19vw, 7rem);
+  line-height: 0.92;
   letter-spacing: -0.035em;
-  /* the P's left side-bearing, so its stem — not its box — sits on the rail */
+  /* the P's left side-bearing, so its stem, not its box, sits on the rail */
   margin-left: -0.045em;
 }
 
-/* ── the room ─────────────────────────────────────────────────────────────── */
-.sx1-hall {
+/* ── the photograph ──────────────────────────────────────────────────────── */
+.sx1-fig {
   position: relative;
-  z-index: 2; /* IN FRONT of the name */
-  width: var(--sx1-hall);
-  /* from the viewport's own left edge, less 6vw, so the far woman's chair is on screen
-     and the near woman is cut only at her back leg */
-  margin-left: calc(-1 * var(--rail) - 6vw);
-  /* THE OCCLUSION, DERIVED: the highest head in the file is 14.8% down a 3:2 frame, i.e.
-     0.099 of the room's WIDTH below its top; the name's baseline sits ~0.07em above its
-     line box's foot. Pulling the room up by both, plus 0.19em, puts the head-tops ~0.19em
-     above the baseline — about a third of the x-height — at every width. */
-  margin-top: calc(-0.099 * var(--sx1-hall) - 0.26 * var(--sx1-name));
-  /* on a phone the room is followed by words, so its floor fades out beneath it rather
-     than stopping on a line; on the wide stage the section's own edge cuts it instead */
-  -webkit-mask-image: linear-gradient(to bottom, #000 64%, transparent 94%);
-  mask-image: linear-gradient(to bottom, #000 64%, transparent 94%);
-  transform-origin: 14% 26%; /* the far corner: the dolly pivots where the room ends */
+  margin: clamp(1.6rem, 6vw, 2.4rem) calc(-1 * var(--rail)) 0;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  background: #1b2a23;
 }
-.sx1-hall__img {
-  display: block;
+.sx1-fig__img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  /* the teacher is at x 0.5, the emblem above him; a portrait-ish crop keeps both */
+  object-position: 50% 45%;
+  display: block;
 }
 
-/* ── the wall: the two paragraphs ─────────────────────────────────────────── */
+/* ── the two paragraphs ──────────────────────────────────────────────────── */
 .sx1-copy {
-  position: relative;
-  z-index: 3;
-  margin-top: 0;
+  margin-top: clamp(1.8rem, 6vw, 2.6rem);
 }
 .sx1-sub {
   margin: 0;
@@ -147,157 +109,98 @@
   color: var(--ink-onDark-soft);
   text-wrap: pretty;
 }
-
-/* a short phone (320×568, or any landscape phone) spends less on the pill's clearance */
-@media (max-height: 640px) {
-  .sx1-stage {
-    padding-top: calc(5.4rem + 0.5rem);
-  }
-  .sx1-h {
-    margin-top: 0.7rem;
-  }
-}
-
-/* the two paragraphs side by side on a portrait tablet, which keeps the section inside
-   one screen and a tenth (measured 1,121px at 768×1024) instead of ~1.3 */
-@media (min-width: 600px) {
-  .sx1-copy {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: clamp(1.5rem, 4vw, 3rem);
-    align-items: start;
-  }
-  .sx1-support {
-    margin: 0.35em 0 0;
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════════════════════
-   THE WIDE STAGE — landscape screens from 900px.
-
-   Everything is placed in `cqw` of ONE box, so the relationship between the heads and
-   the letters is identical at 1024, 1440 and 2531: the box is the composition, and the
-   screen only decides how big it is.
-
-   Its width is min(100%, 160svh, 135rem):
-     · 160svh keeps it about one screen tall on short, wide screens — 2531×1140 gets a
-       1824px stage, not a 2531px one. Measured section heights: 978px at 1440×900
-       (1.09), 788 at 1280×720 (1.09), 1232 at 2531×1140 (1.08), 1454 at 2560×1440 (1.01);
-     · 135rem = 2160px caps the room at 75% of it = 1620 CSS px, the source's own width,
-       so no desktop tier is ever an upscale;
-     · margin-inline: auto centres it. A capped box that is not centred reads right at
-       1440 and hundreds of pixels off at 2531 (DESIGN-SYSTEM §3).
-   ══════════════════════════════════════════════════════════════════════════════ */
-@media (min-width: 900px) and (min-aspect-ratio: 5/4) {
-  .sx1-stage {
-    /* content-box, so the aspect ratio is the COMPOSITION's and --sx1-t0 is added on top:
-       a constant clearance for the fixed pill, which does not scale with the stage */
-    --sx1-t0: 1.75rem;
-    box-sizing: content-box;
-    max-width: none;
-    width: min(100%, 160svh, 135rem);
-    aspect-ratio: 100 / 66;
-    padding: var(--sx1-t0) 0 0;
-    display: block;
-    container-type: inline-size;
-  }
-
-  .sx1-eyebrow {
-    position: absolute;
-    left: 4cqw;
-    top: calc(var(--sx1-t0) + 13.2cqw - 2.6rem);
-    /* the house register mark is 11.5px; on a 2160px stage it is allowed to grow a little */
-    font-size: clamp(11.5px, 0.62cqw, 13.5px);
-    letter-spacing: 0.19em;
-  }
-
-  .sx1-h {
-    position: absolute;
-    left: 4cqw;
-    top: calc(var(--sx1-t0) + 13.2cqw);
-    margin: 0;
-  }
-  .sx1-h__about {
-    font-size: 4.6cqw;
-  }
-  /* 13.5cqw: wide enough that FOUR heads pass under it (pink, black, maroon, red), and
-     the near woman's, the largest, stands clear to its right */
-  .sx1-h__name {
-    font-size: 13.5cqw;
-  }
-
-  /* Heads in this file, as fractions of the room: tops at y 0.148–0.190, and
-     x 0.127–0.165 · 0.230–0.272 · 0.317–0.359 · 0.463–0.515 · 0.625–0.735.
-     The name's baseline is 0.79em below its line top and its x-height 0.477em (measured
-     in the render), so with the name's line top at 13.2 + 4.6 = 17.8cqw its baseline is
-     at 28.47cqw and its x-height starts at 22.03cqw. A room top of 18.8cqw puts the two
-     highest heads (0.148 and 0.153 of 50cqw) at 26.2 and 26.45cqw, about a third of the
-     way up the x-height. MEASURED per letter by diffing the render with and without the
-     room, identical at 1024, 1280, 1440, 2531 and 2560: r 18% of its ink hidden, first a
-     21% (to 38% of its height), n 7%, second a 2%, v 0%, last a 12%, P never. */
-  .sx1-hall {
-    position: absolute;
-    left: 0;
-    top: calc(var(--sx1-t0) + 18.8cqw);
-    width: 75cqw;
-    margin: 0;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  /* on the plaster wall: right of the near woman (she ends at 65cqw) and above the
-     floor, which meets that wall at ~49.8cqw here */
-  .sx1-copy {
-    position: absolute;
-    left: 66.5cqw;
-    top: calc(var(--sx1-t0) + 13.4cqw);
-    width: 29.5cqw;
-    margin: 0;
-    display: block;
-  }
-  .sx1-sub {
-    font-size: clamp(1.2rem, 2.2cqw, 3rem);
-  }
-  .sx1-support {
-    margin: 1.2em 0 0;
-    font-size: clamp(1rem, 1.28cqw, 1.45rem);
-  }
-}
-
-/* ══════════════════════════════════════════════════════════════════════════════
-   THE WALK IN — only with `sx1-is-live`, which only exists when motion is allowed.
-   `--sx1-p` runs 0 → 1 across the section's own height. The room rises 3.5cqw and swells 7%
-   about its far corner, so the near end comes towards you and the far end stays put; the
-   wall drifts DOWN 5cqw, i.e. it lags the page — it is further away. Net: the heads climb
-   ~8cqw through the name by the time the section has gone. Transforms only.
-   ══════════════════════════════════════════════════════════════════════════════ */
-.sx1-hero.sx1-is-live .sx1-hall {
-  transform: translate3d(0, calc(var(--sx1-p) * -3.5cqw), 0) scale(calc(1 + var(--sx1-p) * 0.07));
-  will-change: transform;
-}
-.sx1-hero.sx1-is-live .sx1-wall {
-  transform: translate3d(0, calc(var(--sx1-p) * 5cqw), 0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .sx1-hero.sx1-is-live .sx1-hall,
-  .sx1-hero.sx1-is-live .sx1-wall {
-    transform: none;
-  }
-}
-
-
 /* the sentence's three nouns (study, practice, transmission) keep their italic */
 .sx1-noun {
   font-style: italic;
 }
-
-/* GRAFT (sx1c) — the paragraph's first four words as its lead-in. */
+/* the support paragraph's first four words as its lead-in */
 .sx1-lead {
   font-weight: 600;
   font-size: 0.8em;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--ink-onPic);
+}
+
+/* a portrait tablet: the photograph keeps the rail instead of bleeding */
+@media (min-width: 600px) and (max-width: 899px) {
+  .sx1-fig {
+    margin-inline: 0;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE WIDE STAGE. 5 : 7. The name at the top of the left column, the paragraphs at its
+   foot, the photograph filling the right column to the same height. The photograph's
+   height is set by min-height so the row grows if the words ever need more room.
+   ══════════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 900px) {
+  .sx1-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(2.5rem, 4.5vw, 6rem);
+    padding-top: calc(5.4rem + clamp(2rem, 4vw, 3.5rem));
+    padding-bottom: clamp(4rem, 7vw, 6.5rem);
+  }
+  .sx1-head {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .sx1-eyebrow {
+    font-size: clamp(11.5px, 0.7vw, 13.5px);
+    letter-spacing: 0.19em;
+  }
+  .sx1-h__about {
+    font-size: clamp(2rem, 3.2vw, 3.6rem);
+  }
+  .sx1-h__name {
+    font-size: clamp(5rem, 8.4vw, 10rem);
+  }
+  .sx1-fig {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin: 0;
+    aspect-ratio: auto;
+    min-height: min(40vw, 46rem, 74svh);
+    align-self: stretch;
+  }
+  .sx1-copy {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    margin-top: clamp(2.5rem, 4vw, 4rem);
+  }
+  .sx1-sub {
+    font-size: clamp(1.45rem, 1.9vw, 2.4rem);
+  }
+  .sx1-support {
+    font-size: clamp(1rem, 0.9vw, 1.25rem);
+  }
+}
+
+/* ── entry: one gentle fade and rise, on load, motion permitting ────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .sx1-in {
+    animation: sx1-rise 900ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  .sx1-fig.sx1-in {
+    animation-delay: 120ms;
+  }
+  .sx1-copy.sx1-in {
+    animation-delay: 240ms;
+  }
+}
+@keyframes sx1-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ── verification route only (app/preview/sx1): the Introduction's ground below ── */

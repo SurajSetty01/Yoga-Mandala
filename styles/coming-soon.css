@@ -1,0 +1,106 @@
+/* Holding page for Learn, Heal and Insights until the client supplies their content.
+   Two columns on wide screens (the name large on the left, the line and actions on the
+   right) so the page uses the width instead of sitting in a narrow centred column. */
+
+.cs {
+  background: var(--ground);
+  color: var(--ink);
+}
+.cs-wrap {
+  box-sizing: border-box;
+  min-height: 78svh;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(8rem, 18svh, 11rem) var(--page) clamp(4rem, 10svh, 7rem);
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-content: center;
+}
+.cs-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4.25rem, 13vw, 11.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+.cs-side {
+  display: grid;
+  gap: 1rem;
+  max-width: 34rem;
+}
+.cs-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.1vw, 1.75rem);
+  line-height: 1.35;
+  text-wrap: balance;
+}
+.cs-soon {
+  margin: 0.75rem 0 0;
+  font: 600 0.78rem/1.2 var(--font-text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+.cs-note {
+  margin: 0;
+  font: 400 1rem/1.6 var(--font-text);
+  color: var(--ink-soft);
+}
+.cs-acts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.75rem;
+}
+.cs-btn {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  background: var(--forest);
+  color: var(--ink-onDark);
+  font: 600 0.95rem/1 var(--font-text);
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+.cs-btn:hover {
+  background: var(--forest-mid);
+}
+.cs-link {
+  color: var(--forest);
+  font: 500 0.95rem/1.4 var(--font-text);
+  text-underline-offset: 0.25em;
+}
+.cs-btn:focus-visible,
+.cs-link:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+}
+
+@media (min-width: 900px) {
+  .cs-wrap {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: end;
+  }
+  .cs-side {
+    padding-bottom: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cs-name,
+  .cs-side {
+    animation: cs-in 0.9s ease both;
+  }
+  .cs-side {
+    animation-delay: 0.15s;
+  }
+  @keyframes cs-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+}

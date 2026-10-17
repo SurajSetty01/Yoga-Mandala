@@ -35,7 +35,7 @@ export function Sx8Seva() {
       <div className="sx8-rail">
         <header className="sx8-head">
           <div className="sx8-head__mark" id="sx8-h">
-            <Eyebrow n="08">Praṇava &amp; Seva</Eyebrow>
+            <Eyebrow n="09">Praṇava &amp; Seva</Eyebrow>
           </div>
           <p className="sx8-lead">{S.lead}</p>
           <div className="sx8-body">

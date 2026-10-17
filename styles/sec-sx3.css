@@ -57,7 +57,7 @@
   --sx3-tgap: clamp(1.25rem, 3.2vw, 3rem);
   /* where the spine crosses the Transmission frame: at the student's hip, where
      the teacher's hands are. Measured on the clip's frames at 1s and 4s. */
-  --sx3-cross: 0.43;
+  --sx3-cross: 0.5;
   --sx3-line: rgba(36, 29, 24, 0.2);
   --sx3-pad: clamp(4.4rem, 10vw, 9rem);
   --sx3-gap: clamp(3.75rem, 7vw, 6.75rem);
@@ -157,7 +157,6 @@
 .sx3-plate {
   width: 100%;
 }
-.sx3-spread--tradition .sx3-plate--recto,
 .sx3-spread--practice .sx3-plate--verso {
   width: 78%;
 }
@@ -222,11 +221,10 @@
 
 /* ── Transmission: one frame across the spine ─────────────────────────── */
 .sx3-spread--transmission {
-  --tw: 87.72vw;
+  --tw: 100vw;
 }
-/* On a phone the frame bleeds off the RECTO edge, the teacher's side. Its left edge
-   is placed so the spine (the page centre) falls at --sx3-cross of its width:
-     left = 50vw - 0.43W and right = 100vw, so W = 50vw / 0.57 = 87.72vw. */
+/* On a phone the frame is full-bleed. Wider, it is centred on the spine
+   (--sx3-cross 0.5): left = 50% - 0.5W. */
 .sx3-cross {
   position: relative;
   margin: 0;
@@ -234,45 +232,20 @@
   margin-left: calc(50% - var(--tw) * var(--sx3-cross));
 }
 .sx3-cross__ap {
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 3 / 4;
 }
 .sx3-cross .sx3-plate__img,
 .sx3-cross .sx3-plate__film {
   object-position: var(--op-n, var(--op, 50% 0%));
 }
 
-/* THE LAST OF THE GUTTER. Paper, the width of Inquiry's gutter, with the spine's
-   line through its middle. Closed (scaleX 0) by default: the finished state. */
-.sx3-seam {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--sx3-cross) * 100%);
-  width: var(--sx3-g3);
-  background: var(--ground);
-  transform: translateX(-50%) scaleX(var(--sx3-open, 0));
-  transform-origin: 50% 50%;
-  pointer-events: none;
-}
-.sx3-seam::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  transform: translateX(-0.5px);
-  background: var(--sx3-line);
-}
-
-/* ══ 720px and up: pages side by side, words either side of the spine ══════ */
 @media (min-width: 720px) {
   .sx3-sec {
     /* one height unit for every plate. Height-led, so a short laptop is not
        handed a column of pictures taller than its screen. */
-    --sx3-u: min(64svh, 42vw, 40rem);
+    --sx3-u: min(56svh, 36vw, 34rem);
     /* the fourth frame: nearly the height of the screen, and capped for tall ones */
-    --sx3-th: min(94svh, 93vw, 66rem);
+    --sx3-th: min(84svh, 84vw, 54rem);
   }
 
   .sx3-open {
@@ -317,7 +290,7 @@
 
   /* heights: the pairs converge. Big against small, then small against big, then equal. */
   .sx3-spread--tradition .sx3-plate--verso { --h: var(--sx3-u); }
-  .sx3-spread--tradition .sx3-plate--recto { --h: calc(var(--sx3-u) * 0.5); }
+  .sx3-spread--tradition .sx3-plate--recto { --h: calc(var(--sx3-u) * 0.7); }
   .sx3-spread--practice .sx3-plate--verso  { --h: calc(var(--sx3-u) * 0.62); }
   .sx3-spread--practice .sx3-plate--recto  { --h: var(--sx3-u); }
   .sx3-spread--inquiry .sx3-plate          { --h: calc(var(--sx3-u) * 0.8); }
@@ -438,13 +411,12 @@
 .sx3-sec.is-live [data-sx='cross'] {
   opacity: 0;
   transition:
-    opacity 0.9s var(--ease),
-    transform 1.15s var(--ease);
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
 }
-/* the two sides arrive from the outer edges and come to face each other */
-.sx3-sec.is-live [data-sx='verso'] { transform: translateX(-2.4vw); }
-.sx3-sec.is-live [data-sx='recto'] { transform: translateX(2.4vw); transition-delay: 90ms; }
-.sx3-sec.is-live [data-sx='words'] { transform: translateY(18px); transition-delay: 140ms; }
+/* after the client's review: one gentle fade and rise for every element, no sideways travel */
+.sx3-sec.is-live [data-sx] { transform: translateY(14px); }
+.sx3-sec.is-live [data-sx='words'] { transition-delay: 80ms; }
 .sx3-sec.is-live [data-sx].in {
   opacity: 1;
   transform: none;
@@ -455,9 +427,6 @@
     opacity: 1;
     transform: none;
     transition: none;
-  }
-  .sx3-seam {
-    transform: translateX(-50%) scaleX(0);
   }
   /* no clip plays under reduced motion unless the reader presses its button */
   .sx3-plate__film {

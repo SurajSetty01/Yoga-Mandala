@@ -1,21 +1,9 @@
 /* Final sx9 section. Every selector is namespaced .sx9- */
 
-/* ══ 09 · WHAT WE VALUE — FOUR SLITS THAT OPEN ══════════════════════════════
-   Four photographs cut down to four thin slits, veiled pale as the page, each with its
-   word across it. One at a time a slit reaches the reading line and opens to the whole
-   frame; the veil lifts, the word steps down out of the picture to name it, and its line
-   appears beneath. Paper ground, between §08 (warm) and the Closing (warm).
-
-   The DEFAULT below is the finished state — all four open at 3:2, word and line under
-   each (beside each on a wide screen) — which is what no-script and reduced motion get.
-   `.sx9-live` is added by Motion.tsx only where the stage fits the screen.
-
-   CONTRAST. A word on a slit is forest (#22452F) on a paper veil at 0.62 over the
-   photograph. Over the darkest possible pixel the veil composites to #9B9996 (L 0.33):
-   forest on that is 3.9:1, and every word is ≥ 35px, so the 3:1 large-text bar holds
-   over ANY frame at ANY crop — the guarantee is the veil's, not the picture's.
-   Measured on rendered glyph cores, 390x844 and 1440x900, all five states: worst
-   pixel 3.84:1, p5 ≥ 4.06:1 on the slits; 10.04:1 word and 15.58:1 line on paper.
+/* ══ 05 · WHAT WE VALUE ════════════════════════════════════════════════════
+   Four values, each a photograph of it being done, its word and its line. Paper ground.
+   Static layout; the only motion is the page's shared data-ap fade and rise.
+   Words are forest on paper (10.04:1), lines ink on paper (15.58:1).
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sx9 {
@@ -73,13 +61,6 @@
   object-fit: cover;
 }
 
-.sx9-veil {
-  position: absolute;
-  inset: 0;
-  background: rgba(251, 247, 242, 0.62);
-  opacity: 0;
-}
-
 /* Inter, all four: Fraunces drops the macron of ā (DESIGN-SYSTEM §1). */
 .sx9-word {
   margin: clamp(1rem, 2.2vw, 1.5rem) 0 0;
@@ -101,14 +82,6 @@
   line-height: 1.35;
   color: var(--ink);
   text-wrap: balance;
-}
-
-/* measured at the width it will have on the stage */
-.sx9-measuring .sx9-line {
-  box-sizing: border-box;
-  width: var(--sx9-W);
-  max-width: none;
-  padding-inline: 0.5rem;
 }
 
 /* WIDE. The section takes the page measure its neighbours use (the rail's 92rem, centred)
@@ -140,135 +113,6 @@
     max-width: 22ch;
     font-size: clamp(1.3rem, 0.7rem + 1.1vw, 1.9rem);
   }
-}
-
-/* ── the stage ────────────────────────────────────────────────────────────── */
-
-.sx9-live .sx9-track {
-  height: var(--sx9-track);
-  padding-inline: 0;
-}
-
-.sx9-live .sx9-stage {
-  position: sticky;
-  top: var(--sx9-top);
-  width: var(--sx9-W);
-  max-width: none;
-  height: var(--sx9-stage);
-  margin-inline: auto;
-}
-
-.sx9-live .sx9-list {
-  display: block;
-  position: relative;
-  height: 100%;
-}
-
-.sx9-live .sx9-v {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  display: block;
-  width: var(--sx9-W);
-  height: var(--sx9-H);
-  transform: translate3d(0, var(--sx9-y, 0px), 0);
-  transition: transform 0.9s var(--ease);
-}
-.sx9-live .sx9-open {
-  z-index: 2;
-}
-
-.sx9-live .sx9-win {
-  position: absolute;
-  inset: 0;
-  height: var(--sx9-H);
-  aspect-ratio: auto;
-  clip-path: inset(var(--sx9-bt) 0 calc(var(--sx9-H) - var(--sx9-bt) - var(--sx9-s)) 0);
-  transition: clip-path 0.9s var(--ease);
-}
-.sx9-live .sx9-open .sx9-win {
-  clip-path: inset(0 0 0 0);
-}
-
-.sx9-live .sx9-veil {
-  opacity: 1;
-  transition: opacity 0.6s var(--ease) 0.2s;
-}
-.sx9-live .sx9-open .sx9-veil {
-  opacity: 0;
-  transition-delay: 0.1s;
-}
-
-/* the word sits centred on its slit, and when the slit opens it steps down out of the
-   picture to stand beneath it at 62% — a transform, never a re-layout */
-.sx9-live .sx9-word {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  margin: 0;
-  font-size: var(--sx9-F);
-  line-height: 1;
-  white-space: nowrap;
-  transform-origin: 50% 0;
-  transform: translate3d(0, calc(var(--sx9-bt) + (var(--sx9-s) - var(--sx9-F)) / 2 - 0.05em), 0);
-  transition: transform 0.9s var(--ease);
-  pointer-events: none;
-}
-.sx9-live .sx9-open .sx9-word {
-  transform: translate3d(0, calc(var(--sx9-H) + var(--sx9-m1)), 0) scale(var(--sx9-k));
-}
-
-.sx9-live .sx9-line {
-  box-sizing: border-box;
-  position: absolute;
-  top: var(--sx9-lt);
-  left: 0;
-  right: 0;
-  max-width: none;
-  margin: 0;
-  padding-inline: 0.5rem;
-  opacity: 0;
-  transform: translate3d(0, -6px, 0);
-  transition:
-    opacity 0.35s var(--ease),
-    transform 0.6s var(--ease);
-  pointer-events: none;
-}
-.sx9-live .sx9-open .sx9-line {
-  opacity: 1;
-  transform: none;
-  transition-delay: 0.4s;
-  pointer-events: auto;
-}
-
-/* BESIDE (.sx9-side, set by Motion.tsx where it gives the larger frame). The stage spans
-   the page measure; the frames stack on its left. A closed slit's word is centred on it as
-   before, and when the slit opens the word steps down and out of the picture to stand in
-   the column to its right, on its line, both set down to the frame's lower edge. */
-.sx9-live.sx9-side .sx9-stage {
-  width: var(--sx9-C);
-}
-.sx9-live.sx9-side .sx9-word {
-  left: calc(var(--sx9-W) / 2);
-  right: auto;
-  text-align: left;
-  transform-origin: 0 0;
-  transform: translate3d(-50%, calc(var(--sx9-bt) + (var(--sx9-s) - var(--sx9-F)) / 2 - 0.05em), 0);
-}
-.sx9-live.sx9-side .sx9-open .sx9-word {
-  transform: translate3d(calc(var(--sx9-W) / 2 + var(--sx9-cg)), var(--sx9-wy), 0) scale(var(--sx9-ks, 1));
-}
-.sx9-live.sx9-side .sx9-line {
-  top: auto;
-  bottom: 0;
-  left: calc(var(--sx9-W) + var(--sx9-cg));
-  right: auto;
-  width: min(calc(var(--sx9-C) - var(--sx9-W) - var(--sx9-cg)), 22ch);
-  padding-inline: 0;
-  text-align: left;
 }
 
 /* ── preview scaffold (app/preview/sx9 only) ──────────────────────────────── */

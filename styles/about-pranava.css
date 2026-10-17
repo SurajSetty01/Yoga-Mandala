@@ -151,13 +151,12 @@
 }
 
 /* ══ 02 · WHAT IS PRAṆAVA ═════════════════════════════════════════════════
-   AN ENLARGEMENT YOU CANNOT PLACE, STEPPING BACK INTO ITS ROOM.
+   ONE STILL TEACHING PHOTOGRAPH, THEN THE CLIENT'S WORDS.
 
-   The plate opens at 2.4× on a patch of floor and two pairs of hands. As the
-   section passes it steps back until the same frame is ten people doing one
-   thing — which is the answer to the section's own question. The client's lead
-   is split at its OWN full stops into its three "a place to …" clauses; the
-   three spans concatenate back to the sentence character for character.
+   The client's review asked for a teaching/study photograph here: the teacher
+   explaining on the low stage, the class seated in front. It no longer zooms.
+   The client's lead is split at its OWN full stops into its three "a place
+   to ..." clauses; the three spans concatenate back to the sentence exactly.
    ══════════════════════════════════════════════════════════════════════════ */
 .apr-what__stage {
   --apr-zoom: 1; /* stepped all the way back is the finished state */
@@ -173,9 +172,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(calc(1 + (1 - var(--apr-zoom)) * 1.4));
-  transform-origin: 58% 62%;
-  will-change: transform;
+  /* a still teaching photograph (client review, Oct 2026): no zoom, no scroll link.
+     The crops keep the teacher, the student beside him and the class in front. */
+  --op: 58% 66%;
+  --op-n: 80% 70%;
+  transform: none;
 }
 .apr-what__places {
   display: grid;

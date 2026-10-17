@@ -1,35 +1,28 @@
 import { about } from '@/content/pranava';
-import { SX1_HALL } from './media';
-import { Sx1HeroMotion } from './HeroMotion';
+import { SX1_TEACHING } from './media';
 
 /**
- * §01 HERO · "THE WALLS ARE THE WORDS" — the final section on /about/. Owns the page's
- * single <h1>. Styles: styles/sec-sx1.css (every selector `.sx1-…`).
+ * §01 HERO. Owns the page's single <h1>. Styles: styles/sec-sx1.css (every selector `.sx1-…`).
  *
- * WHAT HAPPENS. The hall has had its walls taken away. Its red floor still runs back into
- * the corner and five women still stand in a line along it; where the plaster and netting
- * were there is only the page's green, and the page's words are written on it. The class
- * stands in FRONT of the name — the four furthest heads cross the foot of "Pranava". The
- * sentence beside them sets its three nouns in italic. As the hero scrolls away the room
- * swells about its far corner and rises while the wall holds back, so the practitioners
- * pass up through the name.
+ * IMAGE-LED, CALM. The client's review asked for a hero that says "a centre for Indian
+ * culture and yogic studies" rather than "asana practice": the photograph is now the teacher
+ * seated before his students with the Praṇava emblem and the painted tree on the wall
+ * behind him. On a phone the words come first and the photograph runs edge to edge beneath
+ * the name; from 900px the words take the left five twelfths and the photograph the rest.
  *
- * Reduced motion and no JavaScript get the room at rest — the occlusion is compositional,
- * so the depth and every word survive with nothing moving.
+ * MOTION. Nothing is scroll-linked. The three blocks fade and rise once on load, in CSS,
+ * and only when the reader has not asked for reduced motion.
  *
- * Base: tournament design sx1d. Grafted: the small-capital lead-in (sx1c). The word-sized
- * noun photographs once grafted from sx1a/sx1b were removed at the owner's review.
- *
- * COPY. Every string is `about.hero`, or is cut out of the client's own strings — never
+ * COPY. Every string is `about.hero`, or is cut out of the client's own strings, never
  * retyped. The sub is split on its three nouns with a capturing regex and only wrapped,
  * so the paragraph's text is the client's sentence character for character.
  */
 
-/** "Pranava (Center for Indian Culture & Yogic Studies) was established…" → the bracketed
-    name. The client's dash became brackets on 2026-09-27 (no dashes on the site); the
-    words are unchanged, so the eyebrow is still read out of the client's sentence. */
+/** "Pranava – Center for Indian Culture & Yogic Studies was established…" → the name after
+    the dash. The client's About review (28 Sep 2026) asked for this exact wording back, so
+    the eyebrow is still read out of the client's own sentence. */
 const INSTITUTION = about.what.body[0].split(' was established')[0] ?? '';
-const EYEBROW = /\(([^)]+)\)/.exec(INSTITUTION)?.[1] ?? INSTITUTION;
+const EYEBROW = INSTITUTION.split(' – ')[1] ?? INSTITUTION;
 
 /** "About Pranava" split at its own space; the two spans concatenate back to it exactly. */
 const [ABOUT, NAME] = about.hero.heading.split(' ');
@@ -43,30 +36,31 @@ export function AboutHero() {
   const parts = about.hero.sub.split(/(study|practice|transmission)/);
 
   return (
-    <section className="sx1-hero" aria-labelledby="sx1-h" data-sx1>
+    <section className="sx1-hero" aria-labelledby="sx1-h">
       <div className="sx1-stage">
-        <p className="sx1-eyebrow sx1-wall">{EYEBROW}</p>
+        <div className="sx1-head sx1-in">
+          <p className="sx1-eyebrow">{EYEBROW}</p>
+          <h1 className="sx1-h" id="sx1-h">
+            <span className="sx1-h__about">{ABOUT}</span>{' '}
+            <span className="sx1-h__name">{NAME}</span>
+          </h1>
+        </div>
 
-        <h1 className="sx1-h sx1-wall" id="sx1-h">
-          <span className="sx1-h__about">{ABOUT}</span>{' '}
-          <span className="sx1-h__name">{NAME}</span>
-        </h1>
-
-        <div className="sx1-hall">
+        <figure className="sx1-fig sx1-in">
           <img
-            className="sx1-hall__img"
-            src={SX1_HALL.src}
-            srcSet={SX1_HALL.srcSet}
-            sizes="(min-width: 900px) and (min-aspect-ratio: 5/4) min(75vw, 120vh, 1620px), min(140vw, calc(100vw + 14rem), 150vh)"
-            width={SX1_HALL.w}
-            height={SX1_HALL.h}
-            alt={SX1_HALL.alt}
+            className="sx1-fig__img"
+            src={SX1_TEACHING.src}
+            srcSet={SX1_TEACHING.srcSet}
+            sizes="(min-width: 900px) min(58vw, 1030px), 100vw"
+            width={SX1_TEACHING.w}
+            height={SX1_TEACHING.h}
+            alt={SX1_TEACHING.alt}
             fetchPriority="high"
             decoding="async"
           />
-        </div>
+        </figure>
 
-        <div className="sx1-copy sx1-wall">
+        <div className="sx1-copy sx1-in">
           <p className="sx1-sub">
             {parts.map((p, k) =>
               k % 2 ? (
@@ -90,7 +84,6 @@ export function AboutHero() {
           </p>
         </div>
       </div>
-      <Sx1HeroMotion />
     </section>
   );
 }

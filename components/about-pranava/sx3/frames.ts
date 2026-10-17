@@ -39,6 +39,8 @@ export type Plate = {
   /** object-position below 720px, where most slots are cropped harder */
   posN: string;
   alt: string;
+  /** where the still's derivatives live, when not the shared /media/stills */
+  dir?: string;
 };
 
 const still = (
@@ -60,32 +62,41 @@ const clip = (id: string, pos: string, posN: string, alt: string): Plate => ({
   alt,
 });
 
+/** a plate whose files live outside the shared folders (see `dir`) */
+const own = (p: Plate, extra: Partial<Plate>): Plate => ({ ...p, ...extra });
+
 export const PLATES = {
-  /* TRADITION · verso. The banyan, portrait, with the trunk and its hanging roots rising
-     above one seated figure. The audit calls it the quietest peopled frame in the archive. A
-     tree whose roots came down from its own branches is as literal a picture of "long and
-     living" as this archive holds. 960 wide at most, so it is the tall plate, not the wide one. */
+  /* TRADITION · verso. Bharatanatyam, at the client's request: the dancer (from the
+     Samskṛti & Sādhana evening) in a low araimandi with both arms raised and the
+     fingers held in a mudra. A form handed down whole, body to body, which is what the
+     paragraph means by tradition. Portrait 2:3, so it is the tall plate. Of the five
+     dance frames this is the one with the whole figure and a complete gesture. */
   tradVerso: still(
-    "pr-ttc-dsc_0328",
-    [480, 960],
-    1080 / 1620,
-    "50% 50%",
-    "50% 58%",
-    "A man sitting cross-legged on a stone slab at the foot of a banyan tree, its trunk and hanging roots rising far above him",
+    "ss-dsc07165",
+    [480, 960, 1920],
+    1920 / 2880,
+    "50% 40%",
+    "50% 40%",
+    "A Bharatanatyam dancer in a red and orange costume holding a low stance, both arms raised and her fingers shaped in a mudra",
   ),
 
-  /* TRADITION · recto. A row of practitioners with their legs raised over folding chairs,
-     seen from the foot of the row. The chairs and legs stack into a rhythm, and no face is
-     visible. It is Brodovitch's repeated pose: one form in many bodies, receding. It sits on
-     the recto, so the row runs AWAY from the gutter. Below 720px it is cropped to the three
-     nearest pairs of legs. */
-  tradRecto: still(
-    "pr-ttc-dsc_0274",
-    [480, 960, 1620],
-    1620 / 1080,
-    "50% 55%",
-    "22% 55%",
-    "A row of practitioners lying with their legs raised over folding chairs, one after another down a hall with a dark red floor",
+  /* TRADITION · recto. The client, sitting at the foot of the banyan with his hands
+     resting in his lap, eyes open and looking off to the left (into the gutter). It
+     replaces the eyes-closed meditation frame. TTC original DSC_0355, graded under
+     public/media/about-v2/: warmer white balance, a set black point and gentle
+     S-curve, and the light let in from the open sky at the upper left, where it falls
+     through the gaps in the canopy and across him. The source is 1620 wide, so no
+     larger derivative exists. */
+  tradRecto: own(
+    still(
+      "approach-seated",
+      [480, 960, 1620],
+      1620 / 1080,
+      "50% 50%",
+      "50% 50%",
+      "Praṇav Śāstrī sitting cross-legged at the foot of a banyan tree, hands resting in his lap, morning light falling through the leaves across him",
+    ),
+    { dir: "/media/about-v2" },
   ),
 
   /* PRACTICE · verso. Three practitioners in supported shoulderstand against the yellow
@@ -135,17 +146,20 @@ export const PLATES = {
     "A teacher standing beside a student in a headstand against a wall, explaining with his hands, while seated students watch",
   ),
 
-  /* TRANSMISSION. One frame, laid across the gutter. A teacher's hands take the weight of a
-     student held upside down against the wall. The student is on the left of the frame and
-     the teacher on the right, so the spine is placed where the two people meet: 43% across
-     the frame (see --sx3-cross). The student stands on the verso, the teacher stands on the
-     recto, and the hands cross the gutter. The crop is anchored to the TOP, which keeps the
-     raised feet and drops the water bottle and bag the audit flags in the lower foreground. */
-  trans: clip(
-    "pr-mov-img_5739",
-    "50% 0%",
-    "50% 0%",
-    "A teacher steadying a student balanced upside down against a wall beside a folding chair, his hands taking the weight at the student’s hips",
+  /* TRANSMISSION. The client's pick: Praṇav teaching vṛścikāsana (scorpion) at the wall,
+     his face to the camera. Prabhava IMG_5740, the shot taken right after IMG_5739 (the
+     earlier Transmission clip, where his back was turned). A student balances on her
+     forearms with her legs arched over and her feet on the wall while he stands beside
+     her watching, then steps in. Trimmed 4.8s to 10.4s, tone-mapped from HLG, cropped
+     to 3:4 and encoded under public/media/about-v2/ (810x1080, muted). */
+  trans: own(
+    clip(
+      "approach-transmission",
+      "50% 30%",
+      "50% 30%",
+      "Praṇav Śāstrī beside a student balancing on her forearms against a wall, her legs arched over and her feet on the wall, as he watches the pose",
+    ),
+    { widths: [810], ratio: 810 / 1080, dir: "/media/about-v2" },
   ),
 } as const;
 
@@ -153,15 +167,22 @@ export type PlateKey = keyof typeof PLATES;
 
 export function stillSrc(p: Plate, w?: number): string {
   const width = w ?? p.widths[Math.min(1, p.widths.length - 1)];
-  return `/media/stills/${p.id}-${width}.webp`;
+  return `${p.dir ?? "/media/stills"}/${p.id}-${width}.webp`;
 }
 
 export function stillSet(p: Plate): string {
   return p.widths
-    .map((w) => `/media/stills/${p.id}-${w}.webp ${w}w`)
+    .map((w) => `${p.dir ?? "/media/stills"}/${p.id}-${w}.webp ${w}w`)
     .join(", ");
 }
 
-export const posterJpg = (p: Plate) => `/media/posters/${p.id}.jpg`;
-export const posterAvif = (p: Plate) => `/media/posters/${p.id}.avif`;
-export const clipSrc = (p: Plate) => `/media/clips/${p.id}.mp4`;
+/* The shared clips keep their poster beside them in /media/posters (jpg + avif); the
+   about-v2 Transmission clip keeps its own poster next to it (jpg + webp). */
+export const posterJpg = (p: Plate) =>
+  p.dir ? `${p.dir}/${p.id}.jpg` : `/media/posters/${p.id}.jpg`;
+export const posterModern = (p: Plate) =>
+  p.dir
+    ? { type: "image/webp", src: `${p.dir}/${p.id}.webp` }
+    : { type: "image/avif", src: `/media/posters/${p.id}.avif` };
+export const clipSrc = (p: Plate) =>
+  p.dir ? `${p.dir}/${p.id}.mp4` : `/media/clips/${p.id}.mp4`;

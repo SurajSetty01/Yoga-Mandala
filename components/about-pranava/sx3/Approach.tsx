@@ -4,8 +4,8 @@ import { Eyebrow } from "@/components/about-pranava/parts";
 import {
   PLATES,
   clipSrc,
-  posterAvif,
   posterJpg,
+  posterModern,
   stillSet,
   stillSrc,
   type Plate,
@@ -75,9 +75,9 @@ const SPREADS: Spread[] = [
     verso: PLATES.tradVerso,
     recto: PLATES.tradRecto,
     vAr: [2 / 3, 2 / 3],
-    rAr: [3 / 2, 3 / 4],
+    rAr: [3 / 2, 4 / 5],
     vSizes: "(max-width: 719px) 42vw, min(43vh, 28vw, 427px)",
-    rSizes: "(max-width: 719px) 60vw, min(48vh, 32vw, 480px)",
+    rSizes: "(max-width: 719px) 60vw, min(60vh, 46vw, 820px)",
   },
   {
     key: "practice",
@@ -170,7 +170,7 @@ function Photo({
     inner = (
       <>
         <picture>
-          <source type="image/avif" srcSet={posterAvif(plate)} />
+          <source type={posterModern(plate).type} srcSet={posterModern(plate).src} />
           <img
             className="sx3-plate__img"
             src={posterJpg(plate)}
@@ -292,7 +292,7 @@ export function OurApproach() {
           >
             <div className="sx3-cross__ap">
               <picture>
-                <source type="image/avif" srcSet={posterAvif(T)} />
+                <source type={posterModern(T).type} srcSet={posterModern(T).src} />
                 <img
                   className="sx3-plate__img"
                   src={posterJpg(T)}
@@ -304,6 +304,7 @@ export function OurApproach() {
               <video
                 className="sx3-plate__film"
                 data-src={clipSrc(T)}
+                data-auto="1"
                 muted
                 playsInline
                 loop
@@ -311,8 +312,6 @@ export function OurApproach() {
                 aria-hidden="true"
                 tabIndex={-1}
               />
-              {/* the last of the gutter. Closed (scaleX 0) unless Sx3Motion opens it. */}
-              <span className="sx3-seam" aria-hidden="true" />
             </div>
             <Toggle />
           </figure>

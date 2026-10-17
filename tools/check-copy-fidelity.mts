@@ -35,16 +35,29 @@ const DOCX = [
  * programme names and the page requirements are quoted from it, so it has to be a source
  * too. Extracted at check time rather than kept as a stale text copy beside it.
  */
-const PDF = [path.join(ROOT, 'Context', 'Pranava Website Blueprint.pdf')];
+const PDF = [
+  path.join(ROOT, 'Context', 'Pranava Website Blueprint.pdf'),
+  // the client's own review and architecture brief (28 Sep 2026), which reword some copy
+  path.join(ROOT, 'Context', 'Changes_v1', 'Pranava_About_Page_Review.pdf'),
+  path.join(ROOT, 'Context', 'Changes_v1', 'Pranava_Website_Architecture.pdf'),
+];
 
 function extractPdf(file: string): string {
-  // pypdf is present in this environment; its text layer keeps the double spacing the PDF
-  // was authored with, which norm() collapses anyway.
-  return execSync(
-    `python -c "import sys,pypdf;sys.stdout.reconfigure(encoding='utf-8');` +
-      `print(chr(10).join((p.extract_text() or '') for p in pypdf.PdfReader(sys.argv[1]).pages))" "${file}"`,
-    { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, env: { ...process.env, PYTHONIOENCODING: 'utf-8' } },
-  );
+  // pypdf's text layer keeps the double spacing the PDF was authored with, which norm()
+  // collapses anyway. The default `python` on this machine (3.14) lost its unicodedata
+  // module in October 2026, so a broken interpreter falls through to the `py -3.13` launcher.
+  const script =
+    `-c "import sys,pypdf;sys.stdout.reconfigure(encoding='utf-8');` +
+    `print(chr(10).join((p.extract_text() or '') for p in pypdf.PdfReader(sys.argv[1]).pages))" "${file}"`;
+  const opts = { encoding: 'utf8' as const, maxBuffer: 32 * 1024 * 1024, stdio: 'pipe' as const, env: { ...process.env, PYTHONIOENCODING: 'utf-8' } };
+  for (const py of ['python', 'py -3.13']) {
+    try {
+      return execSync(`${py} ${script}`, opts);
+    } catch {
+      /* try the next interpreter */
+    }
+  }
+  throw new Error(`no working Python with pypdf could read ${file}`);
 }
 
 function extractDocx(file: string): string {
@@ -79,7 +92,10 @@ const norm = (s: string) =>
     .replace(/[—–]|\s-\s|[.,;:!?()]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-    .toLowerCase();
+    .toLowerCase()
+    // the client renamed the founder in the About review (28 Sep 2026); the older
+    // documents still say Pranav Murthy, so both spellings compare as one name
+    .replace(/praṇav śāstrī|pranav shastri/g, 'pranav murthy');
 
 /** Every string anywhere in the exported content tree, with the path that reached it. */
 function walk(node: unknown, at: string, out: Array<{ at: string; text: string }>) {

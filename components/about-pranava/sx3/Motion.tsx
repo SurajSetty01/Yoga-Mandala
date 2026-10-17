@@ -3,33 +3,23 @@
 import { useEffect } from "react";
 
 /**
- * The section's only client code. THE MECHANIC IS NOT IN HERE: the narrowing gutters, the
- * converging plates and the frame across the spine are static composition in
- * sec-sx3.css. This file adds three things, and each has a finished default without it.
+ * The section's only client code. Every value it writes has a finished default in
+ * sec-sx3.css. After the client's review ("simplify") it does two things:
  *
- *   1. `[data-sx]` reveals, opt-in through `.is-live` on the section. The verso arrives from
- *      the left, the recto from the right, and they come to face each other at the gutter.
- *   2. `--sx3-open` goes 1 → 0 on the Transmission frame: the paper seam inside it (the
- *      last of the gutter, Inquiry's width) closes as the frame's top travels from 62% down
- *      the screen to the frame being centred. Its stylesheet default is 0, so the frame is whole unless this
- *      runs.
- *   3. The three clips. `data-src` is attached when a frame has been near the screen for a
- *      moment, the clip fades over its still only once it has PROVABLY played, it pauses
- *      when off screen or when the tab is hidden, and it is released when well past.
- *      Nothing attaches BY ITSELF before `load`, on a phone (≤ 860px, the gate the approved
- *      hero, /within/ and /practice/ all use), or under reduced motion; on Data Saver, a slow
- *      connection or without MP4 there is no clip at all.
- *   4. The play/pause button on each clip (grafted from sx3b). Revealed only where a clip
- *      can play. A choice made with it wins over the automatic behaviour until reload.
+ *   1. `[data-sx]` reveals, opt-in through `.is-live` on the section: a short fade and
+ *      rise, nothing more. No scroll-linked values, no pinning.
+ *   2. The clips. Only the Transmission clip (`data-auto`) is attached by itself, when its
+ *      frame has been near the screen for a moment; it fades over its still only once it
+ *      has PROVABLY played, pauses when off screen or when the tab is hidden, and is
+ *      released when well past. Practice and Inquiry show their stills until the reader
+ *      presses play. Nothing attaches BY ITSELF before `load`, on a phone (860px and
+ *      down), or under reduced motion; on Data Saver, a slow connection or without MP4
+ *      there is no clip at all. Every clip has a play/pause button (WCAG 2.2.2).
  *
- * Under `prefers-reduced-motion: reduce` there is no `.is-live` and no seam: the reader gets
- * the finished book, a still in every clip's place, and a button to start any clip.
- *
- * Rules kept, each one a bug already shipped on this project: ONE passive scroll listener
- * that only raises a flag; every read of scrollY and every write inside one rAF; geometry
- * measured on load and resize, never per frame; IntersectionObserver on the <figure>,
- * never on the aperture that clips; no `poster` attribute anywhere; `removeAttribute('src')`
- * + `load()` to abort a transfer (src = '' would re-request the page itself).
+ * Rules kept, each one a bug already shipped on this project: IntersectionObserver on the
+ * <figure>, never on the aperture that clips; no `poster` attribute anywhere;
+ * `removeAttribute('src')` + `load()` to abort a transfer (src = '' would re-request the
+ * page itself).
  */
 export function Sx3Motion() {
   useEffect(() => {
@@ -50,7 +40,7 @@ export function Sx3Motion() {
   return null;
 }
 
-/** 1 and 2: the reveals and the seam. Only when motion is allowed. */
+/** 1: the reveals, a gentle fade and rise. Only when motion is allowed. */
 function stage(root: HTMLElement): () => void {
   const cleanups: Array<() => void> = [];
 
@@ -68,61 +58,6 @@ function stage(root: HTMLElement): () => void {
   );
   root.querySelectorAll("[data-sx]").forEach((el) => reveal.observe(el));
   cleanups.push(() => reveal.disconnect());
-
-  /* ── 2. the seam ────────────────────────────────────────────────────── */
-  const cross = root.querySelector<HTMLElement>(".sx3-cross");
-  let top = 0;
-  let h = 1;
-  let vh = innerHeight;
-  const measure = () => {
-    if (!cross) return;
-    const r = cross.getBoundingClientRect();
-    top = r.top + scrollY;
-    h = r.height || 1;
-    vh = innerHeight;
-  };
-  let last = -1;
-  const frame = () => {
-    queued = false;
-    if (!cross) return;
-    const y = top - scrollY; // the frame's top edge, in viewport px
-    /* The seam holds open while the frame enters, so it is first read as one more PAIR
-         with Inquiry's gutter. It starts to close only once the frame's top is 62% of
-         the way down the screen, while the reader is looking at it, and it is shut when
-         the frame is centred: 531px of scroll at 1440x900, 358px at 390x844. */
-    const start = vh * 0.62;
-    const end = vh * 0.5 - h / 2;
-    let t = (start - y) / Math.max(1, start - end);
-    t = t < 0 ? 0 : t > 1 ? 1 : t;
-    const eased = t * t * (3 - 2 * t);
-    const open = +(1 - eased).toFixed(4);
-    if (open !== last) {
-      cross.style.setProperty("--sx3-open", String(open));
-      last = open;
-    }
-  };
-  let queued = false;
-  const onScroll = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(frame);
-  };
-  const onResize = () => {
-    measure();
-    onScroll();
-  };
-  measure();
-  frame();
-  addEventListener("scroll", onScroll, { passive: true });
-  addEventListener("resize", onResize, { passive: true });
-  /* layout above can still settle after mount (web fonts, the page's own load) */
-  const ro = new ResizeObserver(() => onResize());
-  ro.observe(document.body);
-  cleanups.push(() => {
-    removeEventListener("scroll", onScroll);
-    removeEventListener("resize", onResize);
-    ro.disconnect();
-  });
 
   return () => {
     for (const c of cleanups) c();
@@ -165,8 +100,11 @@ function films(root: HTMLElement, reduce: boolean): () => void {
   }
   /* null until the reader uses a clip's button; after that their choice wins */
   const choice = new Map<HTMLVideoElement, "play" | "pause">();
+  /* Only Transmission (data-auto) starts by itself; Practice and Inquiry stay stills
+     until the reader presses play. One moving picture in the section, not three. */
   const wants = (v: HTMLVideoElement) =>
-    (choice.get(v) ?? (auto ? "play" : "pause")) === "play";
+    (choice.get(v) ?? (auto && v.dataset.auto === "1" ? "play" : "pause")) ===
+    "play";
   const near = new Set<HTMLVideoElement>();
   const settles = new Map<HTMLVideoElement, ReturnType<typeof setTimeout>>();
   const polls = new Map<HTMLVideoElement, ReturnType<typeof setInterval>>();
