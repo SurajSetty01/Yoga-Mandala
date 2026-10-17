@@ -969,3 +969,13 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 .lenis.lenis-stopped { overflow: hidden; }
+
+/* No section numbers anywhere on the site (owner, Oct 2026): every section label keeps its
+   title and drops its "01, 02 …". One rule, so no page can bring one back by accident. */
+[class$="mark__n"],
+[class$="eyebrow__n"],
+[class$="eyebrow-n"],
+[class$="label__n"],
+.within__eyebrow > span:first-child {
+  display: none !important;
+}

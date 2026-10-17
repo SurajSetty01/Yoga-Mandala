@@ -254,21 +254,35 @@
 }
 .a3-intro__text {
   display: grid;
-  gap: 1.1rem;
-  max-width: 40rem;
-  margin-top: clamp(2.25rem, 4vw, 3.5rem);
+  gap: 1.25rem 2.5rem;
+  max-width: 64rem;
+  margin-top: clamp(2rem, 3.6vw, 3rem);
 }
 .a3-intro__text p {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.15rem, 1rem + 0.55vw, 1.55rem);
-  line-height: 1.5;
-  text-wrap: pretty;
+  font: 400 clamp(0.98rem, 0.92rem + 0.2vw, 1.08rem)/1.65 var(--font-text);
+  color: var(--ink-soft);
 }
 .a3-intro__text p:last-child {
-  margin-top: 0.6rem;
+  margin-top: clamp(0.5rem, 1.5vw, 1.25rem);
+  font-family: var(--font-display);
   font-style: italic;
+  font-size: clamp(1.3rem, 1rem + 1vw, 2rem);
+  line-height: 1.3;
   color: var(--forest);
+  text-wrap: balance;
+}
+@media (min-width: 900px) {
+  .a3-intro__text {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    text-align: left;
+  }
+  .a3-intro__text p:last-child {
+    grid-column: 1 / -1;
+    max-width: 30ch;
+    justify-self: center;
+    text-align: center;
+  }
 }
 .a3-w {
   display: inline;
@@ -667,139 +681,168 @@
   }
 }
 
-/* ── 05 WHAT WE VALUE ────────────────────────────────────────────────────────────── */
+/* ── WHAT WE VALUE: a pinned circle in four quarters ────────────────────────────── */
 
 .a3-val {
+  position: relative;
+  height: 400svh;
   background: var(--ground-deep);
   color: var(--ink-onDark);
+}
+.a3-val.is-still {
+  height: auto;
+}
+.a3-val__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  align-items: center;
   overflow: hidden;
 }
-.a3-val__mandala {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 2rem;
-  margin-top: 1rem;
+.a3-val.is-still .a3-val__stage {
+  position: static;
+  height: auto;
+  padding-block: var(--a3-pad);
 }
-.a3-val__ring {
-  display: none;
+.a3-val__grid {
+  display: grid;
+  gap: 1.5rem clamp(3rem, 7vw, 7rem);
+  align-items: center;
+  justify-items: center;
+}
+.a3-val__disc-wrap {
+  position: relative;
+  width: min(72vw, 46svh, 34rem);
+  aspect-ratio: 1;
+}
+.a3-val__rim {
+  position: absolute;
+  inset: -4%;
+  width: 108%;
+  height: 108%;
+  rotate: -90deg;
+  fill: none;
+}
+.a3-val__rim-bg {
+  stroke: rgba(246, 217, 193, 0.16);
+  stroke-width: 0.35;
+}
+.a3-val__rim-arc {
+  stroke: var(--sand);
+  stroke-width: 0.7;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.15s linear;
 }
 .a3-val__disc {
-  position: relative;
-  width: min(78vw, 22rem);
-  aspect-ratio: 1;
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
   overflow: hidden;
   background: var(--forest-deep);
-  box-shadow: 0 0 0 1px rgba(246, 217, 193, 0.25), 0 40px 80px -40px rgba(0, 0, 0, 0.8);
 }
-.a3-val__disc img {
+.a3-val__q {
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  filter: grayscale(0.7);
+  transition: opacity 0.8s ease, filter 0.8s ease;
+}
+.a3-val__q.is-on {
+  opacity: 1;
+  filter: none;
+}
+.a3-val__q img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* the open centre: the active value's photograph, whole */
+.a3-val__core {
+  position: absolute;
+  inset: 21%;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0 6px var(--ground-deep), 0 30px 60px -20px rgba(0, 0, 0, 0.7);
+  background: var(--forest-deep);
+}
+.a3-val__core img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.08);
-  transition: opacity 0.9s ease, transform 1.6s var(--ease);
+  transform: scale(1.15) rotate(-6deg);
+  transition: opacity 0.7s ease, transform 1.2s var(--ease);
 }
-.a3-val__disc img.is-on {
+.a3-val__core img.is-on {
   opacity: 1;
   transform: none;
 }
-.a3-val__words {
-  display: grid;
-  gap: 0.25rem;
+.a3-val.is-still .a3-val__core {
+  display: none;
+}
+.a3-val__copy {
   width: 100%;
+}
+.a3-val__list {
+  position: relative;
   margin: 0;
   padding: 0;
   list-style: none;
+  min-height: 8.5rem;
 }
-.a3-val__btn {
-  all: unset;
-  box-sizing: border-box;
+.a3-val__list li {
+  position: absolute;
+  inset: 0 0 auto 0;
   display: grid;
-  gap: 0.3rem;
-  width: 100%;
-  padding: 0.9rem 0;
-  cursor: pointer;
-  border-bottom: 1px solid var(--rule-onDark);
+  gap: 0.55rem;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.8s var(--ease);
 }
-.a3-val__btn:focus-visible {
-  outline: 2px solid var(--sand);
-  outline-offset: 4px;
+.a3-val__list li.is-on {
+  opacity: 1;
+  transform: none;
+}
+.a3-val.is-still .a3-val__list li {
+  position: static;
+  opacity: 1;
+  transform: none;
+  margin-bottom: 1.5rem;
 }
 .a3-val__word {
   font-family: 'EB Garamond', 'EB Garamond Fallback', Georgia, serif;
-  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.9rem);
-  line-height: 1;
-  color: rgba(251, 247, 242, 0.5);
-  transition: color 0.4s ease;
-}
-.a3-val__line {
-  font: 400 0.98rem/1.45 var(--font-text);
-  color: var(--ink-onDark-soft);
-}
-.a3-val__q.is-on .a3-val__word {
+  font-size: clamp(3rem, 1.6rem + 5vw, 7.5rem);
+  line-height: 0.95;
   color: var(--sand);
 }
-.a3-val__q.is-on .a3-val__line {
+.a3-val__line {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 0.95rem + 0.8vw, 1.8rem);
+  line-height: 1.3;
   color: var(--ink-onDark);
 }
 
-/* wide: the words at the four quarters of the circle */
 @media (min-width: 1000px) {
-  .a3-val__mandala {
-    display: block;
-    height: min(78vh, 720px);
-    min-height: 560px;
-    margin-top: 0;
+  .a3-val__grid {
+    grid-template-columns: auto minmax(0, 1fr);
+    justify-items: start;
   }
-  .a3-val__ring {
-    display: block;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: min(64vh, 600px);
-    aspect-ratio: 1;
-    translate: -50% -50%;
-    fill: none;
-    stroke: rgba(246, 217, 193, 0.4);
-    stroke-width: 0.5;
+  .a3-val__disc-wrap {
+    width: min(70svh, 40vw, 40rem);
   }
-  .a3-val__disc {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: min(50vh, 460px);
-    translate: -50% -50%;
+  .a3-val__list {
+    min-height: 13rem;
   }
-  .a3-val__words {
-    position: absolute;
-    inset: 0;
-    display: block;
-  }
-  .a3-val__q {
-    position: absolute;
-    width: 21rem;
-  }
-  .a3-val__btn {
-    border-bottom: 0;
-  }
-  .a3-val__q--0 { left: 0; top: 4%; }
-  .a3-val__q--1 { right: 0; top: 4%; text-align: right; }
-  .a3-val__q--2 { left: 0; bottom: 4%; }
-  .a3-val__q--3 { right: 0; bottom: 4%; text-align: right; }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .a3-val__ring {
-    animation: a3-turn 60s linear infinite;
+@media (max-width: 999px) {
+  .a3-val__copy {
+    text-align: center;
   }
-  @keyframes a3-turn {
-    to {
-      rotate: 360deg;
-    }
+  .a3-val__copy .a3-label {
+    justify-content: center;
   }
 }
 
