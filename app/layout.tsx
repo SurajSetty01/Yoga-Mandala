@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter } from 'next/font/google';
+import { EB_Garamond, Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 import { site } from '@/content/site';
 
@@ -22,6 +22,18 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
   display: 'swap',
   preload: true,
+});
+
+/*
+ * Sanskrit set large (ā, ī, ṇ, ś with their marks in the right place). Fraunces has no
+ * precomposed ā or ī, so the browser stacks a loose macron beside the letter; EB Garamond
+ * carries the transliteration range properly. Used only through --font-sanskrit.
+ */
+const garamond = EB_Garamond({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-sanskrit',
+  display: 'swap',
+  preload: false,
 });
 
 const inter = Inter({
@@ -66,7 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang={site.lang}
       data-scroll-behavior="smooth"
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${fraunces.variable} ${inter.variable} ${garamond.variable}`}
       suppressHydrationWarning
     >
       <head>

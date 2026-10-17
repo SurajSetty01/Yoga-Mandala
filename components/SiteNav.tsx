@@ -59,7 +59,7 @@ export function SiteNav({ light = false }: { light?: boolean }) {
           identity rather than reproducing it. At 34px the raster is faithful and sharp.
           `alt=""` because the wordmark beside it already names the organisation.
         */}
-        <Link className="pill__mark" href="/">
+        <Link className="pill__mark" href="/about/">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="pill__logo"

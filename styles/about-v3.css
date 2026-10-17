@@ -1,0 +1,1002 @@
+/* ── PRAṆAVA ABOUT (v3) ────────────────────────────────────────────────────────────────
+   Rebuilt from scratch against the client's About review (28 Sep 2026) with the Yoga
+   Mandala page as the standard: each section about one screen tall, one idea each, a
+   rhythm of image-led, text-led and mixed sections, and only a gentle reveal for motion.
+   Every selector is namespaced .a3-. */
+
+.a3 {
+  --a3-pad: clamp(4.5rem, 9vw, 8rem);
+  --a3-h1: clamp(3.4rem, 1.2rem + 7.4vw, 8.6rem);
+  --a3-h2: clamp(2.2rem, 1.1rem + 3.4vw, 4.6rem);
+  --a3-lead: clamp(1.3rem, 1rem + 1vw, 2rem);
+  --a3-read: clamp(1rem, 0.94rem + 0.22vw, 1.15rem);
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.a3-rail {
+  box-sizing: border-box;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: var(--page);
+}
+
+.a3-kicker {
+  margin: 0;
+  font: 600 0.74rem/1.3 var(--font-text);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+
+/* the gentle reveal (see Reveal.tsx): hidden only once script has opted in */
+.a3-js [data-a3r] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.9s var(--ease) var(--d, 0ms), transform 1.1s var(--ease) var(--d, 0ms);
+}
+.a3-js [data-a3r].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ─────────────────────────────────────────────────────────────────────────── */
+
+.a3-hero {
+  padding-top: clamp(7rem, 10vw, 8.75rem);
+}
+.a3-hero__top {
+  display: grid;
+  gap: 1.75rem 4rem;
+  align-items: end;
+  padding-bottom: clamp(2rem, 3.6vw, 3.25rem);
+}
+.a3-hero__title {
+  display: grid;
+  gap: 1rem;
+}
+.a3-hero__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.3rem, 1rem + 6.6vw, 7.6rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+}
+.a3-hero__words {
+  display: grid;
+  gap: 1rem;
+  max-width: 32rem;
+}
+.a3-hero__sub {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 0.75vw, 1.7rem);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.a3-hero__support {
+  margin: 0;
+  font: 400 0.98rem/1.65 var(--font-text);
+  color: var(--ink-soft);
+}
+.a3-hero__pic {
+  margin: 0;
+  overflow: hidden;
+  background: var(--sandstone);
+}
+.a3-hero__pic img {
+  display: block;
+  width: 100%;
+  height: clamp(320px, 44vw, 1000px);
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+@media (min-width: 1000px) {
+  .a3-hero__top {
+    grid-template-columns: auto minmax(0, 32rem);
+    justify-content: space-between;
+  }
+  .a3-hero__h {
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .a3-hero__pic img {
+    animation: a3-settle 1.8s var(--ease) both;
+  }
+  @keyframes a3-settle {
+    from {
+      transform: scale(1.06);
+    }
+  }
+}
+
+/* ── shared section frame and label ───────────────────────────────────────────────── */
+
+.a3-sec {
+  padding-block: var(--a3-pad);
+}
+.a3-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  margin: 0 0 clamp(1.25rem, 2.4vw, 2rem);
+  font: 600 0.74rem/1.3 var(--font-text);
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+.a3-label__n {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--brass);
+}
+
+/* ── 01 INTRODUCTION ──────────────────────────────────────────────────────────────── */
+
+.a3-intro {
+  background: var(--ground-warm);
+}
+.a3-intro__h {
+  margin: 0;
+  max-width: 15ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 1.1rem + 4.6vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.a3-intro__cols {
+  display: grid;
+  gap: 1.25rem 3rem;
+  margin-top: clamp(1.75rem, 3.2vw, 3rem);
+  padding-top: clamp(1.5rem, 2.6vw, 2.25rem);
+  border-top: 1px solid var(--rule);
+}
+.a3-intro__cols p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 0.98rem + 0.42vw, 1.4rem);
+  line-height: 1.45;
+}
+.a3-intro__end {
+  display: grid;
+  gap: 2rem 3.5rem;
+  margin-top: clamp(2.25rem, 4vw, 3.5rem);
+  align-items: end;
+}
+.a3-intro__belief {
+  margin: 0;
+  max-width: 25ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.45rem, 1.05rem + 1.1vw, 2.15rem);
+  line-height: 1.22;
+  color: var(--forest);
+  text-wrap: balance;
+}
+.a3-intro__trio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.6rem, 1.2vw, 1.1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.a3-intro__trio figure {
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.a3-intro__trio img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.a3-intro__trio figcaption {
+  font: 500 0.82rem/1.3 var(--font-text);
+  letter-spacing: 0.06em;
+  text-transform: capitalize;
+  color: var(--ink-soft);
+}
+
+@media (min-width: 760px) {
+  .a3-intro__cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1000px) {
+  .a3-intro__end {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+}
+
+.a3-label--dark {
+  color: var(--ink-onDark-soft);
+}
+.a3-label--dark .a3-label__n {
+  color: var(--sand);
+}
+
+/* ── 02 WHAT IS PRAṆAVA? ─────────────────────────────────────────────────────────── */
+
+.a3-what {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+.a3-what__grid {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4.5rem) clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.a3-what__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1rem + 3vw, 4.1rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.a3-what__body {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  max-width: 34rem;
+}
+.a3-what__body p {
+  margin: 0;
+  font: 400 var(--a3-read)/1.7 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.a3-what__pics {
+  display: grid;
+  gap: clamp(0.6rem, 1vw, 0.9rem);
+}
+.a3-what__big {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: 50% 40%;
+  border-radius: 2px;
+}
+.a3-what__small {
+  display: block;
+  width: 62%;
+  justify-self: end;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.a3-what__intent {
+  margin: 0;
+  padding-top: clamp(1.75rem, 3vw, 2.5rem);
+  border-top: 1px solid var(--rule-onDark);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.45rem, 1rem + 1.6vw, 2.7rem);
+  line-height: 1.3;
+  color: var(--sand);
+  text-wrap: balance;
+}
+
+@media (min-width: 1000px) {
+  .a3-what__grid {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: start;
+  }
+  .a3-what__pics {
+    margin-top: 2.6rem;
+  }
+  .a3-what__intent {
+    grid-column: 1 / -1;
+  }
+}
+
+/* clips: the poster is a real image; the video sits over it once it plays */
+.a3-clip {
+  position: relative;
+  overflow: hidden;
+}
+.a3-clip img,
+.a3-clip video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.a3-clip video {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── 03 OUR APPROACH ─────────────────────────────────────────────────────────────── */
+
+.a3-appr {
+  background: var(--ground);
+}
+.a3-appr__head {
+  display: grid;
+  gap: 0;
+  margin-bottom: clamp(2.25rem, 4vw, 3.5rem);
+}
+.a3-appr__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 1rem + 2.9vw, 3.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  max-width: 24ch;
+  text-wrap: balance;
+}
+.a3-appr__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3vw, 2.5rem) clamp(1rem, 2vw, 1.75rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.a3-appr__col {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+.a3-appr__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--sandstone);
+}
+.a3-appr__media img,
+.a3-appr__media .a3-clip {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.a3-appr__name {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.45rem, 1.1rem + 0.9vw, 2rem);
+  line-height: 1.1;
+}
+.a3-appr__body {
+  margin: 0;
+  font: 400 0.95rem/1.62 var(--font-text);
+  color: var(--ink-soft);
+}
+/* Transmission: the one the lead does not name, and the one the others lead to */
+.a3-appr__col.is-key .a3-appr__name {
+  color: var(--forest);
+}
+.a3-appr__col.is-key .a3-appr__name::after {
+  content: '';
+  display: block;
+  width: 2.25rem;
+  height: 2px;
+  margin-top: 0.65rem;
+  background: var(--brass);
+}
+
+@media (min-width: 1000px) {
+  .a3-appr__head {
+    grid-template-columns: minmax(0, 0.38fr) minmax(0, 1fr);
+    align-items: end;
+  }
+  .a3-appr__head .a3-label {
+    margin: 0 0 0.7rem;
+  }
+  .a3-appr__cols {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── 04 HOW WE TEACH ─────────────────────────────────────────────────────────────── */
+
+.a3-teach {
+  background: var(--ground-warm);
+}
+.a3-teach__grid {
+  display: grid;
+  gap: clamp(2.25rem, 4vw, 3.5rem) clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.a3-teach__pic {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.a3-teach__pic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+.a3-teach__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 1rem + 3.2vw, 4.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.a3-teach__open {
+  margin: 1.4rem 0 0;
+  max-width: 36rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 0.98rem + 0.4vw, 1.35rem);
+  line-height: 1.45;
+}
+.a3-teach__prompt {
+  margin: 1.75rem 0 0.9rem;
+  font: 600 0.74rem/1.3 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+.a3-teach__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.a3-teach__list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--rule);
+  font: 500 1rem/1.4 var(--font-text);
+}
+.a3-teach__n {
+  flex: none;
+  width: 1.6rem;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--brass);
+}
+.a3-teach__close {
+  margin: 1.75rem 0 0;
+  max-width: 38rem;
+  font: 400 var(--a3-read)/1.7 var(--font-text);
+  color: var(--ink-soft);
+}
+
+@media (min-width: 700px) {
+  .a3-teach__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+  }
+}
+@media (min-width: 1000px) {
+  .a3-teach__grid {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  }
+  .a3-teach__pic img {
+    aspect-ratio: auto;
+    height: min(78vh, 760px);
+  }
+}
+
+/* ── 05 WHAT WE VALUE ────────────────────────────────────────────────────────────── */
+
+.a3-val {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+.a3-val__grid {
+  display: grid;
+  gap: 2.5rem clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.a3-val__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule-onDark);
+}
+.a3-val__row {
+  border-bottom: 1px solid var(--rule-onDark);
+}
+.a3-val__btn {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  padding: clamp(1rem, 1.8vw, 1.5rem) 0;
+  cursor: pointer;
+}
+.a3-val__btn:focus-visible {
+  outline: 2px solid var(--sand);
+  outline-offset: 4px;
+}
+.a3-val__word {
+  font-family: "EB Garamond", "EB Garamond Fallback", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 1.2rem + 3vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ink-onDark-soft);
+  transition: color 0.4s ease;
+}
+.a3-val__line {
+  font: 400 1rem/1.5 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.a3-val__row.is-on .a3-val__word {
+  color: var(--sand);
+}
+.a3-val__row.is-on .a3-val__line {
+  color: var(--ink-onDark);
+}
+.a3-val__inline {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  margin: 0 0 1.4rem;
+  border-radius: 2px;
+}
+.a3-val__stage {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .a3-val__grid {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+  .a3-val__inline {
+    display: none;
+  }
+  .a3-val__stage {
+    display: block;
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--forest-deep);
+  }
+  .a3-val__stage img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 0.8s ease, transform 1.4s var(--ease);
+  }
+  .a3-val__stage img.is-on {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── 06 THE PRAṆAVA JOURNEY ──────────────────────────────────────────────────────── */
+
+.a3-jour {
+  background: var(--ground);
+}
+.a3-jour__doors {
+  display: grid;
+  gap: clamp(0.75rem, 1.4vw, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.a3-jour__door {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 2px;
+  aspect-ratio: 4 / 5;
+  color: var(--ink-onPic);
+  text-decoration: none;
+  background: var(--forest-deep);
+}
+.a3-jour__door img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.a3-jour__door::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 18, 14, 0.86) 0%, rgba(10, 18, 14, 0.55) 34%, rgba(10, 18, 14, 0) 62%);
+}
+.a3-jour__text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: grid;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 2.2vw, 2rem);
+}
+.a3-jour__name {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.2rem + 2.2vw, 3.3rem);
+  line-height: 1;
+}
+.a3-jour__arrow {
+  font-family: var(--font-text);
+  font-size: 1.4rem;
+  transition: transform 0.4s var(--ease);
+}
+.a3-jour__line {
+  max-width: 26rem;
+  min-height: 4.5em; /* three lines on every door, so the names share one baseline */
+  font: 400 0.98rem/1.5 var(--font-text);
+  color: var(--ink-onPic-2);
+}
+.a3-jour__door:hover img,
+.a3-jour__door:focus-visible img {
+  transform: scale(1.04);
+}
+.a3-jour__door:hover .a3-jour__arrow,
+.a3-jour__door:focus-visible .a3-jour__arrow {
+  transform: translateX(6px);
+}
+.a3-jour__door:focus-visible {
+  outline: 3px solid var(--brass);
+  outline-offset: 3px;
+}
+
+@media (min-width: 900px) {
+  .a3-jour__doors {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .a3-jour__door {
+    aspect-ratio: auto;
+    height: min(70vh, 640px);
+  }
+}
+
+/* ── 07 THE FOUNDER ──────────────────────────────────────────────────────────────── */
+
+.a3-found {
+  background: var(--ground-warm);
+}
+.a3-found__grid {
+  display: grid;
+  gap: clamp(2.25rem, 4vw, 3.5rem) clamp(3rem, 6vw, 6rem);
+  align-items: start;
+}
+.a3-found__pic {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.a3-found__pic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+/* the name carries ā and ī, which Fraunces misplaces: it is set in Inter */
+.a3-found__h {
+  margin: 0;
+  font: 500 clamp(2rem, 1rem + 2.6vw, 3.6rem)/1.05 var(--font-text);
+  letter-spacing: -0.025em;
+}
+.a3-found__role {
+  margin: 0.9rem 0 0;
+  font: 600 0.74rem/1.3 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.a3-found__lede {
+  margin: 1.75rem 0 0;
+  max-width: 38rem;
+  font-family: "EB Garamond", "EB Garamond Fallback", Georgia, serif;
+  font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.6rem);
+  line-height: 1.45;
+}
+.a3-found__body {
+  display: grid;
+  gap: 0.85rem 2.5rem;
+  margin-top: 1.25rem;
+}
+.a3-found__body p {
+  margin: 0;
+  font: 400 0.98rem/1.68 var(--font-text);
+  color: var(--ink-soft);
+}
+.a3-found__quote {
+  margin: clamp(2rem, 3.5vw, 3rem) 0 0;
+  padding: clamp(1.5rem, 2.5vw, 2rem) 0 0;
+  border-top: 1px solid var(--rule);
+}
+.a3-found__quote p {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.45rem, 1rem + 1.4vw, 2.4rem);
+  line-height: 1.28;
+  color: var(--forest);
+  text-wrap: balance;
+}
+.a3-found__quote p::before {
+  content: '\201C';
+  margin-left: -0.45em;
+  color: var(--brass);
+}
+.a3-found__quote p::after {
+  content: '\201D';
+  color: var(--brass);
+}
+
+@media (min-width: 760px) {
+  .a3-found__body {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1000px) {
+  .a3-found__grid {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+  }
+  .a3-found__pic {
+    position: sticky;
+    top: 7rem;
+  }
+  .a3-found__pic img {
+    aspect-ratio: auto;
+    height: min(80vh, 780px);
+  }
+}
+
+/* ── 08 FACULTY ──────────────────────────────────────────────────────────────────── */
+
+.a3-fac {
+  background: var(--ground);
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+}
+.a3-fac__grid {
+  display: grid;
+  gap: 1.75rem clamp(3rem, 6vw, 6rem);
+  align-items: end;
+}
+.a3-fac__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 1rem + 3.3vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  max-width: 13ch;
+}
+.a3-fac__body {
+  display: grid;
+  gap: 1rem;
+  max-width: 36rem;
+}
+.a3-fac__body p {
+  margin: 0;
+  font: 400 var(--a3-read)/1.7 var(--font-text);
+  color: var(--ink-soft);
+}
+
+/* ── 09 PRAṆAVA & SEVA ───────────────────────────────────────────────────────────── */
+
+.a3-seva {
+  background: var(--ground-deep);
+  color: var(--ink-onDark);
+}
+.a3-seva__grid {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem) clamp(3rem, 6vw, 6rem);
+  align-items: center;
+}
+.a3-seva__h {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 1rem + 2.7vw, 3.7rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.a3-seva__body {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+  max-width: 34rem;
+}
+.a3-seva__body p {
+  margin: 0;
+  font: 400 var(--a3-read)/1.68 var(--font-text);
+  color: var(--ink-onDark-soft);
+}
+.a3-seva__prompt {
+  margin: 1.75rem 0 0.8rem;
+  font: 600 0.74rem/1.3 var(--font-text);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+.a3-seva__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.a3-seva__list li {
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--rule-onDark);
+  border-radius: 999px;
+  font: 500 0.9rem/1.2 var(--font-text);
+  color: var(--ink-onDark);
+}
+.a3-seva__mandala {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--forest-deep);
+}
+.a3-seva__mandala img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.a3-seva__mandala figcaption {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.25rem, 2.2vw, 1.85rem);
+}
+.a3-seva__mandala figcaption p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.3rem);
+  line-height: 1.45;
+}
+.a3-seva__link {
+  justify-self: start;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.75rem 1.35rem;
+  border-radius: 999px;
+  background: var(--sand);
+  color: var(--ground-deep);
+  font: 600 0.92rem/1 var(--font-text);
+  text-decoration: none;
+  transition: background 0.25s ease;
+}
+.a3-seva__link:hover {
+  background: var(--ink-onDark);
+}
+.a3-seva__link:focus-visible {
+  outline: 2px solid var(--sand);
+  outline-offset: 3px;
+}
+
+@media (min-width: 1000px) {
+  .a3-fac__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .a3-seva__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* ── 10 BEGIN ────────────────────────────────────────────────────────────────────── */
+
+.a3-close {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: var(--ink-onPic);
+  background: var(--ground-deep);
+}
+.a3-close__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+.a3-close::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(10, 18, 14, 0.9) 0%, rgba(10, 18, 14, 0.74) 46%, rgba(10, 18, 14, 0.3) 100%);
+}
+.a3-close__in {
+  display: grid;
+  align-content: center;
+  min-height: min(92vh, 860px);
+  padding-block: var(--a3-pad);
+}
+.a3-close__h {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 1.1rem + 4.4vw, 5.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.a3-close__body {
+  margin: 1.6rem 0 0;
+  max-width: 36rem;
+  font: 400 var(--a3-read)/1.7 var(--font-text);
+  color: var(--ink-onPic-2);
+}
+.a3-close__call {
+  margin: 1.6rem 0 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.4rem, 1.05rem + 1vw, 2rem);
+  color: var(--sand);
+}
+.a3-close__acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.a3-close__btn {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  background: var(--sand);
+  color: var(--ground-deep);
+  font: 600 0.95rem/1 var(--font-text);
+  text-decoration: none;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.a3-close__btn--line {
+  background: transparent;
+  color: var(--ink-onPic);
+  box-shadow: inset 0 0 0 1px rgba(251, 247, 242, 0.55);
+}
+.a3-close__btn:hover {
+  background: var(--ink-onPic);
+  color: var(--ground-deep);
+}
+.a3-close__btn:focus-visible {
+  outline: 2px solid var(--sand);
+  outline-offset: 3px;
+}

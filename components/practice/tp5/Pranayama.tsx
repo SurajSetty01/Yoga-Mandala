@@ -1,67 +1,43 @@
 import { links } from '@/content/site';
-import { AIR, GROUND, groundSrcSet } from './media';
-import { Tp5Air } from './Tp5Air';
+import { GROUND, groundSrcSet } from './media';
 
 /**
- * 04 · PRĀṆĀYĀMA — ONLY THE AIR MOVES.
+ * 04 · PRĀṆĀYĀMA. Rebuilt at the owner's review (Oct 2026): one screen. The old version hung
+ * a clip of leaves above a wall of type and put the people at the very bottom.
  *
- * The section is the height between a canopy and the ground. Leaves hang from its top edge
- * in a small window and move on their own loop, the one thing on /practice/ that runs on a
- * clock and not on the reader. Five people sit on grass at its bottom edge, perfectly still,
- * with the trunks of their trees rising out of the frame toward the leaves. The word stands
- * in the air between the two, and the honest mark sits under it.
- *
- * Nothing here depicts a technique: no diagram, no count, no pulse. Prāṇāyāma is named in
- * the client's material and described nowhere, so the section carries the word, the air,
- * and one line saying no description is published yet.
- *
- * The word is set in Inter: it carries ā three times and ṇ once, which Fraunces drops.
- *
- * Reduced motion, no JavaScript, Save-Data: the clip is never attached and its first frame
- * stands in its place. The composition is the same; only the leaves hold still.
+ * IMAGE-LED on paper: the people come first, five women seated on the grass beneath the trees
+ * with their hands on their knees, large on the left. On the right the word, set in EB Garamond
+ * so its ā and ṇ are drawn correctly, with a slow ring behind it that widens and settles like
+ * a breath (still with reduced motion), and the ask.
  */
 export function Tp5Pranayama() {
   const message = 'Hello Praṇava. I would like to know more about Prāṇāyāma.';
 
   return (
     <section className="tp5" id="pc-pranayama" aria-labelledby="tp5-h">
-      <div className="tp5-rail">
-        <h2 className="tp5-eyebrow" id="tp5-h">
-          <span className="tp5-eyebrow-n">04</span>
-          Prāṇāyāma
-        </h2>
-
-        <figure className="tp5-air">
-          <div className="tp5-air-win">
-            <picture>
-              <source type="image/avif" srcSet={`/media/posters/${AIR.id}.avif`} />
-              <img
-                className="tp5-air-img"
-                src={`/media/posters/${AIR.id}.jpg`}
-                width={AIR.w}
-                height={AIR.h}
-                alt={AIR.alt}
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-            <video
-              className="tp5-air-vid"
-              muted
-              playsInline
-              loop
-              preload="none"
-              tabIndex={-1}
-              aria-hidden="true"
-              disablePictureInPicture
-              data-src={`/media/clips/${AIR.id}.mp4`}
-            />
-          </div>
-          <figcaption className="tp5-cap">Leaves moving in the air.</figcaption>
+      <div className="tp5-rail tp5-grid">
+        <figure className="tp5-pic">
+          <img
+            src={`/media/stills/${GROUND.id}-960.webp`}
+            srcSet={groundSrcSet}
+            sizes="(min-width: 1000px) 56vw, 100vw"
+            width={1620}
+            height={1080}
+            alt={GROUND.alt}
+            loading="lazy"
+            decoding="async"
+          />
         </figure>
 
-        <div className="tp5-mid">
-          <h3 className="tp5-word">Prāṇāyāma</h3>
+        <div className="tp5-copy">
+          <h2 className="tp5-eyebrow" id="tp5-h">
+            <span className="tp5-eyebrow-n">04</span>
+            Prāṇāyāma
+          </h2>
+          <div className="tp5-word-wrap">
+            <span className="tp5-breath" aria-hidden="true" />
+            <p className="tp5-word">Prāṇāyāma</p>
+          </div>
           <p className="tp5-ask">
             <span className="tp5-ask-note">
               Named by Praṇava as part of a sustained practice. No description, format or fee
@@ -73,42 +49,11 @@ export function Tp5Pranayama() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Ask about Prāṇāyāma
-              <svg
-                className="tp5-ask-arw"
-                width="15"
-                height="10"
-                viewBox="0 0 15 10"
-                aria-hidden="true"
-                focusable="false"
-              >
-                <path
-                  d="M0 5h12.5M8.5 1L12.8 5 8.5 9"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                />
-              </svg>
+              Ask about Prāṇāyāma <span aria-hidden="true">→</span>
             </a>
           </p>
         </div>
       </div>
-
-      <figure className="tp5-ground">
-        <img
-          className="tp5-ground-img"
-          src={`/media/stills/${GROUND.id}-1620.webp`}
-          srcSet={groundSrcSet}
-          sizes="(min-width: 1620px) 1620px, 100vw"
-          width={GROUND.w}
-          height={GROUND.h}
-          alt={GROUND.alt}
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
-
-      <Tp5Air />
     </section>
   );
 }

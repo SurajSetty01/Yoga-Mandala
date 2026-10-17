@@ -893,7 +893,7 @@ html.is-static .frame { transform: scale(1.02); }
 @import "../styles/sec-te1.css";
 @import "../styles/sec-te2.css";
 @import "../styles/sec-te3.css";
-@import "../styles/coming-soon.css";
+@import "../styles/about-v3.css";
 
 /* ── route skeletons ─────────────────────────────────────────────────────────
    Temporary. These exist so the navigation is real and clickable before the
