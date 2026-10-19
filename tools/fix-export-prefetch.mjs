@@ -33,15 +33,23 @@ function walk(dir) {
     const full = path.join(dir, entry.name);
     if (!entry.isDirectory()) continue;
     if (entry.name.startsWith('__next.')) {
-      for (const file of fs.readdirSync(full)) {
-        const from = path.join(full, file);
-        if (!fs.statSync(from).isFile()) continue;
-        const to = path.join(dir, `${entry.name}.${file}`);
-        if (!fs.existsSync(to)) {
-          fs.copyFileSync(from, to);
-          copied++;
+      /* nested routes keep their payload one or more folders deeper
+         (__next.yoga-mandala/join/__PAGE__.txt); the flat name joins every level with dots */
+      const flatten = (src, prefix) => {
+        for (const file of fs.readdirSync(src)) {
+          const from = path.join(src, file);
+          if (fs.statSync(from).isDirectory()) {
+            flatten(from, `${prefix}.${file}`);
+            continue;
+          }
+          const to = path.join(dir, `${prefix}.${file}`);
+          if (!fs.existsSync(to)) {
+            fs.copyFileSync(from, to);
+            copied++;
+          }
         }
-      }
+      };
+      flatten(full, entry.name);
     }
     walk(full);
   }
